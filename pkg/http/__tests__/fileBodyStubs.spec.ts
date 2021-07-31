@@ -1,12 +1,12 @@
 import Path from 'path'
 import Supertest from 'supertest'
-import { equalsTo, get, mockrushHTTP, opts, post, urlPath } from '../index'
+import { equalsTo, get, mockinhoHTTP, opts, post, urlPath } from '../index'
 import { ok } from '../stub/initializers/ok'
 import { Headers, MediaTypes } from '../types'
 
 describe('HTTP - Working With File Body Stubs', function () {
   describe('Default Path', function () {
-    const $ = mockrushHTTP(opts().dynamicPort().verbose())
+    const $ = mockinhoHTTP(opts().dynamicPort().verbose())
 
     beforeAll(() => $.start())
     afterAll(() => $.finalize())
@@ -36,7 +36,7 @@ describe('HTTP - Working With File Body Stubs', function () {
   })
 
   describe('Local', function () {
-    const $ = mockrushHTTP(
+    const $ = mockinhoHTTP(
       opts().dynamicPort().stubsDirectory(Path.join(__dirname, '__fixtures__'))
     )
 

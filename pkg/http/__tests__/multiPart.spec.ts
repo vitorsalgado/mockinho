@@ -1,10 +1,10 @@
 import Path from 'path'
 import Supertest from 'supertest'
-import { mockrushHTTP, opts, post, urlPath } from '../index'
+import { mockinhoHTTP, opts, post, urlPath } from '../index'
 import { ok } from '../stub/initializers/ok'
 
 describe('Form MultiPart', function () {
-  const $ = mockrushHTTP(opts().dynamicPort().multiPartOptions({}))
+  const $ = mockinhoHTTP(opts().dynamicPort().multiPartOptions({}))
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())

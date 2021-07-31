@@ -1,17 +1,17 @@
 import * as Path from 'path'
 import Supertest from 'supertest'
+import { fromFile } from '../../shared/bodyconverters'
 import { containing, equalsTo, jsonPath, not } from '../../shared/matchers'
 import { urlPath } from '../../shared/matchers/http'
 import { opts } from '../config'
-import { fromFile, get, mockrushHTTP } from '../index'
-import { post } from '../stub'
-import { ok, okJSON } from '../stub/initializers/ok'
+import { get, mockinhoHTTP } from '../index'
+import { ok, okJSON, post } from '../stub'
 import { Headers, MediaTypes } from '../types'
 
 const fixture = (name: string) => Path.join(__dirname, `__fixtures__/__content__${name}`)
 
-describe.skip('MockRush HTTP', function () {
-  const $ = mockrushHTTP(opts().dynamicPort().trace())
+describe.skip('Mockinho HTTP', function () {
+  const $ = mockinhoHTTP(opts().dynamicPort().trace())
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())

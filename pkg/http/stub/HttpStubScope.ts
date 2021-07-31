@@ -1,10 +1,10 @@
 import Chalk from 'chalk'
-import { MockrushError } from '../../../internal/MockrushError'
+import { MockinhoError } from '../../../internal/MockinhoError'
 import { ErrorCodes } from '../types'
 import { HttpStub } from './HttpStub'
 import { HttpStubRepository } from './HttpStubRepository'
 
-export class PendingHttpStubScopeError extends MockrushError {
+export class PendingHttpStubScopeError extends MockinhoError {
   constructor() {
     super('There are still mocked requests have not been called.', ErrorCodes.MR_ERR_PENDING_SCOPE)
   }

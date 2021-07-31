@@ -1,11 +1,11 @@
 import Supertest from 'supertest'
 import { urlPath } from '../../../shared/matchers/http'
-import { mockrushHTTP, opts, PendingHttpStubScopeError, post } from '../../index'
+import { mockinhoHTTP, opts, PendingHttpStubScopeError, post } from '../../index'
 import { get } from '../index'
 import { okJSON } from '../initializers/ok'
 
 describe('HTTP Scope', function () {
-  const $ = mockrushHTTP(opts().dynamicPort().loadFileStubs(false))
+  const $ = mockinhoHTTP(opts().dynamicPort().loadFileStubs(false))
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())

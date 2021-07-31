@@ -1,11 +1,11 @@
 import Supertest from 'supertest'
 import { urlPath } from '../../shared/matchers/http'
-import { del, head, mockrushHTTP, opts, patch, put } from '../index'
+import { del, head, mockinhoHTTP, opts, patch, put } from '../index'
 import { get, post } from '../stub'
 import { ok } from '../stub/initializers/ok'
 
 describe('CORS', function () {
-  const $ = mockrushHTTP(opts().dynamicPort().cors({ methods: '*' }))
+  const $ = mockinhoHTTP(opts().dynamicPort().cors({ methods: '*' }))
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())

@@ -1,10 +1,10 @@
 import Supertest from 'supertest'
 import { v4 } from 'uuid'
-import { mockrushHTTP, opts } from '../index'
+import { mockinhoHTTP, opts } from '../index'
 
 describe('HTTP - File Stubbing', function () {
   describe('Default Path', function () {
-    const $ = mockrushHTTP(opts().dynamicPort().verbose().loadFileStubs())
+    const $ = mockinhoHTTP(opts().dynamicPort().verbose().loadFileStubs())
 
     beforeAll(() => $.start())
     afterAll(() => $.finalize())

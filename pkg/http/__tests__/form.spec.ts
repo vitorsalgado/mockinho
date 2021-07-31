@@ -6,7 +6,7 @@ import {
   equalsTo,
   item,
   jsonPath,
-  mockrushHTTP,
+  mockinhoHTTP,
   opts,
   post,
   urlPath
@@ -15,7 +15,7 @@ import { ok } from '../stub/initializers/ok'
 import { Headers, MediaTypes } from '../types'
 
 describe('HTTP - Form Url Encoded', function () {
-  const $ = mockrushHTTP(opts().dynamicPort().trace().formBodyOptions({ bodyLimit: 80 }))
+  const $ = mockinhoHTTP(opts().dynamicPort().trace().formBodyOptions({ bodyLimit: 80 }))
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())

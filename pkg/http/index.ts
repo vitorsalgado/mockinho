@@ -1,6 +1,6 @@
 import { Configurations, ConfigurationsBuilder } from './config'
 import { HttpServerFactory } from './HttpServer'
-import { MockrushHTTP } from './MockrushHTTP'
+import { MockinhoHTTP } from './MockinhoHTTP'
 
 export * from './config'
 export * from './stub'
@@ -11,15 +11,15 @@ export * from './HttpContext'
 export * from './HttpRequest'
 export * from './HttpServer'
 export * from './types'
-export * from './MockrushHTTP'
+export * from './MockinhoHTTP'
 export * from '../shared/matchers'
 export * from '../shared/matchers/http'
 
-export const mockrushHTTP = <
+export const mockinhoHTTP = <
   ServerFactory extends HttpServerFactory,
   Config extends Configurations<ServerFactory>
 >(
   configurations: ConfigurationsBuilder<ServerFactory, Config>
-): MockrushHTTP<ServerFactory, Config> => new MockrushHTTP(configurations)
+): MockinhoHTTP<ServerFactory, Config> => new MockinhoHTTP(configurations)
 
-export default mockrushHTTP
+export default mockinhoHTTP

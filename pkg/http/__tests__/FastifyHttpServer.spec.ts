@@ -5,12 +5,12 @@ import { FastifyConfigurationsBuilder } from '../config/FastifyConfigurationsBui
 import { FastifyHttpServer } from '../FastifyHttpServer'
 import { FastifyRequestHandler } from '../FastifyRequestHandler'
 import { HttpContext } from '../HttpContext'
-import { mockrushHTTP, opts, post } from '../index'
+import { mockinhoHTTP, opts, post } from '../index'
 import { okJSON } from '../stub/initializers/ok'
 import { Headers, MediaTypes } from '../types'
 
 describe('Fastify Http Server', function () {
-  const $ = mockrushHTTP(opts().dynamicPort().trace())
+  const $ = mockinhoHTTP(opts().dynamicPort().trace())
 
   const builder = new FastifyConfigurationsBuilder()
 

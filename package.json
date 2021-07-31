@@ -1,5 +1,5 @@
 {
-  "name": "mockrush",
+  "name": "mockinho",
   "description": "Node.js Mock Server",
   "version": "1.0.0",
   "scripts": {
@@ -13,12 +13,12 @@
     "test:coverage:upload": "codecov -f coverage/*.json",
     "lint": "eslint --ext .ts,.js .",
     "lint:ci": "npm run lint && npm run prettier:ci",
-    "prettier": "prettier 'src/**' --write --ignore-unknown",
-    "prettier:ci": "prettier --check 'src/**' --ignore-unknown"
+    "prettier": "prettier 'cmd/**' 'pkg/**' 'internal/**' --write --ignore-unknown",
+    "prettier:ci": "npm run prettier -- --check"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vitorsalgado/mockrush.git"
+    "url": "git+https://github.com/vitorsalgado/mockinho.git"
   },
   "author": {
     "name": "Vitor Hugo Salgado",
@@ -27,9 +27,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vitorsalgado/mockrush/issues"
+    "url": "https://github.com/vitorsalgado/mockinho/issues"
   },
-  "homepage": "https://github.com/vitorsalgado/mockrush#readme",
+  "homepage": "https://github.com/vitorsalgado/mockinho#readme",
   "dependencies": {
     "ajv": "^6.12.6",
     "chalk": "^4.1.1",

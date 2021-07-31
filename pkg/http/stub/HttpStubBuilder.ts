@@ -1,5 +1,5 @@
 import { encodeBase64 } from '../../../internal/encoding/base64'
-import { MockrushError } from '../../../internal/MockrushError'
+import { MockinhoError } from '../../../internal/MockinhoError'
 import { noNullElements } from '../../../internal/preconditions/noNullElements'
 import { notBlank } from '../../../internal/preconditions/notBlank'
 import { notEmpty } from '../../../internal/preconditions/notEmpty'
@@ -32,7 +32,7 @@ const extractQueries = (request: HttpRequest): Record<string, string | string[] 
   request.query
 const extractNothing = () => undefined
 
-export class InvalidStubConfigurationError extends MockrushError {
+export class InvalidStubConfigurationError extends MockinhoError {
   constructor(message: string) {
     super(message, ErrorCodes.MR_ERR_INVALID_STUB_CONFIG)
   }

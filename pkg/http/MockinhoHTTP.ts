@@ -12,7 +12,7 @@ import { buildStubFromFile } from './import/buildStubFromFile'
 import { loadStubFiles } from './import/loadStubFiles'
 import { HttpStubBuilder, HttpStubScope } from './stub'
 
-export class MockrushHTTP<
+export class MockinhoHTTP<
   ServerFactory extends HttpServerFactory,
   Config extends Configurations<ServerFactory>
 > implements HttpServer

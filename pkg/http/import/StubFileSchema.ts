@@ -1,5 +1,5 @@
 export default {
-  description: 'MockRush Stub File Representation',
+  description: 'Mockinho Stub File Representation',
   anyOf: [{ $ref: '#/definitions/stub' }, { type: 'array', items: { $ref: '#/definitions/stub' } }],
 
   definitions: {

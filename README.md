@@ -1,4 +1,4 @@
-<h1 align="center">MockRush - Mock Server</h1>
+<h1 align="center">Mockinho - Mock Server</h1>
 
 <p align="center">
     <img src="docs/assets/logo.png" alt="Logo" />
