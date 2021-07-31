@@ -1,0 +1,80 @@
+{
+  "id": "1",
+  "priority": 1,
+  "name": "Test",
+
+  "request": {
+    "method": "POST",
+    "urlPathPattern": "\/test\/([^/])+\/another-route",
+    "querystring": {
+      "q": {
+        "contains": "orange"
+      },
+      "sort": {
+        "equalsTo": "ASC"
+      },
+      "filter": {
+        "not": {
+          "containing": "test"
+        }
+      }
+    },
+    "headers": {
+      "Content-Type": {
+        "allOf": [
+          { "startsWith": "application" },
+          { "endsWith": "json" }
+        ]
+      },
+      "Accept": {
+        "containing": "json"
+      },
+      "X-Correlation-Id": {
+        "allOf": [
+          { "isPresent": true },
+          { "isUUID": true }
+        ]
+      }
+    },
+    "body": {
+      "anyOf": [
+        {
+          "jsonPath": {
+            "path": "data.message",
+            "equalsTo": "test"
+          }
+        },
+        {
+          "allOf": [
+            { "jsonPath": { "path": "data.list", "item": { "index": 2, "contains": "app" } } },
+            { "jsonPath": { "path": "data.list", "hasLength": 5 } },
+            { "jsonPath": { "path": "data.age", "equalsTo": 33 } },
+            {
+              "jsonPath": {
+                "path": "notifications", "anyOf": [
+                  {
+                    "item": {
+                      "index": 1,
+                      "jsonPath": {
+                        "path": "context.mobile.content",
+                        "equalsTo": "nice comment"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+
+  "response": {
+    "status": 200,
+    "bodyFile": "body-stub.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

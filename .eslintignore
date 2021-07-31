@@ -1,0 +1,9 @@
+dist/
+scripts/
+cmd/
+
+*.d.ts
+
+tools/dev
+
+src/grpc

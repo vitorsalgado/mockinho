@@ -1,0 +1,40 @@
+[
+  {
+    "id": "4",
+    "name": "Product 1",
+    "request": {
+      "method": "GET",
+      "urlPath": "/orders/1000/products"
+    },
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "id": 1,
+          "name": "Product 01"
+        }
+      ],
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    }
+  },
+  {
+    "id": "5",
+    "name": "Product 2",
+    "request": {
+      "method": "GET",
+      "urlPath": "/orders/1000/products/1000"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "id": 1000,
+        "name": "Product 01"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    }
+  }
+]

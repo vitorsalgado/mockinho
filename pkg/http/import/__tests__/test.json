@@ -1,0 +1,34 @@
+{
+  "id": "100",
+  "priority": 10,
+  "name": "Test Stub",
+  "request": {
+    "method": "GET",
+    "url": "/test",
+    "queryString": {
+      "contains": "term"
+    },
+    "headers": {
+      "Content-Type": "json",
+      "Accept": {
+        "equalsTo": "none"
+      }
+    },
+    "body": {
+      "jsonPath": {
+        "path": "user.name",
+        "equalsTo": "test"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "message": "hello",
+      "content": "world"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

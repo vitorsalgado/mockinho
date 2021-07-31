@@ -1,0 +1,78 @@
+{
+  "name": "mockrush",
+  "description": "Node.js Mock Server",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "nodemon --ext js,ts,json,env,yaml,yml cmd/http/index.ts",
+    "prepare": "husky install",
+    "build": "tsc --project tsconfig.build.json",
+    "release": "standard-version",
+    "test": "jest --detectOpenHandles",
+    "test:coverage": "npm run test -- --coverage",
+    "test:ci": "npm run test -- --colors --coverage --ci",
+    "test:coverage:upload": "codecov -f coverage/*.json",
+    "lint": "eslint --ext .ts,.js .",
+    "lint:ci": "npm run lint && npm run prettier:ci",
+    "prettier": "prettier 'src/**' --write --ignore-unknown",
+    "prettier:ci": "prettier --check 'src/**' --ignore-unknown"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitorsalgado/mockrush.git"
+  },
+  "author": {
+    "name": "Vitor Hugo Salgado",
+    "email": "vsalgadopb@gmail.com",
+    "url": "https://github.com/vitorsalgado"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vitorsalgado/mockrush/issues"
+  },
+  "homepage": "https://github.com/vitorsalgado/mockrush#readme",
+  "dependencies": {
+    "ajv": "^6.12.6",
+    "chalk": "^4.1.1",
+    "dotenv": "^10.0.0",
+    "fastify": "^3.19.1",
+    "fastify-cors": "^6.0.2",
+    "fastify-formbody": "^5.1.0",
+    "fastify-multipart": "^4.0.7",
+    "js-yaml": "^3.14.1",
+    "pino": "^6.13.0",
+    "pino-pretty": "^5.1.2",
+    "tslib": "^2.3.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
+    "@types/busboy": "^0.2.4",
+    "@types/jest": "^26.0.24",
+    "@types/js-yaml": "^4.0.2",
+    "@types/node": "^16.3.3",
+    "@types/pino": "^6.3.9",
+    "@types/supertest": "^2.0.11",
+    "@types/uuid": "^8.3.1",
+    "@typescript-eslint/eslint-plugin": "^4.28.4",
+    "@typescript-eslint/parser": "^4.28.4",
+    "codecov": "^3.8.3",
+    "eslint": "^7.31.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-tsdoc": "^0.2.14",
+    "husky": "^7.0.1",
+    "jest": "^27.0.6",
+    "lint-staged": "^11.0.1",
+    "nodemon": "^2.0.12",
+    "prettier": "^2.3.2",
+    "standard-version": "^9.3.1",
+    "supertest": "^6.1.3",
+    "ts-jest": "^27.0.3",
+    "ts-node": "^10.1.0",
+    "typescript": "^4.3.5"
+  }
+}

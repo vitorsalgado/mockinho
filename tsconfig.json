@@ -1,0 +1,50 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2020"],
+    "target": "ES2020",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "importHelpers": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "declaration": true,
+
+    "alwaysStrict": true,
+    "forceConsistentCasingInFileNames": true,
+    "removeComments": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": true,
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "composite": true,
+    "skipLibCheck": true,
+
+    "typeRoots": [
+      "node_modules/@types",
+      "declarations.d.ts"
+    ],
+
+    "outDir": "dist",
+    "rootDirs": [
+      "cmd",
+      "pkg",
+      "internal",
+      "test"
+    ]
+  },
+  "exclude": [
+    "dist",
+    "coverage",
+    "node_modules",
+    "tools"
+  ]
+}

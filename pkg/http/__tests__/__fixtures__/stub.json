@@ -1,0 +1,40 @@
+{
+  "id": "1",
+  "priority": 1,
+  "name": "Test",
+
+  "request": {
+    "method": "POST",
+    "url": "/test",
+    "querystring": {
+      "q": {
+        "contains": "term"
+      }
+    },
+    "headers": {
+      "Content-Type": "json",
+      "Accept": {
+        "equalsTo": "none"
+      }
+    },
+    "body": {
+      "anyOf": {
+        "jsonPath": {
+          "path": "data.message",
+          "equalsTo": "test"
+        }
+      }
+    }
+  },
+
+  "response": {
+    "status": 200,
+    "body": {
+      "message": "hello",
+      "content": "world"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

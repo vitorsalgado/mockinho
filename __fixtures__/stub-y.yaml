@@ -1,0 +1,41 @@
+---
+id: '2'
+priority: 2
+name: Test YAML
+request:
+  method: POST
+  urlPathPattern: \/test\/([^/])+\/another-route\/([^/])+
+  querystring:
+    q:
+      equalsTo: ORANGE
+      caseInsensitive: false
+      locale: pt
+    sort:
+      equalsTo: aSc
+      ignoreCase: true
+  headers:
+    X-Context:
+      isPresent: true
+    X-Var:
+      anyOf:
+        - isPresent
+        - contains: 'a-var'
+    X-Correlation-Id:
+      not: isPresent
+
+  body:
+    anyOf:
+      - jsonPath:
+          path: data.message
+          equalsTo: test
+response:
+  status: 200
+  body:
+    - name: 'tester'
+      status: 'ok'
+    - name: 'dev'
+      status: 'nok'
+
+  headers:
+    Content-Type: application/json
+    X-Trace-Id: SUPER-TRACE-ID
