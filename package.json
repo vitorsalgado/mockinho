@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon --ext js,ts,json,env,yaml,yml packages/http/cmd/mockinho-http/index.ts",
     "prepare": "husky install",
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap --ci --ignore-scripts prepare --force-local",
     "build": "lerna run build",
     "release": "standard-version",
     "test": "jest --detectOpenHandles",
