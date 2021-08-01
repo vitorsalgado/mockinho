@@ -1,11 +1,11 @@
 import { ScenarioInMemoryRepository } from '@mockinho/core'
-import { FastifyConfigurationsBuilder } from '../config'
 import { HttpContext } from '../HttpContext'
 import { HttpStubRepository } from '../stub'
+import { ExpressConfigurationsBuilder } from '../config'
 
 describe('HttpContext', function () {
   it('should provide deps instances', function () {
-    const builder = new FastifyConfigurationsBuilder()
+    const builder = new ExpressConfigurationsBuilder()
 
     const cfg = builder
       .port(3000)
@@ -16,9 +16,9 @@ describe('HttpContext', function () {
       .disableDefaultLogger(false)
       .defaultLoggerLevel('warn')
       .trace()
-      .formBodyOptions({ bodyLimit: 1000 })
-      .cors({ maxAge: 10 })
-      .multiPartOptions({ addToBody: true })
+      .formUrlEncodedOptions({ limit: 1000 })
+      .enableCors({ maxAge: 10 })
+      .multiPartOptions({ limits: { fieldNameSize: 10 } })
       .build()
 
     const ctx = new HttpContext(cfg)

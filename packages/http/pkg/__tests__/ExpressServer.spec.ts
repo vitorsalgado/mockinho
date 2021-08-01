@@ -1,10 +1,8 @@
 import Supertest from 'supertest'
 import { containing } from '@mockinho/core-matchers'
-import { FastifyConfigurationsBuilder } from '../config'
-import { FastifyHttpServer } from '../FastifyHttpServer'
-import { FastifyRequestHandler } from '../FastifyRequestHandler'
 import { HttpContext } from '../HttpContext'
-import { mockinhoHTTP, opts, post } from '..'
+import { mockinhoHTTP, opts, post, ExpressConfigurationsBuilder, ExpressServer } from '..'
+
 import { urlPath } from '../matchers'
 import { okJSON } from '../stub'
 import { Headers, MediaTypes } from '../types'
@@ -12,7 +10,7 @@ import { Headers, MediaTypes } from '../types'
 describe('Fastify Http Server', function () {
   const $ = mockinhoHTTP(opts().dynamicPort().trace())
 
-  const builder = new FastifyConfigurationsBuilder()
+  const builder = new ExpressConfigurationsBuilder()
 
   const cfg = builder
     .port(3000)
@@ -21,13 +19,12 @@ describe('Fastify Http Server', function () {
     .disableDefaultLogger(false)
     .defaultLoggerLevel('warn')
     .trace()
-    .formBodyOptions({ bodyLimit: 1000 })
-    .cors({ maxAge: 10 })
-    .multiPartOptions({ addToBody: true })
+    .formUrlEncodedOptions({ limit: 1000 })
+    .enableCors({ maxAge: 10 })
     .build()
 
   const ctx = new HttpContext(cfg)
-  const httpServer = new FastifyHttpServer(cfg, new FastifyRequestHandler(ctx))
+  const httpServer = new ExpressServer(ctx)
 
   beforeAll(() => $.start())
   afterAll(async () => {

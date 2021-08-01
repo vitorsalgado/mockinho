@@ -1,3 +1,4 @@
+import { Express } from 'express'
 import {
   encodeBase64,
   Matcher,
@@ -34,6 +35,11 @@ const extractQuery =
 const extractQueries = (request: HttpRequest): Record<string, string | string[] | undefined> =>
   request.query
 const extractNothing = () => undefined
+const extractMultiPartFiles = (request: HttpRequest): Array<Express.Multer.File> => request.files
+const extractFileByFieldName =
+  (field: string) =>
+  (request: HttpRequest): Express.Multer.File | undefined =>
+    request.files.find(x => x.fieldname === field)
 
 export class InvalidStubConfigurationError extends MockinhoError {
   constructor(message: string) {
@@ -191,6 +197,37 @@ export class HttpStubBuilder extends StubBaseBuilder<
     }
 
     this._matchers.push(this.spec(extractBody, allOf(...matchers), 5))
+
+    return this
+  }
+
+  requestFields(...matchers: Array<Matcher<BodyType>>): this {
+    return this.requestBody(...matchers)
+  }
+
+  files(...matchers: Array<Matcher<Array<Express.Multer.File>>>): this {
+    notEmpty(matchers)
+    noNullElements(matchers)
+
+    if (matchers.length === 0) {
+      this._matchers.push(this.spec(extractMultiPartFiles, matchers[0], 3))
+    }
+
+    this._matchers.push(this.spec(extractMultiPartFiles, allOf(...matchers), 5))
+
+    return this
+  }
+
+  file(fieldName: string, ...matchers: Array<Matcher<Express.Multer.File | undefined>>): this {
+    notBlank(fieldName)
+    notEmpty(matchers)
+    noNullElements(matchers)
+
+    if (matchers.length === 0) {
+      this._matchers.push(this.spec(extractFileByFieldName(fieldName), matchers[0], 3))
+    }
+
+    this._matchers.push(this.spec(extractFileByFieldName(fieldName), allOf(...matchers), 5))
 
     return this
   }

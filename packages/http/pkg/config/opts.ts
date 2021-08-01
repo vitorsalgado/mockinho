@@ -1,3 +1,3 @@
-import { FastifyConfigurationsBuilder } from './FastifyConfigurationsBuilder'
+import { ExpressConfigurationsBuilder } from './ExpressConfigurationsBuilder'
 
-export const opts = (): FastifyConfigurationsBuilder => new FastifyConfigurationsBuilder()
+export const opts = (): ExpressConfigurationsBuilder => new ExpressConfigurationsBuilder()

@@ -1,5 +1,5 @@
 export * from './Configurations'
 export * from './ConfigurationsBuilder'
-export * from './FastifyConfigurations'
-export * from './FastifyConfigurationsBuilder'
+export * from './ExpressConfigurations'
+export * from './ExpressConfigurationsBuilder'
 export * from './opts'

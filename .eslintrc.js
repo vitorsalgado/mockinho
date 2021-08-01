@@ -42,9 +42,7 @@ module.exports = {
       }
     ],
     'import/no-self-import': ['error'],
-    'import/named': ['error'],
     'import/export': ['error'],
-    'import/no-unused-modules': [1, { unusedExports: true }],
     'import/no-deprecated': ['error']
   },
   settings: {

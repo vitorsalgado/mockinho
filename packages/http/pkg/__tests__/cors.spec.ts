@@ -1,10 +1,10 @@
 import Supertest from 'supertest'
-import { del, head, mockinhoHTTP, opts, patch, put } from '..'
+import { del, head, mockinhoHTTP, opts, patch, put, options } from '..'
 import { urlPath } from '../matchers'
 import { get, ok, post } from '../stub'
 
 describe('CORS', function () {
-  const $ = mockinhoHTTP(opts().dynamicPort().cors({ methods: '*' }))
+  const $ = mockinhoHTTP(opts().dynamicPort().enableCors({ methods: '*' }))
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
@@ -17,7 +17,8 @@ describe('CORS', function () {
       put(urlPath('/test')).reply(ok()),
       del(urlPath('/test')).reply(ok()),
       patch(urlPath('/test')).reply(ok()),
-      head(urlPath('/test')).reply(ok())
+      head(urlPath('/test')).reply(ok()),
+      options(urlPath('/test')).reply(ok())
     )
 
     await Supertest($.server()).get('/test').expect(200)
@@ -26,6 +27,7 @@ describe('CORS', function () {
     await Supertest($.server()).del('/test').expect(200)
     await Supertest($.server()).patch('/test').expect(200)
     await Supertest($.server()).head('/test').expect(200)
+    await Supertest($.server()).options('/test').expect(200)
 
     expect(scope.isDone()).toBeTruthy()
   })

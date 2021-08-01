@@ -1,11 +1,11 @@
 import Path from 'path'
 import { Logger, LoggerPino } from '@mockinho/core'
-import { FastifyHttpServerFactory } from '../../FastifyHttpServerFactory'
-import { FastifyConfigurationsBuilder } from '../FastifyConfigurationsBuilder'
+import { ExpressConfigurationsBuilder } from '../ExpressConfigurationsBuilder'
+import { ExpressServerFactory } from '../../ExpressServerFactory'
 
 describe('Configurations Builder', function () {
   it('should build configurations with builder values', function () {
-    const builder = new FastifyConfigurationsBuilder()
+    const builder = new ExpressConfigurationsBuilder()
     const pinoLogger = new LoggerPino()
 
     const cfg = builder
@@ -19,10 +19,10 @@ describe('Configurations Builder', function () {
       .disableDefaultLogger(false)
       .defaultLoggerLevel('warn')
       .trace()
-      .serverFactory(new FastifyHttpServerFactory())
-      .formBodyOptions({ bodyLimit: 1000 })
-      .cors({ maxAge: 10 })
-      .multiPartOptions({ addToBody: true })
+      .serverFactory(new ExpressServerFactory())
+      .formUrlEncodedOptions({ limit: 1000 })
+      .enableCors({ maxAge: 10 })
+      .multiPartOptions({ limits: { fieldNameSize: 1000 } })
       .build()
 
     expect(cfg.port).toEqual(3000)
@@ -35,15 +35,15 @@ describe('Configurations Builder', function () {
     expect(cfg.stubsDirectory).toEqual(Path.join(__dirname, 'test'))
     expect(cfg.stubsBodyContentDirectory).toEqual(Path.join(__dirname, 'test', 'bodies'))
     expect(cfg.trace).toBeTruthy()
-    expect(cfg.serverFactory).toBeInstanceOf(FastifyHttpServerFactory)
-    expect(cfg.formBodyOptions).toEqual({ bodyLimit: 1000 })
+    expect(cfg.serverFactory).toBeInstanceOf(ExpressServerFactory)
+    expect(cfg.formUrlEncodedOptions).toEqual({ extended: false, limit: 1000 })
     expect(cfg.corsOptions).toEqual({ maxAge: 10 })
     expect(cfg.cors).toBeTruthy()
-    expect(cfg.multiPartOptions).toEqual({ addToBody: true })
+    expect(cfg.multiPartOptions).toEqual({ limits: { fieldNameSize: 1000 } })
   })
 
   it('should add default logger when enable and not previously added', function () {
-    const builder = new FastifyConfigurationsBuilder()
+    const builder = new ExpressConfigurationsBuilder()
 
     const cfg = builder.disableDefaultLogger(false).build()
 
@@ -52,14 +52,14 @@ describe('Configurations Builder', function () {
   })
 
   it('should add fastify server factory when none was specified', function () {
-    const builder = new FastifyConfigurationsBuilder()
+    const builder = new ExpressConfigurationsBuilder()
     const cfg = builder.build()
 
-    expect(cfg.serverFactory).toBeInstanceOf(FastifyHttpServerFactory)
+    expect(cfg.serverFactory).toBeInstanceOf(ExpressServerFactory)
   })
 
   it('should set stub body content dir to __content__ as the default', function () {
-    const builder = new FastifyConfigurationsBuilder()
+    const builder = new ExpressConfigurationsBuilder()
     const cfg = builder.stubsDirectory(Path.join(__dirname, 'test')).build()
 
     expect(cfg.stubsDirectory).toEqual(Path.join(__dirname, 'test'))
@@ -99,7 +99,7 @@ describe('Configurations Builder', function () {
       }
     }
 
-    const builder = new FastifyConfigurationsBuilder()
+    const builder = new ExpressConfigurationsBuilder()
 
     const cfg = builder
       .port(3000)
