@@ -1,10 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDirs": ["cmd", "pkg"],
+    "rootDir": "pkg",
     "outDir": "dist"
   },
-  "include": ["pkg", "cmd"],
+  "include": ["pkg"],
   "references": [
     { "path": "../core", "prepend": false },
     { "path": "../core-matchers", "prepend": false },

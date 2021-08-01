@@ -2,8 +2,12 @@
   "name": "@mockinho/http",
   "version": "0.0.0",
   "description": "Mockinho HTTP Mock Server",
-  "main": "dist/pkg/index.js",
-  "types": "dist/pkg/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "test": "jest --detectOpenHandles"
@@ -14,6 +18,7 @@
   "files": [
     "dist"
   ],
+  "private": false,
   "publishConfig": {
     "access": "public"
   },

@@ -2,8 +2,12 @@
   "name": "@mockinho/core-bodyconverters",
   "version": "0.0.0",
   "description": "Mockinho Core Body Converters",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "test": "jest --detectOpenHandles"
@@ -14,6 +18,7 @@
   "files": [
     "dist"
   ],
+  "private": false,
   "publishConfig": {
     "access": "public"
   },
@@ -26,8 +31,5 @@
   },
   "bugs": {
     "url": "https://github.com/vitorsalgado/mockinho/issues"
-  },
-  "dependencies": {
-    "@mockinho/core": "^0.0.0"
   }
 }

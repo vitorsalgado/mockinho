@@ -4,8 +4,5 @@
     "rootDir": "pkg",
     "outDir": "dist"
   },
-  "include": ["pkg"],
-  "references": [
-    { "path": "../core", "prepend": false }
-  ]
+  "include": ["pkg"]
 }
