@@ -1,0 +1,5 @@
+ignore:
+  - "**/*.config.ts"
+  - "**/*.config.js"
+  # Core Matchers
+  - packages/core-matchers/pkg/testUtils.ts
