@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon --ext js,ts,json,env,yaml,yml packages/http/cmd/mockinho-http/index.ts",
     "prepare": "husky install",
-    "bootstrap": "lerna bootstrap --ci --ignore-scripts --force-local && lerna link",
+    "bootstrap": "lerna bootstrap --ignore-scripts --force-local && lerna link",
     "build": "lerna run build",
     "release": "standard-version",
     "test": "jest --detectOpenHandles",
@@ -18,7 +18,8 @@
     "prettier": "prettier 'packages/**' --write --ignore-unknown",
     "prettier:ci": "npm run prettier -- --check",
     "clean": "lerna clean && npm run clean:build",
-    "clean:build": "lerna exec -- rm -rf dist && lerna exec -- rm -rf tsconfig.tsbuildinfo && lerna exec -- rm -rf tsconfig.build.tsbuildinfo"
+    "clean:build": "lerna exec -- rm -rf dist && lerna exec -- rm -rf tsconfig.tsbuildinfo && lerna exec -- rm -rf tsconfig.build.tsbuildinfo",
+    "clean:deps": ""
   },
   "workspaces": [
     "packages/*"
