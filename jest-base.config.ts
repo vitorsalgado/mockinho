@@ -11,8 +11,8 @@ const config: JestConfig.InitialOptions = {
       tsconfig: '../../tsconfig.test.json'
     }
   },
-  coveragePathIgnorePatterns: ['<rootDir>/dist/', '/node_modules/'],
-  testPathIgnorePatterns: ['<rootDir>/dist/', '/node_modules/']
+  coveragePathIgnorePatterns: ['/dist/', '<rootDit>/dist', '/node_modules/'],
+  testPathIgnorePatterns: ['/dist/', '<rootDit>/dist', '/node_modules/']
 }
 
 export default config

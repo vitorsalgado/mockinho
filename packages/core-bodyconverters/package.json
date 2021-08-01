@@ -28,7 +28,6 @@
     "url": "https://github.com/vitorsalgado/mockinho/issues"
   },
   "dependencies": {
-    "@mockinho/core": "^0.0.0",
-    "@mockinho/core-matchers": "^0.0.0"
+    "@mockinho/core": "^0.0.0"
   }
 }

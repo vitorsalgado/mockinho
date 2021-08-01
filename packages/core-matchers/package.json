@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc --build --incremental",
+    "build": "tsc --project tsconfig.build.json",
     "test": "jest --detectOpenHandles"
   },
   "directories": {
@@ -29,7 +29,6 @@
   },
   "dependencies": {
     "@mockinho/core": "^0.0.0",
-    "@mockinho/core-bodyconverters": "^0.0.0",
     "uuid": "^8.3.2"
   }
 }

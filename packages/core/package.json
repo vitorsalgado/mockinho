@@ -29,8 +29,6 @@
     "url": "https://github.com/vitorsalgado/mockinho/issues"
   },
   "dependencies": {
-    "@mockinho/core-bodyconverters": "^0.0.0",
-    "@mockinho/core-matchers": "^0.0.0",
     "pino": "^6.13.0",
     "pino-pretty": "^5.1.2",
     "uuid": "^8.3.2"

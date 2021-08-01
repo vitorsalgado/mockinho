@@ -4,5 +4,10 @@
     "rootDirs": ["cmd", "pkg"],
     "outDir": "dist"
   },
-  "include": ["pkg", "cmd"]
+  "include": ["pkg", "cmd"],
+  "references": [
+    { "path": "../core", "prepend": false },
+    { "path": "../core-matchers", "prepend": false },
+    { "path": "../core-bodyconverters", "prepend": false }
+  ]
 }

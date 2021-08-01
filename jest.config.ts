@@ -12,13 +12,7 @@ const config: JestConfig.InitialOptions = {
       tsconfig: './tsconfig.test.json'
     }
   },
-  collectCoverageFrom: [
-    '**/internal/*/**/*.ts',
-    '**/pkg/*/**/*.ts',
-    '**/cmd/*/**/*.ts',
-    '!**/__fixtures__/**',
-    '!**/__tests__/**'
-  ],
+  collectCoverageFrom: ['**/packages/*/**/*.ts', '!**/__fixtures__/**', '!**/__tests__/**'],
   coveragePathIgnorePatterns: [
     '<rootDir>/dist/',
     '/node_modules/',
