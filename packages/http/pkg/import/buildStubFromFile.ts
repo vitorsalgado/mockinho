@@ -25,15 +25,11 @@ import { HttpStubBuilder, response } from '../stub'
 import { InvalidStubFileError } from './InvalidStubFileError'
 import { StubFile } from './StubFile'
 
-const MatcherConsts = [
+const MatcherConstants = [
   'isPresent',
   'isUUID',
-  'urlPath',
-  'urlPathMatching',
-  'urlPathPattern',
   'contains',
   'containing',
-  'url',
   'equals',
   'equalsTo',
   'matching',
@@ -46,9 +42,23 @@ const MatcherConsts = [
   'hitTimes',
   'not',
   'jsonPath',
+  'fieldPath',
   'anyOf',
   'allOf',
-  'item'
+  'item',
+
+  // HTTP
+  // --
+  'url',
+  'urlPath',
+  'urlPathMatching',
+  'urlPathPattern',
+
+  // Multi-Part
+  // --
+  'fileContent',
+  'fileEncoding',
+  'fileMimeType'
 ]
 
 export function buildStubFromFile<Config extends Configurations<HttpServerFactory>>(
@@ -107,6 +117,21 @@ export function buildStubFromFile<Config extends Configurations<HttpServerFactor
     }
   }
 
+  if (stub.request.files) {
+    for (const [key, value] of Object.entries(stub.request.files)) {
+      if (typeof value !== 'object') {
+        if (value === '*' || value === 'anything' || value === 'any') {
+          builder.file(key.toLowerCase(), anything())
+        } else if (value === 'isPresent') {
+          builder.file(key.toLowerCase(), isPresent())
+        }
+      } else {
+        const matcherKey = getSingleMatcherFromObjectKeys(filename, Object.keys(value))
+        builder.file(key, discoverMatcherByKey(filename, matcherKey, value[matcherKey], value))
+      }
+    }
+  }
+
   if (stub.scenario) {
     builder.scenario(stub.scenario.name, stub.scenario.requiredState, stub.scenario.newState)
   }
@@ -124,10 +149,11 @@ export function buildStubFromFile<Config extends Configurations<HttpServerFactor
   return builder
 }
 
-function discoverMatcherByValue(value: string): Matcher<any> {
+function discoverMatcherByValue(value: string, def = equalsTo): Matcher<any> {
   switch (value) {
     case '*':
     case 'any':
+    case 'anything':
       return anything()
 
     case 'isPresent':
@@ -137,7 +163,7 @@ function discoverMatcherByValue(value: string): Matcher<any> {
       return isUUID()
 
     default:
-      return equalsTo(value)
+      return def(value)
   }
 }
 
@@ -177,7 +203,7 @@ function discoverMatcherByKey(filename: string, key: string, values: any, root: 
     const [notK, notV] = Object.entries(values)[0]
 
     return not(discoverMatcherByKey(filename, notK, notV, values))
-  } else if (key === 'jsonPath') {
+  } else if (key === 'jsonPath' || key === 'fieldPath') {
     return jsonPath(
       valueEntries[0][1] as string,
       discoverMatcherByKey(filename, valueEntries[1][0], valueEntries[1][1], valueEntries[1])
@@ -238,7 +264,7 @@ function textCaseProperties(
 }
 
 function getSingleMatcherFromObjectKeys(filename: string, keys: string[]): string {
-  const matchers = keys.filter(x => MatcherConsts.includes(x))
+  const matchers = keys.filter(x => MatcherConstants.includes(x))
 
   if (matchers.length === 0) {
     throw new InvalidStubFileError('No matchers set!', filename)

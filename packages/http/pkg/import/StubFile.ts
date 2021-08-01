@@ -19,6 +19,7 @@ export interface StubFile {
     headers: Record<string, string | Record<string, string>>
     body: string | Record<string, string | Record<string, string>>
     bodyFile: string
+    files: Record<string, Record<string, string>>
   }
 
   response: {

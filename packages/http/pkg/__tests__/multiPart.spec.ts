@@ -33,6 +33,7 @@ describe('Form MultiPart', function () {
       .attach('image', Path.join(__dirname, '__fixtures__/mp-logo.png'))
       .field('field-test-1', 'field-test-value-1')
       .field('field-test-2', 'field-test-value-2')
+      .field('field-test-3', ['val1', 'val2'])
       .expect(200)
 
     expect(scope.isDone()).toBeTruthy()
