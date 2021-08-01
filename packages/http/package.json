@@ -4,9 +4,6 @@
   "description": "Mockinho HTTP Mock Server",
   "main": "dist/pkg/index.js",
   "types": "dist/pkg/index.d.ts",
-  "bin": {
-    "mockinho-http": "dist/cmd/mockinho-http/index.js"
-  },
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "test": "jest --detectOpenHandles"
