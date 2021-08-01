@@ -9,7 +9,7 @@ on:
       - '*'
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,14 +21,34 @@ jobs:
         with:
           node-version: 14.x
 
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Deps
         run: |
           npm ci
+          npm run bootstrap
 
       - name: Lint
         run: |
           npm run lint:ci
 
       - name: Test
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
           npm run test:ci
+          npm run test:coverage:upload
+
+  automerge:
+    needs:
+      - test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: fastify/github-action-merge-dependabot@v2.2.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

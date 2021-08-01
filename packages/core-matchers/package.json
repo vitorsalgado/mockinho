@@ -1,0 +1,35 @@
+{
+  "name": "@mockinho/core-matchers",
+  "version": "0.0.0",
+  "description": "Mockinho Core Matchers",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --build --incremental",
+    "test": "jest --detectOpenHandles"
+  },
+  "directories": {
+    "dist": "dist"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "Vitor Hugo Salgado <vsalgadopb@gmail.com>",
+  "homepage": "https://github.com/vitorsalgado/mockinho/tree/master/packages/core-matchers#readme",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitorsalgado/mockinho.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vitorsalgado/mockinho/issues"
+  },
+  "dependencies": {
+    "@mockinho/core": "^0.0.0",
+    "@mockinho/core-bodyconverters": "^0.0.0",
+    "uuid": "^8.3.2"
+  }
+}

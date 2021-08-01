@@ -1,0 +1,38 @@
+{
+  "name": "@mockinho/core",
+  "version": "0.0.0",
+  "description": "Mockinho Core Modules",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "test": "jest --detectOpenHandles"
+  },
+  "directories": {
+    "dist": "dist"
+  },
+  "files": [
+    "dist"
+  ],
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "Vitor Hugo Salgado <vsalgadopb@gmail.com>",
+  "homepage": "https://github.com/vitorsalgado/mockinho/tree/master/packages/core#readme",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitorsalgado/mockinho.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vitorsalgado/mockinho/issues"
+  },
+  "dependencies": {
+    "@mockinho/core-bodyconverters": "^0.0.0",
+    "@mockinho/core-matchers": "^0.0.0",
+    "pino": "^6.13.0",
+    "pino-pretty": "^5.1.2",
+    "uuid": "^8.3.2"
+  }
+}

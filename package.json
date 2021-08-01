@@ -1,10 +1,12 @@
 {
-  "name": "mockinho",
+  "name": "@mockinho/monorepo",
+  "version": "0.0.0",
   "description": "Node.js Mock Server",
-  "version": "1.0.0",
+  "private": true,
   "scripts": {
-    "start": "nodemon --ext js,ts,json,env,yaml,yml cmd/http/index.ts",
+    "start": "nodemon --ext js,ts,json,env,yaml,yml packages/http/cmd/mockinho-http/index.ts",
     "prepare": "husky install",
+    "bootstrap": "lerna bootstrap --hoist",
     "build": "tsc --project tsconfig.build.json",
     "release": "standard-version",
     "test": "jest --detectOpenHandles",
@@ -13,9 +15,12 @@
     "test:coverage:upload": "codecov -f coverage/*.json",
     "lint": "eslint --ext .ts,.js .",
     "lint:ci": "npm run lint && npm run prettier:ci",
-    "prettier": "prettier 'cmd/**' 'pkg/**' 'internal/**' --write --ignore-unknown",
+    "prettier": "prettier 'packages/**' --write --ignore-unknown",
     "prettier:ci": "npm run prettier -- --check"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vitorsalgado/mockinho.git"
@@ -31,18 +36,8 @@
   },
   "homepage": "https://github.com/vitorsalgado/mockinho#readme",
   "dependencies": {
-    "ajv": "^6.12.6",
-    "chalk": "^4.1.1",
     "dotenv": "^10.0.0",
-    "fastify": "^3.19.1",
-    "fastify-cors": "^6.0.2",
-    "fastify-formbody": "^5.1.0",
-    "fastify-multipart": "^4.0.7",
-    "js-yaml": "^3.14.1",
-    "pino": "^6.13.0",
-    "pino-pretty": "^5.1.2",
-    "tslib": "^2.3.0",
-    "uuid": "^8.3.2"
+    "tslib": "^2.3.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
@@ -66,6 +61,7 @@
     "eslint-plugin-tsdoc": "^0.2.14",
     "husky": "^7.0.1",
     "jest": "^27.0.6",
+    "lerna": "^4.0.0",
     "lint-staged": "^11.0.1",
     "nodemon": "^2.0.12",
     "prettier": "^2.3.2",

@@ -5,6 +5,7 @@ const config: JestConfig.InitialOptions = {
   verbose: true,
   collectCoverage: false,
   restoreMocks: true,
+  projects: ['<rootDir>'],
   transform: { '^.+\\.tsx?$': 'ts-jest' },
   globals: {
     'ts-jest': {
@@ -30,15 +31,7 @@ const config: JestConfig.InitialOptions = {
     '<rootDir>/scripts',
     '<rootDir>/tools'
   ],
-  testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
-  coverageThreshold: {
-    global: {
-      branches: 70,
-      functions: 70,
-      lines: 70,
-      statements: 70
-    }
-  }
+  testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)']
 }
 
 export default config

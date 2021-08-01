@@ -105,6 +105,8 @@ dist
 
 .DS_Store
 
+lerna-debug.json
+
 # Yarn
 **/.yarn/*
 !**/.yarn/releases
@@ -117,3 +119,4 @@ dist
 .idea/
 .vscode/
 tools/dev
+yarn.lock
