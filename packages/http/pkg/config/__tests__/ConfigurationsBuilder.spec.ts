@@ -51,7 +51,7 @@ describe('Configurations Builder', function () {
     expect(cfg.loggers[0]).toBeInstanceOf(LoggerPino)
   })
 
-  it('should add fastify server factory when none was specified', function () {
+  it('should add express server factory when none was specified', function () {
     const builder = new ExpressConfigurationsBuilder()
     const cfg = builder.build()
 

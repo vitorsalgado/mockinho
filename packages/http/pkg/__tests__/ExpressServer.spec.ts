@@ -7,7 +7,7 @@ import { urlPath } from '../matchers'
 import { okJSON } from '../stub'
 import { Headers, MediaTypes } from '../types'
 
-describe('Fastify Http Server', function () {
+describe('Express Http Server', function () {
   const $ = mockinhoHTTP(opts().dynamicPort().trace())
 
   const builder = new ExpressConfigurationsBuilder()
