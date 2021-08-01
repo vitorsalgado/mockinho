@@ -1,6 +1,6 @@
-import { extractPathname } from '@mockinho/core'
-import Chalk from 'chalk'
 import { Stream } from 'stream'
+import Chalk from 'chalk'
+import { extractPathname } from '@mockinho/core'
 import { HttpEvents } from './HttpEvents'
 import { ifVerbose } from './ifVerbose'
 

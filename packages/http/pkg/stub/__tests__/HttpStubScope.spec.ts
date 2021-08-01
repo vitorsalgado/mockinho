@@ -1,7 +1,7 @@
 import Supertest from 'supertest'
-import { mockinhoHTTP, opts, PendingHttpStubScopeError, post } from '../../index'
+import { mockinhoHTTP, opts, PendingHttpStubScopeError, post } from '../..'
 import { urlPath } from '../../matchers'
-import { get } from '../index'
+import { get } from '..'
 import { okJSON } from '../initializers'
 
 describe('HTTP Scope', function () {

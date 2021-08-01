@@ -1,16 +1,6 @@
-import { hasLength } from '@mockinho/core-matchers'
 import Supertest from 'supertest'
-import {
-  allOf,
-  containing,
-  equalsTo,
-  item,
-  jsonPath,
-  mockinhoHTTP,
-  opts,
-  post,
-  urlPath
-} from '../index'
+import { hasLength } from '@mockinho/core-matchers'
+import { allOf, containing, equalsTo, item, jsonPath, mockinhoHTTP, opts, post, urlPath } from '..'
 import { ok } from '../stub'
 import { Headers, MediaTypes } from '../types'
 

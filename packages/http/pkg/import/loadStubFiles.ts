@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 
-import { listFilenames, noNullElements, notBlank, notEmpty } from '@mockinho/core'
-import Chalk from 'chalk'
 import * as Fs from 'fs'
+import Chalk from 'chalk'
+import { listFilenames, noNullElements, notBlank, notEmpty } from '@mockinho/core'
 import { chooseStubFileParser } from './chooseStubFileParser'
 import { InvalidStubFileError } from './InvalidStubFileError'
 import { ParseResult, parseStubFile } from './parseStubFile'

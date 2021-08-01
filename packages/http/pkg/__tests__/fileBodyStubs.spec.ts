@@ -1,6 +1,6 @@
 import Path from 'path'
 import Supertest from 'supertest'
-import { equalsTo, get, mockinhoHTTP, opts, post, urlPath } from '../index'
+import { equalsTo, get, mockinhoHTTP, opts, post, urlPath } from '..'
 import { ok } from '../stub'
 import { Headers, MediaTypes } from '../types'
 

@@ -1,7 +1,7 @@
 import Path from 'path'
 import Supertest from 'supertest'
 import { v4 } from 'uuid'
-import { mockinhoHTTP, opts } from '../index'
+import { mockinhoHTTP, opts } from '..'
 
 describe('HTTP - File Stubbing', function () {
   describe('Default Path', function () {

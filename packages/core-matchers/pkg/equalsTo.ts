@@ -1,5 +1,5 @@
-import { createMatcher, Matcher } from '@mockinho/core'
 import assert from 'assert'
+import { createMatcher, Matcher } from '@mockinho/core'
 
 export const equalsTo = <T>(
   expected: T,

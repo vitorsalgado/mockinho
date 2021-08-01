@@ -1,3 +1,4 @@
+import Path from 'path'
 import {
   isTrue,
   notBlank,
@@ -6,7 +7,6 @@ import {
   ResponseDefinitionBuilderContext
 } from '@mockinho/core'
 import { fromFile, toJSON } from '@mockinho/core-bodyconverters'
-import Path from 'path'
 import { BodyType, Headers, MediaTypes, StatusCodes } from '../types'
 import { HttpResponseDefinition } from './HttpResponseDefinition'
 

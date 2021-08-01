@@ -1,6 +1,6 @@
+import { URL } from 'url'
 import { createMatcher, Matcher } from '@mockinho/core'
 import { equalsTo } from '@mockinho/core-matchers'
-import { URL } from 'url'
 
 export const urlPath = (
   path: string,

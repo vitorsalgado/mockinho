@@ -1,5 +1,5 @@
-import { extractPathname, isoDateTime } from '@mockinho/core'
 import Chalk from 'chalk'
+import { extractPathname, isoDateTime } from '@mockinho/core'
 import { HttpStub } from '../stub'
 import { HttpEvents } from './HttpEvents'
 

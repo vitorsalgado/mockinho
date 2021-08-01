@@ -1,5 +1,5 @@
 import Supertest from 'supertest'
-import { del, head, mockinhoHTTP, opts, patch, put } from '../index'
+import { del, head, mockinhoHTTP, opts, patch, put } from '..'
 import { urlPath } from '../matchers'
 import { get, ok, post } from '../stub'
 

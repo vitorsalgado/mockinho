@@ -14,6 +14,7 @@
     "test:ci": "npm run test -- --colors --coverage --ci",
     "test:coverage:upload": "codecov -f coverage/*.json",
     "lint": "eslint --ext .ts,.js .",
+    "lint:fix": "npm run lint -- --fix",
     "lint:ci": "npm run lint && npm run prettier:ci",
     "prettier": "prettier 'packages/**' --write --ignore-unknown",
     "prettier:ci": "npm run prettier -- --check",

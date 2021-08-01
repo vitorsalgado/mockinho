@@ -1,5 +1,5 @@
-import { Level, Logger } from '@mockinho/core'
 import * as Path from 'path'
+import { Level, Logger } from '@mockinho/core'
 import { HttpServerFactory } from '../HttpServer'
 import { Configurations } from './Configurations'
 

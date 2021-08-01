@@ -1,5 +1,5 @@
-import { createMatcher, Matcher } from '@mockinho/core'
 import { validate } from 'uuid'
+import { createMatcher, Matcher } from '@mockinho/core'
 
 export const isUUID = (): Matcher<string> =>
   createMatcher(

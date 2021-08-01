@@ -1,5 +1,5 @@
-import { Logger, LoggerPino } from '@mockinho/core'
 import Path from 'path'
+import { Logger, LoggerPino } from '@mockinho/core'
 import { FastifyHttpServerFactory } from '../../FastifyHttpServerFactory'
 import { FastifyConfigurationsBuilder } from '../FastifyConfigurationsBuilder'
 

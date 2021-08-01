@@ -1,6 +1,6 @@
 import Path from 'path'
 import Supertest from 'supertest'
-import { mockinhoHTTP, opts, post, urlPath } from '../index'
+import { mockinhoHTTP, opts, post, urlPath } from '..'
 import { ok } from '../stub'
 
 describe('Form MultiPart', function () {
