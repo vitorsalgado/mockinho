@@ -1,22 +1,35 @@
 import Path from 'path'
-import {
-  isTrue,
-  notBlank,
-  notNull,
-  ResponseDefinitionBuilder,
-  ResponseDefinitionBuilderContext
-} from '@mockinho/core'
+import Fs from 'fs'
+import { isTrue, notBlank, notNull, ResponseDefinitionBuilder, MockinhoError } from '@mockinho/core'
+
 import { fromFile, toJSON } from '@mockinho/core-bodyconverters'
-import { BodyType, Headers, MediaTypes, StatusCodes } from '../types'
+import { BodyType, Headers, MediaTypes, StatusCodes, ErrorCodes } from '../types'
+import { HttpRequest } from '../HttpRequest'
+import { HttpContext } from '../HttpContext'
+import { ExpressServerFactory } from '../ExpressServerFactory'
+import { ExpressConfigurations } from '../config'
 import { HttpResponseDefinition } from './HttpResponseDefinition'
 
+class InvalidResponseDefinitionError extends MockinhoError {
+  constructor(message: string) {
+    super(message, ErrorCodes.MR_ERR_INVALID_RESPONSE_DEFINITION)
+  }
+}
+
 export class HttpResponseDefinitionBuilder
-  implements ResponseDefinitionBuilder<HttpResponseDefinition>
+  implements
+    ResponseDefinitionBuilder<
+      HttpContext<ExpressServerFactory, ExpressConfigurations>,
+      HttpRequest,
+      HttpResponseDefinition
+    >
 {
   private _status: number = StatusCodes.OK
   private _body: BodyType = undefined
   private _bodyFile: string = ''
+  private _bodyFunction?: (request: HttpRequest) => BodyType
   private _bodyFileRelativeToFixtures: boolean = true
+  private _bodyCtrl: number = 0
   private _headers: Record<string, string> = {}
   private _delay: number = 0
 
@@ -63,11 +76,14 @@ export class HttpResponseDefinitionBuilder
 
   body(body: BodyType): HttpResponseDefinitionBuilder {
     this._body = body
+    this._bodyCtrl++
 
     return this
   }
 
   bodyJSON(body: Record<string, unknown>): HttpResponseDefinitionBuilder {
+    notNull(body)
+
     return this.body(toJSON(body)).header(Headers.ContentType, MediaTypes.APPLICATION_JSON)
   }
 
@@ -76,6 +92,14 @@ export class HttpResponseDefinitionBuilder
 
     this._bodyFile = path
     this._bodyFileRelativeToFixtures = relativeToFixtures
+    this._bodyCtrl++
+
+    return this
+  }
+
+  bodyWith(builder: (request: HttpRequest) => BodyType): HttpResponseDefinitionBuilder {
+    this._bodyFunction = builder
+    this._bodyCtrl++
 
     return this
   }
@@ -84,29 +108,49 @@ export class HttpResponseDefinitionBuilder
     notNull(ms)
 
     this._delay = ms
+
     return this
   }
 
   // endregion
 
-  build(context: ResponseDefinitionBuilderContext): HttpResponseDefinition {
+  build(
+    context: HttpContext<ExpressServerFactory, ExpressConfigurations>,
+    request: HttpRequest
+  ): HttpResponseDefinition {
     notNull(context)
-
-    this.validate()
 
     if (this._bodyFile) {
       const file = this._bodyFileRelativeToFixtures
-        ? Path.join(context.fixturesBodyPath, this._bodyFile)
+        ? Path.join(context.provideConfigurations().stubsBodyContentDirectory, this._bodyFile)
         : this._bodyFile
 
       this._body = fromFile(file)
+    } else if (this._bodyFunction) {
+      this._body = this._bodyFunction(request)
     }
 
     return new HttpResponseDefinition(this._status, this._headers, this._body, this._delay)
   }
 
-  validate(): void {
+  validate(context: HttpContext<ExpressServerFactory, ExpressConfigurations>): void {
     notNull(this._status)
     isTrue(this._delay >= 0, 'Delay must be a positive number.')
+
+    if (this._bodyCtrl > 1) {
+      throw new InvalidResponseDefinitionError(
+        'Found more than one body strategy setup. Choose between: .body() .bodyFile() or .bodyWith()'
+      )
+    }
+
+    if (this._bodyFile) {
+      const file = this._bodyFileRelativeToFixtures
+        ? Path.join(context.provideConfigurations().stubsBodyContentDirectory, this._bodyFile)
+        : this._bodyFile
+
+      if (!Fs.existsSync(file)) {
+        throw new TypeError(`File ${file} not found!`)
+      }
+    }
   }
 }

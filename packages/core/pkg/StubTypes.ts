@@ -7,12 +7,3 @@ export interface Expectation<Value, ValueContext> {
   matcher: Matcher<Value>
   weight: number
 }
-
-export interface ResponseDefinitionBuilderContext {
-  fixturesPath: string
-  fixturesBodyPath: string
-}
-
-export interface ResponseDefinitionBuilder<ResponseDefinition> {
-  build(context: ResponseDefinitionBuilderContext): ResponseDefinition
-}

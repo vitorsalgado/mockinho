@@ -48,6 +48,7 @@ export class InvalidStubConfigurationError extends MockinhoError {
 }
 
 export class HttpStubBuilder extends StubBaseBuilder<
+  HttpContext<any, any>,
   HttpRequest,
   HttpResponseDefinition,
   HttpResponseDefinitionBuilder,
@@ -257,6 +258,7 @@ export class HttpStubBuilder extends StubBaseBuilder<
     notNull(context)
 
     this.validate()
+    this._responseDefinitionBuilder.validate(context)
 
     return new HttpStub(
       this._id,
@@ -265,10 +267,7 @@ export class HttpStubBuilder extends StubBaseBuilder<
       this._source,
       this._sourceDescription,
       this._matchers,
-      this._responseDefinitionBuilder.build({
-        fixturesPath: context.provideConfigurations().stubsDirectory,
-        fixturesBodyPath: context.provideConfigurations().stubsBodyContentDirectory
-      }),
+      this._responseDefinitionBuilder,
       this.meta,
       this._scenarioName
         ? {

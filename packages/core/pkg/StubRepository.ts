@@ -1,8 +1,16 @@
 import { Stub } from './Stub'
 import { StubSource } from './StubTypes'
 import { Optional } from './utils'
+import { Context } from './Context'
+import { ResponseDefinitionBuilder } from './ResponseDefinitionBuilder'
 
-export interface StubRepository<Request, ResDef, TheStub extends Stub<Request, ResDef>> {
+export interface StubRepository<
+  Ctx extends Context,
+  Req,
+  Res,
+  ResBuilder extends ResponseDefinitionBuilder<Ctx, Req, Res>,
+  TheStub extends Stub<Ctx, Req, Res, ResBuilder>
+> {
   save(stub: TheStub): TheStub
 
   fetchSorted(): Array<TheStub>

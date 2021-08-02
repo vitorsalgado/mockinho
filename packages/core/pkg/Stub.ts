@@ -1,5 +1,7 @@
-import { v4, v4 as UUId } from 'uuid'
+import { v4 as UUIdV4 } from 'uuid'
 import { Expectation, StubSource } from './StubTypes'
+import { ResponseDefinitionBuilder } from './ResponseDefinitionBuilder'
+import { Context } from './Context'
 
 export interface StubScenario {
   readonly name: string
@@ -7,7 +9,12 @@ export interface StubScenario {
   readonly newState: string
 }
 
-export class Stub<Req, ResDef = any> {
+export class Stub<
+  Ctx extends Context,
+  Req,
+  Res,
+  ResponseBuilder extends ResponseDefinitionBuilder<Ctx, Req, Res>
+> {
   constructor(
     public readonly id: string,
     public readonly name: string,
@@ -15,27 +22,42 @@ export class Stub<Req, ResDef = any> {
     public readonly source: StubSource,
     public readonly sourceDescription: string,
     public readonly expectations: Array<Expectation<any, Req>>,
-    public readonly responseDefinition: ResDef,
+    public readonly responseDefinitionBuilder: ResponseBuilder,
     private hits: number,
     public readonly scenario?: StubScenario
   ) {
     if (!this.id) {
-      this.id = v4()
+      this.id = UUIdV4()
     }
   }
 
-  static newStub<Req, ResDef>(
+  static newStub<
+    Ctx extends Context,
+    Req,
+    Res,
+    ResponseBuilder extends ResponseDefinitionBuilder<Ctx, Req, Res>
+  >(
     id: string,
     name: string,
     priority: number,
     expectations: Array<Expectation<any, Req>>,
-    responseDefinition: ResDef,
+    responseDefinition: ResponseBuilder,
     source: StubSource,
     sourceDescription: string,
     scenario?: StubScenario
-  ): Stub<Req, ResDef> {
-    id = id === '' ? UUId() : id
-    return new Stub(id, name, priority, 'code', '', expectations, responseDefinition, 0, scenario)
+  ): Stub<Ctx, Req, Res, ResponseBuilder> {
+    id = id === '' ? UUIdV4() : id
+    return new Stub<Ctx, Req, Res, ResponseBuilder>(
+      id,
+      name,
+      priority,
+      'code',
+      '',
+      expectations,
+      responseDefinition,
+      0,
+      scenario
+    )
   }
 
   hit(): void {

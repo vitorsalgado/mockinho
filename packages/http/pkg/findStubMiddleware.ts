@@ -4,10 +4,10 @@ import { Request, Response, NextFunction } from 'express'
 import { findStubForRequest, FindStubResult, Stub } from '@mockinho/core'
 import { HttpContext } from './HttpContext'
 import { HttpRequest } from './HttpRequest'
-import { HttpResponseDefinition, HttpStub } from './stub'
+import { HttpResponseDefinition, HttpStub, HttpResponseDefinitionBuilder } from './stub'
 import { ExpressServerFactory } from './ExpressServerFactory'
 import { ExpressConfigurations } from './config'
-import { StubNotFoundError } from './StubNotFoundError'
+import { StubNotFoundError } from './stub/StubNotFoundError'
 import { BodyType } from './types'
 
 export function findStubMiddleware(
@@ -28,7 +28,7 @@ export function findStubMiddleware(
 
     if (result.hasMatch()) {
       const matched = result.matched()
-      const response = matched.responseDefinition
+      const response = matched.responseDefinitionBuilder.build(context, req)
 
       let body: BodyType
 
@@ -92,7 +92,12 @@ function fromExpressRequest(request: Request): HttpRequest {
 function onRequestNotMatched(
   context: HttpContext<ExpressServerFactory, ExpressConfigurations>,
   req: HttpRequest,
-  result: FindStubResult<HttpRequest, HttpResponseDefinition>
+  result: FindStubResult<
+    HttpContext<ExpressServerFactory, ExpressConfigurations>,
+    HttpRequest,
+    HttpResponseDefinition,
+    HttpResponseDefinitionBuilder
+  >
 ) {
   context.emit('requestNotMatched', {
     url: req.url,
@@ -106,7 +111,12 @@ function onRequestMatched(
   verbose: boolean,
   req: HttpRequest,
   response: HttpResponseDefinition,
-  matched: Stub<HttpRequest, HttpResponseDefinition>
+  matched: Stub<
+    HttpContext<ExpressServerFactory, ExpressConfigurations>,
+    HttpRequest,
+    HttpResponseDefinition,
+    HttpResponseDefinitionBuilder
+  >
 ) {
   context.emit('requestMatched', {
     verbose: verbose,

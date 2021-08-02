@@ -1,5 +1,5 @@
 import { MockinhoError } from '@mockinho/core'
-import { ErrorCodes } from './types'
+import { ErrorCodes } from '../types'
 
 export interface ClosestMatch {
   id: string

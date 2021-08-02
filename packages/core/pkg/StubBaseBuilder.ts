@@ -3,19 +3,21 @@ import { Matcher } from './Matcher'
 import { SCENARIO_STATE_STARTED } from './Scenario'
 import { scenarioMatcher } from './scenarioMatcher'
 import { Stub } from './Stub'
-import { Expectation, ResponseDefinitionBuilder } from './StubTypes'
+import { Expectation } from './StubTypes'
+import { ResponseDefinitionBuilder } from './ResponseDefinitionBuilder'
 
 export abstract class StubBaseBuilder<
+  Ctx extends Context,
   Req,
-  ResDef = any,
-  ResDefBuilder extends ResponseDefinitionBuilder<ResDef> = any,
-  S extends Stub<Req, ResDef> = Stub<Req, ResDef>
+  Res,
+  ResBuilder extends ResponseDefinitionBuilder<Ctx, Req, Res>,
+  S extends Stub<Ctx, Req, Res, ResBuilder> = Stub<Ctx, Req, Res, ResBuilder>
 > {
   protected _id: string = ''
   protected _name: string = ''
   protected _priority: number = 0
   protected readonly _matchers: Array<Expectation<any, Req>> = []
-  protected _responseDefinitionBuilder!: ResponseDefinitionBuilder<ResDef>
+  protected _responseDefinitionBuilder!: ResBuilder
   protected _scenarioName: string = ''
   protected _scenarioRequiredState: string = ''
   protected _scenarioNewState: string = ''
@@ -51,7 +53,7 @@ export abstract class StubBaseBuilder<
 
   abstract requestBody(...matcher: Array<Matcher<any>>): this
 
-  reply(responseDefinitionBuilder: ResDefBuilder): this {
+  reply(responseDefinitionBuilder: ResBuilder): this {
     this._responseDefinitionBuilder = responseDefinitionBuilder
     return this
   }

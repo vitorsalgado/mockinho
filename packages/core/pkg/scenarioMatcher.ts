@@ -17,8 +17,12 @@ export const scenarioMatcher = (
     (
       value: undefined,
       ctx: MatcherContext<
-        Stub<any>,
-        Context<any, StubRepository<any, any, Stub<any>>, ScenarioRepository>
+        Stub<any, any, any, any>,
+        Context<
+          any,
+          StubRepository<any, any, any, any, Stub<any, any, any, any>>,
+          ScenarioRepository
+        >
       >
     ): boolean => {
       const optScenario = ctx.context.provideScenarioRepository().fetchByName(name)

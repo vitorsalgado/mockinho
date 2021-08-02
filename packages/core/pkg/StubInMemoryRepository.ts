@@ -2,11 +2,20 @@ import { Stub } from './Stub'
 import { StubRepository } from './StubRepository'
 import { StubSource } from './StubTypes'
 import { Optional } from './utils'
+import { Context } from './Context'
+import { ResponseDefinitionBuilder } from './ResponseDefinitionBuilder'
 
-export abstract class StubInMemoryRepository<Req, ResDef, TheStub extends Stub<Req, ResDef>>
-  implements StubRepository<Req, ResDef, TheStub>
+export abstract class StubInMemoryRepository<
+  Ctx extends Context,
+  Req,
+  Res,
+  ResBuilder extends ResponseDefinitionBuilder<Ctx, Req, Res>,
+  TheStub extends Stub<Ctx, Req, Res, ResBuilder>
+> implements StubRepository<Ctx, Req, Res, ResBuilder, TheStub>
 {
-  constructor(protected readonly stubs: Map<string, TheStub> = new Map<string, TheStub>()) {}
+  protected constructor(
+    protected readonly stubs: Map<string, TheStub> = new Map<string, TheStub>()
+  ) {}
 
   save(stub: TheStub): TheStub {
     this.stubs.set(stub.id, stub)

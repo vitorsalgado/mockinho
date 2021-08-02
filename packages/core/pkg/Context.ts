@@ -3,7 +3,7 @@ import { StubRepository } from './StubRepository'
 
 export interface Context<
   Config = any,
-  StubRepo extends StubRepository<any, any, any> = any,
+  StubRepo extends StubRepository<any, any, any, any, any> = any,
   ScenarioRepo extends ScenarioRepository = any
 > {
   provideConfigurations(): Config

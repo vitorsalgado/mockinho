@@ -2,14 +2,21 @@ import { Context } from './Context'
 import { FindStubResult } from './FindStubResult'
 import { Stub } from './Stub'
 import { StubRepository } from './StubRepository'
+import { ResponseDefinitionBuilder } from './ResponseDefinitionBuilder'
 
-export function findStubForRequest<Request, ResponseDefinition, Config>(
-  request: Request,
+export function findStubForRequest<
+  Ctx extends Context,
+  Req,
+  Res,
+  ResBuilder extends ResponseDefinitionBuilder<Ctx, Req, Res>,
+  Config
+>(
+  request: Req,
   context: Context<
     Config,
-    StubRepository<Request, ResponseDefinition, Stub<Request, ResponseDefinition>>
+    StubRepository<Ctx, Req, Res, ResBuilder, Stub<Ctx, Req, Res, ResBuilder>>
   >
-): FindStubResult<Request, ResponseDefinition> {
+): FindStubResult<Ctx, Req, Res, ResBuilder> {
   const stubRepository = context.provideStubRepository()
   const stubs = stubRepository.fetchSorted()
 
