@@ -1,5 +1,5 @@
-import { createServer, Server as NodeHttpServer } from 'http'
-import { Server as NodeHttpsServer } from 'https'
+import { createServer as createHttpServer, Server as NodeHttpServer } from 'http'
+import { Server as NodeHttpsServer, createServer as createHttpsServer } from 'https'
 import { AddressInfo } from 'net'
 import express, { Express, Request, Response, NextFunction } from 'express'
 import Multer from 'multer'
@@ -21,7 +21,10 @@ export class ExpressServer implements HttpServer {
   constructor(private readonly context: HttpContext<ExpressServerFactory, ExpressConfigurations>) {
     this.configurations = context.provideConfigurations()
     this.expressApp = express()
-    this.serverInstance = createServer(this.expressApp)
+    this.serverInstance =
+      this.configurations.https && this.configurations.httpsOptions
+        ? createHttpsServer(this.configurations.httpsOptions, this.expressApp)
+        : createHttpServer(this.expressApp)
   }
 
   preSetup(): void {
@@ -89,7 +92,7 @@ export class ExpressServer implements HttpServer {
     }
   }
 
-  server(): NodeHttpServer {
+  server(): NodeHttpServer | NodeHttpsServer {
     return this.serverInstance
   }
 

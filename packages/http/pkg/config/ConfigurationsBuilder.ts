@@ -1,4 +1,5 @@
 import * as Path from 'path'
+import { ServerOptions as HttpsServerOptions } from 'https'
 import { Level, Logger } from '@mockinho/core'
 import { HttpServerFactory } from '../HttpServer'
 import { Configurations } from './Configurations'
@@ -12,6 +13,8 @@ export abstract class ConfigurationsBuilder<
 
   protected _port: number = 0
   protected _host: string = '127.0.0.1'
+  protected _https: boolean = false
+  protected _httpsOptions?: HttpsServerOptions
   protected _root: string = process.cwd()
   protected _dynamicPort: boolean = true
   protected _defaultLoggerDisabled: boolean = false
@@ -37,6 +40,12 @@ export abstract class ConfigurationsBuilder<
 
   root(rootPath: string): this {
     this._root = rootPath
+    return this
+  }
+
+  https(options: HttpsServerOptions): this {
+    this._https = true
+    this._httpsOptions = options
     return this
   }
 

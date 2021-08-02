@@ -11,6 +11,7 @@ describe('Configurations Builder', function () {
     const cfg = builder
       .port(3000)
       .host('127.0.0.1')
+      .https({ enableTrace: true })
       .dynamicPort()
       .log(pinoLogger)
       .verbose(false)
@@ -27,6 +28,8 @@ describe('Configurations Builder', function () {
 
     expect(cfg.port).toEqual(3000)
     expect(cfg.host).toEqual('127.0.0.1')
+    expect(cfg.https).toBeTruthy()
+    expect(cfg.httpsOptions).toEqual({ enableTrace: true })
     expect(cfg.dynamicPort).toBeTruthy()
     expect(cfg.loggers).toHaveLength(1)
     expect(cfg.loggers[0]).toBeInstanceOf(LoggerPino)
@@ -115,5 +118,20 @@ describe('Configurations Builder', function () {
 
     expect(cfg.loggers).toHaveLength(1)
     expect(cfg.loggers[0]).toBeInstanceOf(FakeLog)
+  })
+
+  describe('HTTPS', function () {
+    it('should have https as false by default', function () {
+      const builder = new ExpressConfigurationsBuilder()
+      const cfg = builder.build()
+
+      expect(cfg.https).toBeFalsy()
+      expect(cfg.httpsOptions).toBeUndefined()
+    })
+
+    it('should fail when https is enabled but no options are provided', function () {
+      const builder = new ExpressConfigurationsBuilder()
+      expect(() => builder.https(undefined as any).build()).toThrowError(ReferenceError)
+    })
   })
 })

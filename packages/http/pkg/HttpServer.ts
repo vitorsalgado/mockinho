@@ -1,4 +1,5 @@
-import { Server } from 'http'
+import { Server as NodeHttpServer } from 'http'
+import { Server as NodeHttpsServer } from 'https'
 import { HttpContext } from './HttpContext'
 
 export interface HttpServerInfo {
@@ -12,7 +13,7 @@ export interface HttpServer {
 
   close(): Promise<void>
 
-  server(): Server
+  server(): NodeHttpServer | NodeHttpsServer
 
   info(): HttpServerInfo
 }
