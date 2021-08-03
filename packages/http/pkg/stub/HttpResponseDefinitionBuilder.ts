@@ -6,8 +6,8 @@ import { fromFile, toJSON } from '@mockinho/core-bodyconverters'
 import { BodyType, Headers, MediaTypes, StatusCodes, ErrorCodes } from '../types'
 import { HttpRequest } from '../HttpRequest'
 import { HttpContext } from '../HttpContext'
-import { ExpressServerFactory } from '../ExpressServerFactory'
-import { ExpressConfigurations } from '../config'
+import { Configurations } from '../config'
+import { HttpServerFactory } from '../HttpServer'
 import { HttpResponseDefinition } from './HttpResponseDefinition'
 
 class InvalidResponseDefinitionError extends MockinhoError {
@@ -16,13 +16,10 @@ class InvalidResponseDefinitionError extends MockinhoError {
   }
 }
 
-export class HttpResponseDefinitionBuilder
-  implements
-    ResponseDefinitionBuilder<
-      HttpContext<ExpressServerFactory, ExpressConfigurations>,
-      HttpRequest,
-      HttpResponseDefinition
-    >
+export class HttpResponseDefinitionBuilder<
+  SF extends HttpServerFactory,
+  C extends Configurations<SF>
+> implements ResponseDefinitionBuilder<HttpContext<SF, C>, HttpRequest, HttpResponseDefinition>
 {
   private _status: number = StatusCodes.OK
   private _body: BodyType = undefined
@@ -33,11 +30,14 @@ export class HttpResponseDefinitionBuilder
   private _headers: Record<string, string> = {}
   private _delay: number = 0
 
-  static newBuilder = (): HttpResponseDefinitionBuilder => new HttpResponseDefinitionBuilder()
+  static newBuilder = <
+    SF extends HttpServerFactory,
+    C extends Configurations<SF>
+  >(): HttpResponseDefinitionBuilder<SF, C> => new HttpResponseDefinitionBuilder()
 
   // region Builder
 
-  status(status: number): HttpResponseDefinitionBuilder {
+  status(status: number): this {
     notNull(status)
 
     this._status = status
@@ -45,7 +45,7 @@ export class HttpResponseDefinitionBuilder
     return this
   }
 
-  header(key: string, value: string): HttpResponseDefinitionBuilder {
+  header(key: string, value: string): this {
     notBlank(key)
     notNull(value)
 
@@ -54,7 +54,7 @@ export class HttpResponseDefinitionBuilder
     return this
   }
 
-  headerLocation(location?: string): HttpResponseDefinitionBuilder {
+  headerLocation(location?: string): this {
     if (location === null || typeof location === 'undefined') {
       return this
     }
@@ -64,7 +64,7 @@ export class HttpResponseDefinitionBuilder
     return this
   }
 
-  headers(headers: Record<string, string>): HttpResponseDefinitionBuilder {
+  headers(headers: Record<string, string>): this {
     notNull(headers)
 
     for (const [key, value] of Object.entries(headers)) {
@@ -74,20 +74,20 @@ export class HttpResponseDefinitionBuilder
     return this
   }
 
-  body(body: BodyType): HttpResponseDefinitionBuilder {
+  body(body: BodyType): this {
     this._body = body
     this._bodyCtrl++
 
     return this
   }
 
-  bodyJSON(body: Record<string, unknown>): HttpResponseDefinitionBuilder {
+  bodyJSON(body: Record<string, unknown>): this {
     notNull(body)
 
     return this.body(toJSON(body)).header(Headers.ContentType, MediaTypes.APPLICATION_JSON)
   }
 
-  bodyFile(path: string, relativeToFixtures: boolean = true): HttpResponseDefinitionBuilder {
+  bodyFile(path: string, relativeToFixtures: boolean = true): this {
     notBlank(path)
 
     this._bodyFile = path
@@ -97,14 +97,14 @@ export class HttpResponseDefinitionBuilder
     return this
   }
 
-  bodyWith(builder: (request: HttpRequest) => BodyType): HttpResponseDefinitionBuilder {
+  bodyWith(builder: (request: HttpRequest) => BodyType): this {
     this._bodyFunction = builder
     this._bodyCtrl++
 
     return this
   }
 
-  delayInMs(ms: number): HttpResponseDefinitionBuilder {
+  delayInMs(ms: number): this {
     notNull(ms)
 
     this._delay = ms
@@ -114,10 +114,7 @@ export class HttpResponseDefinitionBuilder
 
   // endregion
 
-  build(
-    context: HttpContext<ExpressServerFactory, ExpressConfigurations>,
-    request: HttpRequest
-  ): HttpResponseDefinition {
+  build(context: HttpContext<SF, C>, request: HttpRequest): HttpResponseDefinition {
     notNull(context)
 
     if (this._bodyFile) {
@@ -133,7 +130,7 @@ export class HttpResponseDefinitionBuilder
     return new HttpResponseDefinition(this._status, this._headers, this._body, this._delay)
   }
 
-  validate(context: HttpContext<ExpressServerFactory, ExpressConfigurations>): void {
+  validate(context: HttpContext<SF, C>): void {
     notNull(this._status)
     isTrue(this._delay >= 0, 'Delay must be a positive number.')
 

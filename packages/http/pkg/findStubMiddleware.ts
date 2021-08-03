@@ -24,7 +24,13 @@ export function findStubMiddleware(
 
     onRequestReceived(context, verbose, req)
 
-    const result = findStubForRequest(req, context)
+    const result = findStubForRequest<
+      HttpContext<ExpressServerFactory, ExpressConfigurations>,
+      HttpRequest,
+      HttpResponseDefinition,
+      HttpResponseDefinitionBuilder<ExpressServerFactory, ExpressConfigurations>,
+      ExpressConfigurations
+    >(req, context)
 
     if (result.hasMatch()) {
       const matched = result.matched()
@@ -96,13 +102,16 @@ function onRequestNotMatched(
     HttpContext<ExpressServerFactory, ExpressConfigurations>,
     HttpRequest,
     HttpResponseDefinition,
-    HttpResponseDefinitionBuilder
+    HttpResponseDefinitionBuilder<ExpressServerFactory, ExpressConfigurations>
   >
 ) {
   context.emit('requestNotMatched', {
     url: req.url,
     method: req.method,
-    closestMatch: result.closestMatch().orNothing() as HttpStub
+    closestMatch: result.closestMatch().orNothing() as HttpStub<
+      ExpressServerFactory,
+      ExpressConfigurations
+    >
   })
 }
 
@@ -115,7 +124,7 @@ function onRequestMatched(
     HttpContext<ExpressServerFactory, ExpressConfigurations>,
     HttpRequest,
     HttpResponseDefinition,
-    HttpResponseDefinitionBuilder
+    HttpResponseDefinitionBuilder<ExpressServerFactory, ExpressConfigurations>
   >
 ) {
   context.emit('requestMatched', {

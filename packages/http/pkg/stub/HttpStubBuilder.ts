@@ -15,6 +15,8 @@ import { HttpContext } from '../HttpContext'
 import { HttpRequest } from '../HttpRequest'
 import { bearerToken, urlPath } from '../matchers'
 import { BodyType, ErrorCodes, Headers, HttpMethods } from '../types'
+import { Configurations } from '../config'
+import { HttpServerFactory } from '../HttpServer'
 import { HttpResponseDefinition } from './HttpResponseDefinition'
 import { HttpResponseDefinitionBuilder } from './HttpResponseDefinitionBuilder'
 import { HttpStub, HttpStubMeta } from './HttpStub'
@@ -47,12 +49,15 @@ export class InvalidStubConfigurationError extends MockinhoError {
   }
 }
 
-export class HttpStubBuilder extends StubBaseBuilder<
-  HttpContext<any, any>,
+export class HttpStubBuilder<
+  SF extends HttpServerFactory = any,
+  C extends Configurations<SF> = any
+> extends StubBaseBuilder<
+  HttpContext<SF, C>,
   HttpRequest,
   HttpResponseDefinition,
-  HttpResponseDefinitionBuilder,
-  HttpStub
+  HttpResponseDefinitionBuilder<SF, C>,
+  HttpStub<SF, C>
 > {
   private readonly meta: HttpStubMeta = {}
 
@@ -63,7 +68,10 @@ export class HttpStubBuilder extends StubBaseBuilder<
     super()
   }
 
-  static newBuilder = (): HttpStubBuilder => new HttpStubBuilder()
+  static newBuilder = <
+    SF extends HttpServerFactory,
+    C extends Configurations<SF>
+  >(): HttpStubBuilder<SF, C> => new HttpStubBuilder()
 
   url(matcher: Matcher<string> | string): this {
     notNull(matcher)
@@ -254,7 +262,7 @@ export class HttpStubBuilder extends StubBaseBuilder<
     return this
   }
 
-  build(context: HttpContext<any, any>): HttpStub {
+  build(context: HttpContext<SF, C>): HttpStub<SF, C> {
     notNull(context)
 
     this.validate()

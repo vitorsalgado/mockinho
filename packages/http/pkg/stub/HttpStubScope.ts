@@ -1,6 +1,8 @@
 import Chalk from 'chalk'
 import { MockinhoError } from '@mockinho/core'
 import { ErrorCodes } from '../types'
+import { HttpServerFactory } from '../HttpServer'
+import { Configurations } from '../config'
 import { HttpStub } from './HttpStub'
 import { HttpStubRepository } from './HttpStubRepository'
 
@@ -10,9 +12,9 @@ export class PendingHttpStubScopeError extends MockinhoError {
   }
 }
 
-export class HttpStubScope {
+export class HttpStubScope<SF extends HttpServerFactory = any, C extends Configurations<SF> = any> {
   constructor(
-    private readonly stubRepository: HttpStubRepository,
+    private readonly stubRepository: HttpStubRepository<SF, C>,
     private readonly stubs: Array<string>
   ) {}
 
@@ -26,7 +28,7 @@ export class HttpStubScope {
     }
   }
 
-  pendingMocks(): Array<HttpStub> {
+  pendingMocks(): Array<HttpStub<SF, C>> {
     return this.stubRepository.fetchByIds(...this.stubs).filter(x => !x.called())
   }
 

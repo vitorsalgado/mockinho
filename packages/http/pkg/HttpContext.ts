@@ -9,9 +9,9 @@ export class HttpContext<
     Config extends Configurations<ServerFactory>
   >
   extends HttpEventListener
-  implements Context<Config, HttpStubRepository, ScenarioRepository>
+  implements Context<Config, HttpStubRepository<ServerFactory, Config>, ScenarioRepository>
 {
-  private readonly _stubbingRepository: HttpStubRepository
+  private readonly _stubbingRepository: HttpStubRepository<ServerFactory, Config>
   private readonly _scenarioRepository: ScenarioRepository
 
   constructor(private readonly _configurations: Config) {
@@ -29,7 +29,7 @@ export class HttpContext<
     return this._scenarioRepository
   }
 
-  provideStubRepository(): HttpStubRepository {
+  provideStubRepository(): HttpStubRepository<ServerFactory, Config> {
     return this._stubbingRepository
   }
 }
