@@ -1,8 +1,19 @@
 import { Stream } from 'stream'
+import { ExpressServerFactory } from './ExpressServerFactory'
+import { HttpResponseDefinitionBuilder } from './stub'
+import { HttpStubBuilder } from './stub'
+import { ExpressConfigurations } from './config'
 
 export type BodyType = string | Buffer | Stream | undefined | Record<string, unknown> | null
-
 export type HttpMethods = string | 'DELETE' | 'GET' | 'HEAD' | 'PATCH' | 'POST' | 'PUT' | 'OPTIONS'
+export type DefaultConfigurations = ExpressConfigurations
+export type DefaultServerFactory = ExpressServerFactory
+export type DecoratedResponseBuilder = HttpResponseDefinitionBuilder & {
+  [key: string]: (...args: Array<any>) => DecoratedResponseBuilder
+}
+export type DecoratedStubBuilder = HttpStubBuilder & {
+  [key: string]: (...args: Array<any>) => DecoratedStubBuilder
+}
 
 export const MediaTypes = {
   APPLICATION_JSON: 'application/json;charset=utf-8',
@@ -14,7 +25,7 @@ export const Headers = {
   Accept: 'accept',
   ContentType: 'content-type',
   Location: 'location',
-  Authenticate: 'www-authenticate',
+  WwwAuthenticate: 'www-authenticate',
   Authorization: 'authorization',
   Allow: 'allow'
 }

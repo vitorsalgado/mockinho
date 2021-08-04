@@ -1,6 +1,6 @@
 import { Matcher } from '@mockinho/core'
-import { HttpStubBuilder } from '../HttpStubBuilder'
+import { DecoratedStubBuilder } from '../../types'
 import { forMethod } from './forMethod'
 
-export const del = (urlMatcher: Matcher<string> | string): HttpStubBuilder =>
+export const del = (urlMatcher: Matcher<string> | string): DecoratedStubBuilder =>
   forMethod('DELETE', urlMatcher)

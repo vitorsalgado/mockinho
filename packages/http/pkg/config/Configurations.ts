@@ -1,8 +1,7 @@
 import { ServerOptions as HttpsServerOptions } from 'https'
 import { Logger } from '@mockinho/core'
-import { HttpServerFactory } from '../HttpServer'
 
-export interface Configurations<ServerFactory extends HttpServerFactory> {
+export interface Configurations {
   readonly port: number
   readonly host: string
   readonly https: boolean
@@ -17,6 +16,4 @@ export interface Configurations<ServerFactory extends HttpServerFactory> {
   readonly loadFileStubs: boolean
 
   readonly trace: boolean
-
-  readonly serverFactory: ServerFactory
 }

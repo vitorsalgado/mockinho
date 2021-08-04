@@ -1,10 +1,5 @@
 import { StatusCodes } from '../../types'
-import { HttpResponseDefinitionBuilder } from '../HttpResponseDefinitionBuilder'
-import { HttpServerFactory } from '../../HttpServer'
-import { Configurations } from '../../config'
+import { DecoratedResponseBuilder } from '../../types'
 import { response } from './response'
 
-export const noContent = <
-  SF extends HttpServerFactory,
-  C extends Configurations<SF>
->(): HttpResponseDefinitionBuilder<SF, C> => response().status(StatusCodes.NO_CONTENT)
+export const noContent = (): DecoratedResponseBuilder => response().status(StatusCodes.NO_CONTENT)

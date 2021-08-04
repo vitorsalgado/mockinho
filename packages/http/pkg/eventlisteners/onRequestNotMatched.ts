@@ -27,7 +27,7 @@ export function onRequestNotMatched(event: HttpEvents['requestNotMatched']): voi
   )
 }
 
-function tryGetUrlAndMethod(stub: HttpStub<any, any>): string {
+function tryGetUrlAndMethod(stub: HttpStub): string {
   const str = []
 
   if (stub.meta.method) {

@@ -4,7 +4,7 @@ import { HttpServer, HttpServerFactory } from './HttpServer'
 import { ExpressConfigurations } from './config'
 
 export class ExpressServerFactory implements HttpServerFactory {
-  build(context: HttpContext<ExpressServerFactory, ExpressConfigurations>): HttpServer {
+  build(context: HttpContext<ExpressConfigurations>): HttpServer {
     return new ExpressServer(context)
   }
 }

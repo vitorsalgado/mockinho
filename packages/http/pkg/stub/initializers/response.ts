@@ -1,8 +1,4 @@
 import { HttpResponseDefinitionBuilder } from '../HttpResponseDefinitionBuilder'
-import { HttpServerFactory } from '../../HttpServer'
-import { Configurations } from '../../config'
+import { DecoratedResponseBuilder } from '../../types'
 
-export const response = <
-  SF extends HttpServerFactory,
-  C extends Configurations<SF>
->(): HttpResponseDefinitionBuilder<SF, C> => new HttpResponseDefinitionBuilder()
+export const response = (): DecoratedResponseBuilder => HttpResponseDefinitionBuilder.newBuilder()

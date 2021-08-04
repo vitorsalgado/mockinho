@@ -1,21 +1,19 @@
 import { Expectation, Stub, StubScenario, StubSource } from '@mockinho/core'
 import { HttpRequest } from '../HttpRequest'
 import { HttpContext } from '../HttpContext'
-import { Configurations } from '../config'
-import { HttpServerFactory } from '../HttpServer'
-import { HttpResponseDefinitionBuilder } from './HttpResponseDefinitionBuilder'
 import { HttpResponseDefinition } from './HttpResponseDefinition'
+import { HttpResponseDefinitionBuilder } from './HttpResponseDefinitionBuilder'
 
 export interface HttpStubMeta {
   url?: string
   method?: string
 }
 
-export class HttpStub<SF extends HttpServerFactory, C extends Configurations<SF>> extends Stub<
-  HttpContext<SF, C>,
+export class HttpStub extends Stub<
+  HttpContext,
   HttpRequest,
   HttpResponseDefinition,
-  HttpResponseDefinitionBuilder<SF, C>
+  HttpResponseDefinitionBuilder
 > {
   constructor(
     id: string,
@@ -24,7 +22,7 @@ export class HttpStub<SF extends HttpServerFactory, C extends Configurations<SF>
     source: StubSource,
     sourceDescription: string,
     expectations: Array<Expectation<any, HttpRequest>>,
-    responseBuilder: HttpResponseDefinitionBuilder<SF, C>,
+    responseBuilder: HttpResponseDefinitionBuilder,
     public readonly meta: HttpStubMeta,
     scenario?: StubScenario
   ) {

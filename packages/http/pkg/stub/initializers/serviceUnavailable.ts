@@ -1,14 +1,9 @@
 import { StatusCodes } from '../../types'
-import { HttpResponseDefinitionBuilder } from '../HttpResponseDefinitionBuilder'
-import { HttpServerFactory } from '../../HttpServer'
-import { Configurations } from '../../config'
+import { DecoratedResponseBuilder } from '../../types'
 import { response } from './response'
 
-export const serviceUnavailable = <
-  SF extends HttpServerFactory,
-  C extends Configurations<SF>
->(): HttpResponseDefinitionBuilder<SF, C> => response().status(StatusCodes.SERVICE_UNAVAILABLE)
+export const serviceUnavailable = (): DecoratedResponseBuilder =>
+  response().status(StatusCodes.SERVICE_UNAVAILABLE)
 
-export const serviceUnavailableJSON = <SF extends HttpServerFactory, C extends Configurations<SF>>(
-  body: Record<string, unknown>
-): HttpResponseDefinitionBuilder<SF, C> => serviceUnavailable().bodyJSON(body)
+export const serviceUnavailableJSON = (body: Record<string, unknown>): DecoratedResponseBuilder =>
+  serviceUnavailable().bodyJSON(body)

@@ -33,7 +33,7 @@ module.exports = {
         groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object']
       }
     ],
-    'import/no-duplicates': ['error', { considerQueryString: false }],
+    'import/no-duplicates': ['off'],
     'import/no-mutable-exports': ['error'],
     'import/no-useless-path-segments': [
       'error',

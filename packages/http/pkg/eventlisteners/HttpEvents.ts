@@ -14,7 +14,7 @@ export interface HttpEvents {
   requestNotMatched: {
     readonly method: HttpMethods
     readonly url: string
-    readonly closestMatch?: HttpStub<any, any>
+    readonly closestMatch?: HttpStub
   }
 
   requestMatched: {

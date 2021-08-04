@@ -10,7 +10,6 @@ import { HttpServer, HttpServerInfo } from './HttpServer'
 import { StubNotFoundError } from './stub/StubNotFoundError'
 import { ErrorCodes } from './types'
 import { HttpContext } from './HttpContext'
-import { ExpressServerFactory } from './ExpressServerFactory'
 import { findStubMiddleware } from './findStubMiddleware'
 
 export class ExpressServer implements HttpServer {
@@ -18,7 +17,7 @@ export class ExpressServer implements HttpServer {
   private readonly serverInstance: NodeHttpServer | NodeHttpsServer
   private readonly expressApp: Express
 
-  constructor(private readonly context: HttpContext<ExpressServerFactory, ExpressConfigurations>) {
+  constructor(private readonly context: HttpContext) {
     this.configurations = context.provideConfigurations()
     this.expressApp = express()
     this.serverInstance =

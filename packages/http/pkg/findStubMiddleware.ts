@@ -5,13 +5,12 @@ import { findStubForRequest, FindStubResult, Stub } from '@mockinho/core'
 import { HttpContext } from './HttpContext'
 import { HttpRequest } from './HttpRequest'
 import { HttpResponseDefinition, HttpStub, HttpResponseDefinitionBuilder } from './stub'
-import { ExpressServerFactory } from './ExpressServerFactory'
 import { ExpressConfigurations } from './config'
 import { StubNotFoundError } from './stub/StubNotFoundError'
 import { BodyType } from './types'
 
 export function findStubMiddleware(
-  context: HttpContext<ExpressServerFactory, ExpressConfigurations>
+  context: HttpContext
 ): (request: Request, reply: Response, next: NextFunction) => Promise<void> {
   const verbose = context.provideConfigurations().verbose
 
@@ -25,10 +24,10 @@ export function findStubMiddleware(
     onRequestReceived(context, verbose, req)
 
     const result = findStubForRequest<
-      HttpContext<ExpressServerFactory, ExpressConfigurations>,
+      HttpContext,
       HttpRequest,
       HttpResponseDefinition,
-      HttpResponseDefinitionBuilder<ExpressServerFactory, ExpressConfigurations>,
+      HttpResponseDefinitionBuilder,
       ExpressConfigurations
     >(req, context)
 
@@ -86,9 +85,9 @@ export function findStubMiddleware(
   }
 }
 
-function fromExpressRequest(request: Request): HttpRequest {
-  ;(request as HttpRequest).id = UUId()
-  ;(request as HttpRequest).href = `${request.protocol}://${request.hostname}${request.url}`
+function fromExpressRequest(request: Request & { [key: string]: any }): HttpRequest {
+  request.id = UUId()
+  request.href = `${request.protocol}://${request.hostname}${request.url}`
 
   return request as HttpRequest
 }
@@ -96,36 +95,28 @@ function fromExpressRequest(request: Request): HttpRequest {
 // region Events
 
 function onRequestNotMatched(
-  context: HttpContext<ExpressServerFactory, ExpressConfigurations>,
+  context: HttpContext,
   req: HttpRequest,
   result: FindStubResult<
-    HttpContext<ExpressServerFactory, ExpressConfigurations>,
+    HttpContext,
     HttpRequest,
     HttpResponseDefinition,
-    HttpResponseDefinitionBuilder<ExpressServerFactory, ExpressConfigurations>
+    HttpResponseDefinitionBuilder
   >
 ) {
   context.emit('requestNotMatched', {
     url: req.url,
     method: req.method,
-    closestMatch: result.closestMatch().orNothing() as HttpStub<
-      ExpressServerFactory,
-      ExpressConfigurations
-    >
+    closestMatch: result.closestMatch().orNothing() as HttpStub
   })
 }
 
 function onRequestMatched(
-  context: HttpContext<ExpressServerFactory, ExpressConfigurations>,
+  context: HttpContext,
   verbose: boolean,
   req: HttpRequest,
   response: HttpResponseDefinition,
-  matched: Stub<
-    HttpContext<ExpressServerFactory, ExpressConfigurations>,
-    HttpRequest,
-    HttpResponseDefinition,
-    HttpResponseDefinitionBuilder<ExpressServerFactory, ExpressConfigurations>
-  >
+  matched: Stub<HttpContext, HttpRequest, HttpResponseDefinition, HttpResponseDefinitionBuilder>
 ) {
   context.emit('requestMatched', {
     verbose: verbose,
@@ -136,11 +127,7 @@ function onRequestMatched(
   })
 }
 
-function onRequestReceived(
-  context: HttpContext<ExpressServerFactory, ExpressConfigurations>,
-  verbose: boolean,
-  req: HttpRequest
-) {
+function onRequestReceived(context: HttpContext, verbose: boolean, req: HttpRequest) {
   context.emit('requestReceived', {
     verbose: verbose,
     method: req.method,

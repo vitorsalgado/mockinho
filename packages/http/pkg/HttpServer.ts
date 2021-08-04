@@ -19,5 +19,5 @@ export interface HttpServer {
 }
 
 export interface HttpServerFactory {
-  build(context: HttpContext<any, any>): HttpServer
+  build(context: HttpContext<any>): HttpServer
 }

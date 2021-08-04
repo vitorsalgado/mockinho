@@ -1,14 +1,8 @@
 import { StatusCodes } from '../../types'
-import { HttpResponseDefinitionBuilder } from '../HttpResponseDefinitionBuilder'
-import { HttpServerFactory } from '../../HttpServer'
-import { Configurations } from '../../config'
+import { DecoratedResponseBuilder } from '../../types'
 import { response } from './response'
 
-export const badGateway = <
-  SF extends HttpServerFactory,
-  C extends Configurations<SF>
->(): HttpResponseDefinitionBuilder<SF, C> => response().status(StatusCodes.BAD_GATEWAY)
+export const badGateway = (): DecoratedResponseBuilder => response().status(StatusCodes.BAD_GATEWAY)
 
-export const badGatewayJSON = <SF extends HttpServerFactory, C extends Configurations<SF>>(
-  body: Record<string, unknown>
-): HttpResponseDefinitionBuilder<SF, C> => badGateway().bodyJSON(body)
+export const badGatewayJSON = (body: Record<string, unknown>): DecoratedResponseBuilder =>
+  badGateway().bodyJSON(body)

@@ -1,32 +1,33 @@
 import { Server } from 'http'
 import { LoggerUtil, notBlank, notEmpty, SCENARIO_STATE_STARTED, StubSource } from '@mockinho/core'
-import { Configurations, ConfigurationsBuilder } from './config'
+import { ConfigurationsBuilder } from './config'
 import { onRequestMatched, onRequestNotMatched, onRequestReceived } from './eventlisteners'
 import { HttpContext } from './HttpContext'
-import { HttpServer, HttpServerFactory, HttpServerInfo } from './HttpServer'
+import { HttpServer, HttpServerInfo } from './HttpServer'
 import { buildStubFromFile } from './import/buildStubFromFile'
 import { loadStubFiles } from './import/loadStubFiles'
 import { HttpStubBuilder, HttpStubScope } from './stub'
+import { DefaultConfigurations } from './types'
+import { DefaultServerFactory } from './types'
 
-export class MockinhoHTTP<
-  ServerFactory extends HttpServerFactory,
-  Config extends Configurations<ServerFactory>
-> implements HttpServer
-{
+export class MockinhoHTTP implements HttpServer {
+  // --
   // region Ctor
 
-  private readonly context: HttpContext<ServerFactory, Config>
+  private readonly context: HttpContext
   private readonly httpServer: HttpServer
-  private readonly configurations: Config
+  private readonly configurations: DefaultConfigurations
 
-  constructor(configurationsBuilder: ConfigurationsBuilder<ServerFactory, Config>) {
+  constructor(
+    configurationsBuilder: ConfigurationsBuilder<DefaultServerFactory, DefaultConfigurations>
+  ) {
     const configurations = configurationsBuilder.build()
     const context = new HttpContext(configurations)
 
     this.configurations = configurations
-    this.httpServer = configurations.serverFactory.build(context)
+    this.httpServer = configurationsBuilder.provideServerFactory().build(context)
 
-    configurations.loggers.forEach(log => LoggerUtil.INSTANCE.subscribe(log))
+    configurations.loggers.forEach(log => LoggerUtil.instance().subscribe(log))
 
     this.context = context
     this.context.on('requestReceived', onRequestReceived)
@@ -37,6 +38,21 @@ export class MockinhoHTTP<
   }
 
   // endregion
+
+  // extension(StubLifeCycleListener)  --- hit-times and scenarios goes in this category
+  // remove context from matchers
+  // eliminate createMatchers function
+  // add log.trace on matchers - maybe
+  // rename Expectation --> MatcherMetadata
+  // improve newBuilder()
+  // think about stub-repository -- should receive StubLifeCycleListener? or the Facade? --- Facade seems better
+  // check possibility and need of Parameters -- Maybe an event need then
+  // Traffic Listener -- should be a Middleware
+  // check possibility to expose Express Middleware to final user
+
+  // ---
+  // make everything async or at least possible to use async (matchers, extensions ...)
+  // ---
 
   mock(...stubBuilders: Array<HttpStubBuilder>): HttpStubScope {
     notEmpty(stubBuilders)

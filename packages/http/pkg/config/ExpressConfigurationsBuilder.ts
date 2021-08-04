@@ -85,7 +85,6 @@ export class ExpressConfigurationsBuilder extends ConfigurationsBuilder<
       stubsBodyContentDirectory: this._stubsBodyContentDirectory,
       trace: this._trace,
       verbose: this._verbose,
-      serverFactory: this._serverFactory,
       formUrlEncodedOptions: this._formBodyOptions,
       multiPartOptions: this._multiPartOptions,
       cors: this._cors,

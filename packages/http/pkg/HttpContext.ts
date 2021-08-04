@@ -1,17 +1,14 @@
 import { Context, ScenarioInMemoryRepository, ScenarioRepository } from '@mockinho/core'
 import { Configurations } from './config'
 import { HttpEventListener } from './eventlisteners'
-import { HttpServerFactory } from './HttpServer'
 import { HttpStubRepository } from './stub'
+import { DefaultConfigurations } from './types'
 
-export class HttpContext<
-    ServerFactory extends HttpServerFactory,
-    Config extends Configurations<ServerFactory>
-  >
+export class HttpContext<Config extends Configurations = DefaultConfigurations>
   extends HttpEventListener
-  implements Context<Config, HttpStubRepository<ServerFactory, Config>, ScenarioRepository>
+  implements Context<Config, HttpStubRepository, ScenarioRepository>
 {
-  private readonly _stubbingRepository: HttpStubRepository<ServerFactory, Config>
+  private readonly _stubbingRepository: HttpStubRepository
   private readonly _scenarioRepository: ScenarioRepository
 
   constructor(private readonly _configurations: Config) {
@@ -29,7 +26,7 @@ export class HttpContext<
     return this._scenarioRepository
   }
 
-  provideStubRepository(): HttpStubRepository<ServerFactory, Config> {
+  provideStubRepository(): HttpStubRepository {
     return this._stubbingRepository
   }
 }

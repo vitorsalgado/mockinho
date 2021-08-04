@@ -1,10 +1,6 @@
 import { StatusCodes } from '../../types'
-import { HttpResponseDefinitionBuilder } from '../HttpResponseDefinitionBuilder'
-import { HttpServerFactory } from '../../HttpServer'
-import { Configurations } from '../../config'
+import { DecoratedResponseBuilder } from '../../types'
 import { response } from './response'
 
-export const seeOther = <SF extends HttpServerFactory, C extends Configurations<SF>>(
-  location?: string
-): HttpResponseDefinitionBuilder<SF, C> =>
+export const seeOther = (location?: string): DecoratedResponseBuilder =>
   response().status(StatusCodes.SEE_OTHER).headerLocation(location)

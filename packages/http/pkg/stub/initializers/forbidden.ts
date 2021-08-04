@@ -1,14 +1,8 @@
 import { StatusCodes } from '../../types'
-import { HttpResponseDefinitionBuilder } from '../HttpResponseDefinitionBuilder'
-import { HttpServerFactory } from '../../HttpServer'
-import { Configurations } from '../../config'
+import { DecoratedResponseBuilder } from '../../types'
 import { response } from './response'
 
-export const forbidden = <
-  SF extends HttpServerFactory,
-  C extends Configurations<SF>
->(): HttpResponseDefinitionBuilder<SF, C> => response().status(StatusCodes.FORBIDDEN)
+export const forbidden = (): DecoratedResponseBuilder => response().status(StatusCodes.FORBIDDEN)
 
-export const forbiddenJSON = <SF extends HttpServerFactory, C extends Configurations<SF>>(
-  body: Record<string, unknown>
-): HttpResponseDefinitionBuilder<SF, C> => forbidden().bodyJSON(body)
+export const forbiddenJSON = (body: Record<string, unknown>): DecoratedResponseBuilder =>
+  forbidden().bodyJSON(body)

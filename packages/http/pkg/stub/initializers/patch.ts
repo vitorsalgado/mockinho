@@ -1,6 +1,6 @@
 import { Matcher } from '@mockinho/core'
-import { HttpStubBuilder } from '../HttpStubBuilder'
+import { DecoratedStubBuilder } from '../../types'
 import { forMethod } from './forMethod'
 
-export const patch = (urlMatcher: Matcher<string> | string): HttpStubBuilder =>
+export const patch = (urlMatcher: Matcher<string> | string): DecoratedStubBuilder =>
   forMethod('PATCH', urlMatcher)

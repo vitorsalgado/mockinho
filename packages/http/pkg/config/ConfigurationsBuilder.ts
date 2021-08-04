@@ -1,13 +1,10 @@
-import * as Path from 'path'
+import Path from 'path'
 import { ServerOptions as HttpsServerOptions } from 'https'
 import { Level, Logger } from '@mockinho/core'
 import { HttpServerFactory } from '../HttpServer'
-import { Configurations } from './Configurations'
+import { ExpressServerFactory } from '../ExpressServerFactory'
 
-export abstract class ConfigurationsBuilder<
-  ServerFactory extends HttpServerFactory,
-  Config extends Configurations<ServerFactory>
-> {
+export abstract class ConfigurationsBuilder<ServerFactory extends HttpServerFactory, Config> {
   protected static STUB_FIXTURES_DIR = '__fixtures__'
   protected static STUB_FIXTURES_BODY_FILES_DIR = '__content__'
 
@@ -26,6 +23,8 @@ export abstract class ConfigurationsBuilder<
   protected _loadFileStubs: boolean = false
   protected _stubsDirectory: string = ''
   protected _stubsBodyContentDirectory: string = ''
+
+  // region Builders
 
   port(port: number): this {
     this._port = port
@@ -98,5 +97,15 @@ export abstract class ConfigurationsBuilder<
     return this
   }
 
+  // endregion
+
   abstract build(): Config
+
+  provideServerFactory(): ServerFactory {
+    if (!this._serverFactory) {
+      return new ExpressServerFactory() as ServerFactory
+    }
+
+    return this._serverFactory
+  }
 }

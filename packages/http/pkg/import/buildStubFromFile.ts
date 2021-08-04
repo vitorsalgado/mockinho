@@ -19,7 +19,6 @@ import {
   startsWith
 } from '@mockinho/core-matchers'
 import { Configurations } from '../config'
-import { HttpServerFactory } from '../HttpServer'
 import { urlPath, urlPathMatching } from '../matchers'
 import { HttpStubBuilder, response } from '../stub'
 import { InvalidStubFileError } from './InvalidStubFileError'
@@ -61,7 +60,7 @@ const MatcherConstants = [
   'fileMimeType'
 ]
 
-export function buildStubFromFile<Config extends Configurations<HttpServerFactory>>(
+export function buildStubFromFile<Config extends Configurations>(
   configurations: Config,
   stub: StubFile,
   filename: string

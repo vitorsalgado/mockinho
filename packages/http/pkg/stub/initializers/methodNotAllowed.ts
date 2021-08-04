@@ -1,12 +1,8 @@
 import { Headers, HttpMethods, StatusCodes } from '../../types'
-import { HttpResponseDefinitionBuilder } from '../HttpResponseDefinitionBuilder'
-import { HttpServerFactory } from '../../HttpServer'
-import { Configurations } from '../../config'
+import { DecoratedResponseBuilder } from '../../types'
 import { response } from './response'
 
-export const methodNotAllowed = <SF extends HttpServerFactory, C extends Configurations<SF>>(
-  allows?: HttpMethods
-): HttpResponseDefinitionBuilder<SF, C> => {
+export const methodNotAllowed = (allows?: HttpMethods): DecoratedResponseBuilder => {
   const builder = response().status(StatusCodes.METHOD_NOT_ALLOWED)
 
   if (allows) {

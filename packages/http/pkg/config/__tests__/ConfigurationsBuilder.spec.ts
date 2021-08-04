@@ -5,10 +5,8 @@ import { ExpressServerFactory } from '../../ExpressServerFactory'
 
 describe('Configurations Builder', function () {
   it('should build configurations with builder values', function () {
-    const builder = new ExpressConfigurationsBuilder()
     const pinoLogger = new LoggerPino()
-
-    const cfg = builder
+    const builder = new ExpressConfigurationsBuilder()
       .port(3000)
       .host('127.0.0.1')
       .https({ enableTrace: true })
@@ -24,7 +22,10 @@ describe('Configurations Builder', function () {
       .formUrlEncodedOptions({ limit: 1000 })
       .enableCors({ maxAge: 10 })
       .multiPartOptions({ limits: { fieldNameSize: 1000 } })
-      .build()
+
+    const cfg = builder.build()
+
+    expect(builder.provideServerFactory()).toBeInstanceOf(ExpressServerFactory)
 
     expect(cfg.port).toEqual(3000)
     expect(cfg.host).toEqual('127.0.0.1')
@@ -38,7 +39,6 @@ describe('Configurations Builder', function () {
     expect(cfg.stubsDirectory).toEqual(Path.join(__dirname, 'test'))
     expect(cfg.stubsBodyContentDirectory).toEqual(Path.join(__dirname, 'test', 'bodies'))
     expect(cfg.trace).toBeTruthy()
-    expect(cfg.serverFactory).toBeInstanceOf(ExpressServerFactory)
     expect(cfg.formUrlEncodedOptions).toEqual({ extended: false, limit: 1000 })
     expect(cfg.corsOptions).toEqual({ maxAge: 10 })
     expect(cfg.cors).toBeTruthy()
@@ -47,7 +47,6 @@ describe('Configurations Builder', function () {
 
   it('should add default logger when enable and not previously added', function () {
     const builder = new ExpressConfigurationsBuilder()
-
     const cfg = builder.disableDefaultLogger(false).build()
 
     expect(cfg.loggers).toHaveLength(1)
@@ -56,9 +55,7 @@ describe('Configurations Builder', function () {
 
   it('should add express server factory when none was specified', function () {
     const builder = new ExpressConfigurationsBuilder()
-    const cfg = builder.build()
-
-    expect(cfg.serverFactory).toBeInstanceOf(ExpressServerFactory)
+    expect(builder.provideServerFactory()).toBeInstanceOf(ExpressServerFactory)
   })
 
   it('should set stub body content dir to __content__ as the default', function () {
@@ -103,8 +100,6 @@ describe('Configurations Builder', function () {
     }
 
     const builder = new ExpressConfigurationsBuilder()
-
-    const cfg = builder
       .port(3000)
       .host('127.0.0.1')
       .dynamicPort()
@@ -114,7 +109,8 @@ describe('Configurations Builder', function () {
       .stubsDirectory(Path.join(__dirname, 'test'), Path.join(__dirname, 'test', 'bodies'))
       .disableDefaultLogger()
       .defaultLoggerLevel('warn')
-      .build()
+
+    const cfg = builder.build()
 
     expect(cfg.loggers).toHaveLength(1)
     expect(cfg.loggers[0]).toBeInstanceOf(FakeLog)

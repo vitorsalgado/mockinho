@@ -4,10 +4,11 @@ import { isTrue, notBlank, notNull, ResponseDefinitionBuilder, MockinhoError } f
 
 import { fromFile, toJSON } from '@mockinho/core-bodyconverters'
 import { BodyType, Headers, MediaTypes, StatusCodes, ErrorCodes } from '../types'
+import { DecoratedResponseBuilder } from '../types'
 import { HttpRequest } from '../HttpRequest'
 import { HttpContext } from '../HttpContext'
 import { Configurations } from '../config'
-import { HttpServerFactory } from '../HttpServer'
+import { ExpressConfigurations } from '../config'
 import { HttpResponseDefinition } from './HttpResponseDefinition'
 
 class InvalidResponseDefinitionError extends MockinhoError {
@@ -16,10 +17,8 @@ class InvalidResponseDefinitionError extends MockinhoError {
   }
 }
 
-export class HttpResponseDefinitionBuilder<
-  SF extends HttpServerFactory,
-  C extends Configurations<SF>
-> implements ResponseDefinitionBuilder<HttpContext<SF, C>, HttpRequest, HttpResponseDefinition>
+export class HttpResponseDefinitionBuilder<C extends Configurations = ExpressConfigurations>
+  implements ResponseDefinitionBuilder<HttpContext<C>, HttpRequest, HttpResponseDefinition>
 {
   private _status: number = StatusCodes.OK
   private _body: BodyType = undefined
@@ -30,10 +29,11 @@ export class HttpResponseDefinitionBuilder<
   private _headers: Record<string, string> = {}
   private _delay: number = 0
 
-  static newBuilder = <
-    SF extends HttpServerFactory,
-    C extends Configurations<SF>
-  >(): HttpResponseDefinitionBuilder<SF, C> => new HttpResponseDefinitionBuilder()
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private constructor() {}
+
+  static newBuilder = (): DecoratedResponseBuilder =>
+    new HttpResponseDefinitionBuilder() as DecoratedResponseBuilder
 
   // region Builder
 
@@ -114,7 +114,7 @@ export class HttpResponseDefinitionBuilder<
 
   // endregion
 
-  build(context: HttpContext<SF, C>, request: HttpRequest): HttpResponseDefinition {
+  build(context: HttpContext<C>, request: HttpRequest): HttpResponseDefinition {
     notNull(context)
 
     if (this._bodyFile) {
@@ -130,7 +130,7 @@ export class HttpResponseDefinitionBuilder<
     return new HttpResponseDefinition(this._status, this._headers, this._body, this._delay)
   }
 
-  validate(context: HttpContext<SF, C>): void {
+  validate(context: HttpContext): void {
     notNull(this._status)
     isTrue(this._delay >= 0, 'Delay must be a positive number.')
 

@@ -1,6 +1,7 @@
-import { Configurations, ConfigurationsBuilder } from './config'
-import { HttpServerFactory } from './HttpServer'
+import { ConfigurationsBuilder } from './config'
 import { MockinhoHTTP } from './MockinhoHTTP'
+import { DefaultServerFactory } from './types'
+import { DefaultConfigurations } from './types'
 
 export * from './config'
 export * from './stub'
@@ -15,11 +16,8 @@ export * from './MockinhoHTTP'
 export * from '@mockinho/core-matchers'
 export * from './matchers'
 
-export const mockinhoHTTP = <
-  ServerFactory extends HttpServerFactory,
-  Config extends Configurations<ServerFactory>
->(
-  configurations: ConfigurationsBuilder<ServerFactory, Config>
-): MockinhoHTTP<ServerFactory, Config> => new MockinhoHTTP(configurations)
+export const mockinhoHTTP = (
+  configurations: ConfigurationsBuilder<DefaultServerFactory, DefaultConfigurations>
+): MockinhoHTTP => new MockinhoHTTP(configurations)
 
 export default mockinhoHTTP
