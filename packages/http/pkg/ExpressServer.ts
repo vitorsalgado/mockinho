@@ -1,6 +1,7 @@
 import { createServer as createHttpServer, Server as NodeHttpServer } from 'http'
 import { Server as NodeHttpsServer, createServer as createHttpsServer } from 'https'
 import { AddressInfo } from 'net'
+import { Socket } from 'net'
 import express, { Express, Request, Response, NextFunction } from 'express'
 import Multer from 'multer'
 import Cors from 'cors'
@@ -16,6 +17,7 @@ export class ExpressServer implements HttpServer {
   private readonly configurations: ExpressConfigurations
   private readonly serverInstance: NodeHttpServer | NodeHttpsServer
   private readonly expressApp: Express
+  private readonly sockets: Set<Socket> = new Set<Socket>()
 
   constructor(private readonly context: HttpContext) {
     this.configurations = context.provideConfigurations()
@@ -30,6 +32,10 @@ export class ExpressServer implements HttpServer {
     const handler = findStubMiddleware(this.context)
 
     this.serverInstance.setTimeout(3_600_000)
+    this.serverInstance.on('connection', socket => {
+      this.sockets.add(socket)
+      socket.once('close', () => this.sockets.delete(socket))
+    })
 
     this.expressApp.disable('x-powered-by')
     this.expressApp.disable('etag')
@@ -96,6 +102,11 @@ export class ExpressServer implements HttpServer {
   }
 
   close(): Promise<void> {
+    for (const socket of this.sockets) {
+      socket.destroy()
+      this.sockets.delete(socket)
+    }
+
     return new Promise<void>(resolve => this.serverInstance.close(() => resolve()))
   }
 }
