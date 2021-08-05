@@ -24,8 +24,8 @@ export class Stub<
     public readonly expectations: Array<Expectation<any, Req>>,
     public readonly responseDefinitionBuilder: ResponseBuilder,
     private hits: number,
-    public readonly scenario?: StubScenario,
-    public readonly meta: Map<string, unknown> = new Map<string, unknown>()
+    public readonly meta: Map<string, unknown>,
+    public readonly scenario?: StubScenario
   ) {
     if (!this.id) {
       this.id = UUIdV4()
@@ -45,6 +45,7 @@ export class Stub<
     responseDefinition: ResponseBuilder,
     source: StubSource,
     sourceDescription: string,
+    meta: Map<string, unknown>,
     scenario?: StubScenario
   ): Stub<Ctx, Req, Res, ResponseBuilder> {
     id = id === '' ? UUIdV4() : id
@@ -57,6 +58,7 @@ export class Stub<
       expectations,
       responseDefinition,
       0,
+      meta,
       scenario
     )
   }

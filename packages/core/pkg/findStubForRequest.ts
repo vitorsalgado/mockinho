@@ -49,10 +49,13 @@ export function findStubForRequest<
     return FindStubResult.noMatch()
   }
 
-  const keys = Array.from(stubWeight)
+  const key = Array.from(stubWeight)
     .sort((a, b) => b[1] - a[1])
     .shift()?.[0]
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return FindStubResult.noMatch(stubRepository.fetchById(keys![0]).get())
+  if (!key) {
+    return FindStubResult.noMatch()
+  }
+
+  return FindStubResult.noMatch(stubRepository.fetchById(key).get())
 }

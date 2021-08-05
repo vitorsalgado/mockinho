@@ -12,6 +12,8 @@ describe('onRequestMatched', function () {
         200,
         { 'content-type': 'application/json' },
         { test: true },
+        [],
+        [],
         10
       ),
       stub: {
@@ -31,6 +33,8 @@ describe('onRequestMatched', function () {
         200,
         { 'content-type': 'application/json' },
         undefined,
+        [],
+        [],
         10
       ),
       stub: {
@@ -50,6 +54,8 @@ describe('onRequestMatched', function () {
         200,
         { 'content-type': 'application/json' },
         Buffer.from('nice txt'),
+        [],
+        [],
         10
       ),
       stub: {
@@ -75,6 +81,8 @@ describe('onRequestMatched', function () {
         200,
         { 'content-type': 'application/json' },
         Readable.from(txt(), { objectMode: false }),
+        [],
+        [],
         10
       ),
       stub: {

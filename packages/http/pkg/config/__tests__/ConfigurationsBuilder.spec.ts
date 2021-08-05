@@ -22,6 +22,7 @@ describe('Configurations Builder', function () {
       .formUrlEncodedOptions({ limit: 1000 })
       .enableCors({ maxAge: 10 })
       .multiPartOptions({ limits: { fieldNameSize: 1000 } })
+      .cookieOptions('super-secret', {})
 
     const cfg = builder.build()
 
@@ -43,6 +44,8 @@ describe('Configurations Builder', function () {
     expect(cfg.corsOptions).toEqual({ maxAge: 10 })
     expect(cfg.cors).toBeTruthy()
     expect(cfg.multiPartOptions).toEqual({ limits: { fieldNameSize: 1000 } })
+    expect(cfg.cookieSecrets).toEqual('super-secret')
+    expect(cfg.cookieOptions).toEqual({})
   })
 
   it('should add default logger when enable and not previously added', function () {

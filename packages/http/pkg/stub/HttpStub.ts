@@ -4,11 +4,6 @@ import { HttpContext } from '../HttpContext'
 import { HttpResponseDefinition } from './HttpResponseDefinition'
 import { HttpResponseDefinitionBuilder } from './HttpResponseDefinitionBuilder'
 
-export interface HttpStubMeta {
-  url?: string
-  method?: string
-}
-
 export class HttpStub extends Stub<
   HttpContext,
   HttpRequest,
@@ -23,8 +18,8 @@ export class HttpStub extends Stub<
     sourceDescription: string,
     expectations: Array<Expectation<any, HttpRequest>>,
     responseBuilder: HttpResponseDefinitionBuilder,
-    scenario?: StubScenario,
-    meta: Map<string, unknown> = new Map<string, unknown>()
+    meta: Map<string, unknown>,
+    scenario?: StubScenario
   ) {
     super(
       id,
@@ -35,8 +30,8 @@ export class HttpStub extends Stub<
       expectations,
       responseBuilder,
       0,
-      scenario,
-      meta
+      meta,
+      scenario
     )
   }
 

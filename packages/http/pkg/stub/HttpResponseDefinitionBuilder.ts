@@ -1,7 +1,7 @@
 import Path from 'path'
 import Fs from 'fs'
+import { CookieOptions } from 'express'
 import { isTrue, notBlank, notNull, ResponseDefinitionBuilder, MockinhoError } from '@mockinho/core'
-
 import { fromFile, toJSON } from '@mockinho/core-bodyconverters'
 import { BodyType, Headers, MediaTypes, StatusCodes, ErrorCodes } from '../types'
 import { DecoratedResponseBuilder } from '../types'
@@ -10,6 +10,8 @@ import { HttpContext } from '../HttpContext'
 import { Configurations } from '../config'
 import { ExpressConfigurations } from '../config'
 import { HttpResponseDefinition } from './HttpResponseDefinition'
+import { Cookie } from './Cookie'
+import { ClearCookie } from './Cookie'
 
 class InvalidResponseDefinitionError extends MockinhoError {
   constructor(message: string) {
@@ -27,6 +29,8 @@ export class HttpResponseDefinitionBuilder<C extends Configurations = ExpressCon
   private _bodyFileRelativeToFixtures: boolean = true
   private _bodyCtrl: number = 0
   private _headers: Record<string, string> = {}
+  private _cookies: Array<Cookie> = []
+  private _cookiesToClear: Array<ClearCookie> = []
   private _delay: number = 0
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -104,6 +108,31 @@ export class HttpResponseDefinitionBuilder<C extends Configurations = ExpressCon
     return this
   }
 
+  cookie(key: string, value: string, options?: CookieOptions): this {
+    this._cookies.push({ key, value, options })
+    return this
+  }
+
+  cookieJson(
+    key: string,
+    value: Record<string, unknown> | Array<unknown>,
+    options?: CookieOptions
+  ): this {
+    this.cookie(key, JSON.stringify(value), options)
+
+    return this
+  }
+
+  clearCookie(key: string, options?: CookieOptions): this {
+    return this.clearCookies({ key, options })
+  }
+
+  clearCookies(...cookies: Array<ClearCookie>): this {
+    this._cookiesToClear.push(...cookies)
+
+    return this
+  }
+
   delayInMs(ms: number): this {
     notNull(ms)
 
@@ -127,7 +156,14 @@ export class HttpResponseDefinitionBuilder<C extends Configurations = ExpressCon
       this._body = this._bodyFunction(request)
     }
 
-    return new HttpResponseDefinition(this._status, this._headers, this._body, this._delay)
+    return new HttpResponseDefinition(
+      this._status,
+      this._headers,
+      this._body,
+      this._cookies,
+      this._cookiesToClear,
+      this._delay
+    )
   }
 
   validate(context: HttpContext): void {

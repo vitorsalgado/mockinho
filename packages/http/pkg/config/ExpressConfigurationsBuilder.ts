@@ -2,6 +2,8 @@ import Path from 'path'
 import { OptionsUrlencoded } from 'body-parser'
 import Multer from 'multer'
 import { CorsOptions } from 'cors'
+import { CookieParseOptions } from 'cookie-parser'
+import CookieParse from 'cookie-parser'
 import { LoggerPino } from '@mockinho/core'
 import { ExpressServerFactory } from '../ExpressServerFactory'
 import { ConfigurationsBuilder } from './ConfigurationsBuilder'
@@ -15,6 +17,8 @@ export class ExpressConfigurationsBuilder extends ConfigurationsBuilder<
   private _multiPartOptions?: Multer.Options
   private _cors: boolean = false
   private _corsOptions?: CorsOptions
+  private _cookieSecrets?: string | Array<string>
+  private _cookieOptions?: CookieParseOptions
 
   formUrlEncodedOptions(options: OptionsUrlencoded): this {
     this._formBodyOptions = options
@@ -29,6 +33,12 @@ export class ExpressConfigurationsBuilder extends ConfigurationsBuilder<
   enableCors(options?: CorsOptions): this {
     this._cors = true
     this._corsOptions = options
+    return this
+  }
+
+  cookieOptions(secrets: string | string[], options?: CookieParse.CookieParseOptions): this {
+    this._cookieSecrets = secrets
+    this._cookieOptions = options
     return this
   }
 
@@ -88,7 +98,9 @@ export class ExpressConfigurationsBuilder extends ConfigurationsBuilder<
       formUrlEncodedOptions: this._formBodyOptions,
       multiPartOptions: this._multiPartOptions,
       cors: this._cors,
-      corsOptions: this._corsOptions
+      corsOptions: this._corsOptions,
+      cookieSecrets: this._cookieSecrets,
+      cookieOptions: this._cookieOptions
     }
   }
 }

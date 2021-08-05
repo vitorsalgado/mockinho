@@ -5,6 +5,7 @@ import { Socket } from 'net'
 import express, { Express, Request, Response, NextFunction } from 'express'
 import Multer from 'multer'
 import Cors from 'cors'
+import CookieParse from 'cookie-parser'
 import { LoggerUtil } from '@mockinho/core'
 import { ExpressConfigurations } from './config'
 import { HttpServer, HttpServerInfo } from './HttpServer'
@@ -43,6 +44,9 @@ export class ExpressServer implements HttpServer {
     this.expressApp.use(express.json())
     this.expressApp.use(express.urlencoded(this.configurations.formUrlEncodedOptions))
     this.expressApp.use(express.text())
+    this.expressApp.use(
+      CookieParse(this.configurations.cookieSecrets, this.configurations.cookieOptions)
+    )
     this.expressApp.use(Multer(this.configurations.multiPartOptions).any())
 
     this.expressApp.all('*', async (req, res, next) => {

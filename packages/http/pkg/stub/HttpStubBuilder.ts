@@ -18,34 +18,6 @@ import { HttpStub } from './HttpStub'
 import { HttpResponseDefinitionBuilder } from './HttpResponseDefinitionBuilder'
 import { HttpResponseDefinition } from './HttpResponseDefinition'
 
-const extractRequest = (request: HttpRequest): HttpRequest => request
-const extractMethod = (request: HttpRequest): HttpMethods => request.method
-const extractUrl = (request: HttpRequest): string => request.href
-const extractBody = (request: HttpRequest): BodyType => request.body
-const extractHeader =
-  (key: string) =>
-  (request: HttpRequest): string =>
-    request.headers[key]
-const extractHeaders = (request: HttpRequest): Record<string, string> => request.headers
-const extractQuery =
-  (key: string) =>
-  (request: HttpRequest): string | string[] | undefined =>
-    request.query[key]
-const extractQueries = (request: HttpRequest): Record<string, string | string[] | undefined> =>
-  request.query
-const extractNothing = () => undefined
-const extractMultiPartFiles = (request: HttpRequest): Array<Express.Multer.File> => request.files
-const extractFileByFieldName =
-  (field: string) =>
-  (request: HttpRequest): Express.Multer.File | undefined =>
-    request.files.find(x => x.fieldname === field)
-
-export class InvalidStubConfigurationError extends MockinhoError {
-  constructor(message: string) {
-    super(message, ErrorCodes.MR_ERR_INVALID_STUB_CONFIG)
-  }
-}
-
 export class HttpStubBuilder extends StubBaseBuilder<
   HttpContext,
   HttpRequest,
@@ -154,7 +126,9 @@ export class HttpStubBuilder extends StubBaseBuilder<
     notNull(matcher)
 
     if (typeof matcher === 'string') {
-      this._matchers.push(this.spec(extractQuery(key) as any, equalsTo(matcher), 0.5))
+      this._matchers.push(
+        this.spec(extractQuery(key), equalsTo<string | string[] | undefined>(matcher), 0.5)
+      )
     } else {
       this._matchers.push(this.spec(extractQuery(key), matcher, 0.5))
     }
@@ -214,6 +188,28 @@ export class HttpStubBuilder extends StubBaseBuilder<
     return this
   }
 
+  cookie(key: string, matcher: Matcher<string> | string): this {
+    if (typeof matcher === 'string') {
+      this._matchers.push(this.spec(extractCookie(key), equalsTo<string | undefined>(matcher), 1))
+    } else {
+      this._matchers.push(this.spec(extractCookie(key) as any, matcher, 1))
+    }
+
+    return this
+  }
+
+  cookieJson(key: string, matcher: Matcher<Record<string, unknown>> | string): this {
+    if (typeof matcher === 'string') {
+      this._matchers.push(
+        this.spec(extractCookieAsJson(key), equalsTo<string | undefined>(matcher), 1)
+      )
+    } else {
+      this._matchers.push(this.spec(extractCookieAsJson(key) as any, matcher, 1))
+    }
+
+    return this
+  }
+
   hitTimes(times: number): this {
     notNull(times)
 
@@ -249,14 +245,14 @@ export class HttpStubBuilder extends StubBaseBuilder<
       this._sourceDescription,
       this._matchers,
       this._responseDefinitionBuilder,
+      this.meta,
       this._scenarioName
         ? {
             name: this._scenarioName,
             requiredState: this._scenarioRequiredState,
             newState: this._scenarioNewState
           }
-        : undefined,
-      this.meta
+        : undefined
     )
   }
 
@@ -267,5 +263,55 @@ export class HttpStubBuilder extends StubBaseBuilder<
       this._responseDefinitionBuilder,
       'Response definition is required. Call .reply() to create one.'
     )
+  }
+}
+
+const extractRequest = (request: HttpRequest): HttpRequest => request
+const extractMethod = (request: HttpRequest): HttpMethods => request.method
+const extractUrl = (request: HttpRequest): string => request.href
+const extractBody = (request: HttpRequest): BodyType => request.body
+const extractHeader =
+  (key: string) =>
+  (request: HttpRequest): string =>
+    request.headers[key]
+const extractHeaders = (request: HttpRequest): Record<string, string> => request.headers
+const extractQuery =
+  (key: string) =>
+  (request: HttpRequest): string | string[] | undefined =>
+    request.query[key]
+const extractQueries = (request: HttpRequest): Record<string, string | string[] | undefined> =>
+  request.query
+const extractNothing = () => undefined
+const extractMultiPartFiles = (request: HttpRequest): Array<Express.Multer.File> => request.files
+const extractFileByFieldName =
+  (field: string) =>
+  (request: HttpRequest): Express.Multer.File | undefined =>
+    request.files.find(x => x.fieldname === field)
+const extractCookie =
+  (key: string) =>
+  (request: HttpRequest): string | undefined => {
+    if (request.cookies && request.cookies[key]) {
+      return request.cookies[key]
+    } else if (request.signedCookies && request.signedCookies[key]) {
+      return request.signedCookies[key]
+    }
+
+    return undefined
+  }
+const extractCookieAsJson =
+  (key: string) =>
+  (request: HttpRequest): string | undefined => {
+    if (request.cookies && request.cookies[key]) {
+      return JSON.parse(request.cookies[key])
+    } else if (request.signedCookies && request.signedCookies[key]) {
+      return JSON.parse(request.signedCookies[key])
+    }
+
+    return undefined
+  }
+
+export class InvalidStubConfigurationError extends MockinhoError {
+  constructor(message: string) {
+    super(message, ErrorCodes.MR_ERR_INVALID_STUB_CONFIG)
   }
 }

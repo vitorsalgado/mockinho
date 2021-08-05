@@ -57,7 +57,14 @@ export function findStubMiddleware(
         body = response.body
       }
 
-      const replier = () => reply.set(response.headers).status(response.status).send(body)
+      const replier = () => {
+        response.cookiesToClear.forEach(cookie => reply.clearCookie(cookie.key, cookie.options))
+        response.cookies.forEach(cookie =>
+          reply.cookie(cookie.key, cookie.value, cookie.options ?? {})
+        )
+
+        reply.set(response.headers).status(response.status).send(body)
+      }
 
       if (response.hasDelay()) {
         setTimeout(replier, response.delay)
