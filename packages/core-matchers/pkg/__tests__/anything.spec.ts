@@ -1,9 +1,8 @@
 import { anything } from '../anything'
-import { fakeMatcherContext } from '../testUtils'
 
 describe('Anything', function () {
   it('should return true always', function () {
-    const result = anything()(undefined, fakeMatcherContext())
+    const result = anything()()
 
     expect(result).toEqual(true)
   })

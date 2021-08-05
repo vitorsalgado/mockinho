@@ -1,8 +1,7 @@
-import { createMatcher, Matcher } from '@mockinho/core'
+import { Matcher } from '@mockinho/core'
 
-export const hasLength = <T>(length: number): Matcher<Array<T> | string> =>
-  createMatcher(
-    'hasLength',
-
-    (value): boolean => value.length === length
-  )
+export const hasLength = <T>(length: number): Matcher<Array<T> | string> => {
+  return function hasLength(value): boolean {
+    return value.length === length
+  }
+}

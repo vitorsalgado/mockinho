@@ -30,24 +30,12 @@ export function onRequestNotMatched(event: HttpEvents['requestNotMatched']): voi
 function tryGetUrlAndMethod(stub: HttpStub): string {
   const str = []
 
-  if (stub.meta.method) {
-    str.push(stub.meta.method)
-  } else {
-    const exp = stub.expectations.find(x => x.matcher.key === 'method')
-
-    if (exp) {
-      str.push(exp.matcher.expectation)
-    }
+  if (stub.meta.has('method')) {
+    str.push(stub.meta.get('method'))
   }
 
-  if (stub.meta.url) {
-    str.push(stub.meta.url)
-  } else {
-    const exp = stub.expectations.find(x => x.matcher.key === 'url')
-
-    if (exp && exp.matcher.expectation) {
-      str.push(exp.matcher.expectation)
-    }
+  if (stub.meta.has('url')) {
+    str.push(stub.meta.get('url'))
   }
 
   if (str.length > 0) {

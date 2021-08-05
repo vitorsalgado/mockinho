@@ -23,10 +23,21 @@ export class HttpStub extends Stub<
     sourceDescription: string,
     expectations: Array<Expectation<any, HttpRequest>>,
     responseBuilder: HttpResponseDefinitionBuilder,
-    public readonly meta: HttpStubMeta,
-    scenario?: StubScenario
+    scenario?: StubScenario,
+    meta: Map<string, unknown> = new Map<string, unknown>()
   ) {
-    super(id, name, priority, source, sourceDescription, expectations, responseBuilder, 0, scenario)
+    super(
+      id,
+      name,
+      priority,
+      source,
+      sourceDescription,
+      expectations,
+      responseBuilder,
+      0,
+      scenario,
+      meta
+    )
   }
 
   toString(): string {

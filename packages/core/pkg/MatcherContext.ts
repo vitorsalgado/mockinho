@@ -1,5 +1,12 @@
-export interface MatcherContext<Stub = any, Context = any, Request = any> {
-  stub: Stub
-  context: Context
-  req: Request
+import { Stub } from './Stub'
+import { Context } from './Context'
+
+export interface MatcherContext<
+  S extends Stub<any, any, any, any> = any,
+  C extends Context = any,
+  R = any
+> {
+  stub: S
+  context: C
+  req: R
 }

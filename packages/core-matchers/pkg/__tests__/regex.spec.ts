@@ -1,5 +1,4 @@
 import { matching } from '../regex'
-import { fakeMatcherContext } from '../testUtils'
 
 describe('Regex', function () {
   it('should test value based on provided regex pattern', function () {
@@ -7,7 +6,7 @@ describe('Regex', function () {
     const matcher = matching(regex)
     const value = 'test'
 
-    expect(matcher(value, fakeMatcherContext())).toBeTruthy()
-    expect(matcher('wrong value', fakeMatcherContext())).toBeFalsy()
+    expect(matcher(value)).toBeTruthy()
+    expect(matcher('wrong value')).toBeFalsy()
   })
 })

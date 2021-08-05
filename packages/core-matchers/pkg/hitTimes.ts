@@ -1,8 +1,11 @@
-import { createMatcher, Matcher } from '@mockinho/core'
+import { Matcher } from '@mockinho/core'
 
-export const hitTimes = (times: number): Matcher<unknown> =>
-  createMatcher(
-    'hitTimes',
+export const hitTimes = (times: number): Matcher<unknown> => {
+  return function hitTimes(value, ctx): boolean {
+    if (!ctx) {
+      throw new ReferenceError('Context is required on "Hit Times Matcher"')
+    }
 
-    (value, ctx): boolean => ctx.stub.totalHits() <= times
-  )
+    return ctx.stub.totalHits() <= times
+  }
+}

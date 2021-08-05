@@ -1,5 +1,4 @@
 import { isPresent } from '../isPresent'
-import { fakeMatcherContext } from '../testUtils'
 
 describe('Is Present', function () {
   it('should return true when value is present whatever the value is', function () {
@@ -8,12 +7,12 @@ describe('Is Present', function () {
     const b = false
     const arr = ['hey']
 
-    const strR = isPresent()(str, fakeMatcherContext())
-    const numR = isPresent()(num, fakeMatcherContext())
-    const bR = isPresent()(b, fakeMatcherContext())
-    const arrR = isPresent()(arr, fakeMatcherContext())
-    const emptyStr = isPresent()('', fakeMatcherContext())
-    const emptyArr = isPresent()([], fakeMatcherContext())
+    const strR = isPresent()(str)
+    const numR = isPresent()(num)
+    const bR = isPresent()(b)
+    const arrR = isPresent()(arr)
+    const emptyStr = isPresent()('')
+    const emptyArr = isPresent()([])
 
     expect(strR).toBeTruthy()
     expect(numR).toBeTruthy()

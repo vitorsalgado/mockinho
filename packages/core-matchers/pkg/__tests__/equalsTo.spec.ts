@@ -1,5 +1,4 @@
 import { equalsTo } from '../equalsTo'
-import { fakeMatcherContext } from '../testUtils'
 
 describe('EqualsTo', function () {
   describe('String', function () {
@@ -7,7 +6,7 @@ describe('EqualsTo', function () {
       const one = 'test'
       const other = 'test'
 
-      expect(equalsTo(one)(other, fakeMatcherContext())).toBeTruthy()
+      expect(equalsTo(one)(other)).toBeTruthy()
     })
 
     it('should consider special characters', function () {
@@ -15,8 +14,8 @@ describe('EqualsTo', function () {
       const other = 'tést@--js-pão-de-queijo#___paçoca-com-tapioca'
       const otherWithErr = 'test@--js-pão-de-queijo#___paçoca-com-tapioca'
 
-      expect(equalsTo(one)(other, fakeMatcherContext())).toBeTruthy()
-      expect(equalsTo(one)(otherWithErr, fakeMatcherContext())).toBeFalsy()
+      expect(equalsTo(one)(other)).toBeTruthy()
+      expect(equalsTo(one)(otherWithErr)).toBeFalsy()
     })
 
     it('should not ignore case by default', function () {
@@ -25,22 +24,22 @@ describe('EqualsTo', function () {
       const one2 = 'Test'
       const other2 = 'Test'
 
-      expect(equalsTo(one1)(other1, fakeMatcherContext())).toBeFalsy()
-      expect(equalsTo(one2)(other2, fakeMatcherContext())).toBeTruthy()
+      expect(equalsTo(one1)(other1)).toBeFalsy()
+      expect(equalsTo(one2)(other2)).toBeTruthy()
     })
 
     it('should ignore case when specified to do so', function () {
       const one = 'Super-TEST'
       const other = 'supER-tEst'
 
-      expect(equalsTo(one, true)(other, fakeMatcherContext())).toBeTruthy()
+      expect(equalsTo(one, true)(other)).toBeTruthy()
     })
 
     it('should compare in different locales', function () {
       const one = '龙'
       const other = '龙'
 
-      expect(equalsTo(one, true)(other, fakeMatcherContext())).toBeTruthy()
+      expect(equalsTo(one, true)(other)).toBeTruthy()
     })
   })
 
@@ -48,8 +47,8 @@ describe('EqualsTo', function () {
     it('should compare numbers', function () {
       const val = 10
 
-      expect(equalsTo(val)(10, fakeMatcherContext())).toBeTruthy()
-      expect(equalsTo(val)(1000, fakeMatcherContext())).toBeFalsy()
+      expect(equalsTo(val)(10)).toBeTruthy()
+      expect(equalsTo(val)(1000)).toBeFalsy()
     })
   })
 
@@ -137,10 +136,10 @@ describe('EqualsTo', function () {
         ]
       }
 
-      expect(equalsTo(obj)(other, fakeMatcherContext())).toBeTruthy()
-      expect(equalsTo(obj)(invalidTypes as any, fakeMatcherContext())).toBeFalsy()
-      expect(equalsTo(obj)(missingFields as any, fakeMatcherContext())).toBeFalsy()
-      expect(equalsTo(obj)(unordered as any, fakeMatcherContext())).toBeTruthy()
+      expect(equalsTo(obj)(other)).toBeTruthy()
+      expect(equalsTo(obj)(invalidTypes as any)).toBeFalsy()
+      expect(equalsTo(obj)(missingFields as any)).toBeFalsy()
+      expect(equalsTo(obj)(unordered as any)).toBeTruthy()
     })
 
     it('should consider array items order but not the items properties ordering', function () {
@@ -165,8 +164,8 @@ describe('EqualsTo', function () {
         ]
       }
 
-      expect(equalsTo(obj)(ordered, fakeMatcherContext())).toBeTruthy()
-      expect(equalsTo(obj)(unordered, fakeMatcherContext())).toBeFalsy()
+      expect(equalsTo(obj)(ordered)).toBeTruthy()
+      expect(equalsTo(obj)(unordered)).toBeFalsy()
     })
   })
 })

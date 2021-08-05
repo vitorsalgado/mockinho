@@ -1,9 +1,8 @@
 import { validate } from 'uuid'
-import { createMatcher, Matcher } from '@mockinho/core'
+import { Matcher } from '@mockinho/core'
 
-export const isUUID = (): Matcher<string> =>
-  createMatcher(
-    'isUUID',
-
-    (value): boolean => validate(value)
-  )
+export const isUUID = (): Matcher<string> => {
+  return function isUUID(value): boolean {
+    return validate(value)
+  }
+}

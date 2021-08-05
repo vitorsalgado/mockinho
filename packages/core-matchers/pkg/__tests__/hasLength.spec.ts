@@ -1,12 +1,11 @@
 import { hasLength } from '../hasLength'
-import { fakeMatcherContext } from '../testUtils'
 
 describe('hasLength', function () {
   it('should return true when array length is equal to the provided value', function () {
     const len = 2
     const arr = ['js', 'ts']
 
-    const result = hasLength(len)(arr, fakeMatcherContext())
+    const result = hasLength(len)(arr)
 
     expect(result).toBeTruthy()
   })
@@ -15,7 +14,7 @@ describe('hasLength', function () {
     const len = 10
     const str = 'unit-tests'
 
-    const result = hasLength(len)(str, fakeMatcherContext())
+    const result = hasLength(len)(str)
 
     expect(result).toBeTruthy()
   })
@@ -27,8 +26,8 @@ describe('hasLength', function () {
     const arr = ['js', 'ts']
     const arrLen = 1
 
-    const strRes = hasLength(strLen)(str, fakeMatcherContext())
-    const arrRes = hasLength(arrLen)(arr, fakeMatcherContext())
+    const strRes = hasLength(strLen)(str)
+    const arrRes = hasLength(arrLen)(arr)
 
     expect(strRes).toBeFalsy()
     expect(arrRes).toBeFalsy()

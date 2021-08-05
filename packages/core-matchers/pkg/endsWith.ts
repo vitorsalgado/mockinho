@@ -1,8 +1,7 @@
-import { createMatcher, Matcher } from '@mockinho/core'
+import { Matcher } from '@mockinho/core'
 
-export const endsWith = (expected: string): Matcher<string> =>
-  createMatcher(
-    'endsWith',
-
-    (value): boolean => value.endsWith(expected)
-  )
+export const endsWith = (expected: string): Matcher<string> => {
+  return function endsWith(value): boolean {
+    return value.endsWith(expected)
+  }
+}

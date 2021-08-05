@@ -14,7 +14,7 @@ import { BodyType, ErrorCodes, Headers, HttpMethods } from '../types'
 import { bearerToken, urlPath } from '../matchers'
 import { HttpRequest } from '../HttpRequest'
 import { HttpContext } from '../HttpContext'
-import { HttpStub, HttpStubMeta } from './HttpStub'
+import { HttpStub } from './HttpStub'
 import { HttpResponseDefinitionBuilder } from './HttpResponseDefinitionBuilder'
 import { HttpResponseDefinition } from './HttpResponseDefinition'
 
@@ -53,7 +53,7 @@ export class HttpStubBuilder extends StubBaseBuilder<
   HttpResponseDefinitionBuilder,
   HttpStub
 > {
-  private readonly meta: HttpStubMeta = {}
+  private readonly meta: Map<string, unknown> = new Map<string, unknown>()
 
   constructor(
     private readonly _source: StubSource = 'code',
@@ -70,18 +70,9 @@ export class HttpStubBuilder extends StubBaseBuilder<
     if (typeof matcher === 'string') {
       notBlank(matcher)
 
-      this.meta.url = matcher
-
-      const m = urlPath(matcher)
-      m.context = 'request'
-      m.key = 'url'
-      m.expectation = [matcher]
-
-      this._matchers.push(this.spec(extractUrl, m))
+      this.meta.set('url', matcher)
+      this._matchers.push(this.spec(extractUrl, urlPath(matcher)))
     } else {
-      matcher.context = 'request'
-      matcher.key = 'url'
-
       this._matchers.push(this.spec(extractUrl, matcher, 10))
     }
 
@@ -94,18 +85,9 @@ export class HttpStubBuilder extends StubBaseBuilder<
     if (typeof matcher === 'string') {
       notBlank(matcher)
 
-      this.meta.method = matcher
-
-      const m = equalsTo(matcher)
-      m.context = 'request'
-      m.key = 'method'
-      m.expectation = [matcher]
-
-      this._matchers.push(this.spec(extractMethod, m, 3))
+      this.meta.set('method', matcher)
+      this._matchers.push(this.spec(extractMethod, equalsTo(matcher), 3))
     } else {
-      matcher.context = 'request'
-      matcher.key = 'method'
-
       this._matchers.push(this.spec(extractMethod, matcher, 3))
     }
 
@@ -267,14 +249,14 @@ export class HttpStubBuilder extends StubBaseBuilder<
       this._sourceDescription,
       this._matchers,
       this._responseDefinitionBuilder,
-      this.meta,
       this._scenarioName
         ? {
             name: this._scenarioName,
             requiredState: this._scenarioRequiredState,
             newState: this._scenarioNewState
           }
-        : undefined
+        : undefined,
+      this.meta
     )
   }
 

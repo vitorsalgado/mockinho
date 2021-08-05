@@ -24,7 +24,8 @@ export class Stub<
     public readonly expectations: Array<Expectation<any, Req>>,
     public readonly responseDefinitionBuilder: ResponseBuilder,
     private hits: number,
-    public readonly scenario?: StubScenario
+    public readonly scenario?: StubScenario,
+    public readonly meta: Map<string, unknown> = new Map<string, unknown>()
   ) {
     if (!this.id) {
       this.id = UUIdV4()
@@ -51,8 +52,8 @@ export class Stub<
       id,
       name,
       priority,
-      'code',
-      '',
+      source,
+      sourceDescription,
       expectations,
       responseDefinition,
       0,
