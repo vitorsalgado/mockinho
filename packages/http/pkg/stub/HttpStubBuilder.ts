@@ -231,6 +231,14 @@ export class HttpStubBuilder extends StubBaseBuilder<
     return this
   }
 
+  proxyTo(target: string, response: HttpResponseDefinitionBuilder): this {
+    response.proxyTo(target)
+
+    this._responseDefinitionBuilder = response
+
+    return this
+  }
+
   build(context: HttpContext): HttpStub {
     notNull(context)
 

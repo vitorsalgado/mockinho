@@ -2,17 +2,22 @@ import { createServer as createHttpServer, Server as NodeHttpServer } from 'http
 import { Server as NodeHttpsServer, createServer as createHttpsServer } from 'https'
 import { AddressInfo } from 'net'
 import { Socket } from 'net'
-import express, { Express, Request, Response, NextFunction } from 'express'
+import express, { Express, Request, Response } from 'express'
 import Multer from 'multer'
 import Cors from 'cors'
 import CookieParse from 'cookie-parser'
 import { LoggerUtil } from '@mockinho/core'
+import { FindStubResult } from '@mockinho/core'
 import { ExpressConfigurations } from './config'
 import { HttpServer, HttpServerInfo } from './HttpServer'
-import { StubNotFoundError } from './stub/StubNotFoundError'
 import { ErrorCodes } from './types'
+import { MediaTypes } from './types'
+import { Headers } from './types'
 import { HttpContext } from './HttpContext'
-import { findStubMiddleware } from './findStubMiddleware'
+import { stubFinderMiddleware } from './stubFinderMiddleware'
+import { HttpRequest } from './HttpRequest'
+import { HttpResponseDefinition } from './stub'
+import { HttpResponseDefinitionBuilder } from './stub'
 
 export class ExpressServer implements HttpServer {
   private readonly configurations: ExpressConfigurations
@@ -30,7 +35,11 @@ export class ExpressServer implements HttpServer {
   }
 
   preSetup(): void {
-    const handler = findStubMiddleware(this.context)
+    process.on('SIGTERM', () => this.serverInstance.close())
+    process.on('SIGKILL', () => this.serverInstance.close())
+    process.on('SIGUSR2', () => this.serverInstance.close())
+
+    const handler = stubFinderMiddleware(this.context)
 
     this.serverInstance.setTimeout(3_600_000)
     this.serverInstance.on('connection', socket => {
@@ -58,31 +67,45 @@ export class ExpressServer implements HttpServer {
     }
 
     this.expressApp.use(function (
-      error: Error | StubNotFoundError | any,
+      params:
+        | Error
+        | FindStubResult<
+            HttpContext,
+            HttpRequest,
+            HttpResponseDefinition,
+            HttpResponseDefinitionBuilder
+          >
+        | any,
       req: Request,
-      res: Response,
-      next: NextFunction
+      res: Response
     ) {
-      if (!error) {
-        return next()
+      if (params instanceof FindStubResult) {
+        if (params.hasMatch()) {
+          throw new Error('Should not be here when there is a match!')
+        }
+
+        return res
+          .set(Headers.ContentType, MediaTypes.TEXT_PLAIN)
+          .status(500)
+          .send(
+            `Request was not matched.${params
+              .closestMatch()
+              .map(() => ' See closest matches below:')
+              .orNothing()}\n` +
+              params
+                .closestMatch()
+                .map(x => [{ id: x.id, name: x.name, filename: x.sourceDescription }])
+                .orValue([])
+                .map(item => `Name: ${item.name}\nId: ${item.id}\nFile: ${item.filename}\n`)
+          )
       }
 
-      LoggerUtil.instance().error(error)
+      LoggerUtil.instance().error(params)
 
-      if (error instanceof StubNotFoundError) {
-        res
-          .status(error.statusCode)
-          .send({ message: error.message, code: error.code, closestMatches: error.closesMatches })
-      }
-
-      res
-        .status(error.statusCode ?? 500)
-        .send({ message: error.message, code: ErrorCodes.MR_ERR, stack: error.stack })
+      return res
+        .status(params.statusCode ?? 500)
+        .send({ message: params.message, code: ErrorCodes.MR_ERR, stack: params.stack })
     })
-
-    process.on('SIGTERM', () => this.serverInstance.close())
-    process.on('SIGKILL', () => this.serverInstance.close())
-    process.on('SIGUSR2', () => this.serverInstance.close())
   }
 
   start(): Promise<string> {

@@ -9,7 +9,9 @@ export class HttpResponseDefinition {
     public readonly body: BodyType,
     public readonly cookies: Array<Cookie>,
     public readonly cookiesToClear: Array<ClearCookie>,
-    public readonly delay: number
+    public readonly delay: number = 0,
+    public readonly proxyTo: string = '',
+    public readonly proxyHeaders: Record<string, string> = {}
   ) {}
 
   hasDelay = (): boolean => this.delay > 0

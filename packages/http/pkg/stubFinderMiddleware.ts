@@ -1,24 +1,23 @@
 import { Readable } from 'stream'
 import { v4 as UUId } from 'uuid'
 import { Request, Response, NextFunction } from 'express'
+import HttpProxy from 'http-proxy'
 import { findStubForRequest, FindStubResult, Stub } from '@mockinho/core'
 import { HttpContext } from './HttpContext'
 import { HttpRequest } from './HttpRequest'
 import { HttpResponseDefinition, HttpStub, HttpResponseDefinitionBuilder } from './stub'
 import { ExpressConfigurations } from './config'
-import { StubNotFoundError } from './stub/StubNotFoundError'
 import { BodyType } from './types'
 
-export function findStubMiddleware(
+export function stubFinderMiddleware(
   context: HttpContext
 ): (request: Request, reply: Response, next: NextFunction) => Promise<void> {
   const verbose = context.provideConfigurations().verbose
+  const proxy = HttpProxy.createProxyServer()
 
-  return async function async(
-    request: Request,
-    reply: Response,
-    next: NextFunction
-  ): Promise<void> {
+  return async function (request: Request, reply: Response, next: NextFunction): Promise<void> {
+    proxy.removeAllListeners()
+
     const req = fromExpressRequest(request)
 
     onRequestReceived(context, verbose, req)
@@ -32,8 +31,30 @@ export function findStubMiddleware(
     >(req, context)
 
     if (result.hasMatch()) {
+      req.matched = true
+      req.matchResult = result
+
       const matched = result.matched()
       const response = matched.responseDefinitionBuilder.build(context, req)
+
+      if (response.proxyTo) {
+        proxy.once('error', err => next(err))
+        proxy.once('proxyReq', proxyReq =>
+          Object.entries(response.proxyHeaders).forEach(([name, value]) =>
+            proxyReq.setHeader(name, value)
+          )
+        )
+        proxy.once('proxyRes', proxyRes => {
+          for (const [name, value] of Object.entries(response.headers)) {
+            proxyRes.headers[name] = value
+          }
+          proxyRes.on('end', () => proxy.removeAllListeners())
+        })
+
+        proxy.web(req, reply, { target: response.proxyTo })
+
+        return
+      }
 
       let body: BodyType
 
@@ -72,7 +93,6 @@ export function findStubMiddleware(
       }
 
       onRequestMatched(context, verbose, req, response, matched)
-
       replier()
 
       return
@@ -80,21 +100,14 @@ export function findStubMiddleware(
 
     onRequestNotMatched(context, req, result)
 
-    return next(
-      new StubNotFoundError(
-        500,
-        result
-          .closestMatch()
-          .map(x => [{ id: x.id, name: x.name, filename: x.sourceDescription }])
-          .orValue([])
-      )
-    )
+    return next(result)
   }
 }
 
 function fromExpressRequest(request: Request & { [key: string]: any }): HttpRequest {
   request.id = UUId()
   request.href = `${request.protocol}://${request.hostname}${request.url}`
+  request.matched = false
 
   return request as HttpRequest
 }

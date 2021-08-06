@@ -22,19 +22,18 @@ class InvalidResponseDefinitionError extends MockinhoError {
 export class HttpResponseDefinitionBuilder<C extends Configurations = ExpressConfigurations>
   implements ResponseDefinitionBuilder<HttpContext<C>, HttpRequest, HttpResponseDefinition>
 {
-  private _status: number = StatusCodes.OK
-  private _body: BodyType = undefined
-  private _bodyFile: string = ''
-  private _bodyFunction?: (request: HttpRequest) => BodyType
-  private _bodyFileRelativeToFixtures: boolean = true
-  private _bodyCtrl: number = 0
-  private _headers: Record<string, string> = {}
-  private _cookies: Array<Cookie> = []
-  private _cookiesToClear: Array<ClearCookie> = []
-  private _delay: number = 0
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  protected _status: number = StatusCodes.OK
+  protected _body: BodyType = undefined
+  protected _bodyFile: string = ''
+  protected _bodyFunction?: (request: HttpRequest) => BodyType
+  protected _bodyFileRelativeToFixtures: boolean = true
+  protected _bodyCtrl: number = 0
+  protected _headers: Record<string, string> = {}
+  protected _cookies: Array<Cookie> = []
+  protected _cookiesToClear: Array<ClearCookie> = []
+  protected _delay: number = 0
+  protected _proxyTo: string = ''
+  protected _proxyHeaders: Record<string, string> = {}
 
   static newBuilder = (): DecoratedResponseBuilder =>
     new HttpResponseDefinitionBuilder() as DecoratedResponseBuilder
@@ -73,6 +72,33 @@ export class HttpResponseDefinitionBuilder<C extends Configurations = ExpressCon
 
     for (const [key, value] of Object.entries(headers)) {
       this._headers[key] = value
+    }
+
+    return this
+  }
+
+  proxyTo(target: string): this {
+    notBlank(target)
+
+    this._proxyTo = target
+
+    return this
+  }
+
+  proxyHeader(key: string, value: string): this {
+    notBlank(key)
+    notNull(value)
+
+    this._proxyHeaders[key] = value
+
+    return this
+  }
+
+  proxyHeaders(headers: Record<string, string>): this {
+    notNull(headers)
+
+    for (const [key, value] of Object.entries(headers)) {
+      this._proxyHeaders[key] = value
     }
 
     return this
@@ -162,7 +188,9 @@ export class HttpResponseDefinitionBuilder<C extends Configurations = ExpressCon
       this._body,
       this._cookies,
       this._cookiesToClear,
-      this._delay
+      this._delay,
+      this._proxyTo,
+      this._proxyHeaders
     )
   }
 
