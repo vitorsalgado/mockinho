@@ -25,6 +25,8 @@ export interface StubFile {
   response: {
     status: number
     headers: Record<string, string>
+    proxyHeaders: Record<string, string>
+    proxyFrom: string
     body: any
     bodyFile: string
     delayInMs: number

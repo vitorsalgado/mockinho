@@ -32,7 +32,7 @@ export class HttpResponseDefinitionBuilder<C extends Configurations = ExpressCon
   protected _cookies: Array<Cookie> = []
   protected _cookiesToClear: Array<ClearCookie> = []
   protected _delay: number = 0
-  protected _proxyTo: string = ''
+  protected _proxyFrom: string = ''
   protected _proxyHeaders: Record<string, string> = {}
 
   static newBuilder = (): DecoratedResponseBuilder =>
@@ -77,10 +77,10 @@ export class HttpResponseDefinitionBuilder<C extends Configurations = ExpressCon
     return this
   }
 
-  proxyTo(target: string): this {
+  proxyFrom(target: string): this {
     notBlank(target)
 
-    this._proxyTo = target
+    this._proxyFrom = target
 
     return this
   }
@@ -189,7 +189,7 @@ export class HttpResponseDefinitionBuilder<C extends Configurations = ExpressCon
       this._cookies,
       this._cookiesToClear,
       this._delay,
-      this._proxyTo,
+      this._proxyFrom,
       this._proxyHeaders
     )
   }

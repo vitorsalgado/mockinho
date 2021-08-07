@@ -232,7 +232,7 @@ export class HttpStubBuilder extends StubBaseBuilder<
   }
 
   proxyTo(target: string, response: HttpResponseDefinitionBuilder): this {
-    response.proxyTo(target)
+    response.proxyFrom(target)
 
     this._responseDefinitionBuilder = response
 

@@ -1,28 +1,26 @@
 /* eslint-disable no-case-declarations */
 
 import { Matcher, notBlank, notNull } from '@mockinho/core'
-import {
-  allOf,
-  anyOf,
-  anything,
-  containing,
-  endsWith,
-  equalsTo,
-  hasLength,
-  hitTimes,
-  isPresent,
-  isUUID,
-  item,
-  jsonPath,
-  matching,
-  not,
-  startsWith
-} from '@mockinho/core-matchers'
-import { Configurations } from '../config'
-import { urlPath, urlPathMatching } from '../matchers'
+import { item } from '@mockinho/core-matchers'
+import { containing } from '@mockinho/core-matchers'
+import { isPresent } from '@mockinho/core-matchers'
+import { anyOf } from '@mockinho/core-matchers'
+import { jsonPath } from '@mockinho/core-matchers'
+import { isUUID } from '@mockinho/core-matchers'
+import { matching } from '@mockinho/core-matchers'
+import { allOf } from '@mockinho/core-matchers'
+import { not } from '@mockinho/core-matchers'
+import { endsWith } from '@mockinho/core-matchers'
+import { hitTimes } from '@mockinho/core-matchers'
+import { equalsTo } from '@mockinho/core-matchers'
+import { hasLength } from '@mockinho/core-matchers'
+import { startsWith } from '@mockinho/core-matchers'
+import { anything } from '@mockinho/core-matchers'
 import { HttpStubBuilder, response } from '../stub'
-import { InvalidStubFileError } from './InvalidStubFileError'
+import { urlPath, urlPathMatching } from '../matchers'
+import { Configurations } from '../config'
 import { StubFile } from './StubFile'
+import { InvalidStubFileError } from './InvalidStubFileError'
 
 const MatcherConstants = [
   'isPresent',
@@ -140,8 +138,13 @@ export function buildStubFromFile<Config extends Configurations>(
   if (stub.response.headers) res.headers(stub.response.headers)
   if (stub.response.delayInMs) res.delayInMs(stub.response.delayInMs)
 
-  if (stub.response.bodyFile) res.bodyFile(stub.response.bodyFile)
-  else if (stub.response.body) res.body(stub.response.body)
+  if (stub.response.proxyFrom) {
+    res.proxyHeaders(stub.response.proxyHeaders)
+    res.proxyFrom(stub.response.proxyFrom)
+  } else {
+    if (stub.response.bodyFile) res.bodyFile(stub.response.bodyFile)
+    else if (stub.response.body) res.body(stub.response.body)
+  }
 
   builder.reply(res)
 

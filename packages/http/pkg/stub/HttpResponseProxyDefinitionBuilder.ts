@@ -8,13 +8,13 @@ export class HttpResponseProxyDefinitionBuilder extends HttpResponseDefinitionBu
 
     super()
 
-    this._proxyTo = target
+    this._proxyFrom = target
   }
 
-  proxyTo(target: string): this {
+  proxyFrom(target: string): this {
     notBlank(target)
 
-    this._proxyTo = target
+    this._proxyFrom = target
 
     return this
   }
