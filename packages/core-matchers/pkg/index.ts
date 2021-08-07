@@ -1,4 +1,5 @@
 export * from './allOf'
+export * from './anyItem'
 export * from './anyOf'
 export * from './anything'
 export * from './containing'

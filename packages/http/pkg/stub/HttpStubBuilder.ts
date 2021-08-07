@@ -1,5 +1,6 @@
 import { Express } from 'express'
 import { allOf, equalsTo, hitTimes } from '@mockinho/core-matchers'
+import { anyItem } from '@mockinho/core-matchers'
 import { encodeBase64 } from '@mockinho/core'
 import { Matcher } from '@mockinho/core'
 import { notNull } from '@mockinho/core'
@@ -51,7 +52,7 @@ export class HttpStubBuilder extends StubBaseBuilder<
     return this
   }
 
-  method(matcher: Matcher<string> | string): this {
+  method(matcher: Matcher<string> | string | Array<string>): this {
     notNull(matcher)
 
     if (typeof matcher === 'string') {
@@ -59,6 +60,12 @@ export class HttpStubBuilder extends StubBaseBuilder<
 
       this.meta.set('method', matcher)
       this._matchers.push(this.spec(extractMethod, equalsTo(matcher), 3))
+    } else if (Array.isArray(matcher)) {
+      notEmpty(matcher)
+      noNullElements(matcher)
+
+      this.meta.set('method', matcher.join(','))
+      this._matchers.push(this.spec(extractMethod, anyItem(matcher), 3))
     } else {
       this._matchers.push(this.spec(extractMethod, matcher, 3))
     }
