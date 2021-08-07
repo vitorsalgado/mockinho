@@ -1,6 +1,7 @@
 import { Stream } from 'stream'
 import Chalk from 'chalk'
 import { extractPathname } from '@mockinho/core'
+import { nowInMs } from '../utils'
 import { HttpEvents } from './HttpEvents'
 import { ifVerbose } from './ifVerbose'
 
@@ -20,7 +21,7 @@ export function onRequestMatched(event: HttpEvents['requestMatched']): void {
             ? `${
                 Chalk.green('Stub: ') +
                 event.stub.id +
-                (event.stub.id ? ' | ' : '') +
+                (event.stub.id && event.stub.name ? ' | ' : '') +
                 event.stub.name
               }\n` +
               `${
@@ -29,7 +30,8 @@ export function onRequestMatched(event: HttpEvents['requestMatched']): void {
                   : ''
               }\n`
             : '') +
-          `${Chalk.green('Response Definition:')}\n` +
+          `${Chalk.green('Response Definition')}\n` +
+          `${Chalk.green('Took: ')}${(nowInMs() - event.start).toFixed(2).toString()} ms\n` +
           `${Chalk.green('Status: ')}${event.responseDefinition.status}\n` +
           `${Chalk.green('Headers:')}\n` +
           `${Object.entries(event.responseDefinition.headers)
@@ -39,9 +41,9 @@ export function onRequestMatched(event: HttpEvents['requestMatched']): void {
             event.responseDefinition.body
               ? `${Chalk.green('Body:')}\n` +
                 (event.responseDefinition.body instanceof Buffer
-                  ? `${Chalk.italic.gray('(Buffer Body)')}`
+                  ? `${Chalk.italic.gray('(buffer response body omitted)')}`
                   : event.responseDefinition.body instanceof Stream
-                  ? `${Chalk.italic.gray('(Stream Body)')}`
+                  ? `${Chalk.italic.gray('(stream response body omitted)')}`
                   : JSON.stringify(event.responseDefinition.body))
               : ''
           }`

@@ -19,6 +19,7 @@ export interface HttpEvents {
 
   requestMatched: {
     readonly verbose: boolean
+    readonly start: number
     readonly method: HttpMethods
     readonly url: string
     readonly responseDefinition: {

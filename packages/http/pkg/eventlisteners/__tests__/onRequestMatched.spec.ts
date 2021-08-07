@@ -1,12 +1,14 @@
 import { Readable } from 'stream'
 import { HttpResponseDefinition } from '../../stub'
 import { onRequestMatched } from '../onRequestMatched'
+import { nowInMs } from '../../utils'
 
 describe('onRequestMatched', function () {
   it('should accept a regular event payload', function () {
     onRequestMatched({
       url: 'http://localhost:8080',
       verbose: true,
+      start: nowInMs(),
       method: 'PATCH',
       responseDefinition: new HttpResponseDefinition(
         200,
@@ -28,6 +30,7 @@ describe('onRequestMatched', function () {
     onRequestMatched({
       url: 'http://localhost:8080',
       verbose: true,
+      start: nowInMs(),
       method: 'POST',
       responseDefinition: new HttpResponseDefinition(
         200,
@@ -49,6 +52,7 @@ describe('onRequestMatched', function () {
     onRequestMatched({
       url: 'http://localhost:8080',
       verbose: true,
+      start: nowInMs(),
       method: 'DELETE',
       responseDefinition: new HttpResponseDefinition(
         200,
@@ -76,6 +80,7 @@ describe('onRequestMatched', function () {
     onRequestMatched({
       url: 'http://localhost:8080',
       verbose: true,
+      start: nowInMs(),
       method: 'GET',
       responseDefinition: new HttpResponseDefinition(
         200,

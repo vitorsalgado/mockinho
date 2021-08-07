@@ -8,6 +8,7 @@ import { HttpRequest } from './HttpRequest'
 import { HttpResponseDefinition, HttpStub, HttpResponseDefinitionBuilder } from './stub'
 import { ExpressConfigurations } from './config'
 import { BodyType } from './types'
+import { nowInMs } from './utils'
 
 export function stubFinderMiddleware(
   context: HttpContext
@@ -108,6 +109,7 @@ function fromExpressRequest(request: Request & { [key: string]: any }): HttpRequ
   request.id = UUId()
   request.href = `${request.protocol}://${request.hostname}${request.url}`
   request.matched = false
+  request.start = nowInMs()
 
   return request as HttpRequest
 }
@@ -140,6 +142,7 @@ function onRequestMatched(
 ) {
   context.emit('requestMatched', {
     verbose: verbose,
+    start: req.start,
     url: req.url,
     method: req.method,
     responseDefinition: response,

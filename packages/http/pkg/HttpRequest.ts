@@ -15,6 +15,7 @@ export interface HttpRequest extends Request {
   body: BodyType
   isMultipart: boolean
   files: Array<Express.Multer.File>
+  start: number
   matched: boolean
   matchResult: FindStubResult<
     HttpContext,
