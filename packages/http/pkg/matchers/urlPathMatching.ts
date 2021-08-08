@@ -4,8 +4,10 @@ import { matching } from '@mockinho/core-matchers'
 
 export const urlPathMatching = (pattern: RegExp): Matcher<string> => {
   return function urlPathMapping(value, ctx): boolean {
-    ctx?.stub.meta.set('url', pattern)
-    ctx?.context.provideStubRepository().save(ctx?.stub)
+    if (ctx) {
+      ctx.stub.meta.set('url', pattern)
+      ctx.context.provideStubRepository().save(ctx.stub)
+    }
 
     return matching(pattern)(new URL(value).pathname, ctx)
   }

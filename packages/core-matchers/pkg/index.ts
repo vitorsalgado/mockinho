@@ -1,3 +1,5 @@
+// Matchers
+// ---
 export * from './allOf'
 export * from './anyItem'
 export * from './anyOf'
@@ -15,3 +17,9 @@ export * from './not'
 export * from './regex'
 export * from './startsWith'
 export * from './testUtils'
+
+// Matcher Transformers
+// ---
+export * from './transformers/trim'
+export * from './transformers/lowerCase'
+export * from './transformers/upperCase'

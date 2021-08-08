@@ -17,6 +17,9 @@ import { equalsTo } from '@mockinho/core-matchers'
 import { hasLength } from '@mockinho/core-matchers'
 import { startsWith } from '@mockinho/core-matchers'
 import { anything } from '@mockinho/core-matchers'
+import { trim } from '@mockinho/core-matchers'
+import { lowerCase } from '@mockinho/core-matchers'
+import { upperCase } from '@mockinho/core-matchers'
 import { HttpStubBuilder, response } from '../stub'
 import { urlPath, urlPathMatching } from '../matchers'
 import { Configurations } from '../config'
@@ -24,6 +27,8 @@ import { StubFile } from './StubFile'
 import { InvalidStubFileError } from './InvalidStubFileError'
 
 const MatcherConstants = [
+  // Matchers
+  // --
   'isPresent',
   'isUUID',
   'contains',
@@ -44,6 +49,12 @@ const MatcherConstants = [
   'anyOf',
   'allOf',
   'item',
+
+  // Matchers Transformers
+  // --
+  'trim',
+  'lowerCase',
+  'upperCase',
 
   // HTTP
   // --
@@ -186,6 +197,9 @@ function discoverMatcherByKey(filename: string, key: string, values: any, root: 
   const valueIsText = typeof values === 'string'
   const valueEntries = Object.entries(values)
 
+  // Matchers
+  // ---
+
   if (key === 'urlPath') {
     const textCase = textCaseProperties(root)
     return urlPath(values, textCase.ignoreCase, textCase.locale)
@@ -219,10 +233,20 @@ function discoverMatcherByKey(filename: string, key: string, values: any, root: 
 
     return not(discoverMatcherByKey(filename, notK, notV, values))
   } else if (key === 'jsonPath' || key === 'fieldPath') {
-    return jsonPath(
-      valueEntries[0][1] as string,
-      discoverMatcherByKey(filename, valueEntries[1][0], valueEntries[1][1], valueEntries[1])
+    const path = findRequiredParameter<string>(
+      'path',
+      valueEntries,
+      filename,
+      '"jsonPath" needs a json key path.'
     )
+    const matcherEntry = findRequiredMatcherEntry(
+      valueEntries,
+      filename,
+      '"jsonPath" requires a matcher to apply on the json key. Eg.: "jsonPath": { path: "data.message", equalsTo: "test" }'
+    )
+    const [k, v] = matcherEntry
+
+    return jsonPath(path as string, discoverMatcherByKey(filename, k, v, matcherEntry))
   } else if (key === 'anyOf') {
     const anyOfMatchers = []
 
@@ -250,14 +274,63 @@ function discoverMatcherByKey(filename: string, key: string, values: any, root: 
 
     return allOf(...allOfMatchers)
   } else if (key === 'item') {
-    return item(
-      valueEntries[0][1] as number,
-      discoverMatcherByKey(filename, valueEntries[1][0], valueEntries[1][1], valueEntries[1])
+    const index = findRequiredParameter<number>(
+      'index',
+      valueEntries,
+      filename,
+      '"items" needs "index" parameter.'
     )
-  } else {
+    const matcherEntry = findRequiredMatcherEntry(
+      valueEntries,
+      filename,
+      '"item" requires a matcher. Eg.: "item": { index: 1, equalsTo: "test" }'
+    )
+    const [k, v] = matcherEntry
+
+    return item(index, discoverMatcherByKey(filename, k, v, matcherEntry))
+  }
+
+  // Matcher Transformers
+  // ---
+  else if (key === 'lowerCase') {
+    const locales = findOptionalParameter('locale', valueEntries, undefined)
+    const matcherEntry = findRequiredMatcherEntry(
+      valueEntries,
+      filename,
+      '"lowerCase" requires a matcher. Eg.: "lowerCase": { equalsTo: "test" }'
+    )
+    const [k, v] = matcherEntry
+
+    return lowerCase(discoverMatcherByKey(filename, k, v, matcherEntry), locales)
+  } else if (key === 'upperCase') {
+    const locales = findOptionalParameter('locale', valueEntries, undefined)
+    const matcherEntry = findRequiredMatcherEntry(
+      valueEntries,
+      filename,
+      '"upperCase" requires a matcher. Eg.: "upperCase": { equalsTo: "test" }'
+    )
+    const [k, v] = matcherEntry
+
+    return upperCase(discoverMatcherByKey(filename, k, v, matcherEntry), locales)
+  } else if (key === 'trim') {
+    const matcherEntry = findRequiredMatcherEntry(
+      valueEntries,
+      filename,
+      '"trim" requires a matcher. Eg.: "trim": { equalsTo: "test" }'
+    )
+    const [k, v] = matcherEntry
+
+    return trim(discoverMatcherByKey(filename, k, v, matcherEntry))
+  }
+
+  // No Matcher Found
+  // ---
+  else {
     throw new InvalidStubFileError(`No matcher found for: ${key} -- ${values} in ${root}`, filename)
   }
 }
+
+// region Utils
 
 function textCaseProperties(
   root: any,
@@ -291,3 +364,46 @@ function getSingleMatcherFromObjectKeys(filename: string, keys: string[]): strin
 
   return matchers[0]
 }
+
+function findRequiredParameter<T>(
+  parameter: string,
+  values: [string, unknown][],
+  filename: string,
+  errorMessage: string
+): T {
+  const entry = values.find(([k]) => k === parameter)
+
+  if (!entry) {
+    throw new InvalidStubFileError(errorMessage, filename)
+  }
+
+  return entry[1] as T
+}
+
+function findRequiredMatcherEntry(
+  values: [string, unknown][],
+  filename: string,
+  errorMessage: string
+): [string, unknown] {
+  const entry = values.find(([key]) => MatcherConstants.includes(key))
+
+  if (!entry) {
+    if (!entry) {
+      throw new InvalidStubFileError(errorMessage, filename)
+    }
+  }
+
+  return entry
+}
+
+function findOptionalParameter<T>(parameter: string, values: [string, unknown][], def: T): T {
+  const entry = values.find(([k]) => k === parameter)
+
+  if (!entry) {
+    return def
+  }
+
+  return entry[1] as T
+}
+
+// endregion

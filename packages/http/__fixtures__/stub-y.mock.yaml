@@ -13,6 +13,12 @@ request:
     sort:
       equalsTo: aSc
       ignoreCase: true
+    filter:
+      upperCase:
+        equalsTo: NONE
+    from:
+      lowerCase:
+        equalsTo: nowhere
   headers:
     X-Context:
       isPresent: true
@@ -26,8 +32,9 @@ request:
   body:
     anyOf:
       - jsonPath:
+          trim:
+            equalsTo: test
           path: data.message
-          equalsTo: test
 response:
   status: 200
   body:

@@ -35,14 +35,14 @@ describe('HTTP - File Stubbing', function () {
 
     it('should match and return from a yaml stub', function () {
       return Supertest($.server())
-        .post('/test/100/another-route/200?q=ORANGE&sort=AsC')
+        .post('/test/100/another-route/200?q=ORANGE&sort=AsC&filter=none&from=NoWheRe')
         .set('content-type', 'application/json')
         .set('Accept', 'application/json')
         .set('X-Context', 'Some Nice Context')
         .set('X-Var', '10')
         .send({
           data: {
-            message: 'test',
+            message: ' test ',
             age: 33
           }
         })

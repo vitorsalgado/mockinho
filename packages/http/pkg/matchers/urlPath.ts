@@ -8,8 +8,10 @@ export const urlPath = (
   locale: string | string[] | undefined = undefined
 ): Matcher<string> => {
   return function urlPath(value, ctx): boolean {
-    ctx?.stub.meta.set('url', path)
-    ctx?.context.provideStubRepository().save(ctx?.stub)
+    if (ctx) {
+      ctx.stub.meta.set('url', path)
+      ctx.context.provideStubRepository().save(ctx.stub)
+    }
 
     return equalsTo(path, ignoreCase, locale)(new URL(value).pathname, ctx)
   }
