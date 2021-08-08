@@ -23,3 +23,8 @@ export * from './testUtils'
 export * from './transformers/trim'
 export * from './transformers/lowerCase'
 export * from './transformers/upperCase'
+
+// Inspect
+// ---
+export * from './inspect/peek'
+export * from './inspect/notMatched'

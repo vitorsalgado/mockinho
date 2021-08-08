@@ -1,21 +1,28 @@
+/* eslint-disable no-console */
+
 import { Express } from 'express'
+import Chalk from 'chalk'
 import { allOf, equalsTo, hitTimes } from '@mockinho/core-matchers'
 import { anyItem } from '@mockinho/core-matchers'
+import { notMatched } from '@mockinho/core-matchers'
 import { encodeBase64 } from '@mockinho/core'
 import { Matcher } from '@mockinho/core'
 import { notNull } from '@mockinho/core'
 import { noNullElements } from '@mockinho/core'
 import { StubSource } from '@mockinho/core'
 import { notBlank } from '@mockinho/core'
-import { MockinhoError } from '@mockinho/core'
 import { notEmpty } from '@mockinho/core'
 import { StubBaseBuilder } from '@mockinho/core'
+import { Expectation } from '@mockinho/core'
+import { MockinhoError } from '@mockinho/core'
 import { DecoratedStubBuilder } from '../types'
-import { BodyType, ErrorCodes, Headers, HttpMethods } from '../types'
+import { BodyType, Headers } from '../types'
+import { Schemes } from '../types'
+import { HttpMethods } from '../types'
+import { ErrorCodes } from '../types'
 import { bearerToken, urlPath } from '../matchers'
 import { HttpRequest } from '../HttpRequest'
 import { HttpContext } from '../HttpContext'
-import { Schemes } from '../types'
 import { HttpStub } from './HttpStub'
 import { HttpResponseDefinitionBuilder } from './HttpResponseDefinitionBuilder'
 import { HttpResponseDefinition } from './HttpResponseDefinition'
@@ -27,7 +34,8 @@ export class HttpStubBuilder extends StubBaseBuilder<
   HttpResponseDefinitionBuilder,
   HttpStub
 > {
-  private readonly meta: Map<string, unknown> = new Map<string, unknown>()
+  private readonly _meta: Map<string, unknown> = new Map<string, unknown>()
+  private _inspect: boolean = false
 
   constructor(
     private readonly _source: StubSource = 'code',
@@ -44,10 +52,10 @@ export class HttpStubBuilder extends StubBaseBuilder<
     if (typeof matcher === 'string') {
       notBlank(matcher)
 
-      this.meta.set('url', matcher)
-      this._matchers.push(this.spec(extractUrl, urlPath(matcher)))
+      this._meta.set('url', matcher)
+      this._matchers.push(this.addSpec(extractUrl, urlPath(matcher), 10, 'Url'))
     } else {
-      this._matchers.push(this.spec(extractUrl, matcher, 10))
+      this._matchers.push(this.addSpec(extractUrl, matcher, 10, 'Url'))
     }
 
     return this
@@ -59,23 +67,23 @@ export class HttpStubBuilder extends StubBaseBuilder<
     if (typeof matcher === 'string') {
       notBlank(matcher)
 
-      this.meta.set('method', matcher)
-      this._matchers.push(this.spec(extractMethod, equalsTo(matcher), 3))
+      this._meta.set('method', matcher)
+      this._matchers.push(this.addSpec(extractMethod, equalsTo(matcher), 3, 'Method'))
     } else if (Array.isArray(matcher)) {
       notEmpty(matcher)
       noNullElements(matcher)
 
-      this.meta.set('method', matcher.join(','))
-      this._matchers.push(this.spec(extractMethod, anyItem(matcher), 3))
+      this._meta.set('method', matcher.join(','))
+      this._matchers.push(this.addSpec(extractMethod, anyItem(matcher), 3, 'Method'))
     } else {
-      this._matchers.push(this.spec(extractMethod, matcher, 3))
+      this._matchers.push(this.addSpec(extractMethod, matcher, 3, 'Method'))
     }
 
     return this
   }
 
   scheme(scheme: Schemes): this {
-    this._matchers.push(this.spec(extractScheme, equalsTo(scheme), 1))
+    this._matchers.push(this.addSpec(extractScheme, equalsTo(scheme), 1, 'Scheme'))
 
     return this
   }
@@ -85,9 +93,11 @@ export class HttpStubBuilder extends StubBaseBuilder<
     notNull(matcher)
 
     if (typeof matcher === 'string') {
-      this._matchers.push(this.spec(extractHeader(key.toLowerCase()), equalsTo(matcher), 0.5))
+      this._matchers.push(
+        this.addSpec(extractHeader(key.toLowerCase()), equalsTo(matcher), 0.5, 'Header')
+      )
     } else {
-      this._matchers.push(this.spec(extractHeader(key.toLowerCase()), matcher, 0.5))
+      this._matchers.push(this.addSpec(extractHeader(key.toLowerCase()), matcher, 0.5, 'Header'))
     }
 
     return this
@@ -96,7 +106,7 @@ export class HttpStubBuilder extends StubBaseBuilder<
   headers(matcher: Matcher<Record<string, string>>): this {
     notNull(matcher)
 
-    this._matchers.push(this.spec(extractHeaders, matcher, 3))
+    this._matchers.push(this.addSpec(extractHeaders, matcher, 3, 'Header'))
 
     return this
   }
@@ -105,9 +115,11 @@ export class HttpStubBuilder extends StubBaseBuilder<
     notNull(matcher)
 
     if (typeof matcher === 'string') {
-      this._matchers.push(this.spec(extractHeader(Headers.ContentType), equalsTo(matcher), 0.5))
+      this._matchers.push(
+        this.addSpec(extractHeader(Headers.ContentType), equalsTo(matcher), 0.5, 'Header')
+      )
     } else {
-      this._matchers.push(this.spec(extractHeader(Headers.ContentType), matcher, 0.5))
+      this._matchers.push(this.addSpec(extractHeader(Headers.ContentType), matcher, 0.5, 'Header'))
     }
 
     return this
@@ -118,9 +130,11 @@ export class HttpStubBuilder extends StubBaseBuilder<
     notNull(password)
 
     this._matchers.push(
-      this.spec(
+      this.addSpec(
         extractHeader(Headers.Authorization),
-        equalsTo(encodeBase64(`Basic ${username}:${password}`))
+        equalsTo(encodeBase64(`Basic ${username}:${password}`)),
+        0.5,
+        'Header'
       )
     )
 
@@ -130,7 +144,7 @@ export class HttpStubBuilder extends StubBaseBuilder<
   bearerAuthorization(token: string): this {
     notNull(token)
 
-    this._matchers.push(this.spec(extractRequest, bearerToken(token)))
+    this._matchers.push(this.addSpec(extractRequest, bearerToken(token), 0.5, 'Header'))
 
     return this
   }
@@ -141,10 +155,15 @@ export class HttpStubBuilder extends StubBaseBuilder<
 
     if (typeof matcher === 'string') {
       this._matchers.push(
-        this.spec(extractQuery(key), equalsTo<string | string[] | undefined>(matcher), 0.5)
+        this.addSpec(
+          extractQuery(key),
+          equalsTo<string | string[] | undefined>(matcher),
+          0.5,
+          'Query'
+        )
       )
     } else {
-      this._matchers.push(this.spec(extractQuery(key), matcher, 0.5))
+      this._matchers.push(this.addSpec(extractQuery(key), matcher, 0.5, 'Query'))
     }
 
     return this
@@ -153,7 +172,7 @@ export class HttpStubBuilder extends StubBaseBuilder<
   queries(matcher: Matcher<Record<string, string | string[] | undefined>>): this {
     notNull(matcher)
 
-    this._matchers.push(this.spec(extractQueries, matcher, 3))
+    this._matchers.push(this.addSpec(extractQueries, matcher, 3, 'Query'))
 
     return this
   }
@@ -163,10 +182,10 @@ export class HttpStubBuilder extends StubBaseBuilder<
     noNullElements(matchers)
 
     if (matchers.length === 0) {
-      this._matchers.push(this.spec(extractBody, matchers[0], 5))
+      this._matchers.push(this.addSpec(extractBody, matchers[0], 5, 'Body'))
     }
 
-    this._matchers.push(this.spec(extractBody, allOf(...matchers), 5))
+    this._matchers.push(this.addSpec(extractBody, allOf(...matchers), 5, 'Body'))
 
     return this
   }
@@ -180,10 +199,10 @@ export class HttpStubBuilder extends StubBaseBuilder<
     noNullElements(matchers)
 
     if (matchers.length === 0) {
-      this._matchers.push(this.spec(extractMultiPartFiles, matchers[0], 3))
+      this._matchers.push(this.addSpec(extractMultiPartFiles, matchers[0], 3, 'Files'))
     }
 
-    this._matchers.push(this.spec(extractMultiPartFiles, allOf(...matchers), 5))
+    this._matchers.push(this.addSpec(extractMultiPartFiles, allOf(...matchers), 5, 'Files'))
 
     return this
   }
@@ -194,19 +213,23 @@ export class HttpStubBuilder extends StubBaseBuilder<
     noNullElements(matchers)
 
     if (matchers.length === 0) {
-      this._matchers.push(this.spec(extractFileByFieldName(fieldName), matchers[0], 3))
+      this._matchers.push(this.addSpec(extractFileByFieldName(fieldName), matchers[0], 3, 'Files'))
     }
 
-    this._matchers.push(this.spec(extractFileByFieldName(fieldName), allOf(...matchers), 5))
+    this._matchers.push(
+      this.addSpec(extractFileByFieldName(fieldName), allOf(...matchers), 5, 'Files')
+    )
 
     return this
   }
 
   cookie(key: string, matcher: Matcher<string> | string): this {
     if (typeof matcher === 'string') {
-      this._matchers.push(this.spec(extractCookie(key), equalsTo<string | undefined>(matcher), 1))
+      this._matchers.push(
+        this.addSpec(extractCookie(key), equalsTo<string | undefined>(matcher), 0.5, 'Cookies')
+      )
     } else {
-      this._matchers.push(this.spec(extractCookie(key) as any, matcher, 1))
+      this._matchers.push(this.addSpec(extractCookie(key) as any, matcher, 0.5, 'Cookies'))
     }
 
     return this
@@ -215,10 +238,15 @@ export class HttpStubBuilder extends StubBaseBuilder<
   cookieJson(key: string, matcher: Matcher<Record<string, unknown>> | string): this {
     if (typeof matcher === 'string') {
       this._matchers.push(
-        this.spec(extractCookieAsJson(key), equalsTo<string | undefined>(matcher), 1)
+        this.addSpec(
+          extractCookieAsJson(key),
+          equalsTo<string | undefined>(matcher),
+          0.5,
+          'Cookies'
+        )
       )
     } else {
-      this._matchers.push(this.spec(extractCookieAsJson(key) as any, matcher, 1))
+      this._matchers.push(this.addSpec(extractCookieAsJson(key) as any, matcher, 0.5, 'Cookies'))
     }
 
     return this
@@ -227,7 +255,7 @@ export class HttpStubBuilder extends StubBaseBuilder<
   hitTimes(times: number): this {
     notNull(times)
 
-    this._matchers.push(this.spec(extractNothing, hitTimes(times)))
+    this._matchers.push(this.addSpec(extractNothing, hitTimes(times), 0, 'Times'))
 
     return this
   }
@@ -237,10 +265,10 @@ export class HttpStubBuilder extends StubBaseBuilder<
     noNullElements(matchers)
 
     if (matchers.length === 1) {
-      this._matchers.push(this.spec(extractRequest, matchers[0], 1))
+      this._matchers.push(this.addSpec(extractRequest, matchers[0], 1, 'Request'))
     }
 
-    this._matchers.push(this.spec(extractRequest, allOf(...matchers), 1))
+    this._matchers.push(this.addSpec(extractRequest, allOf(...matchers), 1, 'Request'))
 
     return this
   }
@@ -249,6 +277,12 @@ export class HttpStubBuilder extends StubBaseBuilder<
     response.proxyFrom(target)
 
     this._responseDefinitionBuilder = response
+
+    return this
+  }
+
+  inspect(mode: boolean = true): this {
+    this._inspect = mode
 
     return this
   }
@@ -267,7 +301,7 @@ export class HttpStubBuilder extends StubBaseBuilder<
       this._sourceDescription,
       this._matchers,
       this._responseDefinitionBuilder,
-      this.meta,
+      this._meta,
       this._scenarioName
         ? {
             name: this._scenarioName,
@@ -285,6 +319,35 @@ export class HttpStubBuilder extends StubBaseBuilder<
       this._responseDefinitionBuilder,
       'Response definition is required. Call .reply() to create one.'
     )
+  }
+
+  protected addSpec<T>(
+    valueGetter: (request: HttpRequest) => T,
+    matcher: Matcher<T>,
+    weight: number = 0,
+    container: string
+  ): Expectation<T, HttpRequest> {
+    return {
+      matcher: this._inspect
+        ? notMatched(matcher, (matcher, value, ctx) => {
+            console.log(Chalk.redBright.bold(`${container}: "${matcher.name}" did not match.`))
+            console.log(
+              Chalk.redBright(
+                `Stub: ${
+                  ctx?.stub.sourceDescription
+                    ? `${ctx?.stub.sourceDescription}`
+                    : ctx?.stub.name
+                    ? ctx.stub.name
+                    : ctx?.stub.id
+                }`
+              )
+            )
+            console.log(Chalk.redBright(`Received: ${JSON.stringify(value)}`))
+          })
+        : matcher,
+      valueGetter,
+      weight
+    }
   }
 }
 

@@ -79,7 +79,7 @@ export function buildStubFromFile<Config extends Configurations>(
   notNull(stub)
   notBlank(filename)
 
-  const builder = new HttpStubBuilder('file', filename)
+  const builder = new HttpStubBuilder('file', filename).inspect(configurations.isVerbose)
 
   if (stub.id) builder.id(stub.id)
   if (stub.name) builder.name(stub.name)
