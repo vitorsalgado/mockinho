@@ -24,6 +24,6 @@ export const listFilenames = (
 
       return filter(file) ? acc.concat(file) : acc
     })
-    .reduce((a, b) => a.concat(b))
+    .reduce((a, b) => a.concat(b), [])
 
 const isDirectory = (value: PathLike) => statSync(value).isDirectory()

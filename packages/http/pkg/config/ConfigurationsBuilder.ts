@@ -1,12 +1,15 @@
 import Path from 'path'
 import { ServerOptions as HttpsServerOptions } from 'https'
+import { Options } from 'http-proxy-middleware'
 import { Level, Logger } from '@mockinho/core'
+import { notBlank } from '@mockinho/core'
 import { HttpServerFactory } from '../HttpServer'
 import { ExpressServerFactory } from '../ExpressServerFactory'
+import { RecordOptions } from '../rec/RecordOptions'
+import { RecordOptionsBuilder } from '../rec/RecordOptionsBuilder'
 
 export abstract class ConfigurationsBuilder<ServerFactory extends HttpServerFactory, Config> {
   protected static STUB_FIXTURES_DIR = '__fixtures__'
-  protected static STUB_FIXTURES_BODY_FILES_DIR = '__content__'
 
   protected _port: number = 0
   protected _host: string = '127.0.0.1'
@@ -22,7 +25,11 @@ export abstract class ConfigurationsBuilder<ServerFactory extends HttpServerFact
   protected _serverFactory!: ServerFactory
   protected _loadFileStubs: boolean = false
   protected _stubsDirectory: string = ''
-  protected _stubsBodyContentDirectory: string = ''
+  protected _stubsExtension: string = 'mock'
+  protected _proxyAll: boolean = false
+  protected _proxyOptions: Options = { secure: false, changeOrigin: true }
+  protected _recordEnabled: boolean = false
+  protected _recordOptions?: RecordOptions
 
   // region Builders
 
@@ -78,12 +85,21 @@ export abstract class ConfigurationsBuilder<ServerFactory extends HttpServerFact
     return this
   }
 
-  stubsDirectory(path: string, bodies?: string): this {
+  stubsDirectory(path: string): this {
     this._stubsDirectory = Path.resolve(path)
-    this._stubsBodyContentDirectory = bodies
-      ? Path.resolve(bodies)
-      : Path.join(path, `${ConfigurationsBuilder.STUB_FIXTURES_BODY_FILES_DIR}`)
+    return this
+  }
 
+  stubsExtension(ext: string): this {
+    notBlank(ext)
+
+    this._stubsExtension = ext
+    return this
+  }
+
+  record(options?: RecordOptionsBuilder): this {
+    this._recordEnabled = true
+    this._recordOptions = options?.build()
     return this
   }
 

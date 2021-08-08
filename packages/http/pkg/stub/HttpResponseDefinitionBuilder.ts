@@ -1,5 +1,4 @@
 import Path from 'path'
-import Fs from 'fs'
 import { CookieOptions } from 'express'
 import { isTrue, notBlank, notNull, ResponseDefinitionBuilder, MockinhoError } from '@mockinho/core'
 import { fromFile, toJSON } from '@mockinho/core-bodyconverters'
@@ -117,11 +116,11 @@ export class HttpResponseDefinitionBuilder<C extends Configurations = ExpressCon
     return this.body(toJSON(body)).header(Headers.ContentType, MediaTypes.APPLICATION_JSON)
   }
 
-  bodyFile(path: string, relativeToFixtures: boolean = true): this {
+  bodyFile(path: string): this {
     notBlank(path)
 
     this._bodyFile = path
-    this._bodyFileRelativeToFixtures = relativeToFixtures
+    this._bodyFileRelativeToFixtures = !Path.isAbsolute(path)
     this._bodyCtrl++
 
     return this
@@ -174,7 +173,7 @@ export class HttpResponseDefinitionBuilder<C extends Configurations = ExpressCon
 
     if (this._bodyFile) {
       const file = this._bodyFileRelativeToFixtures
-        ? Path.join(context.provideConfigurations().stubsBodyContentDirectory, this._bodyFile)
+        ? Path.join(context.provideConfigurations().stubsDirectory, this._bodyFile)
         : this._bodyFile
 
       this._body = fromFile(file)
@@ -194,7 +193,7 @@ export class HttpResponseDefinitionBuilder<C extends Configurations = ExpressCon
     )
   }
 
-  validate(context: HttpContext): void {
+  validate(_context: HttpContext): void {
     notNull(this._status)
     isTrue(this._delay >= 0, 'Delay must be a positive number.')
 
@@ -202,16 +201,6 @@ export class HttpResponseDefinitionBuilder<C extends Configurations = ExpressCon
       throw new InvalidResponseDefinitionError(
         'Found more than one body strategy setup. Choose between: .body() .bodyFile() or .bodyWith()'
       )
-    }
-
-    if (this._bodyFile) {
-      const file = this._bodyFileRelativeToFixtures
-        ? Path.join(context.provideConfigurations().stubsBodyContentDirectory, this._bodyFile)
-        : this._bodyFile
-
-      if (!Fs.existsSync(file)) {
-        throw new TypeError(`File ${file} not found!`)
-      }
     }
   }
 }

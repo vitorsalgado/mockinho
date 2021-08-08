@@ -9,11 +9,14 @@ import { HttpResponseDefinition, HttpStub, HttpResponseDefinitionBuilder } from 
 import { ExpressConfigurations } from './config'
 import { BodyType } from './types'
 import { nowInMs } from './utils'
+import { Headers } from './types'
+import { MediaTypes } from './types'
 
 export function stubFinderMiddleware(
   context: HttpContext
 ): (request: Request, reply: Response, next: NextFunction) => Promise<void> {
-  const verbose = context.provideConfigurations().verbose
+  const configurations = context.provideConfigurations()
+  const verbose = configurations.isVerbose
   const proxy = HttpProxy.createProxyServer()
 
   return async function (request: Request, reply: Response, next: NextFunction): Promise<void> {
@@ -101,7 +104,25 @@ export function stubFinderMiddleware(
 
     onRequestNotMatched(context, req, result)
 
-    return next(result)
+    if (configurations.isProxyEnabled) {
+      return next()
+    }
+
+    reply
+      .set(Headers.ContentType, MediaTypes.TEXT_PLAIN)
+      .status(500)
+      .send(
+        `Request was not matched.${result
+          .closestMatch()
+          .map(() => ' See closest matches below:')
+          .orValue('')}` +
+          result
+            .closestMatch()
+            .map(x => [{ id: x.id, name: x.name, filename: x.sourceDescription }])
+            .orValue([])
+            .map(item => `\nName: ${item.name}\nId: ${item.id}\nFile: ${item.filename}`)
+            .join('')
+      )
   }
 }
 

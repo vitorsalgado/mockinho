@@ -9,20 +9,18 @@ import { ParseResult, parseStubFile } from './parseStubFile'
 import { StubFile } from './StubFile'
 
 const isStubFile =
-  (extensions: Array<string>, contentDir: string) =>
+  (extensions: Array<string>) =>
   (filename: string): boolean =>
-    extensions.some(x => filename.indexOf(x) > -1 && filename.indexOf(contentDir) < 0)
+    extensions.some(x => filename.indexOf(x) > -1)
 
 const ext = (filename: string): string => filename.split('.').pop()!
 
 export async function loadStubFiles(
   stubRoot: string,
-  stubBodiesRoot: string,
   extensions: Array<string>,
   throwOnErrors: boolean = true
 ): Promise<Array<{ stubFile: Array<StubFile>; filename: string }>> {
   notBlank(stubRoot)
-  notBlank(stubBodiesRoot)
   notEmpty(extensions)
   noNullElements(extensions)
 
@@ -31,7 +29,7 @@ export async function loadStubFiles(
   }
 
   const parseResults = await Promise.all(
-    listFilenames(stubRoot, isStubFile(extensions, stubBodiesRoot)).map(
+    listFilenames(stubRoot, isStubFile(extensions)).map(
       file =>
         new Promise<ParseResult>((resolve, reject) =>
           Fs.readFile(file, 'utf-8', (err, data) =>
@@ -65,10 +63,7 @@ export async function loadStubFiles(
   return parseResults
     .filter(x => !x.error)
     .map(x => ({
-      filename: x.file
-        .split('/')
-        .slice(x.file.split('/').findIndex(y => y === stubRoot.split('/').pop()))
-        .join('/'),
+      filename: x.file,
       stubFile: x.stubs
     }))
 }

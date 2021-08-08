@@ -1,5 +1,6 @@
 import { ServerOptions as HttpsServerOptions } from 'https'
 import { Logger } from '@mockinho/core'
+import { RecordOptions } from '../rec/RecordOptions'
 
 export interface Configurations {
   readonly port: number
@@ -9,11 +10,14 @@ export interface Configurations {
   readonly dynamicPort: boolean
 
   readonly loggers: Array<Logger>
-  readonly verbose: boolean
+  readonly isVerbose: boolean
 
   readonly stubsDirectory: string
-  readonly stubsBodyContentDirectory: string
-  readonly loadFileStubs: boolean
+  readonly stubsExtension: string
+  readonly isStubFilesEnabled: boolean
+
+  readonly isRecordEnabled: boolean
+  readonly recordOptions: RecordOptions
 
   readonly trace: boolean
 }

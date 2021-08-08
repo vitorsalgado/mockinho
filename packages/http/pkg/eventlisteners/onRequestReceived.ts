@@ -7,7 +7,7 @@ import { ifVerbose } from './ifVerbose'
 export function onRequestReceived(event: HttpEvents['requestReceived']): void {
   // eslint-disable-next-line no-console
   console.log(
-    `\n${Chalk.blueBright.bold('REQUEST RECEIVED')} ${new Date().toISOString()} ${Chalk.blueBright(
+    `${Chalk.blueBright.bold('REQUEST RECEIVED')} ${new Date().toISOString()} ${Chalk.blueBright(
       `---> ${event.method} ${extractPathname(event.url)}`
     )}` +
       '\n' +
@@ -19,8 +19,14 @@ export function onRequestReceived(event: HttpEvents['requestReceived']): void {
             .map(([key, value]) => `${key}: ${value}`)
             .join('\n')}\n` +
           `${
-            event.body && !(event.body instanceof Buffer || event.body instanceof Stream)
-              ? `${Chalk.blue('Body:')}\n` + JSON.stringify(event.body)
+            event.body !== null &&
+            typeof event.body !== 'undefined' &&
+            !(
+              event.body instanceof Buffer ||
+              event.body instanceof Stream ||
+              (typeof event.body === 'object' && Object.keys(event.body as any).length === 0)
+            )
+              ? `${Chalk.blue('Body:')}\n` + JSON.stringify(event.body) + '\n'
               : ''
           }`
       )

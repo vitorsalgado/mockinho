@@ -4,6 +4,7 @@ import Multer from 'multer'
 import { CorsOptions } from 'cors'
 import { CookieParseOptions } from 'cookie-parser'
 import CookieParse from 'cookie-parser'
+import { Options } from 'http-proxy-middleware'
 import { LoggerPino } from '@mockinho/core'
 import { ExpressServerFactory } from '../ExpressServerFactory'
 import { ConfigurationsBuilder } from './ConfigurationsBuilder'
@@ -42,6 +43,18 @@ export class ExpressConfigurationsBuilder extends ConfigurationsBuilder<
     return this
   }
 
+  enableProxy(target: string | Options): this {
+    this._proxyAll = true
+
+    if (typeof target === 'string') {
+      this._proxyOptions = { target, changeOrigin: true, secure: false }
+    } else {
+      this._proxyOptions = target
+    }
+
+    return this
+  }
+
   build(): ExpressConfigurations {
     if (!this._defaultLoggerDisabled) {
       if (!this._loggers.some(x => x.name() === 'console-pino-pretty-internal')) {
@@ -57,13 +70,6 @@ export class ExpressConfigurationsBuilder extends ConfigurationsBuilder<
       this._stubsDirectory = Path.join(
         this._root,
         `${ExpressConfigurationsBuilder.STUB_FIXTURES_DIR}`
-      )
-    }
-
-    if (!this._stubsBodyContentDirectory) {
-      this._stubsBodyContentDirectory = Path.join(
-        this._root,
-        `${ExpressConfigurationsBuilder.STUB_FIXTURES_DIR}/${ExpressConfigurationsBuilder.STUB_FIXTURES_BODY_FILES_DIR}`
       )
     }
 
@@ -83,6 +89,30 @@ export class ExpressConfigurationsBuilder extends ConfigurationsBuilder<
       throw new ReferenceError('HTTPS options is required when HTTPS is enabled.')
     }
 
+    if (this._recordEnabled) {
+      if (!this._recordOptions || !this._recordOptions.destination) {
+        if (!this._recordOptions) {
+          this._recordOptions = {
+            destination: this._stubsDirectory,
+            captureRequestHeaders: ['accept', 'content-type'],
+            captureResponseHeaders: [
+              'content-type',
+              'link',
+              'content-length',
+              'cache-control',
+              'retry-after',
+              'date',
+              'access-control-expose-headers',
+              'connection'
+            ],
+            filters: []
+          }
+        } else {
+          this._recordOptions.destination = this._stubsDirectory
+        }
+      }
+    }
+
     return {
       port: this._port,
       host: this._host,
@@ -90,17 +120,21 @@ export class ExpressConfigurationsBuilder extends ConfigurationsBuilder<
       httpsOptions: this._httpsOptions,
       dynamicPort: this._dynamicPort,
       loggers: this._loggers,
-      loadFileStubs: this._loadFileStubs,
+      isStubFilesEnabled: this._loadFileStubs,
       stubsDirectory: this._stubsDirectory,
-      stubsBodyContentDirectory: this._stubsBodyContentDirectory,
+      stubsExtension: this._stubsExtension,
       trace: this._trace,
-      verbose: this._verbose,
+      isVerbose: this._verbose,
       formUrlEncodedOptions: this._formBodyOptions,
       multiPartOptions: this._multiPartOptions,
-      cors: this._cors,
+      isCorsEnabled: this._cors,
       corsOptions: this._corsOptions,
       cookieSecrets: this._cookieSecrets,
-      cookieOptions: this._cookieOptions
+      cookieOptions: this._cookieOptions,
+      proxyOptions: this._proxyOptions,
+      isProxyEnabled: this._proxyAll,
+      isRecordEnabled: this._recordEnabled,
+      recordOptions: this._recordOptions!
     }
   }
 }

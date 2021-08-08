@@ -39,21 +39,6 @@ export class MockinhoHTTP implements HttpServer {
 
   // endregion
 
-  // extension(StubLifeCycleListener)  --- hit-times and scenarios goes in this category
-  // remove context from matchers
-  // eliminate createMatchers function
-  // add log.trace on matchers - maybe
-  // rename Expectation --> MatcherMetadata
-  // improve newBuilder()
-  // think about stub-repository -- should receive StubLifeCycleListener? or the Facade? --- Facade seems better
-  // check possibility and need of Parameters -- Maybe an event need then
-  // Traffic Listener -- should be a Middleware
-  // check possibility to expose Express Middleware to final user
-
-  // ---
-  // make everything async or at least possible to use async (matchers, extensions ...)
-  // ---
-
   mock(...stubBuilders: Array<HttpStubBuilder>): HttpStubScope {
     notEmpty(stubBuilders)
 
@@ -100,12 +85,12 @@ export class MockinhoHTTP implements HttpServer {
   }
 
   async start(): Promise<string> {
-    if (this.configurations.loadFileStubs) {
-      const loaded = await loadStubFiles(
-        this.configurations.stubsDirectory,
-        this.configurations.stubsBodyContentDirectory,
-        ['.json', '.yml', '.yaml']
-      )
+    if (this.configurations.isStubFilesEnabled) {
+      const loaded = await loadStubFiles(this.configurations.stubsDirectory, [
+        `.${this.configurations.stubsExtension}.json`,
+        `.${this.configurations.stubsExtension}.yml`,
+        `.${this.configurations.stubsExtension}.yaml`
+      ])
 
       loaded
         .map(item =>

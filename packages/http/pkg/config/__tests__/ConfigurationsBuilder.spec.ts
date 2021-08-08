@@ -14,7 +14,7 @@ describe('Configurations Builder', function () {
       .log(pinoLogger)
       .verbose(false)
       .loadFileStubs(false)
-      .stubsDirectory(Path.join(__dirname, 'test'), Path.join(__dirname, 'test', 'bodies'))
+      .stubsDirectory(Path.join(__dirname, 'test'))
       .disableDefaultLogger(false)
       .defaultLoggerLevel('warn')
       .trace()
@@ -35,14 +35,13 @@ describe('Configurations Builder', function () {
     expect(cfg.dynamicPort).toBeTruthy()
     expect(cfg.loggers).toHaveLength(1)
     expect(cfg.loggers[0]).toBeInstanceOf(LoggerPino)
-    expect(cfg.verbose).toBeFalsy()
-    expect(cfg.loadFileStubs).toBeFalsy()
+    expect(cfg.isVerbose).toBeFalsy()
+    expect(cfg.isStubFilesEnabled).toBeFalsy()
     expect(cfg.stubsDirectory).toEqual(Path.join(__dirname, 'test'))
-    expect(cfg.stubsBodyContentDirectory).toEqual(Path.join(__dirname, 'test', 'bodies'))
     expect(cfg.trace).toBeTruthy()
     expect(cfg.formUrlEncodedOptions).toEqual({ extended: false, limit: 1000 })
     expect(cfg.corsOptions).toEqual({ maxAge: 10 })
-    expect(cfg.cors).toBeTruthy()
+    expect(cfg.isCorsEnabled).toBeTruthy()
     expect(cfg.multiPartOptions).toEqual({ limits: { fieldNameSize: 1000 } })
     expect(cfg.cookieSecrets).toEqual('super-secret')
     expect(cfg.cookieOptions).toEqual({})
@@ -66,7 +65,6 @@ describe('Configurations Builder', function () {
     const cfg = builder.stubsDirectory(Path.join(__dirname, 'test')).build()
 
     expect(cfg.stubsDirectory).toEqual(Path.join(__dirname, 'test'))
-    expect(cfg.stubsBodyContentDirectory).toEqual(Path.join(__dirname, 'test', '__content__'))
   })
 
   it('should only add the provided logger when default is disabled', function () {
@@ -109,7 +107,7 @@ describe('Configurations Builder', function () {
       .log(new FakeLog('test-logger', jest.fn()))
       .verbose(false)
       .loadFileStubs(false)
-      .stubsDirectory(Path.join(__dirname, 'test'), Path.join(__dirname, 'test', 'bodies'))
+      .stubsDirectory(Path.join(__dirname, 'test'))
       .disableDefaultLogger()
       .defaultLoggerLevel('warn')
 

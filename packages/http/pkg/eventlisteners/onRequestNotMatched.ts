@@ -6,7 +6,7 @@ import { HttpEvents } from './HttpEvents'
 export function onRequestNotMatched(event: HttpEvents['requestNotMatched']): void {
   // eslint-disable-next-line no-console
   console.warn(
-    `\n${Chalk.yellowBright.bold('REQUEST WAS NOT MATCHED')} ${isoDateTime()} ${Chalk.yellow(
+    `${Chalk.yellowBright.bold('REQUEST WAS NOT MATCHED')} ${isoDateTime()} ${Chalk.yellow(
       `<--- ${event.method} ${extractPathname(event.url)}`
     )}`
   )
@@ -23,7 +23,7 @@ export function onRequestNotMatched(event: HttpEvents['requestNotMatched']): voi
       '\n' +
       `Id: ${stub.id}${stub.name ? '\nName: ' + stub.name : ''}${
         stub.sourceDescription ? '\nFile: ' + Chalk.bold(stub.sourceDescription) : ''
-      }\n${tryGetUrlAndMethod(stub)}`
+      }${tryGetUrlAndMethod(stub)}\n`
   )
 }
 
@@ -39,7 +39,7 @@ function tryGetUrlAndMethod(stub: HttpStub): string {
   }
 
   if (str.length > 0) {
-    return '\n' + str.join(' ')
+    return '\n' + 'Url: ' + Chalk.bold(str.join(' '))
   }
 
   return ''

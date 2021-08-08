@@ -1,5 +1,6 @@
 /* eslint-disable no-case-declarations */
 
+import Path from 'path'
 import { Matcher, notBlank, notNull } from '@mockinho/core'
 import { item } from '@mockinho/core-matchers'
 import { containing } from '@mockinho/core-matchers'
@@ -107,10 +108,17 @@ export function buildStubFromFile<Config extends Configurations>(
     if (typeof stub.request.body !== 'object') {
       builder.requestBody(equalsTo(stub.request.body) as any)
     } else {
-      const matcherKey = getSingleMatcherFromObjectKeys(filename, Object.keys(stub.request.body))
-      builder.requestBody(
-        discoverMatcherByKey(filename, matcherKey, stub.request.body[matcherKey], stub.request.body)
-      )
+      if (Object.keys(stub.request.body).length > 0) {
+        const matcherKey = getSingleMatcherFromObjectKeys(filename, Object.keys(stub.request.body))
+        builder.requestBody(
+          discoverMatcherByKey(
+            filename,
+            matcherKey,
+            stub.request.body[matcherKey],
+            stub.request.body
+          )
+        )
+      }
     }
   }
 
@@ -142,8 +150,13 @@ export function buildStubFromFile<Config extends Configurations>(
     res.proxyHeaders(stub.response.proxyHeaders)
     res.proxyFrom(stub.response.proxyFrom)
   } else {
-    if (stub.response.bodyFile) res.bodyFile(stub.response.bodyFile)
-    else if (stub.response.body) res.body(stub.response.body)
+    if (stub.response.bodyFile) {
+      if (Path.isAbsolute(stub.response.bodyFile)) {
+        res.bodyFile(stub.response.bodyFile)
+      } else {
+        res.bodyFile(Path.resolve(Path.dirname(filename), stub.response.bodyFile))
+      }
+    } else if (stub.response.body) res.body(stub.response.body)
   }
 
   builder.reply(res)

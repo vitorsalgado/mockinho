@@ -8,7 +8,7 @@ import { ifVerbose } from './ifVerbose'
 export function onRequestMatched(event: HttpEvents['requestMatched']): void {
   // eslint-disable-next-line no-console
   console.log(
-    `\n${Chalk.greenBright.bold('REQUEST MATCHED')} ${new Date().toISOString()} ${Chalk.green(
+    `${Chalk.greenBright.bold('REQUEST MATCHED')} ${new Date().toISOString()} ${Chalk.green(
       `<--- ${event.method} ${extractPathname(event.url)}`
     )}` +
       '\n' +
@@ -28,10 +28,10 @@ export function onRequestMatched(event: HttpEvents['requestMatched']): void {
                 event.stub.sourceDescription
                   ? Chalk.green('Stub File: ') + event.stub.sourceDescription + '\n'
                   : ''
-              }\n`
+              }`
             : '') +
+          `${Chalk.green('Took: ')}${(nowInMs() - event.start).toFixed(2).toString()} ms\n\n` +
           `${Chalk.green('Response Definition')}\n` +
-          `${Chalk.green('Took: ')}${(nowInMs() - event.start).toFixed(2).toString()} ms\n` +
           `${Chalk.green('Status: ')}${event.responseDefinition.status}\n` +
           `${Chalk.green('Headers:')}\n` +
           `${Object.entries(event.responseDefinition.headers)
@@ -46,7 +46,7 @@ export function onRequestMatched(event: HttpEvents['requestMatched']): void {
                   ? `${Chalk.italic.gray('(stream response body omitted)')}`
                   : JSON.stringify(event.responseDefinition.body))
               : ''
-          }`
+          }\n`
       )
   )
 }
