@@ -11,7 +11,7 @@ import { Headers, MediaTypes } from '../types'
 const fixture = (name: string) => Path.join(__dirname, `__fixtures__/__content__${name}`)
 
 describe.skip('Mockinho HTTP', function () {
-  const $ = mockinhoHTTP(opts().dynamicPort().trace())
+  const $ = mockinhoHTTP(opts().dynamicHttpPort().trace())
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())

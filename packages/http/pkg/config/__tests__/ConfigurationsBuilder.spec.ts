@@ -7,10 +7,9 @@ describe('Configurations Builder', function () {
   it('should build configurations with builder values', function () {
     const pinoLogger = new LoggerPino()
     const builder = new ExpressConfigurationsBuilder()
-      .port(3000)
-      .host('127.0.0.1')
-      .https({ enableTrace: true })
-      .dynamicPort()
+      .httpPort(3000)
+      .https(3001, { enableTrace: true }, '127.0.0.1')
+      .dynamicHttpPort()
       .log(pinoLogger)
       .verbose(false)
       .loadFileStubs(false)
@@ -28,11 +27,12 @@ describe('Configurations Builder', function () {
 
     expect(builder.provideServerFactory()).toBeInstanceOf(ExpressServerFactory)
 
-    expect(cfg.port).toEqual(3000)
-    expect(cfg.host).toEqual('127.0.0.1')
-    expect(cfg.https).toBeTruthy()
+    expect(cfg.httpPort).toEqual(3000)
+    expect(cfg.httpHost).toEqual('127.0.0.1')
+    expect(cfg.useHttps).toBeTruthy()
+    expect(cfg.httpsPort).toEqual(3001)
     expect(cfg.httpsOptions).toEqual({ enableTrace: true })
-    expect(cfg.dynamicPort).toBeTruthy()
+    expect(cfg.httpDynamicPort).toBeTruthy()
     expect(cfg.loggers).toHaveLength(1)
     expect(cfg.loggers[0]).toBeInstanceOf(LoggerPino)
     expect(cfg.isVerbose).toBeFalsy()
@@ -101,9 +101,8 @@ describe('Configurations Builder', function () {
     }
 
     const builder = new ExpressConfigurationsBuilder()
-      .port(3000)
-      .host('127.0.0.1')
-      .dynamicPort()
+      .httpPort(3000)
+      .dynamicHttpPort()
       .log(new FakeLog('test-logger', jest.fn()))
       .verbose(false)
       .loadFileStubs(false)
@@ -122,13 +121,13 @@ describe('Configurations Builder', function () {
       const builder = new ExpressConfigurationsBuilder()
       const cfg = builder.build()
 
-      expect(cfg.https).toBeFalsy()
+      expect(cfg.useHttps).toBeFalsy()
       expect(cfg.httpsOptions).toBeUndefined()
     })
 
     it('should fail when https is enabled but no options are provided', function () {
       const builder = new ExpressConfigurationsBuilder()
-      expect(() => builder.https(undefined as any).build()).toThrowError(ReferenceError)
+      expect(() => builder.https(3000, undefined as any).build()).toThrowError(ReferenceError)
     })
   })
 })

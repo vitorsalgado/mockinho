@@ -85,7 +85,7 @@ export class ExpressConfigurationsBuilder extends ConfigurationsBuilder<
       this._multiPartOptions = { storage: Multer.memoryStorage() }
     }
 
-    if (this._https && !this._httpsOptions) {
+    if (this._useHttps && !this._httpsOptions) {
       throw new ReferenceError('HTTPS options is required when HTTPS is enabled.')
     }
 
@@ -114,11 +114,15 @@ export class ExpressConfigurationsBuilder extends ConfigurationsBuilder<
     }
 
     return {
-      port: this._port,
-      host: this._host,
-      https: this._https,
+      useHttp: this._useHttp,
+      httpPort: this._httpPort,
+      httpHost: this._httpHost,
+      httpDynamicPort: this._httpDynamicPort,
+      useHttps: this._useHttps,
+      httpsPort: this._httpsPort,
+      httpsHost: this._httpsHost,
+      httpsDynamicPort: this._httpsDynamicPort,
       httpsOptions: this._httpsOptions,
-      dynamicPort: this._dynamicPort,
       loggers: this._loggers,
       isStubFilesEnabled: this._loadFileStubs,
       stubsDirectory: this._stubsDirectory,

@@ -7,8 +7,8 @@ import { okJSON } from '..'
 import { response } from '..'
 
 describe('Proxied Responses', function () {
-  const $ = mockinhoHTTP(opts().dynamicPort().trace())
-  const P = mockinhoHTTP(opts().dynamicPort().trace())
+  const $ = mockinhoHTTP(opts().dynamicHttpPort().trace())
+  const P = mockinhoHTTP(opts().dynamicHttpPort().trace())
 
   beforeAll(() => Promise.all([$.start(), P.start()]))
   afterAll(() => Promise.all([$.finalize(), P.finalize()]))
@@ -31,7 +31,7 @@ describe('Proxied Responses', function () {
         get(urlPath('/test'))
           .header('content-type', containing('json'))
           .proxyTo(
-            `http://localhost:${P.info().port}`,
+            `http://localhost:${P.info().httpPort}`,
             response()
               .header('test', 'ok')
               .proxyHeader('proxy-header', '100')

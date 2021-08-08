@@ -7,7 +7,7 @@ import { fileContent } from '../matchers/fileContent'
 import { fieldPath } from '../matchers/fieldPath'
 
 describe('Form MultiPart', function () {
-  const $ = mockinhoHTTP(opts().dynamicPort())
+  const $ = mockinhoHTTP(opts().dynamicHttpPort())
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())

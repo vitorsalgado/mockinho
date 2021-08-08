@@ -3,7 +3,7 @@ import { containing } from '@mockinho/core-matchers'
 import { mockinhoHTTP, opts, get, urlPath, Headers, MediaTypes, ok } from '..'
 
 describe('Responses', function () {
-  const $ = mockinhoHTTP(opts().dynamicPort().trace())
+  const $ = mockinhoHTTP(opts().dynamicHttpPort().trace())
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())

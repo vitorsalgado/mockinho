@@ -8,12 +8,12 @@ import { okJSON } from '../stub'
 import { Headers, MediaTypes } from '../types'
 
 describe('Express Http Server', function () {
-  const $ = mockinhoHTTP(opts().dynamicPort().trace())
+  const $ = mockinhoHTTP(opts().dynamicHttpPort().trace())
 
   const builder = new ExpressConfigurationsBuilder()
 
   const cfg = builder
-    .port(3000)
+    .httpPort(3000)
     .verbose(false)
     .loadFileStubs(false)
     .disableDefaultLogger(false)
@@ -36,7 +36,7 @@ describe('Express Http Server', function () {
   it('should return server connection information', async function () {
     await httpServer.start()
 
-    expect(httpServer.info().port).toEqual(3000)
+    expect(httpServer.info().httpPort).toEqual(3000)
   })
 
   it('should accept empty json requests', function () {

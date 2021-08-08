@@ -5,7 +5,7 @@ import { ok } from '../stub'
 import { Headers, MediaTypes } from '../types'
 
 describe('HTTP - Form Url Encoded', function () {
-  const $ = mockinhoHTTP(opts().dynamicPort().formUrlEncodedOptions({ limit: 80 }))
+  const $ = mockinhoHTTP(opts().dynamicHttpPort().formUrlEncodedOptions({ limit: 80 }))
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())

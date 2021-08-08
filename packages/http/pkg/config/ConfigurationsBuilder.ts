@@ -11,12 +11,16 @@ import { RecordOptionsBuilder } from '../rec/RecordOptionsBuilder'
 export abstract class ConfigurationsBuilder<ServerFactory extends HttpServerFactory, Config> {
   protected static STUB_FIXTURES_DIR = '__fixtures__'
 
-  protected _port: number = 0
-  protected _host: string = '127.0.0.1'
-  protected _https: boolean = false
+  protected _useHttp: boolean = false
+  protected _httpPort: number = 0
+  protected _httpHost: string = '127.0.0.1'
+  protected _httpDynamicPort: boolean = true
+  protected _useHttps: boolean = false
+  protected _httpsPort: number = 0
+  protected _httpsHost: string = '127.0.0.1'
   protected _httpsOptions?: HttpsServerOptions
+  protected _httpsDynamicPort: boolean = true
   protected _root: string = process.cwd()
-  protected _dynamicPort: boolean = true
   protected _defaultLoggerDisabled: boolean = false
   protected _defaultLoggerLevel: Level = 'info'
   protected _loggers: Array<Logger> = []
@@ -33,30 +37,60 @@ export abstract class ConfigurationsBuilder<ServerFactory extends HttpServerFact
 
   // region Builders
 
-  port(port: number): this {
-    this._port = port
-    this._dynamicPort = false
+  http(port: number, host: string = '127.0.0.1'): this {
+    return this.httpPort(port).httpHost(host).dynamicHttpPort(false)
+  }
+
+  httpPort(port: number): this {
+    this._useHttp = true
+    this._httpPort = port
+    this._httpDynamicPort = false
     return this
   }
 
-  host(host: string): this {
-    this._host = host
+  httpHost(host: string): this {
+    this._useHttp = true
+    this._httpHost = host
+    return this
+  }
+
+  dynamicHttpPort(value: boolean = true): this {
+    this._useHttp = true
+    this._httpDynamicPort = value
+    return this
+  }
+
+  https(port: number, options: HttpsServerOptions, host: string = '127.0.0.1'): this {
+    return this.httpsPort(port).httpsHost(host).httpsOptions(options).dynamicHttpsPort(false)
+  }
+
+  httpsPort(port: number): this {
+    this._useHttps = true
+    this._httpsPort = port
+    this._httpsDynamicPort = false
+    return this
+  }
+
+  httpsHost(host: string): this {
+    this._useHttps = true
+    this._httpsHost = host
+    return this
+  }
+
+  httpsOptions(options: HttpsServerOptions): this {
+    this._useHttps = true
+    this._httpsOptions = options
+    return this
+  }
+
+  dynamicHttpsPort(value: boolean = true): this {
+    this._useHttps = true
+    this._httpsDynamicPort = value
     return this
   }
 
   root(rootPath: string): this {
     this._root = rootPath
-    return this
-  }
-
-  https(options: HttpsServerOptions): this {
-    this._https = true
-    this._httpsOptions = options
-    return this
-  }
-
-  dynamicPort(value: boolean = true): this {
-    this._dynamicPort = value
     return this
   }
 

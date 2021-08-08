@@ -5,7 +5,7 @@ import { get } from '..'
 import { okJSON } from '../initializers'
 
 describe('HTTP Scope', function () {
-  const $ = mockinhoHTTP(opts().dynamicPort().loadFileStubs(false))
+  const $ = mockinhoHTTP(opts().dynamicHttpPort().loadFileStubs(false))
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())

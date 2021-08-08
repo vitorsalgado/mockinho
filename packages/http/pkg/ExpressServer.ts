@@ -18,32 +18,42 @@ import { HttpContext } from './HttpContext'
 import { stubFinderMiddleware } from './stubFinderMiddleware'
 import { RecordDispatcher } from './rec/RecordDispatcher'
 
-export class ExpressServer implements HttpServer {
+export class ExpressServer implements HttpServer<Express> {
   private readonly configurations: ExpressConfigurations
-  private readonly serverInstance: NodeHttpServer | NodeHttpsServer
+  private readonly serverInstances: Array<NodeHttpServer | NodeHttpsServer> = []
   private readonly expressApp: Express
   private readonly sockets: Set<Socket> = new Set<Socket>()
+  private readonly httpServer?: NodeHttpServer
+  private readonly httpsServer?: NodeHttpsServer
 
   constructor(private readonly context: HttpContext) {
     this.configurations = context.provideConfigurations()
     this.expressApp = express()
-    this.serverInstance =
-      this.configurations.https && this.configurations.httpsOptions
-        ? createHttpsServer(this.configurations.httpsOptions, this.expressApp)
-        : createHttpServer(this.expressApp)
+
+    if (this.configurations.useHttp) {
+      this.httpServer = createHttpServer(this.expressApp)
+      this.serverInstances.push(this.httpServer)
+    }
+
+    if (this.configurations.useHttps && this.configurations.httpsOptions) {
+      this.httpsServer = createHttpsServer(this.configurations.httpsOptions, this.expressApp)
+      this.serverInstances.push(this.httpsServer)
+    }
   }
 
   preSetup(): void {
     process.on('SIGTERM', () => this.close())
     process.on('SIGINT', () => this.close())
 
-    const handler = stubFinderMiddleware(this.context)
+    for (const server of this.serverInstances) {
+      // server.setTimeout(3_600_000)
+      server.on('connection', socket => {
+        this.sockets.add(socket)
+        socket.once('close', () => this.sockets.delete(socket))
+      })
+    }
 
-    this.serverInstance.setTimeout(3_600_000)
-    this.serverInstance.on('connection', socket => {
-      this.sockets.add(socket)
-      socket.once('close', () => this.sockets.delete(socket))
-    })
+    const handler = stubFinderMiddleware(this.context)
 
     this.expressApp.disable('x-powered-by')
     this.expressApp.disable('etag')
@@ -70,11 +80,13 @@ export class ExpressServer implements HttpServer {
       if (this.configurations.isRecordEnabled) {
         const dispatcher = new RecordDispatcher(this.configurations)
 
-        this.serverInstance.on('close', () =>
-          dispatcher
-            .terminate()
-            .finally(() => LoggerUtil.instance().debug('Recorder Dispatcher Terminated'))
-        )
+        for (const server of this.serverInstances) {
+          server.on('close', () =>
+            dispatcher
+              .terminate()
+              .finally(() => LoggerUtil.instance().debug('Recorder Dispatcher Terminated'))
+          )
+        }
 
         opts = {
           ...this.configurations.proxyOptions,
@@ -120,24 +132,55 @@ export class ExpressServer implements HttpServer {
     })
   }
 
-  start(): Promise<string> {
-    const { port, host } = this.configurations
+  async start(): Promise<HttpServerInfo> {
+    const { httpPort, httpHost, httpDynamicPort, httpsPort, httpsHost, httpsDynamicPort } =
+      this.configurations
 
-    return new Promise<string>(resolve =>
-      this.serverInstance.listen(this.configurations.dynamicPort ? 0 : port, host, () =>
-        resolve(String((this.server().address() as AddressInfo).port))
+    const info: HttpServerInfo = {
+      useHttp: this.configurations.useHttp,
+      httpPort: 0,
+      httpHost: this.configurations.httpHost,
+      useHttps: this.configurations.useHttps,
+      httpsPort: 0,
+      httpsHost: this.configurations.httpsHost
+    }
+
+    if (this.httpServer) {
+      const { port } = await new Promise<AddressInfo>(resolve =>
+        this.httpServer?.listen(httpDynamicPort ? 0 : httpPort, httpHost, () =>
+          resolve(this.httpServer?.address() as AddressInfo)
+        )
       )
-    )
+
+      info.httpPort = port
+    }
+
+    if (this.httpsServer) {
+      const { port } = await new Promise<AddressInfo>(resolve =>
+        this.httpsServer?.listen(httpsDynamicPort ? 0 : httpsPort, httpsHost, () =>
+          resolve(this.httpsServer?.address() as AddressInfo)
+        )
+      )
+
+      info.httpsPort = port
+    }
+
+    return info
   }
 
   info(): HttpServerInfo {
     return {
-      port: (this.server().address() as AddressInfo).port
+      useHttp: this.configurations.useHttp,
+      httpHost: this.configurations.httpHost,
+      httpPort: this.httpServer ? (this.httpServer.address() as AddressInfo).port : 0,
+      useHttps: this.configurations.useHttps,
+      httpsHost: this.configurations.httpsHost,
+      httpsPort: this.httpsServer ? (this.httpsServer.address() as AddressInfo).port : 0
     }
   }
 
-  server(): NodeHttpServer | NodeHttpsServer {
-    return this.serverInstance
+  server(): Express {
+    return this.expressApp
   }
 
   close(): Promise<void> {
@@ -146,6 +189,16 @@ export class ExpressServer implements HttpServer {
       this.sockets.delete(socket)
     }
 
-    return new Promise<void>(resolve => this.serverInstance.close(() => resolve()))
+    const listeners: Array<Promise<void>> = []
+
+    if (this.httpServer) {
+      listeners.push(new Promise<void>(resolve => this.httpServer?.close(() => resolve())))
+    }
+
+    if (this.httpsServer) {
+      listeners.push(new Promise<void>(resolve => this.httpsServer?.close(() => resolve())))
+    }
+
+    return Promise.all(listeners).then()
   }
 }

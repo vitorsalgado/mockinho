@@ -4,7 +4,7 @@ import { urlPath } from '../matchers'
 import { get, ok, post } from '../stub'
 
 describe('CORS', function () {
-  const $ = mockinhoHTTP(opts().dynamicPort().enableCors({ methods: '*' }))
+  const $ = mockinhoHTTP(opts().dynamicHttpPort().enableCors({ methods: '*' }))
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())

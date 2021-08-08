@@ -8,7 +8,7 @@ import { urlPath } from '..'
 import { ok } from '..'
 
 describe('Cookies', function () {
-  const $ = mockinhoHTTP(opts().dynamicPort().cookieOptions('super-secret'))
+  const $ = mockinhoHTTP(opts().dynamicHttpPort().cookieOptions('super-secret'))
   const cookieSignedName = 'cookie-test'
   const cookieSignedValue = 's%3Atest.d7jIkuqZkCaFT0czqQ8b6KyUv077GFUH1mxQR%2Fj7SyQ'
 

@@ -6,7 +6,7 @@ import { mockinhoHTTP, opts } from '..'
 describe('HTTP - File Stubbing', function () {
   describe('Default Path', function () {
     const $ = mockinhoHTTP(
-      opts().dynamicPort().verbose().loadFileStubs().root(Path.join(__dirname, '../..'))
+      opts().dynamicHttpPort().verbose().loadFileStubs().root(Path.join(__dirname, '../..'))
     )
 
     beforeAll(() => $.start())

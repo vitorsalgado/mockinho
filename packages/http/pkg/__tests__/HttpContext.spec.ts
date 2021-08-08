@@ -8,9 +8,8 @@ describe('HttpContext', function () {
     const builder = new ExpressConfigurationsBuilder()
 
     const cfg = builder
-      .port(3000)
-      .host('127.0.0.1')
-      .dynamicPort()
+      .httpPort(3000)
+      .dynamicHttpPort()
       .verbose(false)
       .loadFileStubs(false)
       .disableDefaultLogger(false)

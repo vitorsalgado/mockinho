@@ -1,4 +1,5 @@
 import Path from 'path'
+import * as Fs from 'fs'
 import { CookieOptions } from 'express'
 import { isTrue, notBlank, notNull, ResponseDefinitionBuilder, MockinhoError } from '@mockinho/core'
 import { fromFile, toJSON } from '@mockinho/core-bodyconverters'
@@ -173,7 +174,10 @@ export class HttpResponseDefinitionBuilder<C extends Configurations = ExpressCon
 
     if (this._bodyFile) {
       const file = this._bodyFileRelativeToFixtures
-        ? Path.join(context.provideConfigurations().stubsDirectory, this._bodyFile)
+        ? HttpResponseDefinitionBuilder.makeValidPath(
+            context.provideConfigurations().stubsDirectory,
+            this._bodyFile
+          )
         : this._bodyFile
 
       this._body = fromFile(file)
@@ -193,7 +197,7 @@ export class HttpResponseDefinitionBuilder<C extends Configurations = ExpressCon
     )
   }
 
-  validate(_context: HttpContext): void {
+  validate(context: HttpContext): void {
     notNull(this._status)
     isTrue(this._delay >= 0, 'Delay must be a positive number.')
 
@@ -202,5 +206,22 @@ export class HttpResponseDefinitionBuilder<C extends Configurations = ExpressCon
         'Found more than one body strategy setup. Choose between: .body() .bodyFile() or .bodyWith()'
       )
     }
+
+    if (this._bodyFile && this._bodyFileRelativeToFixtures) {
+      HttpResponseDefinitionBuilder.makeValidPath(
+        context.provideConfigurations().stubsDirectory,
+        this._bodyFile
+      )
+    }
+  }
+
+  private static makeValidPath(...path: Array<string>): string {
+    const file = Path.join(...path)
+
+    if (!Fs.existsSync(file)) {
+      throw new TypeError(`File ${file} not found!`)
+    }
+
+    return file
   }
 }

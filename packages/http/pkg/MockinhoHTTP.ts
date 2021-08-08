@@ -84,7 +84,7 @@ export class MockinhoHTTP implements HttpServer {
     this.httpServer.preSetup()
   }
 
-  async start(): Promise<string> {
+  async start(): Promise<HttpServerInfo> {
     if (this.configurations.isStubFilesEnabled) {
       const loaded = await loadStubFiles(this.configurations.stubsDirectory, [
         `.${this.configurations.stubsExtension}.json`,

@@ -15,6 +15,7 @@ import { BodyType, ErrorCodes, Headers, HttpMethods } from '../types'
 import { bearerToken, urlPath } from '../matchers'
 import { HttpRequest } from '../HttpRequest'
 import { HttpContext } from '../HttpContext'
+import { Schemes } from '../types'
 import { HttpStub } from './HttpStub'
 import { HttpResponseDefinitionBuilder } from './HttpResponseDefinitionBuilder'
 import { HttpResponseDefinition } from './HttpResponseDefinition'
@@ -69,6 +70,12 @@ export class HttpStubBuilder extends StubBaseBuilder<
     } else {
       this._matchers.push(this.spec(extractMethod, matcher, 3))
     }
+
+    return this
+  }
+
+  scheme(scheme: Schemes): this {
+    this._matchers.push(this.spec(extractScheme, equalsTo(scheme), 1))
 
     return this
   }
@@ -282,6 +289,7 @@ export class HttpStubBuilder extends StubBaseBuilder<
 }
 
 const extractRequest = (request: HttpRequest): HttpRequest => request
+const extractScheme = (request: HttpRequest): Schemes => request.protocol as Schemes
 const extractMethod = (request: HttpRequest): HttpMethods => request.method
 const extractUrl = (request: HttpRequest): string => request.href
 const extractBody = (request: HttpRequest): BodyType => request.body

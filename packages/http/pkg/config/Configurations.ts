@@ -3,11 +3,15 @@ import { Logger } from '@mockinho/core'
 import { RecordOptions } from '../rec/RecordOptions'
 
 export interface Configurations {
-  readonly port: number
-  readonly host: string
-  readonly https: boolean
+  readonly useHttp: boolean
+  readonly httpPort: number
+  readonly httpHost: string
+  readonly httpDynamicPort: boolean
+  readonly useHttps: boolean
+  readonly httpsPort: number
+  readonly httpsHost: string
   readonly httpsOptions?: HttpsServerOptions
-  readonly dynamicPort: boolean
+  readonly httpsDynamicPort: boolean
 
   readonly loggers: Array<Logger>
   readonly isVerbose: boolean

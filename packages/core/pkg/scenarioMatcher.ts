@@ -8,10 +8,10 @@ export const scenarioMatcher = (
 ): Matcher<undefined> => {
   return function scenario(value: undefined, ctx?: MatcherContext): boolean {
     if (!ctx) {
-      throw new ReferenceError('Context is required on "Scenario Matcher!')
+      throw new ReferenceError('Context is required on "Scenario Matcher"!')
     }
 
-    const optScenario = ctx!.context.provideScenarioRepository().fetchByName(name)
+    const optScenario = ctx.context.provideScenarioRepository().fetchByName(name)
 
     if (optScenario.isEmpty()) {
       return true

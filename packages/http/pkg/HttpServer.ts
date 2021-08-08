@@ -1,23 +1,27 @@
-import { Server as NodeHttpServer } from 'http'
-import { Server as NodeHttpsServer } from 'https'
 import { HttpContext } from './HttpContext'
 
 export interface HttpServerInfo {
-  port: number
+  useHttp: boolean
+  httpPort: number
+  httpHost: string
+
+  useHttps: boolean
+  httpsPort: number
+  httpsHost: string
 }
 
-export interface HttpServer {
+export interface HttpServer<Listener = any> {
   preSetup(): void
 
-  start(): Promise<string>
+  start(): Promise<HttpServerInfo>
 
   close(): Promise<void>
 
-  server(): NodeHttpServer | NodeHttpsServer
+  server(): Listener
 
   info(): HttpServerInfo
 }
 
-export interface HttpServerFactory {
-  build(context: HttpContext<any>): HttpServer
+export interface HttpServerFactory<Listener = any> {
+  build(context: HttpContext<any>): HttpServer<Listener>
 }
