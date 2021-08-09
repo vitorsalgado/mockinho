@@ -5,8 +5,11 @@ import { HttpStubRepository } from './HttpStubRepository'
 import { HttpStub } from './HttpStub'
 
 export class PendingHttpStubScopeError extends MockinhoError {
-  constructor() {
-    super('There are still mocked requests have not been called.', ErrorCodes.MR_ERR_PENDING_SCOPE)
+  constructor(pending: Array<HttpStub>) {
+    super(
+      `There are still mocked requests have not been called.\n${pending.join('\n')}`,
+      ErrorCodes.MR_ERR_PENDING_SCOPE
+    )
   }
 }
 
@@ -22,7 +25,7 @@ export class HttpStubScope {
 
   ensureIsDone(): void {
     if (!this.isDone()) {
-      throw new PendingHttpStubScopeError()
+      throw new PendingHttpStubScopeError(this.pendingMocks())
     }
   }
 
