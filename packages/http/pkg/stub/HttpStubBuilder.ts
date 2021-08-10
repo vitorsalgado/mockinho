@@ -20,9 +20,9 @@ import { BodyType, Headers } from '../types'
 import { Schemes } from '../types'
 import { HttpMethods } from '../types'
 import { ErrorCodes } from '../types'
-import { bearerToken, urlPath } from '../matchers'
 import { HttpRequest } from '../HttpRequest'
 import { HttpContext } from '../HttpContext'
+import { bearerToken, urlPath } from '../matchers'
 import { HttpStub } from './HttpStub'
 import { HttpResponseDefinitionBuilder } from './HttpResponseDefinitionBuilder'
 import { HttpResponseDefinition } from './HttpResponseDefinition'
@@ -302,6 +302,7 @@ export class HttpStubBuilder extends StubBaseBuilder<
       this._matchers,
       this._responseDefinitionBuilder,
       this._meta,
+      new Map<string, unknown>(),
       this._scenarioName
         ? {
             name: this._scenarioName,

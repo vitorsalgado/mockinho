@@ -20,6 +20,8 @@ export interface StubFile {
     body: string | Record<string, string | Record<string, string>>
     bodyFile: string
     files: Record<string, Record<string, string>>
+
+    [key: string]: unknown
   }
 
   response: {
@@ -27,8 +29,12 @@ export interface StubFile {
     headers: Record<string, string>
     proxyHeaders: Record<string, string>
     proxyFrom: string
-    body: any
+    body: unknown
     bodyFile: string
     delayInMs: number
+
+    [key: string]: unknown
   }
+
+  [key: string]: unknown
 }

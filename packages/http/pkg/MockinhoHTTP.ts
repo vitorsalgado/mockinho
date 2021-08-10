@@ -1,22 +1,40 @@
 import { Server } from 'http'
-import { LoggerUtil, notBlank, notEmpty, SCENARIO_STATE_STARTED, StubSource } from '@mockinho/core'
+import { LoggerUtil, notBlank, notEmpty, StubSource } from '@mockinho/core'
+import { MockPreInit } from '@mockinho/core'
+import { ScenarioPreInit } from '@mockinho/core'
 import { ConfigurationsBuilder } from './config'
 import { onRequestMatched, onRequestNotMatched, onRequestReceived } from './eventlisteners'
 import { HttpContext } from './HttpContext'
 import { HttpServer, HttpServerInfo } from './HttpServer'
-import { buildStubFromFile } from './import/buildStubFromFile'
-import { loadStubFiles } from './import/loadStubFiles'
 import { HttpStubBuilder, HttpStubScope } from './stub'
+import { HttpResponseDefinition } from './stub'
+import { HttpResponseDefinitionBuilder } from './stub'
+import { HttpStub } from './stub'
 import { DefaultConfigurations } from './types'
 import { DefaultServerFactory } from './types'
+import { MockProvider } from './stubproviders/MockProvider'
+import { DefaultMockProviderFactory } from './stubproviders/default/DefaultMockProviderFactory'
+import { DefaultMockProvider } from './stubproviders/default/DefaultMockProvider'
+import { HttpRequest } from './HttpRequest'
 
-export class MockinhoHTTP implements HttpServer {
+export class MockinhoHTTP {
   // --
+
   // region Ctor
 
   private readonly context: HttpContext
   private readonly httpServer: HttpServer
   private readonly configurations: DefaultConfigurations
+  private readonly mockProviders: Array<MockProvider> = []
+  private readonly mockPreInitializers: Array<
+    MockPreInit<
+      HttpContext,
+      HttpRequest,
+      HttpResponseDefinition,
+      HttpResponseDefinitionBuilder,
+      HttpStub
+    >
+  > = []
 
   constructor(
     configurationsBuilder: ConfigurationsBuilder<DefaultServerFactory, DefaultConfigurations>
@@ -26,18 +44,30 @@ export class MockinhoHTTP implements HttpServer {
 
     this.configurations = configurations
     this.httpServer = configurationsBuilder.provideServerFactory().build(context)
+    this.context = context
 
     configurations.loggers.forEach(log => LoggerUtil.instance().subscribe(log))
 
-    this.context = context
     this.context.on('requestReceived', onRequestReceived)
     this.context.on('requestNotMatched', onRequestNotMatched)
     this.context.on('requestMatched', onRequestMatched)
+
+    const provider = new DefaultMockProviderFactory().build(this.configurations)
+
+    ;(provider as DefaultMockProvider).addFieldParser(...this.configurations.mockFieldParsers)
+
+    this.mockPreInitializers.push(new ScenarioPreInit() as any)
+    this.mockProviders.push(provider)
+    this.mockProviders.push(
+      ...this.configurations.mockProviderFactories.map(x => x.build(this.configurations))
+    )
 
     this.preSetup()
   }
 
   // endregion
+
+  // region Entrypoint
 
   mock(...stubBuilders: Array<HttpStubBuilder>): HttpStubScope {
     notEmpty(stubBuilders)
@@ -46,11 +76,7 @@ export class MockinhoHTTP implements HttpServer {
       .map(stubBuilder => {
         const stub = stubBuilder.build(this.context)
 
-        if (stub.scenario) {
-          if (stub.scenario.requiredState === SCENARIO_STATE_STARTED) {
-            this.context.provideScenarioRepository().createNewIfNeeded(stub.scenario.name)
-          }
-        }
+        this.mockPreInitializers.forEach(initializer => initializer.init(stub, this.context))
 
         return this.context.provideStubRepository().save(stub)
       })
@@ -59,7 +85,17 @@ export class MockinhoHTTP implements HttpServer {
     return new HttpStubScope(this.context.provideStubRepository(), added)
   }
 
-  // region Stub Api
+  async start(): Promise<HttpServerInfo> {
+    await Promise.all(this.mockProviders.map(x => x.mocks())).then(mocks =>
+      mocks.flatMap(x => x).forEach(m => this.mock(m))
+    )
+
+    return this.httpServer.start()
+  }
+
+  // endregion
+
+  // region General Api
 
   cleanAll(): void {
     this.context.provideStubRepository().removeAll()
@@ -82,25 +118,6 @@ export class MockinhoHTTP implements HttpServer {
 
   preSetup(): void {
     this.httpServer.preSetup()
-  }
-
-  async start(): Promise<HttpServerInfo> {
-    if (this.configurations.isStubFilesEnabled) {
-      const loaded = await loadStubFiles(this.configurations.stubsDirectory, [
-        `.${this.configurations.stubsExtension}.json`,
-        `.${this.configurations.stubsExtension}.yml`,
-        `.${this.configurations.stubsExtension}.yaml`
-      ])
-
-      loaded
-        .map(item =>
-          item.stubFile.map(stub => buildStubFromFile(this.configurations, stub, item.filename))
-        )
-        .flatMap(x => x)
-        .forEach(stub => this.mock(stub))
-    }
-
-    return this.httpServer.start()
   }
 
   close(): Promise<void> {

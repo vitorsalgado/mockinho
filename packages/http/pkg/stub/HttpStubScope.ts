@@ -20,7 +20,7 @@ export class HttpStubScope {
   ) {}
 
   isDone(): boolean {
-    return this.stubRepository.fetchByIds(...this.stubs).every(x => x.called())
+    return this.stubRepository.fetchByIds(...this.stubs).every(x => x.hasBeenCalled())
   }
 
   ensureIsDone(): void {
@@ -30,13 +30,13 @@ export class HttpStubScope {
   }
 
   pendingMocks(): Array<HttpStub> {
-    return this.stubRepository.fetchByIds(...this.stubs).filter(x => !x.called())
+    return this.stubRepository.fetchByIds(...this.stubs).filter(x => !x.hasBeenCalled())
   }
 
   abortPendingMocks(): void {
     this.stubRepository
       .fetchByIds(...this.stubs)
-      .filter(x => !x.called())
+      .filter(x => !x.hasBeenCalled())
       .forEach(x => this.stubRepository.removeById(x.id))
   }
 

@@ -10,7 +10,7 @@ export function testHttpContext(): HttpContext {
 export function testHttpMatcherContext(): any {
   return {
     context: testHttpContext(),
-    stub: new HttpStub('test', 'test-stub', 1, 'code', '', [], ok(), new Map()),
+    stub: new HttpStub('test', 'test-stub', 1, 'code', '', [], ok(), new Map(), new Map()),
     req: {
       url: '/test',
       method: 'get'

@@ -3,6 +3,7 @@ import Multer from 'multer'
 import { CorsOptions } from 'cors'
 import { CookieParseOptions } from 'cookie-parser'
 import { Options } from 'http-proxy-middleware'
+import { RequestHandler } from 'express'
 import { Configurations } from './Configurations'
 
 export interface ExpressConfigurations extends Configurations {
@@ -14,4 +15,5 @@ export interface ExpressConfigurations extends Configurations {
   readonly cookieOptions?: CookieParseOptions
   readonly isProxyEnabled: boolean
   readonly proxyOptions: Options
+  readonly preHandlerMiddlewares: Array<RequestHandler>
 }

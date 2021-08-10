@@ -6,7 +6,7 @@ import { mockinhoHTTP, opts } from '..'
 describe('HTTP - File Stubbing', function () {
   describe('Default Path', function () {
     const $ = mockinhoHTTP(
-      opts().dynamicHttpPort().verbose().loadFileStubs().root(Path.join(__dirname, '../..'))
+      opts().dynamicHttpPort().verbose().loadFileStubs().rootDir(Path.join(__dirname, '../..'))
     )
 
     beforeAll(() => $.start())
@@ -46,7 +46,6 @@ describe('HTTP - File Stubbing', function () {
             age: 33
           }
         })
-
         .expect(res =>
           expect(res.body).toEqual([
             { name: 'tester', status: 'ok' },

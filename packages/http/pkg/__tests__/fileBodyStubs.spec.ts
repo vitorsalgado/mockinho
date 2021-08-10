@@ -6,7 +6,9 @@ import { Headers, MediaTypes } from '../types'
 
 describe('HTTP - Working With File Body Stubs', function () {
   describe('Default Path', function () {
-    const $ = mockinhoHTTP(opts().dynamicHttpPort().verbose().root(Path.join(__dirname, '../../')))
+    const $ = mockinhoHTTP(
+      opts().dynamicHttpPort().verbose().rootDir(Path.join(__dirname, '../../'))
+    )
 
     beforeAll(() => $.start())
     afterAll(() => $.finalize())

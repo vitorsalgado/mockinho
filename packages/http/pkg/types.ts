@@ -5,7 +5,14 @@ import { HttpStubBuilder } from './stub'
 import { ExpressConfigurations } from './config'
 
 export type Schemes = 'http' | 'https'
-export type BodyType = string | Buffer | Stream | undefined | Record<string, unknown> | null
+export type BodyType =
+  | string
+  | Buffer
+  | Stream
+  | undefined
+  | Record<string, unknown>
+  | unknown
+  | null
 export type HttpMethods = string | 'DELETE' | 'GET' | 'HEAD' | 'PATCH' | 'POST' | 'PUT' | 'OPTIONS'
 export type DefaultConfigurations = ExpressConfigurations
 export type DefaultServerFactory = ExpressServerFactory

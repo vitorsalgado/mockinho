@@ -5,6 +5,7 @@ import { CorsOptions } from 'cors'
 import { CookieParseOptions } from 'cookie-parser'
 import CookieParse from 'cookie-parser'
 import { Options } from 'http-proxy-middleware'
+import { RequestHandler } from 'express'
 import { LoggerPino } from '@mockinho/core'
 import { ExpressServerFactory } from '../ExpressServerFactory'
 import { ConfigurationsBuilder } from './ConfigurationsBuilder'
@@ -20,6 +21,7 @@ export class ExpressConfigurationsBuilder extends ConfigurationsBuilder<
   private _corsOptions?: CorsOptions
   private _cookieSecrets?: string | Array<string>
   private _cookieOptions?: CookieParseOptions
+  private _preHandlerMiddlewares: Array<RequestHandler> = []
 
   formUrlEncodedOptions(options: OptionsUrlencoded): this {
     this._formBodyOptions = options
@@ -52,6 +54,11 @@ export class ExpressConfigurationsBuilder extends ConfigurationsBuilder<
       this._proxyOptions = target
     }
 
+    return this
+  }
+
+  addPreHandler(...handler: Array<RequestHandler>): this {
+    this._preHandlerMiddlewares.push(...handler)
     return this
   }
 
@@ -117,6 +124,7 @@ export class ExpressConfigurationsBuilder extends ConfigurationsBuilder<
       useHttp: this._useHttp,
       httpPort: this._httpPort,
       httpHost: this._httpHost,
+      httpOptions: this._httpOptions,
       httpDynamicPort: this._httpDynamicPort,
       useHttps: this._useHttps,
       httpsPort: this._httpsPort,
@@ -138,7 +146,11 @@ export class ExpressConfigurationsBuilder extends ConfigurationsBuilder<
       proxyOptions: this._proxyOptions,
       isProxyEnabled: this._proxyAll,
       isRecordEnabled: this._recordEnabled,
-      recordOptions: this._recordOptions!
+      recordOptions: this._recordOptions!,
+      mockPreInitializers: this._mockPreInitializers,
+      mockFieldParsers: this._mockFieldParsers,
+      mockProviderFactories: this._mockProviderFactories,
+      preHandlerMiddlewares: this._preHandlerMiddlewares
     }
   }
 }

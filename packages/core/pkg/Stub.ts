@@ -25,6 +25,7 @@ export class Stub<
     public readonly responseDefinitionBuilder: ResponseBuilder,
     private hits: number,
     public readonly meta: Map<string, unknown>,
+    public readonly properties: Map<string, unknown>,
     public readonly scenario?: StubScenario
   ) {
     if (!this.id) {
@@ -46,6 +47,7 @@ export class Stub<
     source: StubSource,
     sourceDescription: string,
     meta: Map<string, unknown>,
+    properties: Map<string, unknown>,
     scenario?: StubScenario
   ): Stub<Ctx, Req, Res, ResponseBuilder> {
     id = id === '' ? UUIdV4() : id
@@ -59,6 +61,7 @@ export class Stub<
       responseDefinition,
       0,
       meta,
+      properties,
       scenario
     )
   }
@@ -71,7 +74,20 @@ export class Stub<
     return this.hits
   }
 
-  called(): boolean {
+  hasBeenCalled(): boolean {
     return this.hits > 0
+  }
+
+  getProperty<T>(key: string): T {
+    return this.properties.get(key) as T
+  }
+
+  saveProperty<T>(key: string, value: T): T {
+    this.properties.set(key, value)
+    return value
+  }
+
+  removeProperty(key: string): void {
+    this.properties.delete(key)
   }
 }

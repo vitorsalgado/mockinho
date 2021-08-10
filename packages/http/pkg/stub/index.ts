@@ -1,4 +1,4 @@
-export * from './initializers'
+export * from './entry'
 export * from './HttpResponseDefinition'
 export * from './HttpResponseDefinitionBuilder'
 export * from './HttpStub'

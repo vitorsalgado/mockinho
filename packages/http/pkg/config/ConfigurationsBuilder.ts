@@ -1,12 +1,23 @@
 import Path from 'path'
 import { ServerOptions as HttpsServerOptions } from 'https'
+import { ServerOptions as HttpServerOptions } from 'http'
 import { Options } from 'http-proxy-middleware'
 import { Level, Logger } from '@mockinho/core'
 import { notBlank } from '@mockinho/core'
+import { MockPreInit } from '@mockinho/core'
 import { HttpServerFactory } from '../HttpServer'
 import { ExpressServerFactory } from '../ExpressServerFactory'
 import { RecordOptions } from '../rec/RecordOptions'
 import { RecordOptionsBuilder } from '../rec/RecordOptionsBuilder'
+import { MockProviderFactory } from '../stubproviders/MockProviderFactory'
+import { DefaultConfigurations } from '../types'
+import { FieldParser } from '../stubproviders/default/FieldParser'
+import { HttpContext } from '../HttpContext'
+import { HttpRequest } from '../HttpRequest'
+import { HttpResponseDefinition } from '../stub'
+import { HttpResponseDefinitionBuilder } from '../stub'
+import { HttpStub } from '../stub'
+import { Configurations } from './Configurations'
 
 export abstract class ConfigurationsBuilder<ServerFactory extends HttpServerFactory, Config> {
   protected static STUB_FIXTURES_DIR = '__fixtures__'
@@ -14,6 +25,7 @@ export abstract class ConfigurationsBuilder<ServerFactory extends HttpServerFact
   protected _useHttp: boolean = false
   protected _httpPort: number = 0
   protected _httpHost: string = '127.0.0.1'
+  protected _httpOptions?: HttpServerOptions
   protected _httpDynamicPort: boolean = true
   protected _useHttps: boolean = false
   protected _httpsPort: number = 0
@@ -34,6 +46,17 @@ export abstract class ConfigurationsBuilder<ServerFactory extends HttpServerFact
   protected _proxyOptions: Options = { secure: false, changeOrigin: true }
   protected _recordEnabled: boolean = false
   protected _recordOptions?: RecordOptions
+  protected _mockProviderFactories: Array<MockProviderFactory<DefaultConfigurations>> = []
+  protected _mockFieldParsers: Array<FieldParser> = []
+  protected _mockPreInitializers: Array<
+    MockPreInit<
+      HttpContext,
+      HttpRequest,
+      HttpResponseDefinition,
+      HttpResponseDefinitionBuilder,
+      HttpStub
+    >
+  > = []
 
   // region Builders
 
@@ -51,6 +74,12 @@ export abstract class ConfigurationsBuilder<ServerFactory extends HttpServerFact
   httpHost(host: string): this {
     this._useHttp = true
     this._httpHost = host
+    return this
+  }
+
+  httpOptions(options: HttpServerOptions): this {
+    this._useHttp = true
+    this._httpOptions = options
     return this
   }
 
@@ -89,13 +118,8 @@ export abstract class ConfigurationsBuilder<ServerFactory extends HttpServerFact
     return this
   }
 
-  root(rootPath: string): this {
+  rootDir(rootPath: string): this {
     this._root = rootPath
-    return this
-  }
-
-  log(log: Logger): this {
-    this._loggers.push(log)
     return this
   }
 
@@ -144,6 +168,36 @@ export abstract class ConfigurationsBuilder<ServerFactory extends HttpServerFact
 
   serverFactory(factory: ServerFactory): this {
     this._serverFactory = factory
+    return this
+  }
+
+  addLogger(log: Logger): this {
+    this._loggers.push(log)
+    return this
+  }
+
+  addMockProviderFactory(...factory: Array<MockProviderFactory<Configurations>>): this {
+    this._mockProviderFactories.push(...factory)
+    return this
+  }
+
+  addMockFieldParser(...parser: Array<FieldParser>): this {
+    this._mockFieldParsers.push(...parser)
+    return this
+  }
+
+  addMockPreInitializers(
+    ...inits: Array<
+      MockPreInit<
+        HttpContext,
+        HttpRequest,
+        HttpResponseDefinition,
+        HttpResponseDefinitionBuilder,
+        HttpStub
+      >
+    >
+  ): this {
+    this._mockPreInitializers.push(...inits)
     return this
   }
 

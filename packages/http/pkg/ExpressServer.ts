@@ -4,6 +4,7 @@ import { AddressInfo } from 'net'
 import { Socket } from 'net'
 import express, { Express, Request, Response } from 'express'
 import { NextFunction } from 'express'
+import { Router } from 'express'
 import Multer from 'multer'
 import Cors from 'cors'
 import CookieParse from 'cookie-parser'
@@ -17,6 +18,8 @@ import { ErrorCodes } from './types'
 import { HttpContext } from './HttpContext'
 import { stubFinderMiddleware } from './stubFinderMiddleware'
 import { RecordDispatcher } from './rec/RecordDispatcher'
+import { decorateRequestMiddleware } from './decorateRequestMiddleware'
+import { HttpRequest } from './HttpRequest'
 
 export class ExpressServer implements HttpServer<Express> {
   private readonly configurations: ExpressConfigurations
@@ -31,7 +34,7 @@ export class ExpressServer implements HttpServer<Express> {
     this.expressApp = express()
 
     if (this.configurations.useHttp) {
-      this.httpServer = createHttpServer(this.expressApp)
+      this.httpServer = createHttpServer(this.configurations.httpOptions ?? {}, this.expressApp)
       this.serverInstances.push(this.httpServer)
     }
 
@@ -46,14 +49,13 @@ export class ExpressServer implements HttpServer<Express> {
     process.on('SIGINT', () => this.close())
 
     for (const server of this.serverInstances) {
-      // server.setTimeout(3_600_000)
       server.on('connection', socket => {
         this.sockets.add(socket)
         socket.once('close', () => this.sockets.delete(socket))
       })
     }
 
-    const handler = stubFinderMiddleware(this.context)
+    const stubFinderHandler = stubFinderMiddleware(this.context)
 
     this.expressApp.disable('x-powered-by')
     this.expressApp.disable('etag')
@@ -66,8 +68,10 @@ export class ExpressServer implements HttpServer<Express> {
     )
     this.expressApp.use(Multer(this.configurations.multiPartOptions).any())
 
+    this.expressApp.use(decorateRequestMiddleware as Router)
+    this.configurations.preHandlerMiddlewares.forEach(x => this.expressApp.use(x))
     this.expressApp.all('*', async (req, res, next) => {
-      return handler(req, res, next).catch(err => next(err))
+      return stubFinderHandler(req as HttpRequest, res, next).catch(err => next(err))
     })
 
     if (this.configurations.isCorsEnabled) {

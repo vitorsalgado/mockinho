@@ -8,13 +8,6 @@ import { InvalidStubFileError } from './InvalidStubFileError'
 import { ParseResult, parseStubFile } from './parseStubFile'
 import { StubFile } from './StubFile'
 
-const isStubFile =
-  (extensions: Array<string>) =>
-  (filename: string): boolean =>
-    extensions.some(x => filename.indexOf(x) > -1)
-
-const ext = (filename: string): string => filename.split('.').pop()!
-
 export async function loadStubFiles(
   stubRoot: string,
   extensions: Array<string>,
@@ -67,3 +60,10 @@ export async function loadStubFiles(
       stubFile: x.stubs
     }))
 }
+
+const isStubFile =
+  (extensions: Array<string>) =>
+  (filename: string): boolean =>
+    extensions.some(x => filename.indexOf(x) > -1)
+
+const ext = (filename: string): string => filename.split('.').pop()!

@@ -19,6 +19,7 @@ export class HttpStub extends Stub<
     expectations: Array<Expectation<any, HttpRequest>>,
     responseBuilder: HttpResponseDefinitionBuilder,
     meta: Map<string, unknown>,
+    properties: Map<string, unknown>,
     scenario?: StubScenario
   ) {
     super(
@@ -31,6 +32,7 @@ export class HttpStub extends Stub<
       responseBuilder,
       0,
       meta,
+      properties,
       scenario
     )
   }

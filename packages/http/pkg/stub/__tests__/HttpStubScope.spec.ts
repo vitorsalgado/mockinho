@@ -2,7 +2,7 @@ import Supertest from 'supertest'
 import { mockinhoHTTP, opts, PendingHttpStubScopeError, post } from '../..'
 import { urlPath } from '../../matchers'
 import { get } from '..'
-import { okJSON } from '../initializers'
+import { okJSON } from '../entry'
 
 describe('HTTP Scope', function () {
   const $ = mockinhoHTTP(opts().dynamicHttpPort().loadFileStubs(false))

@@ -1,77 +1,39 @@
-/* eslint-disable no-case-declarations */
-
 import Path from 'path'
-import { Matcher, notBlank, notNull } from '@mockinho/core'
+import { notBlank, notNull } from '@mockinho/core'
+import { Matcher } from '@mockinho/core'
+import { isPresent } from '@mockinho/core-matchers'
+import { matching } from '@mockinho/core-matchers'
+import { equalsTo } from '@mockinho/core-matchers'
+import { anything } from '@mockinho/core-matchers'
 import { item } from '@mockinho/core-matchers'
 import { containing } from '@mockinho/core-matchers'
-import { isPresent } from '@mockinho/core-matchers'
 import { anyOf } from '@mockinho/core-matchers'
 import { jsonPath } from '@mockinho/core-matchers'
 import { isUUID } from '@mockinho/core-matchers'
-import { matching } from '@mockinho/core-matchers'
 import { allOf } from '@mockinho/core-matchers'
 import { not } from '@mockinho/core-matchers'
+import { upperCase } from '@mockinho/core-matchers'
+import { lowerCase } from '@mockinho/core-matchers'
 import { endsWith } from '@mockinho/core-matchers'
 import { hitTimes } from '@mockinho/core-matchers'
-import { equalsTo } from '@mockinho/core-matchers'
 import { hasLength } from '@mockinho/core-matchers'
 import { startsWith } from '@mockinho/core-matchers'
-import { anything } from '@mockinho/core-matchers'
 import { trim } from '@mockinho/core-matchers'
-import { lowerCase } from '@mockinho/core-matchers'
-import { upperCase } from '@mockinho/core-matchers'
-import { HttpStubBuilder, response } from '../stub'
-import { urlPath, urlPathMatching } from '../matchers'
-import { Configurations } from '../config'
-import { StubFile } from './StubFile'
+import { Configurations } from '../../config'
+import { urlPath, urlPathMatching } from '../../matchers'
+import { HttpStubBuilder, response } from '../../stub'
 import { InvalidStubFileError } from './InvalidStubFileError'
-
-const MatcherConstants = [
-  // Matchers
-  // --
-  'isPresent',
-  'isUUID',
-  'contains',
-  'containing',
-  'equals',
-  'equalsTo',
-  'matching',
-  'regex',
-  'endsWith',
-  'startsWith',
-  'hasLength',
-  'isPresent',
-  'times',
-  'hitTimes',
-  'not',
-  'jsonPath',
-  'fieldPath',
-  'anyOf',
-  'allOf',
-  'item',
-
-  // Matchers Transformers
-  // --
-  'trim',
-  'lowerCase',
-  'upperCase',
-
-  // HTTP
-  // --
-  'url',
-  'urlPath',
-  'urlPathMatching',
-  'urlPathPattern',
-
-  // Multi-Part
-  // --
-  'fileContent',
-  'fileEncoding',
-  'fileMimeType'
-]
+import { StubFile } from './StubFile'
+import { textCaseProperties } from './utils/textCaseProperties'
+import { getSingleMatcherFromObjectKeys } from './utils/getSingleMatcherFromObjectKeys'
+import { findRequiredParameter } from './utils/findRequiredParameter'
+import { findRequiredMatcherEntry } from './utils/findRequiredMatcherEntry'
+import { findOptionalParameter } from './utils/findOptionalParameter'
+import { FieldParser } from './FieldParser'
 
 export function buildStubFromFile<Config extends Configurations>(
   configurations: Config,
+  fieldParsers: Array<FieldParser>,
   stub: StubFile,
   filename: string
 ): HttpStubBuilder {
@@ -85,7 +47,7 @@ export function buildStubFromFile<Config extends Configurations>(
   if (stub.name) builder.name(stub.name)
   if (stub.priority) builder.priority(stub.priority)
 
-  if (stub.request.method) builder.method(discoverMatcherByValue(stub.request.method))
+  if (stub.request.method) builder.method(discoverMatcherByValue(stub.request.method, fieldParsers))
 
   if (stub.request.url) builder.url(equalsTo(stub.request.url))
   else if (stub.request.urlPath) builder.url(urlPath(stub.request.urlPath))
@@ -99,7 +61,10 @@ export function buildStubFromFile<Config extends Configurations>(
         builder.query(key, equalsTo(value) as any)
       } else {
         const matcherKey = getSingleMatcherFromObjectKeys(filename, Object.keys(value))
-        builder.query(key, discoverMatcherByKey(filename, matcherKey, value[matcherKey], value))
+        builder.query(
+          key,
+          discoverMatcherByKey(filename, matcherKey, value[matcherKey], value, fieldParsers)
+        )
       }
     }
   }
@@ -110,7 +75,10 @@ export function buildStubFromFile<Config extends Configurations>(
         builder.header(key.toLowerCase(), equalsTo(value))
       } else {
         const matcherKey = getSingleMatcherFromObjectKeys(filename, Object.keys(value))
-        builder.header(key, discoverMatcherByKey(filename, matcherKey, value[matcherKey], value))
+        builder.header(
+          key,
+          discoverMatcherByKey(filename, matcherKey, value[matcherKey], value, fieldParsers)
+        )
       }
     }
   }
@@ -126,7 +94,8 @@ export function buildStubFromFile<Config extends Configurations>(
             filename,
             matcherKey,
             stub.request.body[matcherKey],
-            stub.request.body
+            stub.request.body,
+            fieldParsers
           )
         )
       }
@@ -143,7 +112,10 @@ export function buildStubFromFile<Config extends Configurations>(
         }
       } else {
         const matcherKey = getSingleMatcherFromObjectKeys(filename, Object.keys(value))
-        builder.file(key, discoverMatcherByKey(filename, matcherKey, value[matcherKey], value))
+        builder.file(
+          key,
+          discoverMatcherByKey(filename, matcherKey, value[matcherKey], value, fieldParsers)
+        )
       }
     }
   }
@@ -172,28 +144,48 @@ export function buildStubFromFile<Config extends Configurations>(
 
   builder.reply(res)
 
+  for (const additionalBuilder of fieldParsers) {
+    additionalBuilder.parse(configurations, filename, stub, builder)
+  }
+
   return builder
 }
 
-function discoverMatcherByValue(value: string, def = equalsTo): Matcher<any> {
-  switch (value) {
-    case '*':
-    case 'any':
-    case 'anything':
-      return anything()
+// region Utils
 
-    case 'isPresent':
-      return isPresent()
+function discoverMatcherByValue(
+  value: string,
+  parsers: Array<FieldParser>,
+  def = equalsTo
+): Matcher<any> {
+  if (value === '*' || value === 'any' || value === 'anything') {
+    return anything()
+  } else if (value === 'isPresent') {
+    return isPresent()
+  } else if (value === 'isUUID') {
+    return isUUID()
+  } else {
+    let matcher: Matcher<unknown> | undefined
 
-    case 'isUUID':
-      return isUUID()
+    for (const parser of parsers) {
+      matcher = parser.discoverMatcherByValue(value)
 
-    default:
-      return def(value)
+      if (matcher) {
+        return matcher
+      }
+    }
+
+    return def(value)
   }
 }
 
-function discoverMatcherByKey(filename: string, key: string, values: any, root: any): Matcher<any> {
+function discoverMatcherByKey(
+  filename: string,
+  key: string,
+  values: any,
+  root: any,
+  parsers: Array<FieldParser>
+): Matcher<any> {
   const valueIsText = typeof values === 'string'
   const valueEntries = Object.entries(values)
 
@@ -226,12 +218,12 @@ function discoverMatcherByKey(filename: string, key: string, values: any, root: 
     return hitTimes(values)
   } else if (key === 'not') {
     if (valueIsText) {
-      return not(discoverMatcherByValue(values))
+      return not(discoverMatcherByValue(values, parsers))
     }
 
     const [notK, notV] = Object.entries(values)[0]
 
-    return not(discoverMatcherByKey(filename, notK, notV, values))
+    return not(discoverMatcherByKey(filename, notK, notV, values, parsers))
   } else if (key === 'jsonPath' || key === 'fieldPath') {
     const path = findRequiredParameter<string>(
       'path',
@@ -246,19 +238,19 @@ function discoverMatcherByKey(filename: string, key: string, values: any, root: 
     )
     const [k, v] = matcherEntry
 
-    return jsonPath(path as string, discoverMatcherByKey(filename, k, v, matcherEntry))
+    return jsonPath(path as string, discoverMatcherByKey(filename, k, v, matcherEntry, parsers))
   } else if (key === 'anyOf') {
     const anyOfMatchers = []
 
     for (const entry of values) {
       // noinspection SuspiciousTypeOfGuard
       if (typeof entry === 'string') {
-        anyOfMatchers.push(discoverMatcherByValue(entry))
+        anyOfMatchers.push(discoverMatcherByValue(entry, parsers))
         continue
       }
 
       for (const [k, v] of Object.entries(entry)) {
-        anyOfMatchers.push(discoverMatcherByKey(filename, k, v, entry))
+        anyOfMatchers.push(discoverMatcherByKey(filename, k, v, entry, parsers))
       }
     }
 
@@ -268,7 +260,7 @@ function discoverMatcherByKey(filename: string, key: string, values: any, root: 
 
     for (const entry of values) {
       for (const [k, v] of Object.entries(entry)) {
-        allOfMatchers.push(discoverMatcherByKey(filename, k, v, entry))
+        allOfMatchers.push(discoverMatcherByKey(filename, k, v, entry, parsers))
       }
     }
 
@@ -287,7 +279,7 @@ function discoverMatcherByKey(filename: string, key: string, values: any, root: 
     )
     const [k, v] = matcherEntry
 
-    return item(index, discoverMatcherByKey(filename, k, v, matcherEntry))
+    return item(index, discoverMatcherByKey(filename, k, v, matcherEntry, parsers))
   }
 
   // Matcher Transformers
@@ -301,7 +293,7 @@ function discoverMatcherByKey(filename: string, key: string, values: any, root: 
     )
     const [k, v] = matcherEntry
 
-    return lowerCase(discoverMatcherByKey(filename, k, v, matcherEntry), locales)
+    return lowerCase(discoverMatcherByKey(filename, k, v, matcherEntry, parsers), locales)
   } else if (key === 'upperCase') {
     const locales = findOptionalParameter('locale', valueEntries, undefined)
     const matcherEntry = findRequiredMatcherEntry(
@@ -311,7 +303,7 @@ function discoverMatcherByKey(filename: string, key: string, values: any, root: 
     )
     const [k, v] = matcherEntry
 
-    return upperCase(discoverMatcherByKey(filename, k, v, matcherEntry), locales)
+    return upperCase(discoverMatcherByKey(filename, k, v, matcherEntry, parsers), locales)
   } else if (key === 'trim') {
     const matcherEntry = findRequiredMatcherEntry(
       valueEntries,
@@ -320,90 +312,25 @@ function discoverMatcherByKey(filename: string, key: string, values: any, root: 
     )
     const [k, v] = matcherEntry
 
-    return trim(discoverMatcherByKey(filename, k, v, matcherEntry))
+    return trim(discoverMatcherByKey(filename, k, v, matcherEntry, parsers))
   }
 
-  // No Matcher Found
-  // ---
+  // Will try to find one in the additional builders
   else {
+    let matcher: Matcher<unknown> | undefined
+
+    for (const parser of parsers) {
+      matcher = parser.discoverMatcherByKey(filename, key, values, root)
+
+      if (matcher) {
+        return matcher
+      }
+    }
+
+    // No Matcher Found
+    // Throw Error
     throw new InvalidStubFileError(`No matcher found for: ${key} -- ${values} in ${root}`, filename)
   }
-}
-
-// region Utils
-
-function textCaseProperties(
-  root: any,
-  def: boolean = false
-): { ignoreCase: boolean; locale: string | string[] | undefined } {
-  const locale = root.locale as string | string[] | undefined
-  let ignoreCase = def
-
-  if (root.ignoreCase) {
-    ignoreCase = root.ignoreCase
-  } else if (root.caseInsensitive) {
-    ignoreCase = root.caseInsensitive
-  }
-
-  return {
-    ignoreCase,
-    locale
-  }
-}
-
-function getSingleMatcherFromObjectKeys(filename: string, keys: string[]): string {
-  const matchers = keys.filter(x => MatcherConstants.includes(x))
-
-  if (matchers.length === 0) {
-    throw new InvalidStubFileError('No matchers set!', filename)
-  }
-
-  if (matchers.length > 1) {
-    throw new InvalidStubFileError('More than one matcher set!', filename)
-  }
-
-  return matchers[0]
-}
-
-function findRequiredParameter<T>(
-  parameter: string,
-  values: [string, unknown][],
-  filename: string,
-  errorMessage: string
-): T {
-  const entry = values.find(([k]) => k === parameter)
-
-  if (!entry) {
-    throw new InvalidStubFileError(errorMessage, filename)
-  }
-
-  return entry[1] as T
-}
-
-function findRequiredMatcherEntry(
-  values: [string, unknown][],
-  filename: string,
-  errorMessage: string
-): [string, unknown] {
-  const entry = values.find(([key]) => MatcherConstants.includes(key))
-
-  if (!entry) {
-    if (!entry) {
-      throw new InvalidStubFileError(errorMessage, filename)
-    }
-  }
-
-  return entry
-}
-
-function findOptionalParameter<T>(parameter: string, values: [string, unknown][], def: T): T {
-  const entry = values.find(([k]) => k === parameter)
-
-  if (!entry) {
-    return def
-  }
-
-  return entry[1] as T
 }
 
 // endregion

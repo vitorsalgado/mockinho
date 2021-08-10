@@ -1,6 +1,5 @@
 import { Readable } from 'stream'
-import { v4 as UUId } from 'uuid'
-import { Request, Response, NextFunction } from 'express'
+import { Response, NextFunction } from 'express'
 import HttpProxy from 'http-proxy'
 import { findStubForRequest, FindStubResult, Stub } from '@mockinho/core'
 import { HttpContext } from './HttpContext'
@@ -8,21 +7,18 @@ import { HttpRequest } from './HttpRequest'
 import { HttpResponseDefinition, HttpStub, HttpResponseDefinitionBuilder } from './stub'
 import { ExpressConfigurations } from './config'
 import { BodyType } from './types'
-import { nowInMs } from './utils'
 import { Headers } from './types'
 import { MediaTypes } from './types'
 
 export function stubFinderMiddleware(
   context: HttpContext
-): (request: Request, reply: Response, next: NextFunction) => Promise<void> {
+): (request: HttpRequest, reply: Response, next: NextFunction) => Promise<void> {
   const configurations = context.provideConfigurations()
   const verbose = configurations.isVerbose
   const proxy = HttpProxy.createProxyServer()
 
-  return async function (request: Request, reply: Response, next: NextFunction): Promise<void> {
+  return async function (req: HttpRequest, reply: Response, next: NextFunction): Promise<void> {
     proxy.removeAllListeners()
-
-    const req = fromExpressRequest(request)
 
     onRequestReceived(context, verbose, req)
 
@@ -35,9 +31,6 @@ export function stubFinderMiddleware(
     >(req, context)
 
     if (result.hasMatch()) {
-      req.matched = true
-      req.matchResult = result
-
       const matched = result.matched()
       const response = matched.responseDefinitionBuilder.build(context, req)
 
@@ -124,15 +117,6 @@ export function stubFinderMiddleware(
             .join('')
       )
   }
-}
-
-function fromExpressRequest(request: Request & { [key: string]: any }): HttpRequest {
-  request.id = UUId()
-  request.href = `${request.protocol}://${request.hostname}${request.url}`
-  request.matched = false
-  request.start = nowInMs()
-
-  return request as HttpRequest
 }
 
 // region Events

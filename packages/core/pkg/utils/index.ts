@@ -1,4 +1,3 @@
-export * from './convertBodyToJSON'
 export * from './extractPathname'
 export * from './getQueryParam'
 export * from './isoDateTime'

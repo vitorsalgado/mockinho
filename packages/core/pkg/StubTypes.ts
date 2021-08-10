@@ -1,6 +1,6 @@
 import { Matcher } from './Matcher'
 
-export type StubSource = 'code' | 'file'
+export type StubSource = string | 'code' | 'file'
 
 export interface Expectation<Value, ValueContext> {
   valueGetter: (ctx: ValueContext) => Value
