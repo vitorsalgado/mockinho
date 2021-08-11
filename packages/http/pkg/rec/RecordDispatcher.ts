@@ -1,3 +1,4 @@
+import './worker'
 import Path from 'path'
 import { Worker } from 'worker_threads'
 import { execSync } from 'child_process'
@@ -15,7 +16,11 @@ export class RecordDispatcher {
 
     this.worker.on('message', () => LoggerUtil.instance().debug('Recorded'))
 
-    execSync(`mkdir -p ${Path.join(configurations.recordOptions.destination)}`)
+    try {
+      execSync(`mkdir -p ${Path.join(configurations.recordOptions.destination)}`)
+    } catch (e) {
+      LoggerUtil.instance().error(e, e.message)
+    }
   }
 
   record(message: RecordArgs): void {

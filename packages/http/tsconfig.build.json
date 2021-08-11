@@ -2,7 +2,8 @@
   "extends": "../../tsconfig.build.json",
   "compilerOptions": {
     "rootDir": "pkg",
-    "outDir": "dist"
+    "outDir": "dist",
+    "allowJs": true
   },
   "include": ["pkg"],
   "references": [

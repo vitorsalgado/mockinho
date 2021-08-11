@@ -4,12 +4,17 @@ const Fs = require('fs')
 const Path = require('path')
 const Util = require('util')
 const { parentPort, workerData } = require('worker_threads')
+const { isMainThread } = require('worker_threads')
 const Hash = require('object-hash')
 const Mime = require('mime-types')
 const { LoggerUtil } = require('@mockinho/core')
 
 const writeFile = Util.promisify(Fs.writeFile)
 const access = Util.promisify(Fs.access)
+
+// Exit if not in the context of a Worker
+// File can be imported just to ensure it will be on TypeScript build output
+if (!parentPort || isMainThread) return
 
 parentPort.on('message', async data => {
   const { destination, extension, captureRequestHeaders, captureResponseHeaders } = workerData
@@ -90,7 +95,7 @@ parentPort.on('message', async data => {
   if (!exists) {
     Promise.all([
       writeFile(mockPath, Buffer.from(JSON.stringify(mock, null, 2))),
-      hasResponseBody ? writeFile(mockBodyPath, response.body) : true
+      hasResponseBody ? writeFile(mockBodyPath, response.body) : Promise.resolve()
     ])
       .then(() => parentPort.postMessage({ mock: mockFile, mockBody: mockBodyFile }))
       .catch(err => LoggerUtil.instance().error(err))
