@@ -32,6 +32,7 @@ export abstract class ConfigurationsBuilder<ServerFactory extends HttpServerFact
   protected _httpsHost: string = '127.0.0.1'
   protected _httpsOptions?: HttpsServerOptions
   protected _httpsDynamicPort: boolean = true
+  protected _timeout: number = 5 * 60 * 1000
   protected _root: string = process.cwd()
   protected _defaultLoggerDisabled: boolean = false
   protected _defaultLoggerLevel: Level = 'info'
@@ -115,6 +116,11 @@ export abstract class ConfigurationsBuilder<ServerFactory extends HttpServerFact
   dynamicHttpsPort(value: boolean = true): this {
     this._useHttps = true
     this._httpsDynamicPort = value
+    return this
+  }
+
+  timeout(ms: number): this {
+    this._timeout = ms
     return this
   }
 

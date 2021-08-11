@@ -24,6 +24,8 @@ export interface Configurations {
   readonly httpsOptions?: HttpsServerOptions
   readonly httpsDynamicPort: boolean
 
+  readonly timeout: number
+
   readonly loggers: Array<Logger>
   readonly isVerbose: boolean
 

@@ -131,6 +131,7 @@ export class ExpressConfigurationsBuilder extends ConfigurationsBuilder<
       httpsHost: this._httpsHost,
       httpsDynamicPort: this._httpsDynamicPort,
       httpsOptions: this._httpsOptions,
+      timeout: this._timeout,
       loggers: this._loggers,
       isStubFilesEnabled: this._loadFileStubs,
       stubsDirectory: this._stubsDirectory,

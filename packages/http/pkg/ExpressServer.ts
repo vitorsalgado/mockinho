@@ -35,11 +35,13 @@ export class ExpressServer implements HttpServer<Express> {
 
     if (this.configurations.useHttp) {
       this.httpServer = createHttpServer(this.configurations.httpOptions ?? {}, this.expressApp)
+      this.httpServer.setTimeout(this.configurations.timeout)
       this.serverInstances.push(this.httpServer)
     }
 
     if (this.configurations.useHttps && this.configurations.httpsOptions) {
       this.httpsServer = createHttpsServer(this.configurations.httpsOptions, this.expressApp)
+      this.httpsServer.setTimeout(this.configurations.timeout)
       this.serverInstances.push(this.httpsServer)
     }
   }
