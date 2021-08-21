@@ -8,18 +8,15 @@ import { Router } from 'express'
 import Multer from 'multer'
 import Cors from 'cors'
 import CookieParse from 'cookie-parser'
-import { createProxyMiddleware } from 'http-proxy-middleware'
-import { responseInterceptor } from 'http-proxy-middleware'
-import { Options } from 'http-proxy-middleware'
 import { LoggerUtil } from '@mockinho/core'
 import { ExpressConfigurations } from './config'
 import { HttpServer, HttpServerInfo } from './HttpServer'
 import { ErrorCodes } from './types'
 import { HttpContext } from './HttpContext'
 import { stubFinderMiddleware } from './stubFinderMiddleware'
-import { RecordDispatcher } from './rec/RecordDispatcher'
 import { decorateRequestMiddleware } from './decorateRequestMiddleware'
 import { HttpRequest } from './HttpRequest'
+import { configureProxy } from './configureProxy'
 
 export class ExpressServer implements HttpServer<Express> {
   private readonly configurations: ExpressConfigurations
@@ -57,8 +54,6 @@ export class ExpressServer implements HttpServer<Express> {
       })
     }
 
-    const stubFinderHandler = stubFinderMiddleware(this.context)
-
     this.expressApp.disable('x-powered-by')
     this.expressApp.disable('etag')
 
@@ -69,10 +64,15 @@ export class ExpressServer implements HttpServer<Express> {
       CookieParse(this.configurations.cookieSecrets, this.configurations.cookieOptions)
     )
     this.expressApp.use(Multer(this.configurations.multiPartOptions).any())
-
     this.expressApp.use(decorateRequestMiddleware as Router)
+
     this.configurations.preHandlerMiddlewares.forEach(x => this.expressApp.use(x))
-    this.expressApp.all('*', async (req, res, next) => {
+  }
+
+  async start(): Promise<HttpServerInfo> {
+    const stubFinderHandler = stubFinderMiddleware(this.context)
+
+    this.expressApp.all('*', (req, res, next) => {
       return stubFinderHandler(req as HttpRequest, res, next).catch(err => next(err))
     })
 
@@ -81,48 +81,7 @@ export class ExpressServer implements HttpServer<Express> {
     }
 
     if (this.configurations.isProxyEnabled) {
-      let opts: Options = this.configurations.proxyOptions
-
-      if (this.configurations.isRecordEnabled) {
-        const dispatcher = new RecordDispatcher(this.configurations)
-
-        for (const server of this.serverInstances) {
-          server.on('close', () =>
-            dispatcher
-              .terminate()
-              .finally(() => LoggerUtil.instance().debug('Recorder Dispatcher Terminated'))
-          )
-        }
-
-        opts = {
-          ...this.configurations.proxyOptions,
-
-          selfHandleResponse: true,
-
-          onProxyRes: responseInterceptor(async (responseBuffer, proxyRes, req: any, res) => {
-            dispatcher.record({
-              request: {
-                id: req.id,
-                url: req.url,
-                path: req.path,
-                method: req.method,
-                headers: req.headers,
-                query: req.query,
-                body: req.body
-              },
-              response: {
-                status: res.statusCode,
-                headers: res.getHeaders() as Record<string, string>,
-                body: responseBuffer
-              }
-            })
-
-            return responseBuffer
-          })
-        }
-      }
-
-      this.expressApp.use('*', createProxyMiddleware(opts))
+      configureProxy(this.configurations, this.expressApp, this.serverInstances)
     }
 
     this.expressApp.use(function (error: Error, req: Request, res: Response, next: NextFunction) {
@@ -136,9 +95,7 @@ export class ExpressServer implements HttpServer<Express> {
 
       return next()
     })
-  }
 
-  async start(): Promise<HttpServerInfo> {
     const { httpPort, httpHost, httpDynamicPort, httpsPort, httpsHost, httpsDynamicPort } =
       this.configurations
 
@@ -189,7 +146,7 @@ export class ExpressServer implements HttpServer<Express> {
     return this.expressApp
   }
 
-  close(): Promise<void> {
+  async close(): Promise<void> {
     for (const socket of this.sockets) {
       socket.destroy()
       this.sockets.delete(socket)
@@ -205,6 +162,6 @@ export class ExpressServer implements HttpServer<Express> {
       listeners.push(new Promise<void>(resolve => this.httpsServer?.close(() => resolve())))
     }
 
-    return Promise.all(listeners).then()
+    await Promise.all(listeners)
   }
 }

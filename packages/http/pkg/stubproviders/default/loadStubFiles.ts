@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 import * as Fs from 'fs'
-import Chalk from 'chalk'
+import { red, bold } from 'colorette'
 import { listFilenames, noNullElements, notBlank, notEmpty } from '@mockinho/core'
 import { chooseStubFileParser } from './chooseStubFileParser'
 import { InvalidStubFileError } from './InvalidStubFileError'
@@ -38,9 +38,7 @@ export async function loadStubFiles(
 
   if (errors.length > 0) {
     console.error(
-      `${Chalk.red(
-        `${Chalk.bold('Some Stub files contain errors! Check below for more details.')}`
-      )}`
+      `${red(`${bold('Some Stub files contain errors! Check below for more details.')}`)}`
     )
 
     errors.forEach(error => {

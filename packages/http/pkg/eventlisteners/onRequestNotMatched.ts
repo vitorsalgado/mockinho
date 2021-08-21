@@ -1,4 +1,4 @@
-import Chalk from 'chalk'
+import { yellow, yellowBright, bold } from 'colorette'
 import { extractPathname, isoDateTime } from '@mockinho/core'
 import { HttpStub } from '../stub'
 import { HttpEvents } from './HttpEvents'
@@ -6,7 +6,7 @@ import { HttpEvents } from './HttpEvents'
 export function onRequestNotMatched(event: HttpEvents['requestNotMatched']): void {
   // eslint-disable-next-line no-console
   console.warn(
-    `${Chalk.yellowBright.bold('REQUEST WAS NOT MATCHED')} ${isoDateTime()} ${Chalk.yellow(
+    `${yellowBright(bold('REQUEST WAS NOT MATCHED'))} ${isoDateTime()} ${yellow(
       `<--- ${event.method} ${extractPathname(event.url)}`
     )}`
   )
@@ -19,10 +19,10 @@ export function onRequestNotMatched(event: HttpEvents['requestNotMatched']): voi
 
   // eslint-disable-next-line no-console
   return console.warn(
-    `${Chalk.yellow('Closest Stub:')}` +
+    `${yellow('Closest Stub:')}` +
       '\n' +
       `Id: ${stub.id}${stub.name ? '\nName: ' + stub.name : ''}${
-        stub.sourceDescription ? '\nFile: ' + Chalk.bold(stub.sourceDescription) : ''
+        stub.sourceDescription ? '\nFile: ' + bold(stub.sourceDescription) : ''
       }${tryGetUrlAndMethod(stub)}\n`
   )
 }
@@ -39,7 +39,7 @@ function tryGetUrlAndMethod(stub: HttpStub): string {
   }
 
   if (str.length > 0) {
-    return '\n' + 'Url: ' + Chalk.bold(str.join(' '))
+    return '\n' + 'Url: ' + bold(str.join(' '))
   }
 
   return ''

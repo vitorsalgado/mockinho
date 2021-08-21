@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 import { Express } from 'express'
-import Chalk from 'chalk'
+import { redBright, bold } from 'colorette'
 import { allOf, equalsTo, hitTimes } from '@mockinho/core-matchers'
 import { anyItem } from '@mockinho/core-matchers'
 import { notMatched } from '@mockinho/core-matchers'
@@ -331,9 +331,9 @@ export class HttpStubBuilder extends StubBaseBuilder<
     return {
       matcher: this._inspect
         ? notMatched(matcher, (matcher, value, ctx) => {
-            console.log(Chalk.redBright.bold(`${container}: "${matcher.name}" did not match.`))
+            console.log(bold(redBright(`${container}: "${matcher.name}" did not match.`)))
             console.log(
-              Chalk.redBright(
+              redBright(
                 `Stub: ${
                   ctx?.stub.sourceDescription
                     ? `${ctx?.stub.sourceDescription}`
@@ -343,7 +343,7 @@ export class HttpStubBuilder extends StubBaseBuilder<
                 }`
               )
             )
-            console.log(Chalk.redBright(`Received: ${JSON.stringify(value)}`))
+            console.log(redBright(`Received: ${JSON.stringify(value)}`))
           })
         : matcher,
       valueGetter,

@@ -1,6 +1,7 @@
 import { Configurations } from '../../config'
 import { MockProvider } from '../MockProvider'
 import { HttpStubBuilder } from '../../stub'
+import { HttpServer } from '../../HttpServer'
 import { loadStubFiles } from './loadStubFiles'
 import { buildStubFromFile } from './buildStubFromFile'
 import { FieldParser } from './FieldParser'
@@ -11,7 +12,7 @@ export class DefaultMockProvider implements MockProvider {
     private readonly fieldParsers: Array<FieldParser> = []
   ) {}
 
-  async mocks(): Promise<Array<HttpStubBuilder>> {
+  async mocks(_server: HttpServer): Promise<Array<HttpStubBuilder>> {
     if (!this.configurations.isStubFilesEnabled) {
       return []
     }

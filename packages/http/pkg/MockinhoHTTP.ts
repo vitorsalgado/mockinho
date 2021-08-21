@@ -86,7 +86,7 @@ export class MockinhoHTTP {
   }
 
   async start(): Promise<HttpServerInfo> {
-    await Promise.all(this.mockProviders.map(x => x.mocks())).then(mocks =>
+    await Promise.all(this.mockProviders.map(x => x.mocks(this.httpServer))).then(mocks =>
       mocks.flatMap(x => x).forEach(m => this.mock(m))
     )
 

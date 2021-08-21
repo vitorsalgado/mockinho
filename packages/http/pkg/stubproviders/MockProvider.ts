@@ -1,5 +1,6 @@
 import { HttpStubBuilder } from '../stub'
+import { HttpServer } from '../HttpServer'
 
 export interface MockProvider {
-  mocks(): Promise<Array<HttpStubBuilder>>
+  mocks(server: HttpServer): Promise<Array<HttpStubBuilder>>
 }

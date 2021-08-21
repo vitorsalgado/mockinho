@@ -1,4 +1,4 @@
-import Chalk from 'chalk'
+import { yellowBright, yellow, bold } from 'colorette'
 import { MockinhoError } from '@mockinho/core'
 import { ErrorCodes } from '../types'
 import { HttpStubRepository } from './HttpStubRepository'
@@ -48,11 +48,11 @@ export class HttpStubScope {
     }
 
     // eslint-disable-next-line no-console
-    console.log(`${Chalk.yellowBright.bold('Pending Mocks')}\n`)
+    console.log(`${bold(yellowBright('Pending Mocks'))}\n`)
 
     this.pendingMocks()
       // eslint-disable-next-line no-console
-      .forEach(x => console.log(`${Chalk.yellow(x.toString())}`))
+      .forEach(x => console.log(`${yellow(x.toString())}`))
   }
 
   clean(): void {

@@ -1,5 +1,5 @@
 import { Stream } from 'stream'
-import Chalk from 'chalk'
+import { blue, blueBright, bold } from 'colorette'
 import { extractPathname } from '@mockinho/core'
 import { HttpEvents } from './HttpEvents'
 import { ifVerbose } from './ifVerbose'
@@ -7,14 +7,14 @@ import { ifVerbose } from './ifVerbose'
 export function onRequestReceived(event: HttpEvents['requestReceived']): void {
   // eslint-disable-next-line no-console
   console.log(
-    `${Chalk.blueBright.bold('REQUEST RECEIVED')} ${new Date().toISOString()} ${Chalk.blueBright(
+    `${blueBright(bold('REQUEST RECEIVED'))} ${new Date().toISOString()} ${blueBright(
       `---> ${event.method} ${extractPathname(event.url)}`
     )}` +
       '\n' +
       `${event.method} ${event.url}\n` +
       ifVerbose(
         event.verbose,
-        `${Chalk.blue('Headers:')}\n` +
+        `${blue('Headers:')}\n` +
           `${Object.entries(event.headers)
             .map(([key, value]) => `${key}: ${value}`)
             .join('\n')}\n` +
@@ -26,7 +26,7 @@ export function onRequestReceived(event: HttpEvents['requestReceived']): void {
               event.body instanceof Stream ||
               (typeof event.body === 'object' && Object.keys(event.body as any).length === 0)
             )
-              ? `${Chalk.blue('Body:')}\n` + JSON.stringify(event.body) + '\n'
+              ? `${blue('Body:')}\n` + JSON.stringify(event.body) + '\n'
               : ''
           }`
       )
