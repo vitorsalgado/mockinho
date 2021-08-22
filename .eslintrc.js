@@ -13,10 +13,10 @@ module.exports = {
     node: true
   },
   rules: {
-    'tsdoc/syntax': 'error',
-
     'no-unused-vars': 'off',
     'space-before-function-paren': 'off',
+
+    'tsdoc/syntax': 'error',
     'no-console': 'error',
 
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
@@ -33,6 +33,7 @@ module.exports = {
         groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object']
       }
     ],
+    'import/no-named-as-default': ['off'],
     'import/no-duplicates': ['off'],
     'import/no-mutable-exports': ['error'],
     'import/no-useless-path-segments': [

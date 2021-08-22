@@ -33,6 +33,7 @@
     "url": "https://github.com/vitorsalgado/mockinho/issues"
   },
   "dependencies": {
+    "colorette": "^1.3.0",
     "pino": "^6.13.0",
     "pino-pretty": "^5.1.2",
     "uuid": "^8.3.2"

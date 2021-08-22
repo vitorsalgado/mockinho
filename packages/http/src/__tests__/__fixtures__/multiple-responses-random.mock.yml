@@ -1,0 +1,21 @@
+---
+name: Multiple Responses Random
+request:
+  method: GET
+  urlPath: /test/random
+
+responseType: random
+
+response:
+  - status: 200
+    body:
+      message: response one
+    headers:
+      Content-Type: application/json
+      X-Res: 1
+  - status: 400
+    body:
+      error: failed
+    headers:
+      Content-Type: application/json
+      X-Res: 2

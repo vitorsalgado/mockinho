@@ -1,14 +1,13 @@
 {
   "extends": "../../tsconfig.build.json",
   "compilerOptions": {
-    "rootDir": "pkg",
+    "rootDir": "src",
     "outDir": "dist",
     "allowJs": true
   },
-  "include": ["pkg"],
+  "include": ["src"],
   "references": [
     { "path": "../core", "prepend": false },
-    { "path": "../core-matchers", "prepend": false },
-    { "path": "../core-bodyconverters", "prepend": false }
+    { "path": "../core-matchers", "prepend": false }
   ]
 }

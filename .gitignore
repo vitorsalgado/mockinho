@@ -107,6 +107,8 @@ dist
 
 lerna-debug.json
 
+.ts-node
+
 # Yarn
 **/.yarn/*
 !**/.yarn/releases

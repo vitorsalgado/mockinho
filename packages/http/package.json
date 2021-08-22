@@ -34,7 +34,6 @@
   },
   "dependencies": {
     "@mockinho/core": "^0.0.0",
-    "@mockinho/core-bodyconverters": "^0.0.0",
     "@mockinho/core-matchers": "^0.0.0",
     "ajv": "^6.12.6",
     "colorette": "^1.3.0",
