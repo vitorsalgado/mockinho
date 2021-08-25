@@ -7,7 +7,6 @@ import Multer from 'multer'
 import { CorsOptions } from 'cors'
 import { CookieParseOptions } from 'cookie-parser'
 import CookieParse from 'cookie-parser'
-import { RequestHandler } from 'express'
 import { Level, Logger } from '@mockinho/core'
 import { notBlank } from '@mockinho/core'
 import { PluginFactory } from '@mockinho/core'
@@ -17,6 +16,8 @@ import { RecordOptionsBuilder } from '../rec/RecordOptionsBuilder'
 import { MockProviderFactory } from '../mockproviders/MockProvider'
 import { FieldParser } from '../mockproviders/default/FieldParser'
 import { HttpConfiguration } from './HttpConfiguration'
+import { ConfigError } from './ConfigError'
+import { PreMiddleware } from './PreMiddleware'
 
 export class HttpConfigurationBuilder {
   private static MOCK_FIXTURES_DIR = '__fixtures__'
@@ -55,7 +56,7 @@ export class HttpConfigurationBuilder {
   private _corsOptions?: CorsOptions
   private _cookieSecrets?: string | Array<string>
   private _cookieOptions?: CookieParseOptions
-  private _preHandlerMiddlewares: Array<RequestHandler> = []
+  private _preHandlerMiddlewares: Array<Array<string | PreMiddleware>> = []
 
   // region General Configurations
 
@@ -228,8 +229,18 @@ export class HttpConfigurationBuilder {
     return this
   }
 
-  addPreHandler(...handler: Array<RequestHandler>): this {
-    this._preHandlerMiddlewares.push(...handler)
+  addPreMiddlewares(middlewares: Array<Array<string | PreMiddleware>>): this {
+    this._preHandlerMiddlewares.push(...middlewares)
+    return this
+  }
+
+  use(route: string | PreMiddleware, middleware?: PreMiddleware): this {
+    if (typeof route === 'string' && middleware) {
+      this.addPreMiddlewares([[route, middleware]])
+    } else {
+      this.addPreMiddlewares([[route]])
+    }
+
     return this
   }
 
@@ -285,6 +296,36 @@ export class HttpConfigurationBuilder {
         }
       }
     }
+
+    this._preHandlerMiddlewares.forEach(x => {
+      if (x.length > 2) {
+        throw new ConfigError(
+          'Each middleware item must contain 1 or 2 items: 1 for the middleware function or 2, the route and the middleware function.'
+        )
+      }
+
+      if (x.length === 1) {
+        if (typeof x[0] !== 'function') {
+          throw new ConfigError(
+            'When middleware item contains 1 entry, it must be a middleware function.'
+          )
+        }
+      }
+
+      if (x.length === 2) {
+        if (typeof x[0] !== 'string') {
+          throw new ConfigError(
+            'First element of middleware entry must be the route and the second the middleware function.'
+          )
+        }
+
+        if (typeof x[1] !== 'function') {
+          throw new ConfigError(
+            'Second element of middleware configuration entry must be a function.'
+          )
+        }
+      }
+    })
 
     return {
       useHttp: this._useHttp,

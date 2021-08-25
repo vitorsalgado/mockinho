@@ -5,6 +5,7 @@ import { Socket } from 'net'
 import express, { Express, Request, Response } from 'express'
 import { NextFunction } from 'express'
 import { Router } from 'express'
+import { RequestHandler } from 'express'
 import Multer from 'multer'
 import Cors from 'cors'
 import CookieParse from 'cookie-parser'
@@ -75,7 +76,11 @@ export class HttpServer {
     this.expressApp.use(Multer(this.configuration.multiPartOptions).any())
     this.expressApp.use(decorateRequestMiddleware as Router)
 
-    this.configuration.preHandlerMiddlewares.forEach(x => this.expressApp.use(x))
+    this.configuration.preHandlerMiddlewares.forEach(x =>
+      x.length === 2
+        ? this.expressApp.use(x[0] as string, x[1] as RequestHandler)
+        : this.expressApp.use(x[0] as RequestHandler)
+    )
   }
 
   async start(): Promise<HttpServerInfo> {

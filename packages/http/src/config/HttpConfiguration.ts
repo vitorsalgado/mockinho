@@ -5,7 +5,8 @@ import Multer from 'multer'
 import { CorsOptions } from 'cors'
 import { CookieParseOptions } from 'cookie-parser'
 import { Options } from 'http-proxy-middleware'
-import { RequestHandler } from 'express'
+import { Response } from 'express'
+import { NextFunction } from 'express'
 import { Logger } from '@mockinho/core'
 import { Configuration } from '@mockinho/core'
 import { PluginFactory } from '@mockinho/core'
@@ -13,6 +14,7 @@ import { RecordOptions } from '../rec/RecordOptions'
 import { MockProviderFactory } from '../mockproviders/MockProvider'
 import { DefaultConfiguration } from '../types'
 import { FieldParser } from '../mockproviders/default/FieldParser'
+import { HttpRequest } from '../HttpRequest'
 
 export interface HttpConfiguration extends Configuration {
   readonly useHttp: boolean
@@ -52,5 +54,7 @@ export interface HttpConfiguration extends Configuration {
   readonly cookieOptions?: CookieParseOptions
   readonly isProxyEnabled: boolean
   readonly proxyOptions: Options
-  readonly preHandlerMiddlewares: Array<RequestHandler>
+  readonly preHandlerMiddlewares: Array<
+    Array<string | ((req: HttpRequest, res: Response, next: NextFunction) => void | Promise<void>)>
+  >
 }

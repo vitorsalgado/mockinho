@@ -1,6 +1,9 @@
 import Path from 'path'
+import { Response } from 'express'
+import { NextFunction } from 'express'
 import { Logger, LoggerPino } from '@mockinho/core'
 import { HttpConfigurationBuilder } from '../HttpConfigurationBuilder'
+import { HttpRequest } from '../../HttpRequest'
 
 describe('Configurations Builder', function () {
   it('should build configurations with builder values', function () {
@@ -121,6 +124,69 @@ describe('Configurations Builder', function () {
     it('should fail when https is enabled but no options are provided', function () {
       const builder = new HttpConfigurationBuilder()
       expect(() => builder.https(3000, undefined as any).build()).toThrowError(ReferenceError)
+    })
+  })
+
+  describe('custom middlewares', function () {
+    function middleware(req: HttpRequest, res: Response, next: NextFunction) {
+      next()
+    }
+
+    it('should not accept one entry without a function', function () {
+      const builder = new HttpConfigurationBuilder()
+
+      builder.addPreMiddlewares([['/test']])
+
+      expect(() => builder.build()).toThrowError()
+    })
+
+    it('should not accept more than 2 elements', function () {
+      const builder = new HttpConfigurationBuilder()
+
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      builder.addPreMiddlewares([['/test', 'other-random-value', () => {}]])
+
+      expect(() => builder.build()).toThrowError()
+    })
+
+    it('should not accept 2 elements different than: string - function', function () {
+      const builder = new HttpConfigurationBuilder()
+
+      builder.addPreMiddlewares([['/test', 'other-random-value']])
+
+      expect(() => builder.build()).toThrowError()
+    })
+
+    it('should accept one element with a middleware function', function () {
+      const cfg = new HttpConfigurationBuilder().addPreMiddlewares([[middleware]]).build()
+
+      expect(cfg.preHandlerMiddlewares).toHaveLength(1)
+      expect(typeof cfg.preHandlerMiddlewares[0][0] === 'function').toBeTruthy()
+    })
+
+    it('should accept two elements with a string first and then the middleware function', function () {
+      const cfg = new HttpConfigurationBuilder().addPreMiddlewares([['/test', middleware]]).build()
+
+      expect(cfg.preHandlerMiddlewares).toHaveLength(1)
+      expect(typeof cfg.preHandlerMiddlewares[0][0] === 'string').toBeTruthy()
+      expect(typeof cfg.preHandlerMiddlewares[0][1] === 'function').toBeTruthy()
+    })
+
+    describe('when using .use()', function () {
+      it('should add middleware without route when providing only a function', function () {
+        const cfg = new HttpConfigurationBuilder().use(middleware).build()
+
+        expect(cfg.preHandlerMiddlewares).toHaveLength(1)
+        expect(typeof cfg.preHandlerMiddlewares[0][0] === 'function').toBeTruthy()
+      })
+
+      it('should add middleware for a route when providing two parameters', function () {
+        const cfg = new HttpConfigurationBuilder().use('/test', middleware).build()
+
+        expect(cfg.preHandlerMiddlewares).toHaveLength(1)
+        expect(typeof cfg.preHandlerMiddlewares[0][0] === 'string').toBeTruthy()
+        expect(typeof cfg.preHandlerMiddlewares[0][1] === 'function').toBeTruthy()
+      })
     })
   })
 })
