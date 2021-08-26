@@ -1,5 +1,6 @@
 import Supertest from 'supertest'
 import { containing } from '@mockinho/core-matchers'
+import { ScenarioInMemoryRepository } from '@mockinho/core'
 import { HttpContext } from '../HttpContext'
 import { opts, post, HttpConfigurationBuilder, HttpServer } from '..'
 import { HttpMockRepository } from '..'
@@ -25,7 +26,7 @@ describe('Express Http Server', function () {
     .enableCors({ maxAge: 10 })
     .build()
 
-  const ctx = new HttpContext(cfg, new HttpMockRepository())
+  const ctx = new HttpContext(cfg, new HttpMockRepository(), new ScenarioInMemoryRepository())
   const httpServer = new HttpServer(ctx)
 
   beforeAll(() => $.start())

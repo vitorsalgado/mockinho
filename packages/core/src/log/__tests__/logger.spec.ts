@@ -78,7 +78,7 @@ describe('Logger', function () {
     expect(spyTwo).toHaveBeenCalledWith(fatalData, fatalParam)
 
     spyOne.mockReset()
-    LoggerUtil.instance().unsusbscribe('fake 1')
+    LoggerUtil.instance().unsubscribe('fake 1')
 
     LoggerUtil.instance().fatal('test', 'test')
     expect(spyOne).not.toHaveBeenCalled()

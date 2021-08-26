@@ -14,12 +14,8 @@ export type BodyType =
   | null
 export type HttpMethods = string | 'DELETE' | 'GET' | 'HEAD' | 'PATCH' | 'POST' | 'PUT' | 'OPTIONS'
 export type DefaultConfiguration = HttpConfiguration
-export type DecoratedResponseBuilder = HttpResponseFixtureBuilder & {
-  [key: string]: (...args: Array<unknown>) => DecoratedResponseBuilder
-}
-export type DecoratedMockBuilder = HttpMockBuilder & {
-  [key: string]: (...args: Array<unknown>) => DecoratedMockBuilder
-}
+export type DefaultResponseBuilder = HttpResponseFixtureBuilder
+export type DefaultMockBuilder = HttpMockBuilder
 
 export const MediaTypes = {
   APPLICATION_JSON: 'application/json;charset=utf-8',

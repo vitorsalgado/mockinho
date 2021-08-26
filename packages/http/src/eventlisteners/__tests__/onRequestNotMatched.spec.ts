@@ -1,11 +1,15 @@
 import { equalsTo } from '@mockinho/core-matchers'
+import { ScenarioInMemoryRepository } from '@mockinho/core'
 import { contentType } from '../../matchers'
 import { HttpMockBuilder, ok } from '../../mock'
+import { HttpMockRepository } from '../../mock'
 import { onRequestNotMatched } from '../onRequestNotMatched'
 import { HttpContext } from '../../HttpContext'
+import { opts } from '../../config'
 
 describe('onRequestNotMatched', function () {
-  const fakeContext = () => ({ configurations: { mocksDirectory: '' } } as HttpContext)
+  const fakeContext = () =>
+    new HttpContext(opts().build(), new HttpMockRepository(), new ScenarioInMemoryRepository())
 
   it('should log without a closest match', function () {
     onRequestNotMatched({

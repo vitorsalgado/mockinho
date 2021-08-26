@@ -46,7 +46,7 @@ export class HttpMultipleResponseFixtureBuilder extends HttpResponseFixtureBuild
 
       switch (this._strategy) {
         case 'sequential':
-          builder = this._responses[mock.totalHits() - 1]
+          builder = this._responses[mock.hits - 1]
           break
 
         case 'random':
@@ -63,9 +63,7 @@ export class HttpMultipleResponseFixtureBuilder extends HttpResponseFixtureBuild
             .status(500)
             .header(Headers.ContentType, MediaTypes.TEXT_PLAIN)
             .body(
-              `Unable to obtain a response. Request Number: ${mock.totalHits()} - Responses: ${
-                this._responses.length
-              }`
+              `Unable to obtain a response. Request Number: ${mock.hits} - Responses: ${this._responses.length}`
             )
             .build()(context, request, mock)
         } else {

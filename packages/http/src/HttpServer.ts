@@ -37,7 +37,7 @@ export class HttpServer {
   private readonly httpsServer?: NodeHttpsServer
 
   constructor(private readonly context: HttpContext) {
-    this.configuration = context.configurations
+    this.configuration = context.configuration
     this.expressApp = express()
 
     if (this.configuration.useHttp) {

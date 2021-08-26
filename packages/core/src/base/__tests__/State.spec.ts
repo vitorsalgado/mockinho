@@ -1,20 +1,20 @@
 import { v4, validate } from 'uuid'
-import { Scenario, SCENARIO_STATE_STARTED } from '../Scenario'
+import { Scenario } from '../Scenario'
 import { ScenarioInMemoryRepository } from '../ScenarioInMemoryRepository'
 
 describe('Scenario', function () {
-  it('should create new scenario with name, id as uuid and state equal to STARTED', function () {
+  it('should create new scenario with name, id as uuid and scenario equal to started', function () {
     const name = 'the name'
     const scenario = Scenario.newScenario(name)
 
     expect(scenario.name).toEqual(name)
     expect(validate(scenario.id)).toBeTruthy()
-    expect(scenario.state).toEqual(SCENARIO_STATE_STARTED)
+    expect(scenario.state).toEqual(Scenario.STATE_STARTED)
     expect(scenario.isStarted()).toBeTruthy()
   })
 
   it('should change state', function () {
-    const state = 'new state value'
+    const state = 'new scenario value'
     const scenario = Scenario.newScenario('name')
 
     scenario.updateState(state)

@@ -1,17 +1,17 @@
 import * as Path from 'path'
 import Supertest from 'supertest'
-import { containing, equalsTo, jsonPath, not } from '@mockinho/core-matchers'
+import { containing, equalsTo, jsonPath } from '@mockinho/core-matchers'
 import { fromFile } from '@mockinho/core'
 import { opts } from '../config'
 import { get } from '..'
+import mockaccinoHttp from '..'
 import { urlPath } from '../matchers'
 import { ok, okJSON, post } from '../mock'
 import { Headers, MediaTypes } from '../types'
-import mockaccinoHttp from '..'
 
 const fixture = (name: string) => Path.join(__dirname, `__fixtures__/__content__${name}`)
 
-describe.skip('Mockinho HTTP', function () {
+describe('Mockinho HTTP', function () {
   const $ = mockaccinoHttp(opts().dynamicHttpPort().trace())
 
   beforeAll(() => $.start())
@@ -35,7 +35,7 @@ describe.skip('Mockinho HTTP', function () {
         .expect(res => expect(res.body.data).toEqual(expected))
     })
 
-    it('should mock a GET request and return json body with 200 (OK) from mock file', function () {
+    it.skip('should mock a GET request and return json body with 200 (OK) from mock file', function () {
       const expected = 'test ok'
 
       // $.mock(
@@ -69,7 +69,7 @@ describe.skip('Mockinho HTTP', function () {
         .expect(res => expect(res.text).toEqual('done'))
     })
 
-    it('should mock response body from file stream', function () {
+    it.skip('should mock response body from file stream', function () {
       $.mock(
         post(urlPath('/test')).reply(
           ok()
@@ -87,73 +87,41 @@ describe.skip('Mockinho HTTP', function () {
 
   describe('Scenarios', function () {
     it('should mock requests according to scenarios and fail when state is not valid', async function () {
-      const expected = 'test-expected-value'
-
       $.mock(
         post(urlPath('/test'))
           .name('Stub 1')
           .scenario('Test', 'started', 'phase 2')
-          .header('content', not(containing('test')))
-          .requestBody(jsonPath('message', equalsTo('success')))
-          .reply(okJSON({ data: expected }))
+          .header(Headers.ContentType, containing('json'))
+          .requestBody(jsonPath('message', equalsTo('hey')))
+          .reply(okJSON({ data: 'started' }))
       )
 
       $.mock(
-        post(containing('/test'))
+        post(urlPath('/test'))
           .name('Stub 2')
-          .repeatTimes(1)
-          .header('content', not(containing('test')))
-          .requestBody(jsonPath('message', equalsTo('success')))
           .scenario('Test', 'phase 2', 'phase 3')
+          .header(Headers.ContentType, containing('json'))
+          .requestBody(jsonPath('message', equalsTo('hey')))
           .reply(okJSON({ data: 'phase 2' }))
       )
 
       await Supertest($.server())
-        .post('/test?q=term')
+        .post('/test')
         .set('content', 'nothing')
-        .send({ message: 'success' })
+        .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+        .send({ message: 'hey' })
         .expect(200)
-        .expect(res => expect(res.body.data).toEqual(expected))
+        .expect(res => expect(res.body.data).toEqual('started'))
 
       await Supertest($.server())
         .post('/test')
+        .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
         .set('content', 'nothing')
-        .send({ message: 'success' })
+        .send({ message: 'hey' })
         .expect(200)
         .expect(res => expect(res.body.data).toEqual('phase 2'))
 
-      await Supertest($.server())
-        .get('/')
-        .set('content', 'nothing')
-        .expect(500)
-        .expect(({ body }) => expect(body.error).toEqual('No stub found!'))
+      await Supertest($.server()).post('/').expect(500)
     })
   })
-
-  describe('Request Limit', function () {
-    it('should not mock a request after the mock hit limit passed', async function () {
-      const expected = 'test ok'
-
-      $.mock(
-        get(urlPath('/test'))
-          .header('content-type', containing('json'))
-          .query('qs', containing('nothing'))
-          .repeatTimes(1)
-          .reply(okJSON({ data: expected }))
-      )
-
-      await Supertest($.server())
-        .get('/test?q=term')
-        .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
-        .expect(200)
-        .expect(res => expect(res.body.data).toEqual(expected))
-
-      await Supertest($.server())
-        .get('/test?q=term')
-        .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
-        .expect(500)
-    })
-  })
-
-  it('test', () => expect('test').toEqual('no test'))
 })

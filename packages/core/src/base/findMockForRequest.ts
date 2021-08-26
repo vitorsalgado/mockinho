@@ -1,14 +1,10 @@
-/* eslint-disable no-console */
-import { IncomingMessage } from 'http'
-import { inspect } from 'util'
-import { bold } from 'colorette'
-import { redBright } from 'colorette'
 import { Context } from './Context'
 import { FindMockResult } from './FindMockResult'
 import { MockRepository } from './MockRepository'
 import { Mock } from './Mock'
 import { Configuration } from './Configuration'
-import { Expectation } from './Expectation'
+import { inspectedMatcher } from './inspectedMatcher'
+import { Matcher } from './Matcher'
 
 export function findMockForRequest<Req, Config extends Configuration, M extends Mock>(
   request: Req,
@@ -20,9 +16,18 @@ export function findMockForRequest<Req, Config extends Configuration, M extends 
   for (const mock of mocks) {
     let weight = 0
 
+    mock.expectations.push(
+      ...mock.statefulExpectations.map(x => ({
+        valueGetter: x.valueGetter,
+        matcher: x.matcher(context, mock) as Matcher<unknown>,
+        weight: 0,
+        container: 'Request'
+      }))
+    )
+
     if (
       mock.expectations.every(expectation => {
-        const matcher = context.configurations.trace
+        const matcher = context.configuration.trace
           ? inspectedMatcher(expectation, mock)
           : expectation.matcher
 
@@ -56,26 +61,4 @@ export function findMockForRequest<Req, Config extends Configuration, M extends 
   }
 
   return FindMockResult.noMatch(context.mockRepository.fetchById(key).get())
-}
-
-function inspectedMatcher<M extends Mock>(expectation: Expectation<unknown, unknown>, mock: M) {
-  return function (value: unknown) {
-    console.log(
-      bold(redBright(`${expectation.container}: "${expectation.matcher.name}" did not match.`))
-    )
-    console.log(
-      redBright(
-        `Mock: ${
-          mock.sourceDescription ? `${mock.sourceDescription}` : mock.name ? mock.name : mock.id
-        }`
-      )
-    )
-    console.log(
-      redBright(
-        `Received: ${value && value instanceof IncomingMessage ? value.toString() : inspect(value)}`
-      )
-    )
-
-    return expectation.matcher(value)
-  }
 }

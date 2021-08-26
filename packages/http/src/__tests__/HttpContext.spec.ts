@@ -1,3 +1,4 @@
+import { ScenarioInMemoryRepository } from '@mockinho/core'
 import { HttpContext } from '../HttpContext'
 import { HttpConfigurationBuilder } from '../config'
 import { HttpMockRepository } from '../mock'
@@ -19,9 +20,10 @@ describe('HttpContext', function () {
       .multiPartOptions({ limits: { fieldNameSize: 10 } })
       .build()
 
-    const ctx = new HttpContext(cfg, new HttpMockRepository())
+    const ctx = new HttpContext(cfg, new HttpMockRepository(), new ScenarioInMemoryRepository())
 
-    expect(ctx.configurations).toEqual(cfg)
+    expect(ctx.configuration).toEqual(cfg)
     expect(ctx.mockRepository).toBeInstanceOf(HttpMockRepository)
+    expect(ctx.scenarioRepository).toBeInstanceOf(ScenarioInMemoryRepository)
   })
 })

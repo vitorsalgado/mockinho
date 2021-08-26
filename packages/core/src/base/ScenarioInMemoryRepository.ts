@@ -1,4 +1,4 @@
-import { Optional } from '../../util/Optional'
+import { Optional } from '../util'
 import { Scenario } from './Scenario'
 import { ScenarioRepository } from './ScenarioRepository'
 

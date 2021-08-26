@@ -10,7 +10,7 @@ export class LoggerUtil implements Logger {
     this.loggers.push(log)
   }
 
-  unsusbscribe(name: string): void {
+  unsubscribe(name: string): void {
     const idx = this.loggers.findIndex(x => x.name() === name)
 
     if (idx > -1) {

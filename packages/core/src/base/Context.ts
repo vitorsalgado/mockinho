@@ -1,9 +1,16 @@
 import { Configuration } from './Configuration'
 import { MockRepository } from './MockRepository'
 import { Mock } from './Mock'
+import { ScenarioRepository } from './ScenarioRepository'
 
-export interface Context<C extends Configuration, S extends Mock, R extends MockRepository<S>> {
-  configurations: C
+export interface Context<
+  Config extends Configuration,
+  M extends Mock,
+  MockRepo extends MockRepository<M>
+> {
+  configuration: Config
 
-  mockRepository: R
+  mockRepository: MockRepo
+
+  scenarioRepository: ScenarioRepository
 }

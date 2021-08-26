@@ -37,6 +37,7 @@ describe('Builder Alternatives', function () {
                 weight: 0
               }
             ],
+            [],
             ok().build(),
             new Map(),
             new Map()
@@ -60,7 +61,7 @@ describe('Builder Alternatives', function () {
                 {
                   'content-type': MediaTypes.APPLICATION_JSON,
                   'x-id': mock.id,
-                  'x-verbose': String(context.configurations.isVerbose),
+                  'x-verbose': String(context.configuration.isVerbose),
                   'x-method': request.method
                 },
                 request.body

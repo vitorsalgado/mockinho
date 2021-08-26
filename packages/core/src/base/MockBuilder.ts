@@ -1,16 +1,15 @@
-import { SCENARIO_STATE_STARTED } from '../builtin/scenario'
-import { scenarioMatcher } from '../builtin/scenario'
 import { Matcher } from './Matcher'
 import { Expectation } from './Expectation'
+import { Scenario } from './Scenario'
+import { StatefulExpectation } from './StatefulExpectation'
+import { scenarioStatefulMatcher } from './scenarioStatefulMatcher'
 
 export abstract class MockBuilder {
   protected _id: string = ''
   protected _name: string = ''
   protected _priority: number = 0
-  protected readonly _matchers: Array<Expectation<unknown, unknown>> = []
-  protected _scenarioName: string = ''
-  protected _scenarioRequiredState: string = ''
-  protected _scenarioNewState: string = ''
+  protected readonly _expectations: Array<Expectation<unknown, unknown>> = []
+  protected readonly _statefulExpectations: Array<StatefulExpectation<unknown, unknown>> = []
 
   id(id: string): this {
     this._id = id
@@ -29,19 +28,16 @@ export abstract class MockBuilder {
 
   scenario(
     name: string,
-    requiredState: string = SCENARIO_STATE_STARTED,
+    requiredState: string = Scenario.STATE_STARTED,
     newState: string = ''
   ): this {
-    this._scenarioName = name
-    this._scenarioRequiredState = requiredState
-    this._scenarioNewState = newState
-
-    this._matchers.push(this.spec(() => undefined, scenarioMatcher(name, requiredState, newState)))
+    this._statefulExpectations.push({
+      valueGetter: () => undefined,
+      matcher: scenarioStatefulMatcher(name, requiredState, newState)
+    })
 
     return this
   }
-
-  abstract validate(): void
 
   protected spec<T, V>(
     valueGetter: (request: V) => T,

@@ -13,7 +13,7 @@ describe('Pino Logger', function () {
     LoggerUtil.instance().warn('warning', true)
     LoggerUtil.instance().error('error', 'parameter')
     LoggerUtil.instance().fatal('world ended', 'good bye')
-    LoggerUtil.instance().unsusbscribe('fake 1')
+    LoggerUtil.instance().unsubscribe('fake 1')
     LoggerUtil.instance().fatal('test', 'test')
 
     expect(logger.name()).toBeDefined()

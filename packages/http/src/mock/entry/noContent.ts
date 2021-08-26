@@ -1,5 +1,5 @@
 import { StatusCodes } from '../../types'
-import { DecoratedResponseBuilder } from '../../types'
+import { DefaultResponseBuilder } from '../../types'
 import { response } from './response'
 
-export const noContent = (): DecoratedResponseBuilder => response().status(StatusCodes.NO_CONTENT)
+export const noContent = (): DefaultResponseBuilder => response().status(StatusCodes.NO_CONTENT)

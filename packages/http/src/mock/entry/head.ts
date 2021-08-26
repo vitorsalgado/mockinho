@@ -1,6 +1,6 @@
 import { Matcher } from '@mockinho/core'
-import { DecoratedMockBuilder } from '../../types'
+import { DefaultMockBuilder } from '../../types'
 import { forMethod } from './forMethod'
 
-export const head = (urlMatcher: Matcher<string> | string): DecoratedMockBuilder =>
+export const head = (urlMatcher: Matcher<string> | string): DefaultMockBuilder =>
   forMethod('HEAD', urlMatcher)

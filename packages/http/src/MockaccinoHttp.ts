@@ -1,6 +1,8 @@
 import { Express } from 'express'
 import { LoggerUtil, notBlank, notEmpty, MockSource } from '@mockinho/core'
 import { Plugin } from '@mockinho/core'
+import { ScenarioRepository } from '@mockinho/core'
+import { ScenarioInMemoryRepository } from '@mockinho/core'
 import { HttpConfigurationBuilder } from './config'
 import { HttpConfiguration } from './config'
 import { onRequestMatched, onRequestNotMatched, onRequestReceived } from './eventlisteners'
@@ -23,6 +25,7 @@ export class MockaccinoHttp {
   private readonly httpServer: HttpServer
   private readonly configuration: DefaultConfiguration
   private readonly mockRepository: HttpMockRepository
+  private readonly scenarioRepository: ScenarioRepository
   private readonly mockProviders: Array<MockProvider> = []
   private readonly plugins: Array<Plugin<HttpRequest, HttpMock>> = []
 
@@ -31,7 +34,8 @@ export class MockaccinoHttp {
 
     this.configuration = configurations
     this.mockRepository = new HttpMockRepository()
-    this.context = new HttpContext(configurations, this.mockRepository)
+    this.scenarioRepository = new ScenarioInMemoryRepository()
+    this.context = new HttpContext(configurations, this.mockRepository, this.scenarioRepository)
     this.httpServer = new HttpServer(this.context)
 
     configurations.loggers.forEach(log => LoggerUtil.instance().subscribe(log))

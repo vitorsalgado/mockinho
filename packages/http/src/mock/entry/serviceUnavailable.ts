@@ -1,9 +1,9 @@
 import { StatusCodes } from '../../types'
-import { DecoratedResponseBuilder } from '../../types'
+import { DefaultResponseBuilder } from '../../types'
 import { response } from './response'
 
-export const serviceUnavailable = (): DecoratedResponseBuilder =>
+export const serviceUnavailable = (): DefaultResponseBuilder =>
   response().status(StatusCodes.SERVICE_UNAVAILABLE)
 
-export const serviceUnavailableJSON = (body: Record<string, unknown>): DecoratedResponseBuilder =>
+export const serviceUnavailableJSON = (body: Record<string, unknown>): DefaultResponseBuilder =>
   serviceUnavailable().bodyJSON(body)

@@ -1,9 +1,8 @@
 import { StatusCodes } from '../../types'
-import { DecoratedResponseBuilder } from '../../types'
+import { DefaultResponseBuilder } from '../../types'
 import { HttpResponseFixtureBuilder } from '../HttpResponseFixtureBuilder'
 
-export const ok = (): DecoratedResponseBuilder =>
+export const ok = (): DefaultResponseBuilder =>
   HttpResponseFixtureBuilder.newBuilder().status(StatusCodes.OK)
 
-export const okJSON = (body: Record<string, unknown>): DecoratedResponseBuilder =>
-  ok().bodyJSON(body)
+export const okJSON = (body: Record<string, unknown>): DefaultResponseBuilder => ok().bodyJSON(body)

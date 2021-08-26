@@ -1,8 +1,8 @@
 import { Headers, StatusCodes } from '../../types'
-import { DecoratedResponseBuilder } from '../../types'
+import { DefaultResponseBuilder } from '../../types'
 import { response } from './response'
 
-export const unauthorized = (wwwAuth?: string): DecoratedResponseBuilder => {
+export const unauthorized = (wwwAuth?: string): DefaultResponseBuilder => {
   const builder = response().status(StatusCodes.UNAUTHORIZED)
 
   if (wwwAuth) {
@@ -15,4 +15,4 @@ export const unauthorized = (wwwAuth?: string): DecoratedResponseBuilder => {
 export const unauthorizedJSON = (
   body: Record<string, unknown>,
   wwwAuth?: string
-): DecoratedResponseBuilder => unauthorized(wwwAuth).bodyJSON(body)
+): DefaultResponseBuilder => unauthorized(wwwAuth).bodyJSON(body)

@@ -4,7 +4,7 @@ import * as Util from 'util'
 import { CookieOptions } from 'express'
 import { isTrue, notBlank, notNull } from '@mockinho/core'
 import { BodyType, Headers, MediaTypes, StatusCodes } from '../types'
-import { DecoratedResponseBuilder } from '../types'
+import { DefaultResponseBuilder } from '../types'
 import { HttpRequest } from '../HttpRequest'
 import { HttpContext } from '../HttpContext'
 import { HttpResponseFixture } from './HttpResponseFixture'
@@ -35,8 +35,8 @@ export class HttpResponseFixtureBuilder {
   protected _proxyFrom: string = ''
   protected _proxyHeaders: Record<string, string> = {}
 
-  static newBuilder = (): DecoratedResponseBuilder =>
-    new HttpResponseFixtureBuilder() as DecoratedResponseBuilder
+  static newBuilder = (): DefaultResponseBuilder =>
+    new HttpResponseFixtureBuilder() as DefaultResponseBuilder
 
   // region Builder
 
@@ -188,7 +188,7 @@ export class HttpResponseFixtureBuilder {
       if (this._bodyFile) {
         const file = this._bodyFileRelativeToFixtures
           ? await HttpResponseFixtureBuilder.makeValidPath(
-              context.configurations.mocksDirectory,
+              context.configuration.mocksDirectory,
               this._bodyFile
             )
           : this._bodyFile

@@ -14,7 +14,7 @@ import { HttpConfiguration } from './config'
 export function mockFinderMiddleware(
   context: HttpContext
 ): (request: HttpRequest, reply: Response, next: NextFunction) => Promise<void> {
-  const configurations = context.configurations
+  const configurations = context.configuration
   const verbose = configurations.isVerbose
   const proxy = HttpProxy.createProxyServer()
 
