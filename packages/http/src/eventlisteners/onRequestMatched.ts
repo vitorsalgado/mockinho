@@ -14,7 +14,7 @@ export function onRequestMatched(event: HttpEvents['requestMatched']): void {
       '\n' +
       `${event.method} ${event.url}\n` +
       ifVerbose(
-        event.verbose,
+        event.detailed,
 
         '\n' +
           (event.mock.id || event.mock.sourceDescription || event.mock.name

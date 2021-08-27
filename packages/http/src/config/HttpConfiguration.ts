@@ -26,9 +26,7 @@ export interface HttpConfiguration extends Configuration {
   readonly httpsHost: string
   readonly httpsOptions?: HttpsServerOptions
   readonly httpsDynamicPort: boolean
-
   readonly timeout: number
-  readonly verbose: boolean
 
   readonly mockDirectory: string
   readonly mockFilesExtension: string

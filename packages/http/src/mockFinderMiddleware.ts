@@ -3,6 +3,7 @@ import { Response, NextFunction } from 'express'
 import HttpProxy from 'http-proxy'
 import { findMockForRequest } from '@mockinho/core'
 import { FindMockResult } from '@mockinho/core'
+import { Mode } from '@mockinho/core'
 import { HttpContext } from './HttpContext'
 import { HttpRequest } from './HttpRequest'
 import { HttpResponseFixture, HttpMock } from './mock'
@@ -15,7 +16,7 @@ export function mockFinderMiddleware(
   context: HttpContext
 ): (request: HttpRequest, reply: Response, next: NextFunction) => Promise<void> {
   const configurations = context.configuration
-  const verbose = configurations.verbose
+  const detailed = configurations.modeIs(Mode.detailed)
   const proxy = HttpProxy.createProxyServer()
 
   return async function (req: HttpRequest, res: Response, next: NextFunction): Promise<void> {
@@ -82,7 +83,7 @@ export function mockFinderMiddleware(
         return
       }
 
-      onRequestMatched(context, verbose, req, response, matched)
+      onRequestMatched(context, detailed, req, response, matched)
       replier()
 
       return
@@ -134,7 +135,7 @@ function onRequestMatched(
   matched: HttpMock
 ) {
   context.emit('requestMatched', {
-    verbose: verbose,
+    detailed: verbose,
     start: req.start,
     url: req.url,
     method: req.method,

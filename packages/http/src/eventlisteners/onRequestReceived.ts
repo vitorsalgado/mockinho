@@ -13,7 +13,7 @@ export function onRequestReceived(event: HttpEvents['request']): void {
       '\n' +
       `${event.method} ${event.url}\n` +
       ifVerbose(
-        event.verbose,
+        event.detailed,
         `${blue('Headers:')}\n` +
           `${Object.entries(event.headers)
             .map(([key, value]) => `${key}: ${value}`)

@@ -10,7 +10,7 @@ import { ok } from '..'
 import mockaccinoHttp from '..'
 
 describe('Stateful Matchers', function () {
-  const $ = mockaccinoHttp(opts().dynamicHttpPort().trace().verbose())
+  const $ = mockaccinoHttp(opts().dynamicHttpPort().trace())
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())

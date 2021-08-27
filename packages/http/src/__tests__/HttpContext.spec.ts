@@ -10,7 +10,6 @@ describe('HttpContext', function () {
     const cfg = builder
       .httpPort(3000)
       .dynamicHttpPort()
-      .verbose(false)
       .enableFileMocks(false)
       .logLevel('warn')
       .trace()

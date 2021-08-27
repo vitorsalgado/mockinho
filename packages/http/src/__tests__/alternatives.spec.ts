@@ -1,6 +1,7 @@
 import Supertest from 'supertest'
 import { equalsTo } from '@mockinho/core-matchers'
 import { Matcher } from '@mockinho/core'
+import { Mode } from '@mockinho/core'
 import mockaccinoHttp from '..'
 import { opts } from '..'
 import { ok } from '..'
@@ -61,7 +62,7 @@ describe('Builder Alternatives', function () {
                 {
                   'content-type': MediaTypes.APPLICATION_JSON,
                   'x-id': mock.id,
-                  'x-verbose': String(context.configuration.verbose),
+                  'x-verbose': String(context.configuration.modeIs(Mode.verbose)),
                   'x-method': request.method
                 },
                 request.body

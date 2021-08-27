@@ -20,7 +20,7 @@ export interface HttpEvents {
   }
 
   request: {
-    readonly verbose: boolean
+    readonly detailed: boolean
     readonly method: HttpMethods
     readonly url: string
     readonly headers: Record<string, string>
@@ -34,7 +34,7 @@ export interface HttpEvents {
   }
 
   requestMatched: {
-    readonly verbose: boolean
+    readonly detailed: boolean
     readonly start: number
     readonly method: HttpMethods
     readonly url: string

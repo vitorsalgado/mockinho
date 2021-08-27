@@ -1,6 +1,7 @@
 import Path from 'path'
 import { Response } from 'express'
 import { NextFunction } from 'express'
+import { Mode } from '@mockinho/core'
 import { HttpConfigurationBuilder } from '../HttpConfigurationBuilder'
 import { HttpRequest } from '../../HttpRequest'
 
@@ -12,7 +13,7 @@ describe('Configurations Builder', function () {
       .dynamicHttpPort()
       .timeout(5000)
       .logLevel('silent')
-      .verbose(false)
+      .mode(Mode.verbose)
       .enableFileMocks(false)
       .mockDirectory(Path.join(__dirname, 'test'))
       .trace()
@@ -31,10 +32,9 @@ describe('Configurations Builder', function () {
     expect(cfg.httpDynamicPort).toBeTruthy()
     expect(cfg.timeout).toEqual(5000)
     expect(cfg.logLevel).toEqual('silent')
-    expect(cfg.verbose).toBeFalsy()
+    expect(cfg.mode).toEqual(Mode.verbose)
     expect(cfg.mockFilesEnabled).toBeFalsy()
     expect(cfg.mockDirectory).toEqual(Path.join(__dirname, 'test'))
-    expect(cfg.trace).toBeTruthy()
     expect(cfg.formUrlEncodedOptions).toEqual({ extended: false, limit: 1000 })
     expect(cfg.corsOptions).toEqual({ maxAge: 10 })
     expect(cfg.corsEnabled).toBeTruthy()
@@ -48,6 +48,18 @@ describe('Configurations Builder', function () {
     const cfg = builder.mockDirectory(Path.join(__dirname, 'test')).build()
 
     expect(cfg.mockDirectory).toEqual(Path.join(__dirname, 'test'))
+  })
+
+  it('should set mode', function () {
+    const silent = new HttpConfigurationBuilder().silent().build()
+    const info = new HttpConfigurationBuilder().info().build()
+    const detailed = new HttpConfigurationBuilder().detailed().build()
+    const verbose = new HttpConfigurationBuilder().verbose().build()
+
+    expect(silent.mode).toEqual(Mode.silent)
+    expect(info.mode).toEqual(Mode.info)
+    expect(detailed.mode).toEqual(Mode.detailed)
+    expect(verbose.mode).toEqual(Mode.verbose)
   })
 
   describe('HTTPS', function () {

@@ -17,7 +17,7 @@ describe('Express Http Server', function () {
 
   const cfg = builder
     .httpPort(3000)
-    .verbose(false)
+    .info()
     .enableFileMocks(false)
     .logLevel('warn')
     .trace()

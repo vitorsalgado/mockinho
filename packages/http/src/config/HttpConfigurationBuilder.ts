@@ -10,6 +10,7 @@ import CookieParse from 'cookie-parser'
 import { notBlank } from '@mockinho/core'
 import { PluginFactory } from '@mockinho/core'
 import { Level } from '@mockinho/core'
+import { Mode } from '@mockinho/core'
 import { RecordOptions } from '../rec/RecordOptions'
 import { RecordOptionsBuilder } from '../rec/RecordOptionsBuilder'
 import { MockProviderFactory } from '../mockproviders/MockProvider'
@@ -31,11 +32,11 @@ export class HttpConfigurationBuilder {
   private _httpsHost: string = '127.0.0.1'
   private _httpsOptions?: HttpsServerOptions
   private _httpsDynamicPort: boolean = true
+  private _mode: Mode = Mode.detailed
   private _timeout: number = 5 * 60 * 1000
   private _root: string = process.cwd()
   private _logLevel: Level = 'error'
   private _trace: boolean = false
-  private _verbose: boolean = false
   private _loadMockFiles: boolean = false
   private _mocksDirectory: string = ''
   private _mocksExtension: string = 'mock'
@@ -115,6 +116,31 @@ export class HttpConfigurationBuilder {
     return this
   }
 
+  mode(mode: Mode): this {
+    this._mode = mode
+    return this
+  }
+
+  info(): this {
+    this._mode = Mode.info
+    return this
+  }
+
+  detailed(): this {
+    this._mode = Mode.detailed
+    return this
+  }
+
+  verbose(): this {
+    this._mode = Mode.verbose
+    return this
+  }
+
+  silent(): this {
+    this._mode = Mode.silent
+    return this
+  }
+
   timeout(ms: number): this {
     this._timeout = ms
     return this
@@ -122,11 +148,6 @@ export class HttpConfigurationBuilder {
 
   rootDir(rootPath: string): this {
     this._root = rootPath
-    return this
-  }
-
-  verbose(value: boolean = true): this {
-    this._verbose = value
     return this
   }
 
@@ -324,8 +345,7 @@ export class HttpConfigurationBuilder {
       mockDirectory: this._mocksDirectory,
       mockFilesExtension: this._mocksExtension,
       logLevel: this._logLevel,
-      trace: this._trace,
-      verbose: this._verbose,
+      mode: this._mode,
       formUrlEncodedOptions: this._formBodyOptions,
       multiPartOptions: this._multiPartOptions,
       corsEnabled: this._cors,
@@ -339,7 +359,11 @@ export class HttpConfigurationBuilder {
       mockFieldParsers: this._mockFieldParsers,
       mockProviderFactories: this._mockProviderFactories,
       preHandlerMiddlewares: this._preHandlerMiddlewares,
-      pluginFactories: this._pluginFactories
+      pluginFactories: this._pluginFactories,
+
+      modeIs(mode: Mode): boolean {
+        return this.mode >= mode
+      }
     }
   }
 }

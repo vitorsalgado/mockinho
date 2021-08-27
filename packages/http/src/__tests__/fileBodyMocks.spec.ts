@@ -8,7 +8,7 @@ import { Headers, MediaTypes } from '../types'
 describe('HTTP - Working With File Body Mocks', function () {
   describe('Default Path', function () {
     const $ = mockaccinoHttp(
-      opts().dynamicHttpPort().verbose().trace().rootDir(Path.join(__dirname, '../../'))
+      opts().dynamicHttpPort().trace().rootDir(Path.join(__dirname, '../../'))
     )
 
     beforeAll(() => $.start())
