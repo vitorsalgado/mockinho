@@ -1,3 +1,3 @@
 export * from './Logger'
-export * from './LoggerPino'
+export * from './PinoLogger'
 export * from './LoggerUtil'

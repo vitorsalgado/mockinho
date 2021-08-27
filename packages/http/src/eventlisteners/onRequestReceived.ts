@@ -4,7 +4,7 @@ import { HttpEvents } from './HttpEvents'
 import { ifVerbose } from './utils'
 import { extractPathname } from './utils'
 
-export function onRequestReceived(event: HttpEvents['requestReceived']): void {
+export function onRequestReceived(event: HttpEvents['request']): void {
   // eslint-disable-next-line no-console
   console.log(
     `${blueBright(bold('REQUEST RECEIVED'))} ${new Date().toISOString()} ${blueBright(

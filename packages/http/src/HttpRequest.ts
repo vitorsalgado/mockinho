@@ -12,6 +12,7 @@ export interface HttpRequest extends Request {
   isMultipart: boolean
   files: Array<Express.Multer.File>
   start: number
+  proxied: boolean
 
   [key: string]: unknown
 }

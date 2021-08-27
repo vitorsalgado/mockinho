@@ -1,7 +1,7 @@
 import Pino from 'pino'
 import { Logger } from './Logger'
 
-export class LoggerPino implements Logger {
+export class PinoLogger implements Logger {
   private readonly pino: Pino.Logger
 
   constructor(level: string = 'info') {

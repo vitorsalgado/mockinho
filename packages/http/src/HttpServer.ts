@@ -17,6 +17,8 @@ import { decorateRequestMiddleware } from './decorateRequestMiddleware'
 import { HttpRequest } from './HttpRequest'
 import { configureProxy } from './configureProxy'
 import { HttpConfiguration } from './config'
+import { logIncomingRequest } from './eventlisteners/logIncomingRequest'
+import { logHttpRequestAndResponse } from './eventlisteners/logHttpRequestAndResponse'
 
 export interface HttpServerInfo {
   useHttp: boolean
@@ -67,6 +69,7 @@ export class HttpServer {
     this.expressApp.disable('x-powered-by')
     this.expressApp.disable('etag')
 
+    this.expressApp.use(logIncomingRequest(this.context))
     this.expressApp.use(express.json())
     this.expressApp.use(express.urlencoded(this.configuration.formUrlEncodedOptions))
     this.expressApp.use(express.text())
@@ -81,6 +84,8 @@ export class HttpServer {
         ? this.expressApp.use(x[0] as string, x[1] as RequestHandler)
         : this.expressApp.use(x[0] as RequestHandler)
     )
+
+    this.expressApp.use(logHttpRequestAndResponse(this.context) as Router)
   }
 
   async start(): Promise<HttpServerInfo> {
@@ -95,25 +100,26 @@ export class HttpServer {
     }
 
     if (this.configuration.isProxyEnabled) {
-      configureProxy(this.configuration, this.expressApp, this.serverInstances)
+      configureProxy(this.context, this.expressApp, this.serverInstances)
     }
 
-    this.expressApp.use(function (
-      error: Error & Record<string, unknown>,
-      req: Request,
-      res: Response,
-      next: NextFunction
-    ) {
-      if (error) {
-        LoggerUtil.instance().error(error)
+    this.expressApp.use(
+      (error: Error & Record<string, unknown>, req: Request, res: Response, next: NextFunction) => {
+        if (error) {
+          this.context.emit('exception', error)
 
-        return res
-          .status(error.statusCode ? (error.statusCode as number) : 500)
-          .send({ message: error.message, code: ErrorCodes.ERR_DEF, stack: error.stack })
+          LoggerUtil.instance().error(error)
+
+          return res.status(error.statusCode ? (error.statusCode as number) : 500).send({
+            message: error.message,
+            code: ErrorCodes.ERR_UNKNOWN_REASON,
+            stack: error.stack
+          })
+        }
+
+        return next()
       }
-
-      return next()
-    })
+    )
 
     const { httpPort, httpHost, httpDynamicPort, httpsPort, httpsHost, httpsDynamicPort } =
       this.configuration
@@ -135,6 +141,10 @@ export class HttpServer {
       )
 
       info.httpPort = port
+
+      this.httpServer.on('error', (err: Error & Record<string, unknown>) =>
+        this.context.emit('exception', err)
+      )
     }
 
     if (this.httpsServer) {
@@ -145,6 +155,10 @@ export class HttpServer {
       )
 
       info.httpsPort = port
+
+      this.httpsServer.on('error', (err: Error & Record<string, unknown>) =>
+        this.context.emit('exception', err)
+      )
     }
 
     return info

@@ -7,7 +7,7 @@ export class HttpEventListener extends EventEmitter {
     return this
   }
 
-  emit<E extends keyof HttpEvents>(event: E, args: HttpEvents[E]): boolean {
+  emit<E extends keyof HttpEvents>(event: E, args?: HttpEvents[E]): boolean {
     return super.emit(event, args)
   }
 }

@@ -6,6 +6,7 @@ import { ScenarioInMemoryRepository } from '@mockinho/core'
 import { HttpConfigurationBuilder } from './config'
 import { HttpConfiguration } from './config'
 import { onRequestMatched, onRequestNotMatched, onRequestReceived } from './eventlisteners'
+import { HttpEvents } from './eventlisteners'
 import { HttpContext } from './HttpContext'
 import { HttpMockBuilder, HttpMockScope } from './mock'
 import { HttpMockRepository } from './mock'
@@ -40,7 +41,7 @@ export class MockaccinoHttp {
 
     configurations.loggers.forEach(log => LoggerUtil.instance().subscribe(log))
 
-    this.context.on('requestReceived', onRequestReceived)
+    this.context.on('request', onRequestReceived)
     this.context.on('requestNotMatched', onRequestNotMatched)
     this.context.on('requestMatched', onRequestMatched)
 
@@ -87,11 +88,20 @@ export class MockaccinoHttp {
   }
 
   async start(): Promise<HttpServerInfo> {
-    await Promise.all(this.mockProviders.map(x => x())).then(mocks =>
-      mocks.flatMap(x => x).forEach(m => this.mock(m))
+    await Promise.all(this.mockProviders.map(provider => provider())).then(mocks =>
+      mocks.flatMap(x => x).forEach(mock => this.mock(mock))
     )
 
-    return this.httpServer.start()
+    return this.httpServer.start().then(info => {
+      this.context.emit('started', { info })
+
+      return info
+    })
+  }
+
+  on<E extends keyof HttpEvents>(event: E, listener: (args: HttpEvents[E]) => void): this {
+    this.context.on(event, listener)
+    return this
   }
 
   // endregion
@@ -118,7 +128,7 @@ export class MockaccinoHttp {
   }
 
   close(): Promise<void> {
-    return this.httpServer.close()
+    return this.httpServer.close().finally(() => this.context.emit('closed'))
   }
 
   server(): Express {

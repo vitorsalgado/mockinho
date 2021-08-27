@@ -1,9 +1,9 @@
-import { LoggerPino } from '../LoggerPino'
+import { PinoLogger } from '../PinoLogger'
 import { LoggerUtil } from '../LoggerUtil'
 
 describe('Pino Logger', function () {
   it('should call subscribed pino logger without problems', function () {
-    const logger = new LoggerPino()
+    const logger = new PinoLogger()
 
     LoggerUtil.instance().subscribe(logger)
 

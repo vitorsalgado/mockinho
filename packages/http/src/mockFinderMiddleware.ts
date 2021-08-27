@@ -21,8 +21,6 @@ export function mockFinderMiddleware(
   return async function (req: HttpRequest, res: Response, next: NextFunction): Promise<void> {
     proxy.removeAllListeners()
 
-    onRequestReceived(context, verbose, req)
-
     const result = findMockForRequest<HttpRequest, HttpConfiguration, HttpMock>(req, context)
 
     if (result.hasMatch()) {
@@ -142,17 +140,6 @@ function onRequestMatched(
     method: req.method,
     responseDefinition: response,
     mock: matched
-  })
-}
-
-function onRequestReceived(context: HttpContext, verbose: boolean, req: HttpRequest) {
-  context.emit('requestReceived', {
-    verbose: verbose,
-    method: req.method,
-    url: req.url,
-    body: req.body,
-    headers: req.headers,
-    href: req.href
   })
 }
 

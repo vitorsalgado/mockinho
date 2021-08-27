@@ -1,12 +1,28 @@
 import { HttpMock } from '../mock'
 import { HttpMethods } from '../types'
+import { HttpServerInfo } from '../HttpServer'
+import { HttpTransaction } from './HttpTransaction'
 
 export interface HttpEvents {
-  requestReceived: {
+  started: {
+    info: HttpServerInfo
+  }
+
+  closed: void
+
+  exception: Error
+
+  recordDispatched: void
+
+  recorded: {
+    mock: string
+    mockBody: string
+  }
+
+  request: {
     readonly verbose: boolean
     readonly method: HttpMethods
     readonly url: string
-    readonly href: string
     readonly headers: Record<string, string>
     readonly body: unknown
   }
@@ -33,4 +49,6 @@ export interface HttpEvents {
       sourceDescription: string
     }
   }
+
+  complete: HttpTransaction
 }
