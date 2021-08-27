@@ -7,10 +7,9 @@ import Multer from 'multer'
 import { CorsOptions } from 'cors'
 import { CookieParseOptions } from 'cookie-parser'
 import CookieParse from 'cookie-parser'
-import { Level, Logger } from '@mockinho/core'
 import { notBlank } from '@mockinho/core'
 import { PluginFactory } from '@mockinho/core'
-import { LoggerPino } from '@mockinho/core'
+import { Level } from '@mockinho/core'
 import { RecordOptions } from '../rec/RecordOptions'
 import { RecordOptionsBuilder } from '../rec/RecordOptionsBuilder'
 import { MockProviderFactory } from '../mockproviders/MockProvider'
@@ -34,9 +33,7 @@ export class HttpConfigurationBuilder {
   private _httpsDynamicPort: boolean = true
   private _timeout: number = 5 * 60 * 1000
   private _root: string = process.cwd()
-  private _defaultLoggerDisabled: boolean = false
-  private _defaultLoggerLevel: Level = 'info'
-  private _loggers: Array<Logger> = []
+  private _logLevel: Level = 'error'
   private _trace: boolean = false
   private _verbose: boolean = false
   private _loadMockFiles: boolean = false
@@ -133,13 +130,8 @@ export class HttpConfigurationBuilder {
     return this
   }
 
-  disableDefaultLogger(value: boolean = true): this {
-    this._defaultLoggerDisabled = value
-    return this
-  }
-
-  defaultLoggerLevel(level: Level): this {
-    this._defaultLoggerLevel = level
+  logLevel(level: Level): this {
+    this._logLevel = level
     return this
   }
 
@@ -168,11 +160,6 @@ export class HttpConfigurationBuilder {
 
   trace(value: boolean = true): this {
     this._trace = value
-    return this
-  }
-
-  addLogger(log: Logger): this {
-    this._loggers.push(log)
     return this
   }
 
@@ -247,12 +234,6 @@ export class HttpConfigurationBuilder {
   // endregion
 
   build(): HttpConfiguration {
-    if (!this._defaultLoggerDisabled) {
-      if (!this._loggers.some(x => x.name() === 'console-pino-pretty-internal')) {
-        this._loggers.push(new LoggerPino(this._defaultLoggerLevel))
-      }
-    }
-
     if (!this._mocksDirectory) {
       this._mocksDirectory = Path.join(this._root, `${HttpConfigurationBuilder.MOCK_FIXTURES_DIR}`)
     }
@@ -339,10 +320,10 @@ export class HttpConfigurationBuilder {
       httpsDynamicPort: this._httpsDynamicPort,
       httpsOptions: this._httpsOptions,
       timeout: this._timeout,
-      loggers: this._loggers,
       isMockFilesEnabled: this._loadMockFiles,
       mocksDirectory: this._mocksDirectory,
       mocksExtension: this._mocksExtension,
+      logLevel: this._logLevel,
       trace: this._trace,
       isVerbose: this._verbose,
       formUrlEncodedOptions: this._formBodyOptions,

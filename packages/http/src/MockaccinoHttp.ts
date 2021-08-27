@@ -1,8 +1,10 @@
 import { Express } from 'express'
-import { LoggerUtil, notBlank, notEmpty, MockSource } from '@mockinho/core'
+import { notBlank, notEmpty, MockSource } from '@mockinho/core'
 import { Plugin } from '@mockinho/core'
 import { ScenarioRepository } from '@mockinho/core'
 import { ScenarioInMemoryRepository } from '@mockinho/core'
+import { PinoLogger } from '@mockinho/core'
+import { LoggerUtil } from '@mockinho/core'
 import { HttpConfigurationBuilder } from './config'
 import { HttpConfiguration } from './config'
 import { onRequestMatched, onRequestNotMatched, onRequestReceived } from './eventlisteners'
@@ -33,13 +35,13 @@ export class MockaccinoHttp {
   constructor(config: HttpConfigurationBuilder | HttpConfiguration) {
     const configurations = config instanceof HttpConfigurationBuilder ? config.build() : config
 
+    LoggerUtil.instance().subscribe(new PinoLogger(configurations.logLevel))
+
     this.configuration = configurations
     this.mockRepository = new HttpMockRepository()
     this.scenarioRepository = new ScenarioInMemoryRepository()
     this.context = new HttpContext(configurations, this.mockRepository, this.scenarioRepository)
     this.httpServer = new HttpServer(this.context)
-
-    configurations.loggers.forEach(log => LoggerUtil.instance().subscribe(log))
 
     this.context.on('request', onRequestReceived)
     this.context.on('requestNotMatched', onRequestNotMatched)
@@ -52,7 +54,7 @@ export class MockaccinoHttp {
 
     this.plugins.push(
       ...this.configuration.pluginFactories.map(
-        x => x(this.context) as Plugin<HttpRequest, HttpMock>
+        factory => factory(this.context) as Plugin<HttpRequest, HttpMock>
       )
     )
 

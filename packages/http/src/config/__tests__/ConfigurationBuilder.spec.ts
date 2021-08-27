@@ -1,24 +1,20 @@
 import Path from 'path'
 import { Response } from 'express'
 import { NextFunction } from 'express'
-import { Logger, LoggerPino } from '@mockinho/core'
 import { HttpConfigurationBuilder } from '../HttpConfigurationBuilder'
 import { HttpRequest } from '../../HttpRequest'
 
 describe('Configurations Builder', function () {
   it('should build configurations with builder values', function () {
-    const pinoLogger = new LoggerPino()
     const builder = new HttpConfigurationBuilder()
       .httpPort(3000)
       .https(3001, { enableTrace: true }, '127.0.0.1')
       .dynamicHttpPort()
       .timeout(5000)
-      .addLogger(pinoLogger)
+      .logLevel('silent')
       .verbose(false)
       .loadMocks(false)
       .mocksDirectory(Path.join(__dirname, 'test'))
-      .disableDefaultLogger(false)
-      .defaultLoggerLevel('warn')
       .trace()
       .formUrlEncodedOptions({ limit: 1000 })
       .enableCors({ maxAge: 10 })
@@ -34,8 +30,7 @@ describe('Configurations Builder', function () {
     expect(cfg.httpsOptions).toEqual({ enableTrace: true })
     expect(cfg.httpDynamicPort).toBeTruthy()
     expect(cfg.timeout).toEqual(5000)
-    expect(cfg.loggers).toHaveLength(1)
-    expect(cfg.loggers[0]).toBeInstanceOf(LoggerPino)
+    expect(cfg.logLevel).toEqual('silent')
     expect(cfg.isVerbose).toBeFalsy()
     expect(cfg.isMockFilesEnabled).toBeFalsy()
     expect(cfg.mocksDirectory).toEqual(Path.join(__dirname, 'test'))
@@ -48,68 +43,11 @@ describe('Configurations Builder', function () {
     expect(cfg.cookieOptions).toEqual({})
   })
 
-  it('should add default logger when enable and not previously added', function () {
-    const builder = new HttpConfigurationBuilder()
-    const cfg = builder.disableDefaultLogger(false).build()
-
-    expect(cfg.loggers).toHaveLength(1)
-    expect(cfg.loggers[0]).toBeInstanceOf(LoggerPino)
-  })
-
   it('should set mock body content dir to __content__ as the default', function () {
     const builder = new HttpConfigurationBuilder()
     const cfg = builder.mocksDirectory(Path.join(__dirname, 'test')).build()
 
     expect(cfg.mocksDirectory).toEqual(Path.join(__dirname, 'test'))
-  })
-
-  it('should only add the provided logger when default is disabled', function () {
-    class FakeLog implements Logger {
-      constructor(private readonly _name: string, private readonly spy: jest.Mock) {}
-
-      name(): string {
-        return this._name
-      }
-
-      debug(data: any, ...params: Array<any>): void {
-        this.spy(data, ...params)
-      }
-
-      error(data: any, ...params: Array<any>): void {
-        this.spy(data, ...params)
-      }
-
-      fatal(data: any, ...params: Array<any>): void {
-        this.spy(data, ...params)
-      }
-
-      info(data: any, ...params: Array<any>): void {
-        this.spy(data, ...params)
-      }
-
-      trace(data: any, ...params: Array<any>): void {
-        this.spy(data, ...params)
-      }
-
-      warn(data: any, ...params: Array<any>): void {
-        this.spy(data, ...params)
-      }
-    }
-
-    const builder = new HttpConfigurationBuilder()
-      .httpPort(3000)
-      .dynamicHttpPort()
-      .addLogger(new FakeLog('test-logger', jest.fn()))
-      .verbose(false)
-      .loadMocks(false)
-      .mocksDirectory(Path.join(__dirname, 'test'))
-      .disableDefaultLogger()
-      .defaultLoggerLevel('warn')
-
-    const cfg = builder.build()
-
-    expect(cfg.loggers).toHaveLength(1)
-    expect(cfg.loggers[0]).toBeInstanceOf(FakeLog)
   })
 
   describe('HTTPS', function () {

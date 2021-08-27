@@ -7,7 +7,6 @@ import { CookieParseOptions } from 'cookie-parser'
 import { Options } from 'http-proxy-middleware'
 import { Response } from 'express'
 import { NextFunction } from 'express'
-import { Logger } from '@mockinho/core'
 import { Configuration } from '@mockinho/core'
 import { PluginFactory } from '@mockinho/core'
 import { RecordOptions } from '../rec/RecordOptions'
@@ -29,8 +28,6 @@ export interface HttpConfiguration extends Configuration {
   readonly httpsDynamicPort: boolean
 
   readonly timeout: number
-
-  readonly loggers: Array<Logger>
   readonly isVerbose: boolean
 
   readonly mocksDirectory: string
