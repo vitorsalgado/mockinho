@@ -22,7 +22,7 @@ export class RecordDispatcher {
     this.worker = new Worker(Path.join(__dirname, 'recordWorker.js'), {
       workerData: {
         ...this.configuration.recordOptions,
-        extension: this.configuration.mocksExtension
+        extension: this.configuration.mockFilesExtension
       } as RecordData
     })
 

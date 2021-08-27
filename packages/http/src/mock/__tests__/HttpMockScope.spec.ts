@@ -6,7 +6,7 @@ import { okJSON } from '../entry'
 import mockaccinoHttp from '../..'
 
 describe('HTTP Scope', function () {
-  const $ = mockaccinoHttp(opts().dynamicHttpPort().loadMocks(false))
+  const $ = mockaccinoHttp(opts().dynamicHttpPort().enableFileMocks(false))
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())

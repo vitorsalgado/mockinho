@@ -18,7 +18,7 @@ export function configureProxy(
 ): void {
   let opts: Options = context.configuration.proxyOptions
 
-  if (context.configuration.isRecordEnabled) {
+  if (context.configuration.recordEnabled) {
     const dispatcher = new RecordDispatcher(context)
 
     for (const server of serverInstances) {
@@ -37,7 +37,7 @@ export function configureProxy(
       timeout: opts.timeout ?? 30 * 1000,
       proxyTimeout: opts.proxyTimeout ?? 30 * 1000,
 
-      onProxyReq(proxyReq, request: IncomingMessage) {
+      onProxyReq(proxyReq, request) {
         ;(request as IncomingMessage & Record<string, unknown>).proxied = true
         ;(request as IncomingMessage & Record<string, unknown>).target =
           context.configuration.proxyOptions.target

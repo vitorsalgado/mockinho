@@ -135,17 +135,17 @@ export class HttpConfigurationBuilder {
     return this
   }
 
-  loadMocks(value: boolean = true): this {
+  enableFileMocks(value: boolean = true): this {
     this._loadMockFiles = value
     return this
   }
 
-  mocksDirectory(path: string): this {
+  mockDirectory(path: string): this {
     this._mocksDirectory = Path.resolve(path)
     return this
   }
 
-  mocksExtension(ext: string): this {
+  mockFileExtension(ext: string): this {
     notBlank(ext)
 
     this._mocksExtension = ext
@@ -320,21 +320,21 @@ export class HttpConfigurationBuilder {
       httpsDynamicPort: this._httpsDynamicPort,
       httpsOptions: this._httpsOptions,
       timeout: this._timeout,
-      isMockFilesEnabled: this._loadMockFiles,
-      mocksDirectory: this._mocksDirectory,
-      mocksExtension: this._mocksExtension,
+      mockFilesEnabled: this._loadMockFiles,
+      mockDirectory: this._mocksDirectory,
+      mockFilesExtension: this._mocksExtension,
       logLevel: this._logLevel,
       trace: this._trace,
-      isVerbose: this._verbose,
+      verbose: this._verbose,
       formUrlEncodedOptions: this._formBodyOptions,
       multiPartOptions: this._multiPartOptions,
-      isCorsEnabled: this._cors,
+      corsEnabled: this._cors,
       corsOptions: this._corsOptions,
       cookieSecrets: this._cookieSecrets,
       cookieOptions: this._cookieOptions,
       proxyOptions: this._proxyOptions,
-      isProxyEnabled: this._proxyAll,
-      isRecordEnabled: this._recordEnabled,
+      proxyEnabled: this._proxyAll,
+      recordEnabled: this._recordEnabled,
       recordOptions: this._recordOptions,
       mockFieldParsers: this._mockFieldParsers,
       mockProviderFactories: this._mockProviderFactories,

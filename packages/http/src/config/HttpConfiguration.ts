@@ -28,13 +28,13 @@ export interface HttpConfiguration extends Configuration {
   readonly httpsDynamicPort: boolean
 
   readonly timeout: number
-  readonly isVerbose: boolean
+  readonly verbose: boolean
 
-  readonly mocksDirectory: string
-  readonly mocksExtension: string
-  readonly isMockFilesEnabled: boolean
+  readonly mockDirectory: string
+  readonly mockFilesExtension: string
+  readonly mockFilesEnabled: boolean
 
-  readonly isRecordEnabled: boolean
+  readonly recordEnabled: boolean
   readonly recordOptions?: RecordOptions
 
   readonly mockProviderFactories: Array<MockProviderFactory<DefaultConfiguration>>
@@ -45,11 +45,11 @@ export interface HttpConfiguration extends Configuration {
   // --
   readonly formUrlEncodedOptions?: OptionsUrlencoded
   readonly multiPartOptions?: Multer.Options
-  readonly isCorsEnabled: boolean
+  readonly corsEnabled: boolean
   readonly corsOptions?: CorsOptions
   readonly cookieSecrets?: string | Array<string>
   readonly cookieOptions?: CookieParseOptions
-  readonly isProxyEnabled: boolean
+  readonly proxyEnabled: boolean
   readonly proxyOptions: Options
   readonly preHandlerMiddlewares: Array<
     Array<string | ((req: HttpRequest, res: Response, next: NextFunction) => void | Promise<void>)>

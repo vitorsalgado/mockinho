@@ -188,7 +188,7 @@ export class HttpResponseFixtureBuilder {
       if (this._bodyFile) {
         const file = this._bodyFileRelativeToFixtures
           ? await HttpResponseFixtureBuilder.makeValidPath(
-              context.configuration.mocksDirectory,
+              context.configuration.mockDirectory,
               this._bodyFile
             )
           : this._bodyFile

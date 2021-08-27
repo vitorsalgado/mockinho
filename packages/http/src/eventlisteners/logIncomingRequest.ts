@@ -6,7 +6,7 @@ import { HttpContext } from '../HttpContext'
 export function logIncomingRequest(context: HttpContext) {
   return function (req: Request, res: Response, next: NextFunction): void {
     context.emit('request', {
-      verbose: context.configuration.isVerbose,
+      verbose: context.configuration.verbose,
       method: req.method,
       url: req.url,
       body: req.body,

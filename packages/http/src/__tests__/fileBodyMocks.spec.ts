@@ -40,7 +40,7 @@ describe('HTTP - Working With File Body Mocks', function () {
 
   describe('Local', function () {
     const $ = mockaccinoHttp(
-      opts().dynamicHttpPort().mocksDirectory(Path.join(__dirname, '__fixtures__'))
+      opts().dynamicHttpPort().mockDirectory(Path.join(__dirname, '__fixtures__'))
     )
 
     beforeAll(() => $.start())

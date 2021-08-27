@@ -13,8 +13,8 @@ describe('Responses', function () {
     opts()
       .dynamicHttpPort()
       .trace()
-      .loadMocks()
-      .mocksDirectory(Path.join(__dirname, '__fixtures__'))
+      .enableFileMocks()
+      .mockDirectory(Path.join(__dirname, '__fixtures__'))
   )
 
   beforeAll(() => $.start())

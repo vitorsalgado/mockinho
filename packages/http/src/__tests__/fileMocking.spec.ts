@@ -7,7 +7,7 @@ import mockaccinoHttp from '..'
 describe('HTTP - File Mocking', function () {
   describe('Default Path', function () {
     const $ = mockaccinoHttp(
-      opts().dynamicHttpPort().verbose().loadMocks().rootDir(Path.join(__dirname, '../..'))
+      opts().dynamicHttpPort().verbose().enableFileMocks().rootDir(Path.join(__dirname, '../..'))
     )
 
     beforeAll(() => $.start())

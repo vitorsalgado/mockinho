@@ -15,7 +15,7 @@ export function mockFinderMiddleware(
   context: HttpContext
 ): (request: HttpRequest, reply: Response, next: NextFunction) => Promise<void> {
   const configurations = context.configuration
-  const verbose = configurations.isVerbose
+  const verbose = configurations.verbose
   const proxy = HttpProxy.createProxyServer()
 
   return async function (req: HttpRequest, res: Response, next: NextFunction): Promise<void> {
@@ -90,7 +90,7 @@ export function mockFinderMiddleware(
 
     onRequestNotMatched(context, req, result)
 
-    if (configurations.isProxyEnabled) {
+    if (configurations.proxyEnabled) {
       return next()
     }
 

@@ -10,14 +10,14 @@ export function defaultMockProviderFactory(
   _server: HttpServer
 ): MockProvider {
   return async function (): Promise<Array<HttpMockBuilder>> {
-    if (!configurations.isMockFilesEnabled) {
+    if (!configurations.mockFilesEnabled) {
       return []
     }
 
-    const files = await loadMockFiles(configurations.mocksDirectory, [
-      `.${configurations.mocksExtension}.json`,
-      `.${configurations.mocksExtension}.yml`,
-      `.${configurations.mocksExtension}.yaml`
+    const files = await loadMockFiles(configurations.mockDirectory, [
+      `.${configurations.mockFilesExtension}.json`,
+      `.${configurations.mockFilesExtension}.yml`,
+      `.${configurations.mockFilesExtension}.yaml`
     ])
 
     return files

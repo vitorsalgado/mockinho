@@ -11,7 +11,7 @@ describe('HttpContext', function () {
       .httpPort(3000)
       .dynamicHttpPort()
       .verbose(false)
-      .loadMocks(false)
+      .enableFileMocks(false)
       .logLevel('warn')
       .trace()
       .formUrlEncodedOptions({ limit: 1000 })

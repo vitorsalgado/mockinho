@@ -61,7 +61,7 @@ describe('Builder Alternatives', function () {
                 {
                   'content-type': MediaTypes.APPLICATION_JSON,
                   'x-id': mock.id,
-                  'x-verbose': String(context.configuration.isVerbose),
+                  'x-verbose': String(context.configuration.verbose),
                   'x-method': request.method
                 },
                 request.body

@@ -13,8 +13,8 @@ describe('Configurations Builder', function () {
       .timeout(5000)
       .logLevel('silent')
       .verbose(false)
-      .loadMocks(false)
-      .mocksDirectory(Path.join(__dirname, 'test'))
+      .enableFileMocks(false)
+      .mockDirectory(Path.join(__dirname, 'test'))
       .trace()
       .formUrlEncodedOptions({ limit: 1000 })
       .enableCors({ maxAge: 10 })
@@ -31,13 +31,13 @@ describe('Configurations Builder', function () {
     expect(cfg.httpDynamicPort).toBeTruthy()
     expect(cfg.timeout).toEqual(5000)
     expect(cfg.logLevel).toEqual('silent')
-    expect(cfg.isVerbose).toBeFalsy()
-    expect(cfg.isMockFilesEnabled).toBeFalsy()
-    expect(cfg.mocksDirectory).toEqual(Path.join(__dirname, 'test'))
+    expect(cfg.verbose).toBeFalsy()
+    expect(cfg.mockFilesEnabled).toBeFalsy()
+    expect(cfg.mockDirectory).toEqual(Path.join(__dirname, 'test'))
     expect(cfg.trace).toBeTruthy()
     expect(cfg.formUrlEncodedOptions).toEqual({ extended: false, limit: 1000 })
     expect(cfg.corsOptions).toEqual({ maxAge: 10 })
-    expect(cfg.isCorsEnabled).toBeTruthy()
+    expect(cfg.corsEnabled).toBeTruthy()
     expect(cfg.multiPartOptions).toEqual({ limits: { fieldNameSize: 1000 } })
     expect(cfg.cookieSecrets).toEqual('super-secret')
     expect(cfg.cookieOptions).toEqual({})
@@ -45,9 +45,9 @@ describe('Configurations Builder', function () {
 
   it('should set mock body content dir to __content__ as the default', function () {
     const builder = new HttpConfigurationBuilder()
-    const cfg = builder.mocksDirectory(Path.join(__dirname, 'test')).build()
+    const cfg = builder.mockDirectory(Path.join(__dirname, 'test')).build()
 
-    expect(cfg.mocksDirectory).toEqual(Path.join(__dirname, 'test'))
+    expect(cfg.mockDirectory).toEqual(Path.join(__dirname, 'test'))
   })
 
   describe('HTTPS', function () {

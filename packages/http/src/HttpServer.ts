@@ -95,11 +95,11 @@ export class HttpServer {
       mockFinder(req as HttpRequest, res, next).catch(err => next(err))
     )
 
-    if (this.configuration.isCorsEnabled) {
+    if (this.configuration.corsEnabled) {
       this.expressApp.use(Cors(this.configuration.corsOptions))
     }
 
-    if (this.configuration.isProxyEnabled) {
+    if (this.configuration.proxyEnabled) {
       configureProxy(this.context, this.expressApp, this.serverInstances)
     }
 
