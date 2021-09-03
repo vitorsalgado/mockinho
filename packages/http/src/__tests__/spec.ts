@@ -4,7 +4,7 @@ import { containing, equalsTo, jsonPath } from '@mockinho/core-matchers'
 import { fromFile } from '@mockinho/core'
 import { opts } from '../config'
 import { get } from '..'
-import mockaccinoHttp from '..'
+import { mockHttp } from '..'
 import { urlPath } from '../matchers'
 import { ok, okJSON, post } from '../mock'
 import { Headers, MediaTypes } from '../types'
@@ -12,11 +12,11 @@ import { Headers, MediaTypes } from '../types'
 const fixture = (name: string) => Path.join(__dirname, `__fixtures__/__content__${name}`)
 
 describe('Mockinho HTTP', function () {
-  const $ = mockaccinoHttp(opts().dynamicHttpPort().trace())
+  const $ = mockHttp(opts().dynamicHttpPort().trace())
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
-  afterEach(() => $.cleanAll())
+  afterEach(() => $.removeAll())
 
   describe('GET', function () {
     it('should mock a GET request and return json body with 200 (OK)', function () {

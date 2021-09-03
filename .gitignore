@@ -122,3 +122,5 @@ lerna-debug.json
 .vscode/
 tools/dev
 yarn.lock
+
+./__fixtures__

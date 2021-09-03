@@ -1,4 +1,4 @@
-import { notNull } from '../notNull'
+import { notNull } from '..'
 
 describe('notNull', function () {
   it('should not throw error when value is a empty string', function () {

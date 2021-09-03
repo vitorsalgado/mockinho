@@ -9,7 +9,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "tsc --project tsconfig.build.json",
+    "build": "tsc --build --incremental",
     "test": "jest --detectOpenHandles"
   },
   "directories": {

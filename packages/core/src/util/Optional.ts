@@ -18,17 +18,15 @@ export class Optional<T> {
     return value
   }
 
-  isEmpty = (): boolean => !this.value
+  isEmpty = (): boolean => !this.isPresent()
 
   isPresent = (): boolean => this.value !== null && typeof this.value !== 'undefined'
-
-  // or = (fn: () => T): T => (this.isEmpty() ? fn() : this.value!)
 
   get = (): T => Optional.checkNotNull(this.value!)
 
   orValue(value: T): T {
-    if (this.value) {
-      return this.value
+    if (this.isPresent()) {
+      return this.value!
     }
 
     return value

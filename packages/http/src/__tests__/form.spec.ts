@@ -1,16 +1,16 @@
 import Supertest from 'supertest'
 import { hasLength } from '@mockinho/core-matchers'
 import { allOf, containing, equalsTo, item, jsonPath, opts, post, urlPath } from '..'
+import { mockHttp } from '..'
 import { ok } from '../mock'
 import { Headers, MediaTypes } from '../types'
-import mockaccinoHttp from '..'
 
 describe('HTTP - Form Url Encoded', function () {
-  const $ = mockaccinoHttp(opts().dynamicHttpPort().formUrlEncodedOptions({ limit: 80 }))
+  const $ = mockHttp(opts().dynamicHttpPort().formUrlEncodedOptions({ limit: 80 }))
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
-  afterEach(() => $.cleanAll())
+  afterEach(() => $.removeAll())
 
   it('should accept form-url-encoded requests', function () {
     $.mock(

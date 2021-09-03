@@ -1,16 +1,16 @@
 import Supertest from 'supertest'
 import { opts, PendingHttpMockScopeError, post } from '../..'
+import { mockHttp } from '../..'
 import { urlPath } from '../../matchers'
 import { get } from '..'
 import { okJSON } from '../entry'
-import mockaccinoHttp from '../..'
 
 describe('HTTP Scope', function () {
-  const $ = mockaccinoHttp(opts().dynamicHttpPort().enableFileMocks(false))
+  const $ = mockHttp(opts().dynamicHttpPort().enableFileMocks(false))
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
-  afterEach(() => $.cleanAll())
+  afterEach(() => $.removeAll())
 
   it('isDone() should return true when all mocks where called', async function () {
     const scope = $.mock(

@@ -1,4 +1,4 @@
-import { decodeBase64, encodeBase64 } from '../base64'
+import { decodeBase64, encodeBase64 } from '..'
 
 describe('Encoding', function () {
   describe('Base64', function () {

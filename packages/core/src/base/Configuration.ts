@@ -5,5 +5,5 @@ export interface Configuration {
   readonly logLevel: Level
   readonly mode: Mode
 
-  modeIs(mode: Mode): boolean
+  modeIsAtLeast(mode: Mode): boolean
 }

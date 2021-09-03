@@ -1,8 +1,7 @@
 import './recordWorker'
+
 import Path from 'path'
 import { Worker } from 'worker_threads'
-import { execSync } from 'child_process'
-import { LoggerUtil } from '@mockinho/core'
 import { HttpConfiguration } from '../config'
 import { HttpContext } from '../HttpContext'
 import { RecordDispatcherArgs } from './RecordDispatcherArgs'
@@ -29,12 +28,6 @@ export class RecordDispatcher {
     this.worker.on('message', (mock: string, mockBody: string) =>
       this.context.emit('recorded', { mock, mockBody })
     )
-
-    try {
-      execSync(`mkdir -p ${Path.join(this.configuration.recordOptions.destination)}`)
-    } catch (e) {
-      LoggerUtil.instance().error(e, e.message)
-    }
   }
 
   record(message: RecordDispatcherArgs): void {

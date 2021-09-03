@@ -1,8 +1,7 @@
 import Supertest from 'supertest'
 import { equalsTo } from '@mockinho/core-matchers'
 import { Matcher } from '@mockinho/core'
-import { Mode } from '@mockinho/core'
-import mockaccinoHttp from '..'
+import { mockHttp } from '..'
 import { opts } from '..'
 import { ok } from '..'
 import { HttpMock } from '..'
@@ -14,11 +13,11 @@ import { Headers } from '..'
 import { extractQuery } from '../mock/util/extractors'
 
 describe('Builder Alternatives', function () {
-  const $ = mockaccinoHttp(opts().dynamicHttpPort().trace())
+  const $ = mockHttp(opts().dynamicHttpPort().trace())
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
-  afterEach(() => $.cleanAll())
+  afterEach(() => $.removeAll())
 
   describe('when using $.mock', function () {
     it('should accept a function providing a HttpMock', function () {
@@ -62,7 +61,7 @@ describe('Builder Alternatives', function () {
                 {
                   'content-type': MediaTypes.APPLICATION_JSON,
                   'x-id': mock.id,
-                  'x-verbose': String(context.configuration.modeIs(Mode.verbose)),
+                  'x-verbose': String(context.configuration.modeIsAtLeast('verbose')),
                   'x-method': request.method
                 },
                 request.body

@@ -1,4 +1,4 @@
-import { notBlank } from '../notBlank'
+import { notBlank } from '..'
 
 describe('notBlank', function () {
   it('should not throw error when string is not blank', function () {

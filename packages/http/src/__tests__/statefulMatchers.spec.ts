@@ -7,14 +7,14 @@ import { okJSON } from '..'
 import { Headers } from '..'
 import { MediaTypes } from '..'
 import { ok } from '..'
-import mockaccinoHttp from '..'
+import { mockHttp } from '..'
 
 describe('Stateful Matchers', function () {
-  const $ = mockaccinoHttp(opts().dynamicHttpPort().trace())
+  const $ = mockHttp(opts().dynamicHttpPort().trace())
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
-  afterEach(() => $.cleanAll())
+  afterEach(() => $.removeAll())
 
   describe('when repeatTimes is set', function () {
     describe('and it did not reach maximum allowed value', function () {

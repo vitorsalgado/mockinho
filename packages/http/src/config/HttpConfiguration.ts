@@ -28,6 +28,7 @@ export interface HttpConfiguration extends Configuration {
   readonly httpsDynamicPort: boolean
   readonly timeout: number
 
+  readonly rootDir: string
   readonly mockDirectory: string
   readonly mockFilesExtension: string
   readonly mockFilesEnabled: boolean
@@ -38,6 +39,8 @@ export interface HttpConfiguration extends Configuration {
   readonly mockProviderFactories: Array<MockProviderFactory<DefaultConfiguration>>
   readonly mockFieldParsers: Array<FieldParser>
   readonly pluginFactories: Array<PluginFactory>
+
+  readonly watch: boolean
 
   // Express Configurations
   // --

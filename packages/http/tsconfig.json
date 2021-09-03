@@ -1,11 +1,11 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": "src",
+    "rootDir": ".",
     "outDir": "dist",
     "allowJs": true
   },
-  "include": ["src"],
+  "include": ["src", "package.json"],
   "references": [
     { "path": "../core", "prepend": false },
     { "path": "../core-matchers", "prepend": false }

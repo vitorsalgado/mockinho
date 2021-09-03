@@ -1,7 +1,7 @@
 import { Response } from 'express'
 import { NextFunction } from 'express'
 import Supertest from 'supertest'
-import mockaccinoHttp from '..'
+import { mockHttp } from '..'
 import { opts } from '..'
 import { HttpRequest } from '..'
 import { get } from '..'
@@ -23,7 +23,7 @@ describe('Custom Middlewares', function () {
     next()
   }
 
-  const $ = mockaccinoHttp(
+  const $ = mockHttp(
     opts()
       .dynamicHttpPort()
       .trace()
@@ -33,7 +33,7 @@ describe('Custom Middlewares', function () {
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
-  afterEach(() => $.cleanAll())
+  afterEach(() => $.removeAll())
 
   describe('when providing a custom middleware without a specific route', function () {
     it('should apply it in all routes', function () {

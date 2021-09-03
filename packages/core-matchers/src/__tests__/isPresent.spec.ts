@@ -21,4 +21,9 @@ describe('Is Present', function () {
     expect(emptyStr).toBeFalsy()
     expect(emptyArr).toBeFalsy()
   })
+
+  it('should return false when value is null or undefined', function () {
+    expect(isPresent()(null)).toBeFalsy()
+    expect(isPresent()(undefined)).toBeFalsy()
+  })
 })

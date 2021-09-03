@@ -1,3 +1,4 @@
+import Path from 'path'
 import { Expectation } from '@mockinho/core'
 import { HttpRequest } from '../HttpRequest'
 import { RecordOptions } from './RecordOptions'
@@ -9,7 +10,7 @@ export class RecordOptionsBuilder {
   private _filters: Array<Expectation<unknown, HttpRequest>> = []
 
   destination(dest: string): this {
-    this._destination = dest
+    this._destination = Path.resolve(dest)
     return this
   }
 

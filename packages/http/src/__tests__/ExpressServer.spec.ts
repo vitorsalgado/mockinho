@@ -2,18 +2,18 @@ import Supertest from 'supertest'
 import { containing } from '@mockinho/core-matchers'
 import { ScenarioInMemoryRepository } from '@mockinho/core'
 import { HttpContext } from '../HttpContext'
-import { opts, post, HttpConfigurationBuilder, HttpServer } from '..'
+import { opts, post, ConfigBuilder, HttpServer } from '..'
 import { HttpMockRepository } from '..'
-import { mockaccinoHttp } from '..'
 
 import { urlPath } from '../matchers'
 import { okJSON } from '../mock'
 import { Headers, MediaTypes } from '../types'
+import mockHttp from '../mockHttp'
 
 describe('Express Http Server', function () {
-  const $ = mockaccinoHttp(opts().dynamicHttpPort().trace())
+  const $ = mockHttp(opts().dynamicHttpPort().trace())
 
-  const builder = new HttpConfigurationBuilder()
+  const builder = new ConfigBuilder()
 
   const cfg = builder
     .httpPort(3000)
@@ -33,7 +33,7 @@ describe('Express Http Server', function () {
     await $.finalize()
     await httpServer.close()
   })
-  afterEach(() => $.cleanAll())
+  afterEach(() => $.removeAll())
 
   it('should return server connection information', async function () {
     await httpServer.start()

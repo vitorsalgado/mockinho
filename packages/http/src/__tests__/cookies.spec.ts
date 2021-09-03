@@ -5,16 +5,16 @@ import { opts } from '..'
 import { post } from '..'
 import { urlPath } from '..'
 import { ok } from '..'
-import mockaccinoHttp from '..'
+import { mockHttp } from '..'
 
 describe('Cookies', function () {
-  const $ = mockaccinoHttp(opts().dynamicHttpPort().cookieOptions('super-secret'))
+  const $ = mockHttp(opts().dynamicHttpPort().cookieOptions('super-secret'))
   const cookieSignedName = 'cookie-test'
   const cookieSignedValue = 's%3Atest.d7jIkuqZkCaFT0czqQ8b6KyUv077GFUH1mxQR%2Fj7SyQ'
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
-  afterEach(() => $.cleanAll())
+  afterEach(() => $.removeAll())
 
   describe('when a signed cookie is sent', function () {
     it('should apply matchers on the unsigned value', function () {

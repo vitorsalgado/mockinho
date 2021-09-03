@@ -17,8 +17,8 @@ import { decorateRequestMiddleware } from './decorateRequestMiddleware'
 import { HttpRequest } from './HttpRequest'
 import { configureProxy } from './configureProxy'
 import { HttpConfiguration } from './config'
-import { logIncomingRequest } from './eventlisteners/logIncomingRequest'
-import { logHttpRequestAndResponse } from './eventlisteners/logHttpRequestAndResponse'
+import { logIncomingRequest } from './events/logIncomingRequest'
+import { logHttpRequestAndResponse } from './events/logHttpRequestAndResponse'
 
 export interface HttpServerInfo {
   useHttp: boolean
@@ -56,9 +56,6 @@ export class HttpServer {
   }
 
   preSetup(): void {
-    process.on('SIGTERM', () => this.close())
-    process.on('SIGINT', () => this.close())
-
     for (const server of this.serverInstances) {
       server.on('connection', socket => {
         this.sockets.add(socket)

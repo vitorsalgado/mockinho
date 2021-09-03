@@ -10,4 +10,8 @@ describe('repeatTimes', function () {
     expect(matcher()).toBeFalsy()
     expect(matcher()).toBeFalsy()
   })
+
+  it('should not accept max lower than zero', function () {
+    expect(() => repeatTimes(-1)).toThrowError()
+  })
 })

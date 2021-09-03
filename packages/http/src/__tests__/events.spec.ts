@@ -1,6 +1,5 @@
 import Supertest from 'supertest'
 import { equalsTo } from '@mockinho/core-matchers'
-import mockaccinoHttp from '..'
 import { opts } from '..'
 import { post } from '..'
 import { urlPath } from '..'
@@ -8,9 +7,10 @@ import { MediaTypes } from '..'
 import { jsonPath } from '..'
 import { ok } from '..'
 import { Headers } from '..'
+import { mockHttp } from '..'
 
 describe('Events', function () {
-  const $ = mockaccinoHttp(opts().dynamicHttpPort().formUrlEncodedOptions({ limit: 80 }))
+  const $ = mockHttp(opts().dynamicHttpPort().formUrlEncodedOptions({ limit: 80 }))
 
   it('should trigger attach event listener', async function () {
     const start = jest.fn()

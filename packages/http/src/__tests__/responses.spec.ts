@@ -2,14 +2,14 @@ import Path from 'path'
 import Supertest from 'supertest'
 import { containing } from '@mockinho/core-matchers'
 import { opts, get, urlPath, Headers, MediaTypes, ok } from '..'
-import mockaccinoHttp from '..'
 import { created } from '..'
 import { badRequest } from '..'
 import { StatusCodes } from '..'
+import { mockHttp } from '..'
 import { multipleResponses } from '../mock/entry/multipleResponses'
 
 describe('Responses', function () {
-  const $ = mockaccinoHttp(
+  const $ = mockHttp(
     opts()
       .dynamicHttpPort()
       .trace()
@@ -19,7 +19,7 @@ describe('Responses', function () {
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
-  afterEach(() => $.cleanMocksBySource('code'))
+  afterEach(() => $.removeBy('code'))
 
   describe('when using .bodyWith()', function () {
     it('should be able to build response using request values', function () {

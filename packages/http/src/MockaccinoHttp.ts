@@ -5,10 +5,10 @@ import { ScenarioRepository } from '@mockinho/core'
 import { ScenarioInMemoryRepository } from '@mockinho/core'
 import { PinoLogger } from '@mockinho/core'
 import { LoggerUtil } from '@mockinho/core'
-import { HttpConfigurationBuilder } from './config'
+import { ConfigBuilder } from './config'
 import { HttpConfiguration } from './config'
-import { onRequestMatched, onRequestNotMatched, onRequestReceived } from './eventlisteners'
-import { HttpEvents } from './eventlisteners'
+import { onRequestMatched, onRequestNotMatched, onRequestReceived } from './events'
+import { HttpEvents } from './events'
 import { HttpContext } from './HttpContext'
 import { HttpMockBuilder, HttpMockScope } from './mock'
 import { HttpMockRepository } from './mock'
@@ -24,41 +24,45 @@ export class MockaccinoHttp {
 
   // region Ctor
 
-  private readonly context: HttpContext
-  private readonly httpServer: HttpServer
-  private readonly configuration: DefaultConfiguration
-  private readonly mockRepository: HttpMockRepository
-  private readonly scenarioRepository: ScenarioRepository
-  private readonly mockProviders: Array<MockProvider> = []
-  private readonly plugins: Array<Plugin<HttpRequest, HttpMock>> = []
+  private readonly _context: HttpContext
+  private readonly _httpServer: HttpServer
+  private readonly _configuration: DefaultConfiguration
+  private readonly _mockRepository: HttpMockRepository
+  private readonly _scenarioRepository: ScenarioRepository
+  private readonly _mockProviders: Array<MockProvider> = []
+  private readonly _plugins: Array<Plugin<HttpRequest, HttpMock>> = []
 
-  constructor(config: HttpConfigurationBuilder | HttpConfiguration) {
-    const configurations = config instanceof HttpConfigurationBuilder ? config.build() : config
+  constructor(config: ConfigBuilder | HttpConfiguration) {
+    const configurations = config instanceof ConfigBuilder ? config.build() : config
 
     LoggerUtil.instance().subscribe(new PinoLogger(configurations.logLevel))
 
-    this.configuration = configurations
-    this.mockRepository = new HttpMockRepository()
-    this.scenarioRepository = new ScenarioInMemoryRepository()
-    this.context = new HttpContext(configurations, this.mockRepository, this.scenarioRepository)
-    this.httpServer = new HttpServer(this.context)
+    this._configuration = configurations
+    this._mockRepository = new HttpMockRepository()
+    this._scenarioRepository = new ScenarioInMemoryRepository()
+    this._context = new HttpContext(configurations, this._mockRepository, this._scenarioRepository)
+    this._httpServer = new HttpServer(this._context)
 
-    this.context.on('request', onRequestReceived)
-    this.context.on('requestNotMatched', onRequestNotMatched)
-    this.context.on('requestMatched', onRequestMatched)
+    if (configurations.modeIsAtLeast('info')) {
+      this._context.on('request', onRequestReceived)
+      this._context.on('requestNotMatched', onRequestNotMatched)
+      this._context.on('requestMatched', onRequestMatched)
+    }
 
-    this.mockProviders.push(defaultMockProviderFactory(this.configuration, this.httpServer))
-    this.mockProviders.push(
-      ...this.configuration.mockProviderFactories.map(x => x(this.configuration, this.httpServer))
-    )
-
-    this.plugins.push(
-      ...this.configuration.pluginFactories.map(
-        factory => factory(this.context) as Plugin<HttpRequest, HttpMock>
+    this._mockProviders.push(defaultMockProviderFactory(this._configuration, this._httpServer))
+    this._mockProviders.push(
+      ...this._configuration.mockProviderFactories.map(provider =>
+        provider(this._configuration, this._httpServer)
       )
     )
 
-    this.httpServer.preSetup()
+    this._plugins.push(
+      ...this._configuration.pluginFactories.map(
+        factory => factory(this._context) as Plugin<HttpRequest, HttpMock>
+      )
+    )
+
+    this._httpServer.preSetup()
   }
 
   // endregion
@@ -72,10 +76,10 @@ export class MockaccinoHttp {
 
     const added = mockBuilder
       .map(builder =>
-        typeof builder === 'function' ? builder(this.context) : builder.build(this.context)
+        typeof builder === 'function' ? builder(this._context) : builder.build(this._context)
       )
       .map(mock => {
-        for (const plugin of this.plugins) {
+        for (const plugin of this._plugins) {
           if (plugin.onMockInit) {
             mock = plugin.onMockInit(mock)
           }
@@ -83,63 +87,75 @@ export class MockaccinoHttp {
 
         return mock
       })
-      .map(mock => this.mockRepository.save(mock))
+      .map(mock => this._mockRepository.save(mock))
       .map(mock => mock.id)
 
-    return new HttpMockScope(this.mockRepository, added)
+    return new HttpMockScope(this._mockRepository, added)
   }
 
   async start(): Promise<HttpServerInfo> {
-    await Promise.all(this.mockProviders.map(provider => provider())).then(mocks =>
-      mocks.flatMap(x => x).forEach(mock => this.mock(mock))
-    )
+    await this.applyMocksFromProviders()
 
-    return this.httpServer.start().then(info => {
-      this.context.emit('started', { info })
+    return this._httpServer.start().then(info => {
+      this._context.emit('started', { info })
 
       return info
     })
   }
 
+  rebuild(): Promise<void> {
+    return this.applyMocksFromProviders()
+  }
+
   on<E extends keyof HttpEvents>(event: E, listener: (args: HttpEvents[E]) => void): this {
-    this.context.on(event, listener)
+    notBlank(event)
+    this._context.on(event, listener)
     return this
+  }
+
+  configuration(): HttpConfiguration {
+    return this._configuration
   }
 
   // endregion
 
   // region General Api
 
-  cleanAll(): void {
-    this.mockRepository.removeAll()
+  removeAll(): void {
+    this._mockRepository.removeAll()
   }
 
-  cleanMocksFromFileSystem(): void {
-    this.mockRepository.removeBySource('file')
+  removeFileMocks(): void {
+    this._mockRepository.removeBySource('file')
   }
 
-  cleanMocksBySource(source: MockSource = 'code'): void {
+  removeBy(source: MockSource = 'code'): void {
     notBlank(source)
-
-    this.mockRepository.removeBySource(source)
+    this._mockRepository.removeBySource(source)
   }
 
-  async finalize(): Promise<void> {
-    this.mockRepository.removeAll()
-    await this.close()
+  finalize(): Promise<void> {
+    this._mockRepository.removeAll()
+    return this.close()
   }
 
   close(): Promise<void> {
-    return this.httpServer.close().finally(() => this.context.emit('closed'))
+    return this._httpServer.close().finally(() => this._context.emit('closed'))
   }
 
   server(): Express {
-    return this.httpServer.server()
+    return this._httpServer.server()
   }
 
   info(): HttpServerInfo {
-    return this.httpServer.info()
+    return this._httpServer.info()
   }
 
   // endregion
+
+  private applyMocksFromProviders(): Promise<void> {
+    return Promise.all(this._mockProviders.map(provider => provider())).then(mocks =>
+      mocks.flatMap(x => x).forEach(mock => this.mock(mock))
+    )
+  }
 }

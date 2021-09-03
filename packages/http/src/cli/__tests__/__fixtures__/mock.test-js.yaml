@@ -1,0 +1,7 @@
+---
+name: Test Js Config
+request:
+  method: GET
+  urlPath: /test-js
+response:
+  status: 200

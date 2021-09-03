@@ -2,17 +2,17 @@ import Path from 'path'
 import Supertest from 'supertest'
 import { equalsTo, containing, jsonPath } from '@mockinho/core-matchers'
 import { opts, post, urlPath } from '..'
+import { mockHttp } from '..'
 import { ok } from '../mock'
 import { fileContent } from '../matchers/fileContent'
 import { fieldPath } from '../matchers/fieldPath'
-import mockaccinoHttp from '..'
 
 describe('Form MultiPart', function () {
-  const $ = mockaccinoHttp(opts().dynamicHttpPort())
+  const $ = mockHttp(opts().dynamicHttpPort())
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
-  afterEach(() => $.cleanAll())
+  afterEach(() => $.removeAll())
 
   it('should process multipart requests', async function () {
     const scope = $.mock(

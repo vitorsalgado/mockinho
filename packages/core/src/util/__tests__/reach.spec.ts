@@ -1,4 +1,4 @@
-import { reach } from '../reach'
+import { reach } from '..'
 
 describe('reach', function () {
   const obj = {

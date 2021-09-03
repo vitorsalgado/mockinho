@@ -1,4 +1,4 @@
-import { isTrue } from '../isTrue'
+import { isTrue } from '..'
 
 describe('isTrue', function () {
   it('should not throw error when condition is met', function () {

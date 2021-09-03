@@ -2,5 +2,5 @@
   "verbose": false,
   "ignore": ["*.spec.ts", "/__fixtures__/", "/__tests__"],
   "ext": "js,ts,json,env,yaml,yml",
-  "exec": "ts-node --emit --project tsconfig.build.json packages/http/src/cmd.ts"
+  "exec": "ts-node --project tsconfig.build.json packages/http/src/cli/index.ts --port=3000 --watch"
 }

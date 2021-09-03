@@ -4,6 +4,7 @@ import 'dotenv/config'
 const config: JestConfig.InitialOptions = {
   verbose: true,
   collectCoverage: false,
+  resetModules: true,
   restoreMocks: true,
   projects: ['<rootDir>'],
   transform: { '^.+\\.tsx?$': 'ts-jest' },
@@ -12,11 +13,17 @@ const config: JestConfig.InitialOptions = {
       tsconfig: './tsconfig.test.json'
     }
   },
-  collectCoverageFrom: ['**/packages/*/**/*.ts', '!**/__fixtures__/**', '!**/__tests__/**'],
+  collectCoverageFrom: [
+    '**/packages/*/**/*.ts',
+    '!**/packages/*/**/*.config.ts',
+    '!**/__fixtures__/**',
+    '!**/__tests__/**'
+  ],
   coveragePathIgnorePatterns: [
     '<rootDir>/dist/',
     '/node_modules/',
     '<rootDir>/scripts',
+    '/dist/',
     '<rootDir>/tools'
   ],
   testPathIgnorePatterns: [

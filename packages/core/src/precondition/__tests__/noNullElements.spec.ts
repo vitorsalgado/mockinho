@@ -1,4 +1,4 @@
-import { noNullElements } from '../noNullElements'
+import { noNullElements } from '..'
 
 describe('noNullElements', function () {
   it('should not throw when Array has no null or undefined elements', function () {

@@ -1,4 +1,4 @@
-import { notEmpty } from '../notEmpty'
+import { notEmpty } from '..'
 
 describe('notEmpty', function () {
   it('should throw error when value is null or undefined', function () {

@@ -2,11 +2,11 @@ import Path from 'path'
 import Supertest from 'supertest'
 import { v4 } from 'uuid'
 import { opts } from '..'
-import mockaccinoHttp from '..'
+import { mockHttp } from '..'
 
 describe('HTTP - File Mocking', function () {
   describe('Default Path', function () {
-    const $ = mockaccinoHttp(
+    const $ = mockHttp(
       opts().dynamicHttpPort().enableFileMocks().rootDir(Path.join(__dirname, '../..'))
     )
 

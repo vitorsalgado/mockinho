@@ -1,5 +1,5 @@
-import { PinoLogger } from '../PinoLogger'
-import { LoggerUtil } from '../LoggerUtil'
+import { PinoLogger } from '..'
+import { LoggerUtil } from '..'
 
 describe('Pino Logger', function () {
   it('should call subscribed pino logger without problems', function () {

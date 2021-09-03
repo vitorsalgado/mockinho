@@ -1,15 +1,15 @@
 import Supertest from 'supertest'
 import { del, head, opts, patch, put, options } from '..'
+import { mockHttp } from '..'
 import { urlPath } from '../matchers'
 import { get, ok, post } from '../mock'
-import mockaccinoHttp from '..'
 
 describe('CORS', function () {
-  const $ = mockaccinoHttp(opts().dynamicHttpPort().enableCors({ methods: '*' }))
+  const $ = mockHttp(opts().dynamicHttpPort().enableCors({ methods: '*' }))
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
-  afterEach(() => $.cleanAll())
+  afterEach(() => $.removeAll())
 
   it('server should work with CORS setup', async function () {
     const scope = $.mock(

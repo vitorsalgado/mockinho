@@ -5,17 +5,17 @@ import { equalsTo } from '@mockinho/core-matchers'
 import { opts, get, urlPath, Headers, MediaTypes } from '..'
 import { okJSON } from '..'
 import { response } from '..'
-import mockaccinoHttp from '..'
+import { mockHttp } from '..'
 
 describe('Proxied Responses', function () {
-  const $ = mockaccinoHttp(opts().dynamicHttpPort().trace())
-  const P = mockaccinoHttp(opts().dynamicHttpPort().trace())
+  const $ = mockHttp(opts().dynamicHttpPort().trace())
+  const P = mockHttp(opts().dynamicHttpPort().trace())
 
   beforeAll(() => Promise.all([$.start(), P.start()]))
   afterAll(() => Promise.all([$.finalize(), P.finalize()]))
   afterEach(() => {
-    $.cleanAll()
-    P.cleanAll()
+    $.removeAll()
+    P.removeAll()
   })
 
   describe('when proxying request', function () {

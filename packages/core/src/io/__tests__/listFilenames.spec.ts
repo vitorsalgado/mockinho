@@ -1,5 +1,5 @@
 import Path from 'path'
-import { listFilenames } from '../listFilenames'
+import { listFilenames } from '..'
 
 describe('listFilenames', function () {
   it('should load all file names recursively considering the filter predicated', function () {

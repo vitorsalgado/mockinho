@@ -5,7 +5,6 @@ import { Mock } from './Mock'
 import { Configuration } from './Configuration'
 import { inspectedMatcher } from './inspectedMatcher'
 import { Matcher } from './Matcher'
-import { Mode } from './Mode'
 
 export function findMockForRequest<Req, Config extends Configuration, M extends Mock>(
   request: Req,
@@ -28,7 +27,7 @@ export function findMockForRequest<Req, Config extends Configuration, M extends 
 
     if (
       mock.expectations.every(expectation => {
-        const matcher = context.configuration.modeIs(Mode.verbose)
+        const matcher = context.configuration.modeIsAtLeast('verbose')
           ? inspectedMatcher(expectation, mock)
           : expectation.matcher
 

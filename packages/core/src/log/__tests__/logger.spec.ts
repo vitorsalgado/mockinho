@@ -1,5 +1,5 @@
-import { Logger } from '../Logger'
-import { LoggerUtil } from '../LoggerUtil'
+import { Logger } from '..'
+import { LoggerUtil } from '..'
 
 describe('Logger', function () {
   class FakeLog implements Logger {

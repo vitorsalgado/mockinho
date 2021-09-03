@@ -7,20 +7,28 @@ import Multer from 'multer'
 import { CorsOptions } from 'cors'
 import { CookieParseOptions } from 'cookie-parser'
 import CookieParse from 'cookie-parser'
+import { Response } from 'express'
+import { NextFunction } from 'express'
 import { notBlank } from '@mockinho/core'
 import { PluginFactory } from '@mockinho/core'
 import { Level } from '@mockinho/core'
 import { Mode } from '@mockinho/core'
+import { Modes } from '@mockinho/core'
 import { RecordOptions } from '../rec/RecordOptions'
 import { RecordOptionsBuilder } from '../rec/RecordOptionsBuilder'
 import { MockProviderFactory } from '../mockproviders/MockProvider'
 import { FieldParser } from '../mockproviders/default/FieldParser'
+import { HttpRequest } from '../HttpRequest'
 import { HttpConfiguration } from './HttpConfiguration'
-import { ConfigError } from './ConfigError'
-import { PreMiddleware } from './PreMiddleware'
 
-export class HttpConfigurationBuilder {
-  private static MOCK_FIXTURES_DIR = '__fixtures__'
+export type PreMiddleware = (
+  req: HttpRequest,
+  res: Response,
+  next: NextFunction
+) => void | Promise<void>
+
+export class ConfigBuilder {
+  private static MOCK_DEFAULT_FIXTURES_DIR = '__fixtures__'
 
   private _useHttp: boolean = false
   private _httpPort: number = 0
@@ -32,9 +40,9 @@ export class HttpConfigurationBuilder {
   private _httpsHost: string = '127.0.0.1'
   private _httpsOptions?: HttpsServerOptions
   private _httpsDynamicPort: boolean = true
-  private _mode: Mode = Mode.detailed
+  private _mode: Mode = 'detailed'
   private _timeout: number = 5 * 60 * 1000
-  private _root: string = process.cwd()
+  private _rootDir: string = process.cwd()
   private _logLevel: Level = 'error'
   private _trace: boolean = false
   private _loadMockFiles: boolean = false
@@ -47,6 +55,7 @@ export class HttpConfigurationBuilder {
   private _mockProviderFactories: Array<MockProviderFactory<HttpConfiguration>> = []
   private _mockFieldParsers: Array<FieldParser> = []
   private _pluginFactories: Array<PluginFactory> = []
+  private _watch: boolean = false
 
   private _formBodyOptions?: OptionsUrlencoded
   private _multiPartOptions?: Multer.Options
@@ -87,6 +96,11 @@ export class HttpConfigurationBuilder {
     return this
   }
 
+  disableHttp(value: boolean = false): this {
+    this._useHttp = value
+    return this
+  }
+
   https(port: number, options: HttpsServerOptions, host: string = '127.0.0.1'): this {
     return this.httpsPort(port).httpsHost(host).httpsOptions(options).dynamicHttpsPort(false)
   }
@@ -116,28 +130,33 @@ export class HttpConfigurationBuilder {
     return this
   }
 
+  disableHttps(value: boolean = false): this {
+    this._useHttps = value
+    return this
+  }
+
   mode(mode: Mode): this {
     this._mode = mode
     return this
   }
 
   info(): this {
-    this._mode = Mode.info
+    this._mode = 'info'
     return this
   }
 
   detailed(): this {
-    this._mode = Mode.detailed
+    this._mode = 'detailed'
     return this
   }
 
   verbose(): this {
-    this._mode = Mode.verbose
+    this._mode = 'verbose'
     return this
   }
 
   silent(): this {
-    this._mode = Mode.silent
+    this._mode = 'silent'
     return this
   }
 
@@ -146,8 +165,8 @@ export class HttpConfigurationBuilder {
     return this
   }
 
-  rootDir(rootPath: string): this {
-    this._root = rootPath
+  rootDir(rootDir: string): this {
+    this._rootDir = rootDir
     return this
   }
 
@@ -173,14 +192,25 @@ export class HttpConfigurationBuilder {
     return this
   }
 
-  record(options?: RecordOptionsBuilder): this {
+  record(options?: RecordOptionsBuilder | RecordOptions | boolean): this {
+    if (typeof options === 'boolean') {
+      this._recordEnabled = options
+      return this
+    }
+
     this._recordEnabled = true
-    this._recordOptions = options?.build()
+    this._recordOptions =
+      options && options instanceof RecordOptionsBuilder ? options?.build() : options
     return this
   }
 
   trace(value: boolean = true): this {
     this._trace = value
+    return this
+  }
+
+  watch(value: boolean = true): this {
+    this._watch = value
     return this
   }
 
@@ -213,7 +243,12 @@ export class HttpConfigurationBuilder {
     return this
   }
 
-  enableCors(options?: CorsOptions): this {
+  enableCors(options?: CorsOptions | boolean): this {
+    if (typeof options === 'boolean') {
+      this._cors = options
+      return this
+    }
+
     this._cors = true
     this._corsOptions = options
     return this
@@ -225,11 +260,16 @@ export class HttpConfigurationBuilder {
     return this
   }
 
-  enableProxy(target: string | Options): this {
+  enableProxy(target: string | Options | boolean, options?: Options): this {
+    if (typeof target === 'boolean') {
+      this._proxyAll = false
+      return this
+    }
+
     this._proxyAll = true
 
     if (typeof target === 'string') {
-      this._proxyOptions = { target, changeOrigin: true, secure: false }
+      this._proxyOptions = { target, changeOrigin: true, secure: false, ...options }
     } else {
       this._proxyOptions = target
     }
@@ -255,8 +295,12 @@ export class HttpConfigurationBuilder {
   // endregion
 
   build(): HttpConfiguration {
+    if (!this._useHttp && !this._useHttps) {
+      this._useHttp = true
+    }
+
     if (!this._mocksDirectory) {
-      this._mocksDirectory = Path.join(this._root, `${HttpConfigurationBuilder.MOCK_FIXTURES_DIR}`)
+      this._mocksDirectory = Path.join(this._rootDir, `${ConfigBuilder.MOCK_DEFAULT_FIXTURES_DIR}`)
     }
 
     if (this._formBodyOptions) {
@@ -269,10 +313,6 @@ export class HttpConfigurationBuilder {
 
     if (!this._multiPartOptions) {
       this._multiPartOptions = { storage: Multer.memoryStorage() }
-    }
-
-    if (this._useHttps && !this._httpsOptions) {
-      throw new ReferenceError('HTTPS options is required when HTTPS is enabled.')
     }
 
     if (this._recordEnabled) {
@@ -301,14 +341,14 @@ export class HttpConfigurationBuilder {
 
     this._preHandlerMiddlewares.forEach(x => {
       if (x.length > 2) {
-        throw new ConfigError(
+        throw new Error(
           'Each middleware item must contain 1 or 2 items: 1 for the middleware function or 2, the route and the middleware function.'
         )
       }
 
       if (x.length === 1) {
         if (typeof x[0] !== 'function') {
-          throw new ConfigError(
+          throw new Error(
             'When middleware item contains 1 entry, it must be a middleware function.'
           )
         }
@@ -316,15 +356,13 @@ export class HttpConfigurationBuilder {
 
       if (x.length === 2) {
         if (typeof x[0] !== 'string') {
-          throw new ConfigError(
+          throw new Error(
             'First element of middleware entry must be the route and the second the middleware function.'
           )
         }
 
         if (typeof x[1] !== 'function') {
-          throw new ConfigError(
-            'Second element of middleware configuration entry must be a function.'
-          )
+          throw new Error('Second element of middleware configuration entry must be a function.')
         }
       }
     })
@@ -342,6 +380,7 @@ export class HttpConfigurationBuilder {
       httpsOptions: this._httpsOptions,
       timeout: this._timeout,
       mockFilesEnabled: this._loadMockFiles,
+      rootDir: this._rootDir,
       mockDirectory: this._mocksDirectory,
       mockFilesExtension: this._mocksExtension,
       logLevel: this._logLevel,
@@ -360,9 +399,10 @@ export class HttpConfigurationBuilder {
       mockProviderFactories: this._mockProviderFactories,
       preHandlerMiddlewares: this._preHandlerMiddlewares,
       pluginFactories: this._pluginFactories,
+      watch: this._watch,
 
-      modeIs(mode: Mode): boolean {
-        return this.mode >= mode
+      modeIsAtLeast(mode: Mode): boolean {
+        return Modes[this.mode] >= Modes[mode]
       }
     }
   }

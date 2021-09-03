@@ -3,10 +3,9 @@
 import * as Fs from 'fs'
 import { red, bold } from 'colorette'
 import { listFilenames, noNullElements, notBlank, notEmpty } from '@mockinho/core'
-import { chooseMockFileParser } from './chooseMockFileParser'
 import { InvalidMockFileError } from './InvalidMockFileError'
-import { ParseResult, parseMockFile } from './parseMockFile'
 import { MockFile } from './MockFile'
+import { loadSingleMockFile } from './loadSingleMockFile'
 
 export async function loadMockFiles(
   mockRoot: string,
@@ -22,16 +21,7 @@ export async function loadMockFiles(
   }
 
   const parseResults = await Promise.all(
-    listFilenames(mockRoot, isMockFile(extensions)).map(
-      file =>
-        new Promise<ParseResult>((resolve, reject) =>
-          Fs.readFile(file, 'utf-8', (err, data) =>
-            err
-              ? reject(err)
-              : resolve(parseMockFile(file, () => chooseMockFileParser(ext(file))(data)))
-          )
-        )
-    )
+    listFilenames(mockRoot, isMockFile(extensions)).map(loadSingleMockFile)
   )
 
   const errors = parseResults.filter(x => x.error)
@@ -63,5 +53,3 @@ const isMockFile =
   (extensions: Array<string>) =>
   (filename: string): boolean =>
     extensions.some(x => filename.indexOf(x) > -1)
-
-const ext = (filename: string): string => filename.split('.').pop()!
