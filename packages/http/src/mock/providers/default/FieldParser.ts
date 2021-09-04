@@ -1,6 +1,6 @@
 import { Matcher } from '@mockinho/core'
-import { HttpConfiguration } from '../../config'
-import { HttpMockBuilder } from '../../mock'
+import { Configuration } from '../../../config'
+import { HttpMockBuilder } from '../..'
 import { MockFile } from './MockFile'
 
 export interface FieldParser {
@@ -14,7 +14,7 @@ export interface FieldParser {
   ): Matcher<T> | undefined
 
   parse(
-    configurations: HttpConfiguration,
+    configurations: Configuration,
     filename: string,
     mock: MockFile,
     mockBuilder: HttpMockBuilder

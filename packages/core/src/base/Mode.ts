@@ -1,8 +1,8 @@
-export type Mode = 'silent' | 'info' | 'detailed' | 'verbose'
+export type Mode = 'silent' | 'info' | 'verbose' | 'trace'
 
 export const Modes: Record<string, number> = {
   silent: 10,
   info: 20,
-  detailed: 30,
-  verbose: 40
+  verbose: 30,
+  trace: 40
 }

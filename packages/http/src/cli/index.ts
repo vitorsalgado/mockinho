@@ -6,7 +6,7 @@ import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs'
 import { Mode } from '@mockinho/core'
 import Pkg from '../../package.json'
-import { CliArgv } from '../config/CliArgv'
+import { Argv } from '../config'
 import { run } from './run'
 import { printErrorAndExit } from './utils'
 
@@ -43,7 +43,7 @@ Yargs(hideBin(process.argv))
     mode: {
       alias: 'm',
       describe: 'Mock server information detail',
-      choices: ['silent', 'info', 'verbose', 'detailed'] as Array<Mode>,
+      choices: ['silent', 'info', 'trace', 'verbose'] as Array<Mode>,
       type: 'string'
     },
 
@@ -233,4 +233,4 @@ Yargs(hideBin(process.argv))
     }
   })
   .parseAsync()
-  .then(argv => run(argv as unknown as CliArgv).catch(printErrorAndExit))
+  .then(argv => run(argv as unknown as Argv).catch(printErrorAndExit))

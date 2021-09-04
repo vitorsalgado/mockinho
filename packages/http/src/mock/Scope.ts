@@ -1,9 +1,19 @@
 import { yellowBright, yellow, bold } from 'colorette'
+import { MockaccinoError } from '@mockinho/core'
+import { ErrorCodes } from '../types'
 import { HttpMockRepository } from './HttpMockRepository'
 import { HttpMock } from './HttpMock'
-import { PendingHttpMockScopeError } from './errors/PendingHttpMockScopeError'
 
-export class HttpMockScope {
+export class PendingScopeError extends MockaccinoError {
+  constructor(pending: Array<HttpMock>) {
+    super(
+      `There are still mocked requests have not been called.\n${pending.join('\n')}`,
+      ErrorCodes.ERR_PENDING_SCOPE
+    )
+  }
+}
+
+export class Scope {
   constructor(
     private readonly mockRepository: HttpMockRepository,
     private readonly mocks: Array<string>
@@ -15,7 +25,7 @@ export class HttpMockScope {
 
   ensureIsDone(): void {
     if (!this.isDone()) {
-      throw new PendingHttpMockScopeError(this.pendingMocks())
+      throw new PendingScopeError(this.pendingMocks())
     }
   }
 

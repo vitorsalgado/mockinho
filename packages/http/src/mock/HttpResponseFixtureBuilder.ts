@@ -10,7 +10,7 @@ import { HttpContext } from '../HttpContext'
 import { HttpResponseFixture } from './HttpResponseFixture'
 import { Cookie } from './Cookie'
 import { ClearCookie } from './Cookie'
-import { InvalidResponseFixtureError } from './errors/InvalidResponseFixtureError'
+import { InvalidResponseFixtureError } from './errors'
 import { HttpMock } from './HttpMock'
 
 const access = Util.promisify(Fs.access)

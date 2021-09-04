@@ -6,7 +6,7 @@ import { HttpResponseFixtureBuilder } from './HttpResponseFixtureBuilder'
 import { HttpResponseFixtureBuilderFunction } from './HttpResponseFixtureBuilder'
 import { HttpResponseFixture } from './HttpResponseFixture'
 import { HttpMock } from './HttpMock'
-import { InvalidResponseFixtureError } from './errors/InvalidResponseFixtureError'
+import { InvalidResponseFixtureError } from './errors'
 
 export type MultiResponseStrategy = 'sequential' | 'random'
 

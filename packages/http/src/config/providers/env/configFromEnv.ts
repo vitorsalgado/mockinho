@@ -1,9 +1,9 @@
 import { Mode } from '@mockinho/core'
-import { ConfigBuilder } from '../ConfigBuilder'
-import { rec } from '../../rec/rec'
+import { ConfigurationBuilder } from '../../ConfigurationBuilder'
+import { rec } from '../../../rec/rec'
 
 export function configFromEnv(env: Record<string, unknown>) {
-  return async function (builder: ConfigBuilder): Promise<void> {
+  return async function (builder: ConfigurationBuilder): Promise<void> {
     if (env.MOCK_MODE) builder.mode(env.MOCK_MODE as Mode)
 
     if (env.MOCK_HTTP_PORT) builder.httpPort(parseInt(env.MOCK_HTTP_PORT as string))

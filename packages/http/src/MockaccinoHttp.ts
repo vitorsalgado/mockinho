@@ -5,19 +5,19 @@ import { ScenarioRepository } from '@mockinho/core'
 import { ScenarioInMemoryRepository } from '@mockinho/core'
 import { PinoLogger } from '@mockinho/core'
 import { LoggerUtil } from '@mockinho/core'
-import { ConfigBuilder } from './config'
-import { HttpConfiguration } from './config'
+import { ConfigurationBuilder } from './config'
+import { Configuration } from './config'
 import { onRequestMatched, onRequestNotMatched, onRequestReceived } from './events'
-import { HttpEvents } from './events'
+import { Events } from './events'
 import { HttpContext } from './HttpContext'
-import { HttpMockBuilder, HttpMockScope } from './mock'
+import { HttpMockBuilder, Scope } from './mock'
 import { HttpMockRepository } from './mock'
 import { HttpMock } from './mock'
 import { DefaultConfiguration } from './types'
-import { MockProvider } from './mockproviders/MockProvider'
+import { MockProvider } from './mock/providers/MockProvider'
 import { HttpServer, HttpServerInfo } from './HttpServer'
 import { HttpRequest } from './HttpRequest'
-import { defaultMockProviderFactory } from './mockproviders/default/defaultMockProviderFactory'
+import { defaultMockProviderFactory } from './mock/providers/default/defaultMockProviderFactory'
 
 export class MockaccinoHttp {
   // --
@@ -32,8 +32,8 @@ export class MockaccinoHttp {
   private readonly _mockProviders: Array<MockProvider> = []
   private readonly _plugins: Array<Plugin<HttpRequest, HttpMock>> = []
 
-  constructor(config: ConfigBuilder | HttpConfiguration) {
-    const configurations = config instanceof ConfigBuilder ? config.build() : config
+  constructor(config: ConfigurationBuilder | Configuration) {
+    const configurations = config instanceof ConfigurationBuilder ? config.build() : config
 
     LoggerUtil.instance().subscribe(new PinoLogger(configurations.logLevel))
 
@@ -69,9 +69,7 @@ export class MockaccinoHttp {
 
   // region Entrypoint
 
-  mock(
-    ...mockBuilder: Array<HttpMockBuilder | ((context: HttpContext) => HttpMock)>
-  ): HttpMockScope {
+  mock(...mockBuilder: Array<HttpMockBuilder | ((context: HttpContext) => HttpMock)>): Scope {
     notEmpty(mockBuilder)
 
     const added = mockBuilder
@@ -90,7 +88,7 @@ export class MockaccinoHttp {
       .map(mock => this._mockRepository.save(mock))
       .map(mock => mock.id)
 
-    return new HttpMockScope(this._mockRepository, added)
+    return new Scope(this._mockRepository, added)
   }
 
   async start(): Promise<HttpServerInfo> {
@@ -107,13 +105,13 @@ export class MockaccinoHttp {
     return this.applyMocksFromProviders()
   }
 
-  on<E extends keyof HttpEvents>(event: E, listener: (args: HttpEvents[E]) => void): this {
+  on<E extends keyof Events>(event: E, listener: (args: Events[E]) => void): this {
     notBlank(event)
     this._context.on(event, listener)
     return this
   }
 
-  configuration(): HttpConfiguration {
+  configuration(): Configuration {
     return this._configuration
   }
 

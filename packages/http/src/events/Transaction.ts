@@ -1,7 +1,7 @@
 import { Express } from 'express'
 import { HttpMethods } from '../types'
 
-export interface HttpTransaction {
+export interface Transaction {
   id: string
   elapsed: number
   proxied: boolean

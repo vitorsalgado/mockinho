@@ -1,7 +1,7 @@
 import Path from 'path'
 import Supertest from 'supertest'
 import { run } from '../run'
-import { CliArgv } from '../../config/CliArgv'
+import { Argv } from '../../config/providers/argv/Argv'
 import { get } from '../../mock'
 import { ok } from '../../mock'
 
@@ -22,7 +22,7 @@ describe('cli', function () {
 
   describe('when using a typescript configuration file', function () {
     it('should read the configuration', async function () {
-      const argv: CliArgv = { rootDir: __dirname }
+      const argv: Argv = { rootDir: __dirname }
       const mockhttp = await run(argv)
       const config = mockhttp.configuration()
 
@@ -49,7 +49,7 @@ describe('cli', function () {
 
   describe('when specifying a custom javascript config file', function () {
     it('should read the specific configuration and not the default ones', async function () {
-      const argv: CliArgv = { rootDir: __dirname, config: '.mockhttprc-custom.js' }
+      const argv: Argv = { rootDir: __dirname, config: '.mockhttprc-custom.js' }
       const mockhttp = await run(argv)
       const config = mockhttp.configuration()
 
@@ -90,7 +90,7 @@ describe('cli', function () {
       process.env.MOCK_COOKIE_SECRETS = 'super_secret'
       process.env.MOCK_PROXY = 'https://example.org'
 
-      const argv: CliArgv = { rootDir: __dirname }
+      const argv: Argv = { rootDir: __dirname }
       const mockhttp = await run(argv)
       const config = mockhttp.configuration()
 
@@ -141,7 +141,7 @@ describe('cli', function () {
       process.env.MOCK_PROXY = 'https://example.org'
       process.env.MOCK_WATCH = 'true'
 
-      const argv: CliArgv = {
+      const argv: Argv = {
         noHttp: false,
         port: 0,
         host: 'localhost',
@@ -182,7 +182,7 @@ describe('cli', function () {
     })
 
     it('should set all parameters correctly', async function () {
-      const argv: CliArgv = {
+      const argv: Argv = {
         mode: 'silent',
         noHttp: false,
         port: 0,

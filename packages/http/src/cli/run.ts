@@ -1,16 +1,16 @@
-import { opts } from '../config'
 import { mockHttp } from '..'
 import { MockaccinoHttp } from '..'
 import Pkg from '../../package.json'
-import { CliArgv } from '../config/CliArgv'
-import { configFromFile } from '../config/providers/configFromFile'
-import { configFromArgv } from '../config/providers/configFromArgv'
-import { configFromEnv } from '../config/providers/configFromEnv'
+import { Argv } from '../config'
+import { configFromFile } from '../config/providers/file/configFromFile'
+import { configFromArgv } from '../config/providers/argv/configFromArgv'
+import { configFromEnv } from '../config/providers/env/configFromEnv'
+import { opts } from '../config/opts'
 import { printInfo } from './printInfo'
 import { configureWatcher } from './configureWatcher'
 
-export async function run(options: CliArgv): Promise<MockaccinoHttp> {
-  const builder = opts().enableFileMocks().detailed()
+export async function run(options: Argv): Promise<MockaccinoHttp> {
+  const builder = opts().enableFileMocks().verbose()
 
   const configurationProviders = [
     configFromFile(options.rootDir, options.config),

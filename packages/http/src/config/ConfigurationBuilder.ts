@@ -13,13 +13,12 @@ import { notBlank } from '@mockinho/core'
 import { PluginFactory } from '@mockinho/core'
 import { Level } from '@mockinho/core'
 import { Mode } from '@mockinho/core'
-import { Modes } from '@mockinho/core'
 import { RecordOptions } from '../rec/RecordOptions'
 import { RecordOptionsBuilder } from '../rec/RecordOptionsBuilder'
-import { MockProviderFactory } from '../mockproviders/MockProvider'
-import { FieldParser } from '../mockproviders/default/FieldParser'
+import { MockProviderFactory } from '../mock/providers/MockProvider'
+import { FieldParser } from '../mock/providers/default/FieldParser'
 import { HttpRequest } from '../HttpRequest'
-import { HttpConfiguration } from './HttpConfiguration'
+import { Configuration } from './Configuration'
 
 export type PreMiddleware = (
   req: HttpRequest,
@@ -27,7 +26,7 @@ export type PreMiddleware = (
   next: NextFunction
 ) => void | Promise<void>
 
-export class ConfigBuilder {
+export class ConfigurationBuilder {
   private static MOCK_DEFAULT_FIXTURES_DIR = '__fixtures__'
 
   private _useHttp: boolean = false
@@ -40,11 +39,10 @@ export class ConfigBuilder {
   private _httpsHost: string = '127.0.0.1'
   private _httpsOptions?: HttpsServerOptions
   private _httpsDynamicPort: boolean = true
-  private _mode: Mode = 'detailed'
+  private _mode: Mode = 'verbose'
   private _timeout: number = 5 * 60 * 1000
   private _rootDir: string = process.cwd()
   private _logLevel: Level = 'error'
-  private _trace: boolean = false
   private _loadMockFiles: boolean = false
   private _mocksDirectory: string = ''
   private _mocksExtension: string = 'mock'
@@ -52,7 +50,7 @@ export class ConfigBuilder {
   private _proxyOptions: Options = { secure: false, changeOrigin: true }
   private _recordEnabled: boolean = false
   private _recordOptions?: RecordOptions
-  private _mockProviderFactories: Array<MockProviderFactory<HttpConfiguration>> = []
+  private _mockProviderFactories: Array<MockProviderFactory<Configuration>> = []
   private _mockFieldParsers: Array<FieldParser> = []
   private _pluginFactories: Array<PluginFactory> = []
   private _watch: boolean = false
@@ -61,7 +59,7 @@ export class ConfigBuilder {
   private _multiPartOptions?: Multer.Options
   private _cors: boolean = false
   private _corsOptions?: CorsOptions
-  private _cookieSecrets?: string | Array<string>
+  private _cookieSecrets: Array<string> = []
   private _cookieOptions?: CookieParseOptions
   private _preHandlerMiddlewares: Array<Array<string | PreMiddleware>> = []
 
@@ -145,13 +143,13 @@ export class ConfigBuilder {
     return this
   }
 
-  detailed(): this {
-    this._mode = 'detailed'
+  verbose(): this {
+    this._mode = 'verbose'
     return this
   }
 
-  verbose(): this {
-    this._mode = 'verbose'
+  trace(): this {
+    this._mode = 'trace'
     return this
   }
 
@@ -204,17 +202,12 @@ export class ConfigBuilder {
     return this
   }
 
-  trace(value: boolean = true): this {
-    this._trace = value
-    return this
-  }
-
   watch(value: boolean = true): this {
     this._watch = value
     return this
   }
 
-  addMockProviderFactory(...factory: Array<MockProviderFactory<HttpConfiguration>>): this {
+  addMockProviderFactory(...factory: Array<MockProviderFactory<Configuration>>): this {
     this._mockProviderFactories.push(...factory)
     return this
   }
@@ -255,7 +248,12 @@ export class ConfigBuilder {
   }
 
   cookieOptions(secrets: string | string[], options?: CookieParse.CookieParseOptions): this {
-    this._cookieSecrets = secrets
+    if (typeof secrets === 'string') {
+      this._cookieSecrets = [secrets]
+    } else {
+      this._cookieSecrets = secrets
+    }
+
     this._cookieOptions = options
     return this
   }
@@ -294,13 +292,16 @@ export class ConfigBuilder {
 
   // endregion
 
-  build(): HttpConfiguration {
+  build(): Configuration {
     if (!this._useHttp && !this._useHttps) {
       this._useHttp = true
     }
 
     if (!this._mocksDirectory) {
-      this._mocksDirectory = Path.join(this._rootDir, `${ConfigBuilder.MOCK_DEFAULT_FIXTURES_DIR}`)
+      this._mocksDirectory = Path.join(
+        this._rootDir,
+        `${ConfigurationBuilder.MOCK_DEFAULT_FIXTURES_DIR}`
+      )
     }
 
     if (this._formBodyOptions) {
@@ -367,43 +368,39 @@ export class ConfigBuilder {
       }
     })
 
-    return {
-      useHttp: this._useHttp,
-      httpPort: this._httpPort,
-      httpHost: this._httpHost,
-      httpOptions: this._httpOptions,
-      httpDynamicPort: this._httpDynamicPort,
-      useHttps: this._useHttps,
-      httpsPort: this._httpsPort,
-      httpsHost: this._httpsHost,
-      httpsDynamicPort: this._httpsDynamicPort,
-      httpsOptions: this._httpsOptions,
-      timeout: this._timeout,
-      mockFilesEnabled: this._loadMockFiles,
-      rootDir: this._rootDir,
-      mockDirectory: this._mocksDirectory,
-      mockFilesExtension: this._mocksExtension,
-      logLevel: this._logLevel,
-      mode: this._mode,
-      formUrlEncodedOptions: this._formBodyOptions,
-      multiPartOptions: this._multiPartOptions,
-      corsEnabled: this._cors,
-      corsOptions: this._corsOptions,
-      cookieSecrets: this._cookieSecrets,
-      cookieOptions: this._cookieOptions,
-      proxyOptions: this._proxyOptions,
-      proxyEnabled: this._proxyAll,
-      recordEnabled: this._recordEnabled,
-      recordOptions: this._recordOptions,
-      mockFieldParsers: this._mockFieldParsers,
-      mockProviderFactories: this._mockProviderFactories,
-      preHandlerMiddlewares: this._preHandlerMiddlewares,
-      pluginFactories: this._pluginFactories,
-      watch: this._watch,
-
-      modeIsAtLeast(mode: Mode): boolean {
-        return Modes[this.mode] >= Modes[mode]
-      }
-    }
+    return new Configuration(
+      this._mode,
+      this._logLevel,
+      this._useHttp,
+      this._httpPort,
+      this._httpHost,
+      this._httpOptions,
+      this._httpDynamicPort,
+      this._useHttps,
+      this._httpsPort,
+      this._httpsHost,
+      this._httpsOptions,
+      this._httpsDynamicPort,
+      this._timeout,
+      this._rootDir,
+      this._mocksDirectory,
+      this._mocksExtension,
+      this._loadMockFiles,
+      this._recordEnabled,
+      this._recordOptions,
+      this._mockProviderFactories,
+      this._mockFieldParsers,
+      this._pluginFactories,
+      this._watch,
+      this._formBodyOptions,
+      this._multiPartOptions,
+      this._cors,
+      this._corsOptions,
+      this._cookieSecrets,
+      this._cookieOptions,
+      this._proxyAll,
+      this._proxyOptions,
+      this._preHandlerMiddlewares
+    )
   }
 }

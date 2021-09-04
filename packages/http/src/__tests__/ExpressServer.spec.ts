@@ -2,7 +2,7 @@ import Supertest from 'supertest'
 import { containing } from '@mockinho/core-matchers'
 import { ScenarioInMemoryRepository } from '@mockinho/core'
 import { HttpContext } from '../HttpContext'
-import { opts, post, ConfigBuilder, HttpServer } from '..'
+import { opts, post, ConfigurationBuilder, HttpServer } from '..'
 import { HttpMockRepository } from '..'
 
 import { urlPath } from '../matchers'
@@ -13,7 +13,7 @@ import mockHttp from '../mockHttp'
 describe('Express Http Server', function () {
   const $ = mockHttp(opts().dynamicHttpPort().trace())
 
-  const builder = new ConfigBuilder()
+  const builder = new ConfigurationBuilder()
 
   const cfg = builder
     .httpPort(3000)

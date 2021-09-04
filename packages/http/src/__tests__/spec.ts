@@ -2,12 +2,12 @@ import * as Path from 'path'
 import Supertest from 'supertest'
 import { containing, equalsTo, jsonPath } from '@mockinho/core-matchers'
 import { fromFile } from '@mockinho/core'
-import { opts } from '../config'
 import { get } from '..'
 import { mockHttp } from '..'
 import { urlPath } from '../matchers'
 import { ok, okJSON, post } from '../mock'
 import { Headers, MediaTypes } from '../types'
+import { opts } from '../config/opts'
 
 const fixture = (name: string) => Path.join(__dirname, `__fixtures__/__content__${name}`)
 

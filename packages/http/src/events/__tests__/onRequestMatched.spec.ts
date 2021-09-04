@@ -7,7 +7,7 @@ describe('onRequestMatched', function () {
   it('should accept a regular event payload', function () {
     onRequestMatched({
       url: 'http://localhost:8080',
-      detailed: true,
+      verbose: true,
       start: nowInMs(),
       method: 'PATCH',
       responseDefinition: new HttpResponseFixture(
@@ -29,7 +29,7 @@ describe('onRequestMatched', function () {
   it('should accept no response body', function () {
     onRequestMatched({
       url: 'http://localhost:8080',
-      detailed: true,
+      verbose: true,
       start: nowInMs(),
       method: 'POST',
       responseDefinition: new HttpResponseFixture(
@@ -51,7 +51,7 @@ describe('onRequestMatched', function () {
   it('should accept a buffer body', function () {
     onRequestMatched({
       url: 'http://localhost:8080',
-      detailed: true,
+      verbose: true,
       start: nowInMs(),
       method: 'DELETE',
       responseDefinition: new HttpResponseFixture(
@@ -79,7 +79,7 @@ describe('onRequestMatched', function () {
 
     onRequestMatched({
       url: 'http://localhost:8080',
-      detailed: true,
+      verbose: true,
       start: nowInMs(),
       method: 'GET',
       responseDefinition: new HttpResponseFixture(

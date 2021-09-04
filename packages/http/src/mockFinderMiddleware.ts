@@ -9,19 +9,19 @@ import { HttpResponseFixture, HttpMock } from './mock'
 import { BodyType } from './types'
 import { Headers } from './types'
 import { MediaTypes } from './types'
-import { HttpConfiguration } from './config'
+import { Configuration } from './config'
 
 export function mockFinderMiddleware(
   context: HttpContext
 ): (request: HttpRequest, reply: Response, next: NextFunction) => Promise<void> {
   const configurations = context.configuration
-  const modeIsDetailed = configurations.modeIsAtLeast('detailed')
+  const isVerbose = configurations.modeIsAtLeast('verbose')
   const proxy = HttpProxy.createProxyServer()
 
   return async function (req: HttpRequest, res: Response, next: NextFunction): Promise<void> {
     proxy.removeAllListeners()
 
-    const result = findMockForRequest<HttpRequest, HttpConfiguration, HttpMock>(req, context)
+    const result = findMockForRequest<HttpRequest, Configuration, HttpMock>(req, context)
 
     if (result.hasMatch()) {
       const matched = result.matched()
@@ -82,7 +82,7 @@ export function mockFinderMiddleware(
         return
       }
 
-      onRequestMatched(context, modeIsDetailed, req, response, matched)
+      onRequestMatched(context, isVerbose, req, response, matched)
       replier()
 
       return
@@ -134,7 +134,7 @@ function onRequestMatched(
   matched: HttpMock
 ) {
   context.emit('requestMatched', {
-    detailed: verbose,
+    verbose,
     start: req.start,
     url: req.url,
     method: req.method,

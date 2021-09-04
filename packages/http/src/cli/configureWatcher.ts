@@ -4,13 +4,13 @@ import * as Fs from 'fs'
 import Path from 'path'
 import { blue } from 'colorette'
 import { red } from 'colorette'
-import { HttpConfiguration } from '../config'
+import { Configuration } from '../config'
 import { MockaccinoHttp } from '../MockaccinoHttp'
-import { loadSingleMockFile } from '../mockproviders/default/loadSingleMockFile'
-import { buildMockFromFile } from '../mockproviders/default/buildMockFromFile'
+import { loadSingleMockFile } from '../mock/providers/default/loadSingleMockFile'
+import { buildMockFromFile } from '../mock/providers/default/buildMockFromFile'
 import { watcher } from './watcher'
 
-export function configureWatcher(config: HttpConfiguration, mockhttp: MockaccinoHttp): void {
+export function configureWatcher(config: Configuration, mockhttp: MockaccinoHttp): void {
   const fsWatcher = watcher(
     config.mockDirectory,
     {

@@ -2,11 +2,11 @@ import { Context } from './Context'
 import { FindMockResult } from './FindMockResult'
 import { MockRepository } from './MockRepository'
 import { Mock } from './Mock'
-import { Configuration } from './Configuration'
+import { BaseConfiguration } from './BaseConfiguration'
 import { inspectedMatcher } from './inspectedMatcher'
 import { Matcher } from './Matcher'
 
-export function findMockForRequest<Req, Config extends Configuration, M extends Mock>(
+export function findMockForRequest<Req, Config extends BaseConfiguration, M extends Mock>(
   request: Req,
   context: Context<Config, M, MockRepository<M>>
 ): FindMockResult<M> {
@@ -27,7 +27,7 @@ export function findMockForRequest<Req, Config extends Configuration, M extends 
 
     if (
       mock.expectations.every(expectation => {
-        const matcher = context.configuration.modeIsAtLeast('verbose')
+        const matcher = context.configuration.modeIsAtLeast('trace')
           ? inspectedMatcher(expectation, mock)
           : expectation.matcher
 

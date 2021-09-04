@@ -1,10 +1,10 @@
 import { Stream } from 'stream'
 import { blue, blueBright, bold } from 'colorette'
-import { HttpEvents } from './HttpEvents'
+import { Events } from './Events'
 import { ifVerbose } from './utils'
 import { extractPathname } from './utils'
 
-export function onRequestReceived(event: HttpEvents['request']): void {
+export function onRequestReceived(event: Events['request']): void {
   // eslint-disable-next-line no-console
   console.log(
     `${blueBright(bold('REQUEST RECEIVED'))} ${new Date().toISOString()} ${blueBright(
@@ -13,7 +13,7 @@ export function onRequestReceived(event: HttpEvents['request']): void {
       '\n' +
       `${event.method} ${event.url}\n` +
       ifVerbose(
-        event.detailed,
+        event.verbose,
         `${blue('Headers:')}\n` +
           `${Object.entries(event.headers)
             .map(([key, value]) => `${key}: ${value}`)

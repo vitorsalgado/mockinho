@@ -4,8 +4,8 @@ import { equalsTo, containing, jsonPath } from '@mockinho/core-matchers'
 import { opts, post, urlPath } from '..'
 import { mockHttp } from '..'
 import { ok } from '../mock'
-import { fileContent } from '../matchers/fileContent'
-import { fieldPath } from '../matchers/fieldPath'
+import { fileContent } from '../matchers'
+import { fieldPath } from '../matchers'
 
 describe('Form MultiPart', function () {
   const $ = mockHttp(opts().dynamicHttpPort())

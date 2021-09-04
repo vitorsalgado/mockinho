@@ -79,7 +79,7 @@ describe('Builder Alternatives', function () {
         .expect(res => {
           expect(res.body).toEqual(body)
           expect(res.header['x-id']).toEqual('test-id')
-          expect(res.header['x-verbose']).toEqual(String(false))
+          expect(res.header['x-verbose']).toEqual(String(true))
           expect(res.header['x-method']).toEqual('POST')
         })
     })

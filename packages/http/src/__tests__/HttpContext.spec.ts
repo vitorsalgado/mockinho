@@ -1,11 +1,11 @@
 import { ScenarioInMemoryRepository } from '@mockinho/core'
 import { HttpContext } from '../HttpContext'
-import { ConfigBuilder } from '../config'
+import { ConfigurationBuilder } from '../config'
 import { HttpMockRepository } from '../mock'
 
 describe('HttpContext', function () {
   it('should provide deps instances', function () {
-    const builder = new ConfigBuilder()
+    const builder = new ConfigurationBuilder()
 
     const cfg = builder
       .httpPort(3000)

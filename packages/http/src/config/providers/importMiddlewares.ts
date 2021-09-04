@@ -1,12 +1,12 @@
 import { requireOrImportModule } from '@mockinho/core'
-import { ConfigBuilder } from '../ConfigBuilder'
-import { PreMiddleware } from '../ConfigBuilder'
+import { ConfigurationBuilder } from '../ConfigurationBuilder'
+import { PreMiddleware } from '../ConfigurationBuilder'
 
 const SEPARATOR = '|'
 
-export async function importMiddlewaresFromConfig(
+export async function importMiddlewares(
   components: Array<string>,
-  builder: ConfigBuilder
+  builder: ConfigurationBuilder
 ): Promise<void> {
   for (const component of components) {
     if (component.includes(SEPARATOR)) {

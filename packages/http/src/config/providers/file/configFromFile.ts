@@ -1,15 +1,15 @@
 import Fs from 'fs'
 import Path from 'path'
 import { requireOrImportModule } from '@mockinho/core'
-import { ConfigBuilder } from '../ConfigBuilder'
-import { Config } from '../Config'
-import { importMiddlewaresFromConfig } from './importMiddlewaresFromConfig'
+import { ConfigurationBuilder } from '../../ConfigurationBuilder'
+import { importMiddlewares } from '../importMiddlewares'
+import { InitialOptions } from './InitialOptions'
 
 const Files = ['.mockhttprc.js', '.mockhttprc.ts', '.mockhttprc.json', '.mockhttprc']
 
 export function configFromFile(rootDir: string, configFile?: string) {
-  return async function (builder: ConfigBuilder): Promise<void> {
-    let config: Config | undefined
+  return async function (builder: ConfigurationBuilder): Promise<void> {
+    let config: InitialOptions | undefined
 
     if (configFile) {
       const path = Path.isAbsolute(configFile) ? configFile : Path.join(rootDir, configFile)
@@ -70,7 +70,7 @@ export function configFromFile(rootDir: string, configFile?: string) {
     }
 
     if (config.middlewares) {
-      await importMiddlewaresFromConfig(config.middlewares, builder)
+      await importMiddlewares(config.middlewares, builder)
     }
   }
 }

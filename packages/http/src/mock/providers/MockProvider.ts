@@ -1,5 +1,5 @@
-import { HttpServer } from '../HttpServer'
-import { HttpMockBuilder } from '../mock'
+import { HttpServer } from '../../HttpServer'
+import { HttpMockBuilder } from '..'
 
 export type MockProvider = () => Promise<Array<HttpMockBuilder>>
 

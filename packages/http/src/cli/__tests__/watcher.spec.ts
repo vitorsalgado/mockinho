@@ -3,7 +3,7 @@ import * as Fs from 'fs'
 import Os from 'os'
 import Supertest from 'supertest'
 import { sleep } from '@mockinho/core'
-import { CliArgv } from '../../config/CliArgv'
+import { Argv } from '../../config/providers/argv/Argv'
 import { run } from '../run'
 
 describe.skip('watcher', function () {
@@ -34,8 +34,8 @@ describe.skip('watcher', function () {
 
       Fs.mkdirSync(mocks)
 
-      const argv: CliArgv = {
-        mode: 'detailed',
+      const argv: Argv = {
+        mode: 'verbose',
         port: 0,
         noHttps: true,
         rootDir: tmp,

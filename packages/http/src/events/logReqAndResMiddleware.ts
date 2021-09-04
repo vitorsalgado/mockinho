@@ -4,7 +4,7 @@ import { nowInMs } from '@mockinho/core'
 import { HttpContext } from '../HttpContext'
 import { HttpRequest } from '../HttpRequest'
 
-export function logHttpRequestAndResponse(context: HttpContext) {
+export function logReqAndResMiddleware(context: HttpContext) {
   return function (req: HttpRequest, res: Response, next: NextFunction): void {
     res.on('close', () =>
       context.emit('complete', {

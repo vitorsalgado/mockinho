@@ -1,7 +1,7 @@
 import { Stream } from 'stream'
 import { HttpResponseFixtureBuilder } from './mock'
 import { HttpMockBuilder } from './mock'
-import { HttpConfiguration } from './config'
+import { Configuration } from './config'
 
 export type Schemes = 'http' | 'https'
 export type BodyType =
@@ -13,7 +13,7 @@ export type BodyType =
   | unknown
   | null
 export type HttpMethods = string | 'DELETE' | 'GET' | 'HEAD' | 'PATCH' | 'POST' | 'PUT' | 'OPTIONS'
-export type DefaultConfiguration = HttpConfiguration
+export type DefaultConfiguration = Configuration
 export type DefaultResponseBuilder = HttpResponseFixtureBuilder
 export type DefaultMockBuilder = HttpMockBuilder
 

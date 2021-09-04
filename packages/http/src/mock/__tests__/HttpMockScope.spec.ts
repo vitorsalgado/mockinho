@@ -1,6 +1,7 @@
 import Supertest from 'supertest'
-import { opts, PendingHttpMockScopeError, post } from '../..'
+import { opts, post } from '../..'
 import { mockHttp } from '../..'
+import { PendingScopeError } from '../..'
 import { urlPath } from '../../matchers'
 import { get } from '..'
 import { okJSON } from '../entry'
@@ -61,7 +62,7 @@ describe('HTTP Scope', function () {
       .expect(200)
       .expect(res => expect(res.body.data).toEqual('get ok'))
 
-    expect(() => scope.ensureIsDone()).toThrowError(PendingHttpMockScopeError)
+    expect(() => scope.ensureIsDone()).toThrowError(PendingScopeError)
   })
 
   it('should print pending mocks', async function () {

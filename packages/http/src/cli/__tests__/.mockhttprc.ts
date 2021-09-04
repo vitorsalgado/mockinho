@@ -1,7 +1,7 @@
 import Path from 'path'
-import { Config } from '../../config'
+import { InitialOptions } from '../../config'
 
-const config: Config = {
+const config: InitialOptions = {
   mode: 'info',
 
   http: {

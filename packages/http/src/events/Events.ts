@@ -1,9 +1,9 @@
 import { HttpMock } from '../mock'
 import { HttpMethods } from '../types'
 import { HttpServerInfo } from '../HttpServer'
-import { HttpTransaction } from './HttpTransaction'
+import { Transaction } from './Transaction'
 
-export interface HttpEvents {
+export interface Events {
   started: {
     info: HttpServerInfo
   }
@@ -20,7 +20,7 @@ export interface HttpEvents {
   }
 
   request: {
-    readonly detailed: boolean
+    readonly verbose: boolean
     readonly method: HttpMethods
     readonly url: string
     readonly headers: Record<string, string>
@@ -34,7 +34,7 @@ export interface HttpEvents {
   }
 
   requestMatched: {
-    readonly detailed: boolean
+    readonly verbose: boolean
     readonly start: number
     readonly method: HttpMethods
     readonly url: string
@@ -50,5 +50,5 @@ export interface HttpEvents {
     }
   }
 
-  complete: HttpTransaction
+  complete: Transaction
 }

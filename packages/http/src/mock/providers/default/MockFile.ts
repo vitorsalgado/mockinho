@@ -1,4 +1,4 @@
-import { MultiResponseStrategy } from '../../mock/HttpMultipleResponseFixtureBuilder'
+import { MultiResponseStrategy } from '../../HttpMultipleResponseFixtureBuilder'
 
 export interface MockFileResponse {
   status: number

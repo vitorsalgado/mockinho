@@ -1,9 +1,9 @@
 import { yellow, yellowBright, bold } from 'colorette'
 import { HttpMock } from '../mock'
-import { HttpEvents } from './HttpEvents'
+import { Events } from './Events'
 import { extractPathname } from './utils'
 
-export function onRequestNotMatched(event: HttpEvents['requestNotMatched']): void {
+export function onRequestNotMatched(event: Events['requestNotMatched']): void {
   // eslint-disable-next-line no-console
   console.warn(
     `${yellowBright(bold('REQUEST WAS NOT MATCHED'))} ${new Date().toISOString()} ${yellow(

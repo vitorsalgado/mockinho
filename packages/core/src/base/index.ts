@@ -1,4 +1,4 @@
-export * from './Configuration'
+export * from './BaseConfiguration'
 export * from './Context'
 export * from './Expectation'
 export * from './findMockForRequest'

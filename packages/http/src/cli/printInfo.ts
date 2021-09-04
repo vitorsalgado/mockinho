@@ -2,15 +2,15 @@
 
 import { green } from 'colorette'
 import { greenBright } from 'colorette'
-import { HttpConfiguration } from '../config'
+import { Configuration } from '../config'
+import { Argv } from '../config'
 import { HttpServerInfo } from '../HttpServer'
-import { CliArgv } from '../config/CliArgv'
 import Banner from './banner'
 import { parseServerInfo } from './utils'
 
 export function printInfo(
-  config: HttpConfiguration,
-  options: CliArgv,
+  config: Configuration,
+  options: Argv,
   info: HttpServerInfo,
   pkg: Record<string, unknown>
 ): void {

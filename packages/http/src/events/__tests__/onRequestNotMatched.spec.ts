@@ -5,7 +5,7 @@ import { HttpMockBuilder, ok } from '../../mock'
 import { HttpMockRepository } from '../../mock'
 import { onRequestNotMatched } from '../onRequestNotMatched'
 import { HttpContext } from '../../HttpContext'
-import { opts } from '../../config'
+import { opts } from '../../config/opts'
 
 describe('onRequestNotMatched', function () {
   const fakeContext = () =>

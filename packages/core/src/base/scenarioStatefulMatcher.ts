@@ -1,10 +1,10 @@
-import { Configuration } from './Configuration'
+import { BaseConfiguration } from './BaseConfiguration'
 import { Mock } from './Mock'
 import { StatefulMatcher } from './StatefulMatcher'
 import { Matcher } from './Matcher'
 import { Scenario } from './Scenario'
 
-export function scenarioStatefulMatcher<C extends Configuration, M extends Mock>(
+export function scenarioStatefulMatcher<C extends BaseConfiguration, M extends Mock>(
   name: string,
   requiredState: string = Scenario.STATE_STARTED,
   newState: string = ''

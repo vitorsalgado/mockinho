@@ -3,9 +3,9 @@ import { green, greenBright, gray, bold, italic } from 'colorette'
 import { nowInMs } from '@mockinho/core'
 import { extractPathname } from './utils'
 import { ifVerbose } from './utils'
-import { HttpEvents } from './HttpEvents'
+import { Events } from './Events'
 
-export function onRequestMatched(event: HttpEvents['requestMatched']): void {
+export function onRequestMatched(event: Events['requestMatched']): void {
   // eslint-disable-next-line no-console
   console.log(
     `${greenBright(bold('REQUEST MATCHED'))} ${new Date().toISOString()} ${green(
@@ -14,7 +14,7 @@ export function onRequestMatched(event: HttpEvents['requestMatched']): void {
       '\n' +
       `${event.method} ${event.url}\n` +
       ifVerbose(
-        event.detailed,
+        event.verbose,
 
         '\n' +
           (event.mock.id || event.mock.sourceDescription || event.mock.name

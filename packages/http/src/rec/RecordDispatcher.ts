@@ -2,14 +2,14 @@ import './recordWorker'
 
 import Path from 'path'
 import { Worker } from 'worker_threads'
-import { HttpConfiguration } from '../config'
+import { Configuration } from '../config'
 import { HttpContext } from '../HttpContext'
 import { RecordDispatcherArgs } from './RecordDispatcherArgs'
 import { RecordData } from './RecordData'
 
 export class RecordDispatcher {
   private readonly worker: Worker
-  private readonly configuration: HttpConfiguration
+  private readonly configuration: Configuration
 
   constructor(private readonly context: HttpContext) {
     this.configuration = context.configuration

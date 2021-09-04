@@ -5,15 +5,15 @@ import Path from 'path'
 import { ServerOptions } from 'https'
 import { Options } from 'http-proxy-middleware'
 import { Level } from '@mockinho/core'
-import { CliArgv } from '../CliArgv'
-import { ConfigBuilder } from '../ConfigBuilder'
-import { isDef } from '../../cli/utils'
-import { keyValue } from '../../cli/utils'
-import { rec } from '../../rec/rec'
-import { importMiddlewaresFromConfig } from './importMiddlewaresFromConfig'
+import { ConfigurationBuilder } from '../../ConfigurationBuilder'
+import { isDef } from '../../../cli/utils'
+import { keyValue } from '../../../cli/utils'
+import { rec } from '../../../rec/rec'
+import { importMiddlewares } from '../importMiddlewares'
+import { Argv } from './Argv'
 
-export function configFromArgv(argv: CliArgv) {
-  return async function (builder: ConfigBuilder): Promise<void> {
+export function configFromArgv(argv: Argv) {
+  return async function (builder: ConfigurationBuilder): Promise<void> {
     if (isDef(argv.noHttp) && argv.noHttp) {
       builder.disableHttp()
     } else {
@@ -90,7 +90,7 @@ export function configFromArgv(argv: CliArgv) {
     if (isDef(argv.watch) && argv.watch) builder.watch(argv.watch)
 
     if (argv.use) {
-      await importMiddlewaresFromConfig(argv.use, builder)
+      await importMiddlewares(argv.use, builder)
     }
   }
 }

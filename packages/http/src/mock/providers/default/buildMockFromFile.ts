@@ -19,11 +19,11 @@ import { repeatTimes } from '@mockinho/core-matchers'
 import { hasLength } from '@mockinho/core-matchers'
 import { startsWith } from '@mockinho/core-matchers'
 import { trim } from '@mockinho/core-matchers'
-import { HttpConfiguration } from '../../config'
-import { urlPath, urlPathMatching } from '../../matchers'
-import { HttpMockBuilder, response } from '../../mock'
-import { HttpResponseFixtureBuilder } from '../../mock'
-import { multipleResponses } from '../../mock/entry/multipleResponses'
+import { Configuration } from '../../../config'
+import { urlPath, urlPathMatching } from '../../../matchers'
+import { HttpMockBuilder, response } from '../..'
+import { HttpResponseFixtureBuilder } from '../..'
+import { multipleResponses } from '../../entry/multipleResponses'
 import { InvalidMockFileError } from './InvalidMockFileError'
 import { MockFile } from './MockFile'
 import { MockFileResponse } from './MockFile'
@@ -34,7 +34,7 @@ import { findRequiredMatcherEntry } from './utils/findRequiredMatcherEntry'
 import { findOptionalParameter } from './utils/findOptionalParameter'
 import { FieldParser } from './FieldParser'
 
-export function buildMockFromFile<Config extends HttpConfiguration>(
+export function buildMockFromFile<Config extends Configuration>(
   configuration: Config,
   mock: MockFile,
   filename: string

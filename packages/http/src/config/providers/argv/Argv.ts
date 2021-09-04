@@ -1,6 +1,6 @@
 import { Mode } from '@mockinho/core'
 
-export interface CliArgv {
+export interface Argv {
   noHttp?: boolean
   port?: number
   host?: string

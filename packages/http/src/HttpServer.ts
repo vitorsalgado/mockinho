@@ -16,9 +16,9 @@ import { mockFinderMiddleware } from './mockFinderMiddleware'
 import { decorateRequestMiddleware } from './decorateRequestMiddleware'
 import { HttpRequest } from './HttpRequest'
 import { configureProxy } from './configureProxy'
-import { HttpConfiguration } from './config'
+import { Configuration } from './config'
 import { logIncomingRequest } from './events/logIncomingRequest'
-import { logHttpRequestAndResponse } from './events/logHttpRequestAndResponse'
+import { logReqAndResMiddleware } from './events/logReqAndResMiddleware'
 
 export interface HttpServerInfo {
   useHttp: boolean
@@ -31,7 +31,7 @@ export interface HttpServerInfo {
 }
 
 export class HttpServer {
-  private readonly configuration: HttpConfiguration
+  private readonly configuration: Configuration
   private readonly serverInstances: Array<NodeHttpServer | NodeHttpsServer> = []
   private readonly expressApp: Express
   private readonly sockets: Set<Socket> = new Set<Socket>()
@@ -82,7 +82,7 @@ export class HttpServer {
         : this.expressApp.use(x[0] as RequestHandler)
     )
 
-    this.expressApp.use(logHttpRequestAndResponse(this.context) as Router)
+    this.expressApp.use(logReqAndResMiddleware(this.context) as Router)
   }
 
   async start(): Promise<HttpServerInfo> {

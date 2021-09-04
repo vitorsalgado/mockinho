@@ -1,15 +1,15 @@
 import { Plugin } from './Plugin'
 import { MockRepository } from './MockRepository'
-import { Configuration } from './Configuration'
+import { BaseConfiguration } from './BaseConfiguration'
 import { Mock } from './Mock'
 import { Context } from './Context'
 
 export type PluginFactory = <
-  C extends Configuration,
+  C extends BaseConfiguration,
   S extends Mock,
   SR extends MockRepository<S>,
-  Ctx extends Context<C, S, SR>,
-  Req
+  CTX extends Context<C, S, SR>,
+  REQ
 >(
-  context: Ctx
-) => Plugin<Req, S>
+  context: CTX
+) => Plugin<REQ, S>
