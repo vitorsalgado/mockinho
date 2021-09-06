@@ -121,6 +121,7 @@ function onRequestNotMatched(
 ) {
   context.emit('requestNotMatched', {
     url: req.url,
+    path: req.path,
     method: req.method,
     closestMatch: result.closestMatch().orNothing() as HttpMock
   })
@@ -137,6 +138,7 @@ function onRequestMatched(
     verbose,
     start: req.start,
     url: req.url,
+    path: req.path,
     method: req.method,
     responseDefinition: response,
     mock: matched

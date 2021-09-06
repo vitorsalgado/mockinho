@@ -1,12 +1,19 @@
+/* eslint-disable no-console */
+
 import { Readable } from 'stream'
 import { nowInMs } from '@mockinho/core'
 import { HttpResponseFixture } from '../../mock'
 import { onRequestMatched } from '../onRequestMatched'
 
 describe('onRequestMatched', function () {
+  beforeEach(() => {
+    jest.spyOn(console, 'log')
+  })
+
   it('should accept a regular event payload', function () {
     onRequestMatched({
       url: 'http://localhost:8080',
+      path: '/',
       verbose: true,
       start: nowInMs(),
       method: 'PATCH',
@@ -24,11 +31,14 @@ describe('onRequestMatched', function () {
         sourceDescription: ''
       }
     })
+
+    expect(console.log).toHaveBeenCalled()
   })
 
   it('should accept no response body', function () {
     onRequestMatched({
       url: 'http://localhost:8080',
+      path: '/',
       verbose: true,
       start: nowInMs(),
       method: 'POST',
@@ -46,11 +56,14 @@ describe('onRequestMatched', function () {
         sourceDescription: '__fixtures__/nice-file.json'
       }
     })
+
+    expect(console.log).toHaveBeenCalled()
   })
 
   it('should accept a buffer body', function () {
     onRequestMatched({
-      url: 'http://localhost:8080',
+      url: 'http://localhost:8080/test',
+      path: '/test',
       verbose: true,
       start: nowInMs(),
       method: 'DELETE',
@@ -68,6 +81,8 @@ describe('onRequestMatched', function () {
         sourceDescription: '__fixtures__/nice-file.json'
       }
     })
+
+    expect(console.log).toHaveBeenCalled()
   })
 
   it('should accept a stream body', function () {
@@ -79,6 +94,7 @@ describe('onRequestMatched', function () {
 
     onRequestMatched({
       url: 'http://localhost:8080',
+      path: '/',
       verbose: true,
       start: nowInMs(),
       method: 'GET',
@@ -96,5 +112,7 @@ describe('onRequestMatched', function () {
         sourceDescription: '__fixtures__/nice-file.json'
       }
     })
+
+    expect(console.log).toHaveBeenCalled()
   })
 })

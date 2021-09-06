@@ -4,51 +4,54 @@ import { HttpServerInfo } from '../HttpServer'
 import { Transaction } from './Transaction'
 
 export interface Events {
-  started: {
-    info: HttpServerInfo
+  readonly start: {
+    readonly info: HttpServerInfo
   }
 
-  closed: void
+  readonly close: void
 
-  exception: Error
+  readonly exception: Error
 
-  recordDispatched: void
+  readonly recordDispatched: void
 
-  recorded: {
-    mock: string
-    mockBody: string
+  readonly recorded: {
+    readonly mock: string
+    readonly mockBody: string
   }
 
-  request: {
+  readonly request: {
     readonly verbose: boolean
     readonly method: HttpMethods
     readonly url: string
+    readonly path: string
     readonly headers: Record<string, string>
     readonly body: unknown
   }
 
-  requestNotMatched: {
+  readonly requestNotMatched: {
     readonly method: HttpMethods
     readonly url: string
+    readonly path: string
     readonly closestMatch?: HttpMock
   }
 
-  requestMatched: {
+  readonly requestMatched: {
     readonly verbose: boolean
     readonly start: number
     readonly method: HttpMethods
     readonly url: string
+    readonly path: string
     readonly responseDefinition: {
       readonly status: number
       readonly headers: Record<string, string>
       readonly body: unknown
     }
     readonly mock: {
-      id: string
-      name: string
-      sourceDescription: string
+      readonly id: string
+      readonly name: string
+      readonly sourceDescription: string
     }
   }
 
-  complete: Transaction
+  readonly complete: Transaction
 }

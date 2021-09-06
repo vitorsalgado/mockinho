@@ -33,7 +33,6 @@ describe('Builder Alternatives', function () {
               {
                 valueGetter: extractQuery('term') as (ctx: unknown) => unknown,
                 matcher: equalsTo('test') as Matcher<unknown>,
-                container: 'query',
                 weight: 0
               }
             ],

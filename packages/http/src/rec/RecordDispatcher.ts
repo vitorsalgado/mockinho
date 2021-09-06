@@ -2,6 +2,7 @@ import './recordWorker'
 
 import Path from 'path'
 import { Worker } from 'worker_threads'
+import { notNull } from '@mockinho/core'
 import { Configuration } from '../config'
 import { HttpContext } from '../HttpContext'
 import { RecordDispatcherArgs } from './RecordDispatcherArgs'
@@ -14,14 +15,14 @@ export class RecordDispatcher {
   constructor(private readonly context: HttpContext) {
     this.configuration = context.configuration
 
-    if (!this.configuration.recordOptions) {
-      throw new ReferenceError('record options is not defined')
-    }
+    notNull(this.configuration.recordOptions)
 
     this.worker = new Worker(Path.join(__dirname, 'recordWorker.js'), {
       workerData: {
         ...this.configuration.recordOptions,
-        extension: this.configuration.mockFilesExtension
+        extension: this.configuration.mockFilesExtension,
+        captureResponseHeaders: this.configuration.recordOptions?.captureResponseHeaders,
+        captureRequestHeaders: this.configuration.recordOptions?.captureRequestHeaders
       } as RecordData
     })
 

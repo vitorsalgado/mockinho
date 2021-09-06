@@ -1,6 +1,7 @@
 import { Express } from 'express'
 import { allOf, equalsTo, repeatTimes } from '@mockinho/core-matchers'
 import { anyItem } from '@mockinho/core-matchers'
+import { anything } from '@mockinho/core-matchers'
 import { encodeBase64 } from '@mockinho/core'
 import { Matcher } from '@mockinho/core'
 import { notNull } from '@mockinho/core'
@@ -9,6 +10,7 @@ import { notBlank } from '@mockinho/core'
 import { notEmpty } from '@mockinho/core'
 import { MockSource } from '@mockinho/core'
 import { MockBuilder } from '@mockinho/core'
+import { Expectation } from '@mockinho/core'
 import { DefaultMockBuilder } from '../types'
 import { BodyType, Headers } from '../types'
 import { Schemes } from '../types'
@@ -34,6 +36,7 @@ import { extractScheme } from './util/extractors'
 import { extractRequest } from './util/extractors'
 
 export class HttpMockBuilder extends MockBuilder {
+  private readonly _expectations: Array<Expectation<unknown, unknown>> = []
   private readonly _meta: Map<string, unknown> = new Map<string, unknown>()
   private _responseBuilder!: HttpResponseFixtureBuilderFunction
 
@@ -49,13 +52,15 @@ export class HttpMockBuilder extends MockBuilder {
   url(matcher: Matcher<string> | string): this {
     notNull(matcher)
 
+    const meta = 'URL'
+
     if (typeof matcher === 'string') {
       notBlank(matcher)
 
-      this._meta.set('url', matcher)
-      this._expectations.push(this.spec(extractUrl, urlPath(matcher), 10, 'Url'))
+      this._meta.set(meta, matcher)
+      this._expectations.push(this.spec(extractUrl, urlPath(matcher), 10))
     } else {
-      this._expectations.push(this.spec(extractUrl, matcher, 10, 'Url'))
+      this._expectations.push(this.spec(extractUrl, matcher, 10))
     }
 
     return this
@@ -64,26 +69,33 @@ export class HttpMockBuilder extends MockBuilder {
   method(matcher: Matcher<string> | string | Array<string>): this {
     notNull(matcher)
 
+    const meta = 'Method'
+
     if (typeof matcher === 'string') {
       notBlank(matcher)
 
-      this._meta.set('method', matcher)
-      this._expectations.push(this.spec(extractMethod, equalsTo(matcher), 3, 'Method'))
+      this._meta.set(meta, matcher)
+
+      if (matcher.trim() === '*') {
+        this._expectations.push(this.spec(extractMethod, anything(), 0))
+      } else {
+        this._expectations.push(this.spec(extractMethod, equalsTo(matcher), 3))
+      }
     } else if (Array.isArray(matcher)) {
       notEmpty(matcher)
       noNullElements(matcher)
 
-      this._meta.set('method', matcher.join(','))
-      this._expectations.push(this.spec(extractMethod, anyItem(matcher), 3, 'Method'))
+      this._meta.set(meta, matcher.join(','))
+      this._expectations.push(this.spec(extractMethod, anyItem(matcher), 3))
     } else {
-      this._expectations.push(this.spec(extractMethod, matcher, 3, 'Method'))
+      this._expectations.push(this.spec(extractMethod, matcher, 3))
     }
 
     return this
   }
 
   scheme(scheme: Schemes): this {
-    this._expectations.push(this.spec(extractScheme, equalsTo(scheme), 1, 'Scheme'))
+    this._expectations.push(this.spec(extractScheme, equalsTo(scheme), 1))
 
     return this
   }
@@ -93,11 +105,9 @@ export class HttpMockBuilder extends MockBuilder {
     notNull(matcher)
 
     if (typeof matcher === 'string') {
-      this._expectations.push(
-        this.spec(extractHeader(key.toLowerCase()), equalsTo(matcher), 0.5, 'Header')
-      )
+      this._expectations.push(this.spec(extractHeader(key.toLowerCase()), equalsTo(matcher), 0.5))
     } else {
-      this._expectations.push(this.spec(extractHeader(key.toLowerCase()), matcher, 0.5, 'Header'))
+      this._expectations.push(this.spec(extractHeader(key.toLowerCase()), matcher, 0.5))
     }
 
     return this
@@ -106,7 +116,7 @@ export class HttpMockBuilder extends MockBuilder {
   headers(matcher: Matcher<Record<string, string>>): this {
     notNull(matcher)
 
-    this._expectations.push(this.spec(extractHeaders, matcher, 3, 'Header'))
+    this._expectations.push(this.spec(extractHeaders, matcher, 3))
 
     return this
   }
@@ -115,11 +125,9 @@ export class HttpMockBuilder extends MockBuilder {
     notNull(matcher)
 
     if (typeof matcher === 'string') {
-      this._expectations.push(
-        this.spec(extractHeader(Headers.ContentType), equalsTo(matcher), 0.5, 'Header')
-      )
+      this._expectations.push(this.spec(extractHeader(Headers.ContentType), equalsTo(matcher), 0.5))
     } else {
-      this._expectations.push(this.spec(extractHeader(Headers.ContentType), matcher, 0.5, 'Header'))
+      this._expectations.push(this.spec(extractHeader(Headers.ContentType), matcher, 0.5))
     }
 
     return this
@@ -133,8 +141,7 @@ export class HttpMockBuilder extends MockBuilder {
       this.spec(
         extractHeader(Headers.Authorization),
         equalsTo(encodeBase64(`Basic ${username}:${password}`)),
-        0.5,
-        'Header'
+        0.5
       )
     )
 
@@ -144,7 +151,7 @@ export class HttpMockBuilder extends MockBuilder {
   bearerAuthorization(token: string): this {
     notNull(token)
 
-    this._expectations.push(this.spec(extractRequest, bearerToken(token), 0.5, 'Header'))
+    this._expectations.push(this.spec(extractRequest, bearerToken(token), 0.5))
 
     return this
   }
@@ -155,10 +162,10 @@ export class HttpMockBuilder extends MockBuilder {
 
     if (typeof matcher === 'string') {
       this._expectations.push(
-        this.spec(extractQuery(key), equalsTo<string | string[] | undefined>(matcher), 0.5, 'Query')
+        this.spec(extractQuery(key), equalsTo<string | string[] | undefined>(matcher), 0.5)
       )
     } else {
-      this._expectations.push(this.spec(extractQuery(key), matcher, 0.5, 'Query'))
+      this._expectations.push(this.spec(extractQuery(key), matcher, 0.5))
     }
 
     return this
@@ -167,7 +174,7 @@ export class HttpMockBuilder extends MockBuilder {
   querystring(matcher: Matcher<Record<string, string | string[] | undefined>>): this {
     notNull(matcher)
 
-    this._expectations.push(this.spec(extractQueries, matcher, 3, 'Query'))
+    this._expectations.push(this.spec(extractQueries, matcher, 3))
 
     return this
   }
@@ -177,10 +184,10 @@ export class HttpMockBuilder extends MockBuilder {
     noNullElements(matchers)
 
     if (matchers.length === 0) {
-      this._expectations.push(this.spec(extractBody, matchers[0], 5, 'Body'))
+      this._expectations.push(this.spec(extractBody, matchers[0], 5))
     }
 
-    this._expectations.push(this.spec(extractBody, allOf(...matchers), 5, 'Body'))
+    this._expectations.push(this.spec(extractBody, allOf(...matchers), 5))
 
     return this
   }
@@ -194,10 +201,10 @@ export class HttpMockBuilder extends MockBuilder {
     noNullElements(matchers)
 
     if (matchers.length === 0) {
-      this._expectations.push(this.spec(extractMultiPartFiles, matchers[0], 3, 'Files'))
+      this._expectations.push(this.spec(extractMultiPartFiles, matchers[0], 3))
     }
 
-    this._expectations.push(this.spec(extractMultiPartFiles, allOf(...matchers), 5, 'Files'))
+    this._expectations.push(this.spec(extractMultiPartFiles, allOf(...matchers), 5))
 
     return this
   }
@@ -208,12 +215,10 @@ export class HttpMockBuilder extends MockBuilder {
     noNullElements(matchers)
 
     if (matchers.length === 0) {
-      this._expectations.push(this.spec(extractFileByFieldName(fieldName), matchers[0], 3, 'Files'))
+      this._expectations.push(this.spec(extractFileByFieldName(fieldName), matchers[0], 3))
     }
 
-    this._expectations.push(
-      this.spec(extractFileByFieldName(fieldName), allOf(...matchers), 5, 'Files')
-    )
+    this._expectations.push(this.spec(extractFileByFieldName(fieldName), allOf(...matchers), 5))
 
     return this
   }
@@ -221,10 +226,10 @@ export class HttpMockBuilder extends MockBuilder {
   cookie(key: string, matcher: Matcher<string> | string): this {
     if (typeof matcher === 'string') {
       this._expectations.push(
-        this.spec(extractCookie(key), equalsTo<string | undefined>(matcher), 0.5, 'Cookies')
+        this.spec(extractCookie(key), equalsTo<string | undefined>(matcher), 0.5)
       )
     } else {
-      this._expectations.push(this.spec(extractCookie(key) as any, matcher, 0.5, 'Cookies'))
+      this._expectations.push(this.spec(extractCookie(key) as any, matcher, 0.5))
     }
 
     return this
@@ -233,10 +238,10 @@ export class HttpMockBuilder extends MockBuilder {
   cookieJson(key: string, matcher: Matcher<Record<string, unknown>> | string): this {
     if (typeof matcher === 'string') {
       this._expectations.push(
-        this.spec(extractCookieAsJson(key), equalsTo<string | undefined>(matcher), 0.5, 'Cookies')
+        this.spec(extractCookieAsJson(key), equalsTo<string | undefined>(matcher), 0.5)
       )
     } else {
-      this._expectations.push(this.spec(extractCookieAsJson(key) as any, matcher, 0.5, 'Cookies'))
+      this._expectations.push(this.spec(extractCookieAsJson(key) as any, matcher, 0.5))
     }
 
     return this
@@ -245,7 +250,7 @@ export class HttpMockBuilder extends MockBuilder {
   repeatTimes(times: number): this {
     notNull(times)
 
-    this._expectations.push(this.spec(extractNothing, repeatTimes(times), 0, 'Times'))
+    this._expectations.push(this.spec(extractNothing, repeatTimes(times), 0))
 
     return this
   }
@@ -255,12 +260,10 @@ export class HttpMockBuilder extends MockBuilder {
     noNullElements(matchers)
 
     if (matchers.length === 1) {
-      this._expectations.push(
-        this.spec(extractRequest, matchers[0] as Matcher<unknown>, 1, 'Request')
-      )
+      this._expectations.push(this.spec(extractRequest, matchers[0] as Matcher<unknown>, 1))
     } else {
       this._expectations.push(
-        this.spec(extractRequest, allOf(...(matchers as Array<Matcher<unknown>>)), 1, 'Request')
+        this.spec(extractRequest, allOf(...(matchers as Array<Matcher<unknown>>)), 1)
       )
     }
 

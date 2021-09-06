@@ -5,7 +5,7 @@ import { HttpMockBuilder, ok } from '../../mock'
 import { HttpMockRepository } from '../../mock'
 import { onRequestNotMatched } from '../onRequestNotMatched'
 import { HttpContext } from '../../HttpContext'
-import { opts } from '../../config/opts'
+import { opts } from '../../config'
 
 describe('onRequestNotMatched', function () {
   const fakeContext = () =>
@@ -14,7 +14,8 @@ describe('onRequestNotMatched', function () {
   it('should log without a closest match', function () {
     onRequestNotMatched({
       method: 'GET',
-      url: 'http://localhost:8080'
+      url: 'http://localhost:8080',
+      path: '/'
     })
   })
 
@@ -26,7 +27,8 @@ describe('onRequestNotMatched', function () {
 
     onRequestNotMatched({
       method: 'PATCH',
-      url: 'http://localhost:8080',
+      url: 'http://localhost:8080/test',
+      path: '/test',
       closestMatch: mock
     })
   })
@@ -42,6 +44,7 @@ describe('onRequestNotMatched', function () {
     onRequestNotMatched({
       method: 'PATCH',
       url: 'http://localhost:8080',
+      path: '/',
       closestMatch: mock
     })
   })
@@ -58,7 +61,8 @@ describe('onRequestNotMatched', function () {
 
     onRequestNotMatched({
       method: 'PATCH',
-      url: 'http://localhost:8080',
+      url: 'http://localhost:8080/test',
+      path: '/test',
       closestMatch: mock
     })
   })
@@ -76,6 +80,7 @@ describe('onRequestNotMatched', function () {
     onRequestNotMatched({
       method: 'PATCH',
       url: 'http://localhost:8080',
+      path: '/',
       closestMatch: mock
     })
   })

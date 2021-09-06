@@ -8,7 +8,6 @@ export abstract class MockBuilder {
   protected _id: string = ''
   protected _name: string = ''
   protected _priority: number = 0
-  protected readonly _expectations: Array<Expectation<unknown, unknown>> = []
   protected readonly _statefulExpectations: Array<StatefulExpectation<unknown, unknown>> = []
 
   id(id: string): this {
@@ -24,6 +23,10 @@ export abstract class MockBuilder {
   priority(priority: number): this {
     this._priority = priority
     return this
+  }
+
+  newScenario(name: string, newState: string = ''): this {
+    return this.scenario(name, Scenario.STATE_STARTED, newState)
   }
 
   scenario(
@@ -42,13 +45,11 @@ export abstract class MockBuilder {
   protected spec<T, V>(
     valueGetter: (request: V) => T,
     matcher: Matcher<T>,
-    weight: number = 0,
-    container: string = 'request'
+    weight: number = 0
   ): Expectation<unknown, unknown> {
     return {
       matcher,
       valueGetter,
-      container,
       weight
     } as Expectation<unknown, unknown>
   }

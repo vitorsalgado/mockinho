@@ -3,6 +3,9 @@ import { Response } from 'express'
 import { NextFunction } from 'express'
 import { ConfigurationBuilder } from '../ConfigurationBuilder'
 import { HttpRequest } from '../../HttpRequest'
+import { Defaults } from '../Defaults'
+import { RecordOptions } from '../../rec/RecordOptions'
+import { defaultMockProviderFactory } from '../../mock/providers/default/defaultMockProviderFactory'
 
 describe('Configurations Builder', function () {
   it('should build configurations with builder values', function () {
@@ -61,6 +64,28 @@ describe('Configurations Builder', function () {
     expect(trace.mode).toEqual('trace')
   })
 
+  describe('HTTP', function () {
+    it('should config http', function () {
+      const builder = new ConfigurationBuilder()
+      const opts = { maxHeaderSize: 100 }
+      const cfg = builder.http(1000, 'localhost').httpOptions(opts).build()
+
+      expect(cfg.useHttp).toBeTruthy()
+      expect(cfg.httpPort).toEqual(1000)
+      expect(cfg.httpHost).toEqual('localhost')
+      expect(cfg.httpOptions).toEqual(opts)
+    })
+
+    it('should use a default host when none is provided', function () {
+      const builder = new ConfigurationBuilder()
+      const cfg = builder.http(1000).build()
+
+      expect(cfg.useHttp).toBeTruthy()
+      expect(cfg.httpPort).toEqual(1000)
+      expect(cfg.httpHost).toEqual(Defaults.host)
+    })
+  })
+
   describe('HTTPS', function () {
     it('should have https as false by default', function () {
       const builder = new ConfigurationBuilder()
@@ -68,6 +93,21 @@ describe('Configurations Builder', function () {
 
       expect(cfg.useHttps).toBeFalsy()
       expect(cfg.httpsOptions).toBeUndefined()
+    })
+
+    it('should set dynamic port to true as default', function () {
+      const builder = new ConfigurationBuilder()
+      const cfg = builder.dynamicHttpsPort().build()
+
+      expect(cfg.useHttps).toBeTruthy()
+      expect(cfg.httpsDynamicPort).toBeTruthy()
+    })
+
+    it('should set dynamic port', function () {
+      const builder = new ConfigurationBuilder()
+      const cfg = builder.dynamicHttpsPort(false).build()
+
+      expect(cfg.httpsDynamicPort).toBeFalsy()
     })
   })
 
@@ -79,37 +119,20 @@ describe('Configurations Builder', function () {
     it('should not accept one entry without a function', function () {
       const builder = new ConfigurationBuilder()
 
-      builder.addPreMiddlewares([['/test']])
-
-      expect(() => builder.build()).toThrowError()
-    })
-
-    it('should not accept more than 2 elements', function () {
-      const builder = new ConfigurationBuilder()
-
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      builder.addPreMiddlewares([['/test', 'other-random-value', () => {}]])
-
-      expect(() => builder.build()).toThrowError()
-    })
-
-    it('should not accept 2 elements different than: string - function', function () {
-      const builder = new ConfigurationBuilder()
-
-      builder.addPreMiddlewares([['/test', 'other-random-value']])
+      builder.use('/test')
 
       expect(() => builder.build()).toThrowError()
     })
 
     it('should accept one element with a middleware function', function () {
-      const cfg = new ConfigurationBuilder().addPreMiddlewares([[middleware]]).build()
+      const cfg = new ConfigurationBuilder().use(middleware).build()
 
       expect(cfg.preHandlerMiddlewares).toHaveLength(1)
       expect(typeof cfg.preHandlerMiddlewares[0][0] === 'function').toBeTruthy()
     })
 
     it('should accept two elements with a string first and then the middleware function', function () {
-      const cfg = new ConfigurationBuilder().addPreMiddlewares([['/test', middleware]]).build()
+      const cfg = new ConfigurationBuilder().use('/test', middleware).build()
 
       expect(cfg.preHandlerMiddlewares).toHaveLength(1)
       expect(typeof cfg.preHandlerMiddlewares[0][0] === 'string').toBeTruthy()
@@ -131,6 +154,95 @@ describe('Configurations Builder', function () {
         expect(typeof cfg.preHandlerMiddlewares[0][0] === 'string').toBeTruthy()
         expect(typeof cfg.preHandlerMiddlewares[0][1] === 'function').toBeTruthy()
       })
+
+      it('should fail if middleware route is not a string', function () {
+        expect(() => new ConfigurationBuilder().use(100 as any, middleware).build()).toThrowError()
+      })
+    })
+  })
+
+  describe('record', function () {
+    it('should set default record options when none is provided', function () {
+      const builder = new ConfigurationBuilder()
+      const cfg = builder.record().build()
+
+      expect(cfg.recordOptions?.destination).toEqual(cfg.mockDirectory)
+      expect(cfg.recordOptions?.captureRequestHeaders).toEqual(['accept', 'content-type'])
+      expect(cfg.recordOptions?.captureResponseHeaders).toEqual([
+        'content-type',
+        'link',
+        'content-length',
+        'cache-control',
+        'retry-after',
+        'date',
+        'access-control-expose-headers',
+        'connection'
+      ])
+      expect(cfg.recordOptions?.filters).toEqual([])
+    })
+
+    it('should accept an option object instead of a option builder', function () {
+      const builder = new ConfigurationBuilder()
+      const cfg = builder
+        .record({
+          destination: 'nowhere',
+          captureResponseHeaders: [],
+          captureRequestHeaders: [],
+          filters: []
+        } as RecordOptions)
+        .build()
+
+      expect(cfg.recordOptions).toEqual({
+        destination: 'nowhere',
+        captureResponseHeaders: [],
+        captureRequestHeaders: [],
+        filters: []
+      })
+    })
+  })
+
+  describe('formOptions', function () {
+    it('should set form opts', function () {
+      const builder = new ConfigurationBuilder()
+      const cfg = builder.formUrlEncodedOptions({}).build()
+
+      expect(cfg.formUrlEncodedOptions).toEqual({ extended: false })
+    })
+  })
+
+  describe('proxy', function () {
+    it('should disable proxy when calling .disableProxy()', function () {
+      const builder = new ConfigurationBuilder()
+      const cfg1 = builder.disableProxy().build()
+      const cfg2 = builder.disableProxy(false).build()
+
+      expect(cfg1.proxyEnabled).toBeFalsy()
+      expect(cfg2.proxyEnabled).toBeTruthy()
+    })
+  })
+
+  describe('mock provider factories', function () {
+    it('should add mock provider factory', function () {
+      const builder = new ConfigurationBuilder()
+      const cfg = builder.addMockProviderFactory(defaultMockProviderFactory).build()
+
+      expect(cfg.mockProviderFactories).toHaveLength(1)
+    })
+
+    it('should add field parsers', function () {
+      const builder = new ConfigurationBuilder()
+      const cfg = builder.addMockFieldParser({} as any).build()
+
+      expect(cfg.mockFieldParsers).toHaveLength(1)
+    })
+  })
+
+  describe('plugins', function () {
+    it('should add plugins', function () {
+      const builder = new ConfigurationBuilder()
+      const cfg = builder.addPlugin(() => ({ name: 'test' })).build()
+
+      expect(cfg.pluginFactories).toHaveLength(1)
     })
   })
 })

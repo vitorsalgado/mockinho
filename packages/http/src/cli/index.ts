@@ -9,18 +9,9 @@ import Pkg from '../../package.json'
 import { Argv } from '../config'
 import { run } from './run'
 import { printErrorAndExit } from './utils'
+import { Groups } from './groups'
 
-const Groups = {
-  http: 'HTTP:',
-  https: 'HTTPS:',
-  watch: 'Watch:',
-  record: 'Record:',
-  proxy: 'Proxy:',
-  internal: 'Internal:',
-  server: 'Server:'
-}
-
-Yargs(hideBin(process.argv))
+export default Yargs(hideBin(process.argv))
   .scriptName('mockhttp')
   .usage('Usage: $0 [options]')
   .epilog('Take a look on this opensource project on https://github.com/vitorsalgado/mockinho')
@@ -30,6 +21,7 @@ Yargs(hideBin(process.argv))
   .alias('h', 'help')
   .wrap(yargs.terminalWidth() / 2)
   .completion('', 'Generate completion script to your .zshrc, .bashrc or similar')
+
   .example([
     ['$0', 'Mock server listening on localhost with a random port'],
     ['$0 -p 3000', 'Mock server listening on: http://localhost:3000'],

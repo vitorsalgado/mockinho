@@ -1,9 +1,11 @@
 import Path from 'path'
 import Supertest from 'supertest'
 import { run } from '../run'
-import { Argv } from '../../config/providers/argv/Argv'
+import { Argv } from '../../config'
+import { Defaults } from '../../config'
 import { get } from '../../mock'
 import { ok } from '../../mock'
+import { MockaccinoHttp } from '../../MockaccinoHttp'
 
 describe('cli', function () {
   const OLD_ENV = process.env
@@ -16,8 +18,11 @@ describe('cli', function () {
     process.env = OLD_ENV
   })
 
-  it.skip('should import cli without errors', function () {
-    return import('..')
+  it('should import cli without errors', async function () {
+    const imported = await import('..')
+    const cli = (await imported.default) as MockaccinoHttp
+
+    await cli.finalize()
   })
 
   describe('when using a typescript configuration file', function () {
@@ -42,7 +47,7 @@ describe('cli', function () {
         expect(config.proxyOptions.headers).toEqual({ 'x-test': 'abc', 'x-ctx': 'test' })
         expect(config.preHandlerMiddlewares).toEqual([])
       } finally {
-        await mockhttp.close()
+        await mockhttp.finalize()
       }
     })
   })
@@ -120,6 +125,27 @@ describe('cli', function () {
         expect(config.proxyOptions.target).toEqual('https://example.org')
       } finally {
         await mockhttp.close()
+      }
+    })
+
+    it('should enable record with default values', async function () {
+      process.env.MOCK_RECORD = 'true'
+
+      const argv: Argv = { rootDir: __dirname }
+      const mockhttp = await run(argv)
+      const config = mockhttp.configuration()
+
+      try {
+        mockhttp.mock(get('/test').reply(ok()))
+
+        await Supertest(`http://localhost:${mockhttp.info().httpPort}`).get('/test').expect(200)
+
+        expect(config.recordEnabled).toBeTruthy()
+        expect(config.recordOptions?.destination).toEqual(
+          Path.join(__dirname, Defaults.fixturesDir)
+        )
+      } finally {
+        await mockhttp.finalize()
       }
     })
   })
@@ -223,6 +249,59 @@ describe('cli', function () {
         expect(config.proxyEnabled).toBeTruthy()
         expect(config.proxyOptions.headers).toEqual({ 'x-test': 'abc', 'x-ctx': 'test' })
         expect(config.watch).toBeTruthy()
+      } finally {
+        await mockhttp.close()
+      }
+    })
+
+    it('should allow set both http and https', async function () {
+      const argv: Argv = {
+        mode: 'silent',
+        noHttp: false,
+        port: 0,
+        timeout: 15000,
+        noHttps: false,
+        httpsPort: 0,
+        rootDir: __dirname,
+        mockDir: 'data',
+        mockExtension: 'test'
+      }
+      const mockhttp = await run(argv)
+      const config = mockhttp.configuration()
+
+      try {
+        mockhttp.mock(get('/test').reply(ok()))
+
+        await Supertest(`http://localhost:${mockhttp.info().httpPort}`).get('/test').expect(200)
+
+        expect(config.useHttp).toBeTruthy()
+        expect(config.httpPort).toEqual(0)
+        expect(config.useHttps).toBeTruthy()
+      } finally {
+        await mockhttp.close()
+      }
+    })
+
+    it('should allow set only https', async function () {
+      const argv: Argv = {
+        mode: 'silent',
+        noHttp: true,
+        timeout: 15000,
+        noHttps: false,
+        httpsPort: 0,
+        rootDir: __dirname,
+        mockDir: 'data',
+        mockExtension: 'test'
+      }
+      const mockhttp = await run(argv)
+      const config = mockhttp.configuration()
+
+      try {
+        mockhttp.mock(get('/test').reply(ok()))
+
+        expect(config.useHttp).toBeFalsy()
+        expect(config.useHttps).toBeTruthy()
+        expect(config.httpsPort).toEqual(0)
       } finally {
         await mockhttp.close()
       }

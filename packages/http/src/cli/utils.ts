@@ -6,7 +6,7 @@ export function parseServerInfo(info: HttpServerInfo): string {
   let res = ''
 
   if (info.useHttp) {
-    res += `http://${info.httpHost}${info.httpPort === 0 ? '' : ':' + info.httpPort}`
+    res += `http://${info.httpHost}:${info.httpPort}`
   }
 
   if (info.useHttps) {
@@ -14,7 +14,7 @@ export function parseServerInfo(info: HttpServerInfo): string {
       res += ', '
     }
 
-    res += `https://${info.httpsHost}${info.httpsPort === 0 ? '' : ':' + info.httpsPort}`
+    res += `https://${info.httpsHost}:${info.httpsPort}`
   }
 
   return res

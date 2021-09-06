@@ -31,6 +31,7 @@ export class Configuration extends BaseConfiguration {
     public readonly httpsHost: string,
     public readonly httpsOptions: HttpsServerOptions | undefined,
     public readonly httpsDynamicPort: boolean,
+    public readonly restartable: string,
     public readonly timeout: number,
     public readonly rootDir: string,
     public readonly mockDirectory: string,

@@ -1,6 +1,7 @@
 import { fail } from 'assert'
 import Path from 'path'
 import { loadMockFiles } from '../loadMockFiles'
+import { loadSingleMockFile } from '../loadSingleMockFile'
 
 describe('loadMockFiles', function () {
   it('should load all valid mocks in a directory and its subdirectories excluding invalid ones when throwOnError is false', async function () {
@@ -58,6 +59,17 @@ describe('loadMockFiles', function () {
     it('should throw error when providing extensions that does not have a parser associated', async function () {
       try {
         await loadMockFiles(Path.join(__dirname, '__fixtures__/qtd'), ['.json', '.yaml', '.md'])
+      } catch (ex) {
+        expect(ex).toBeDefined()
+        return
+      }
+
+      fail('should not be here.')
+    })
+
+    it('should fail when trying to load a nonexistent file', async function () {
+      try {
+        await loadSingleMockFile('some-random-file.yaml')
       } catch (ex) {
         expect(ex).toBeDefined()
         return

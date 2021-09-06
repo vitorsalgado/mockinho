@@ -17,8 +17,9 @@ import { decorateRequestMiddleware } from './decorateRequestMiddleware'
 import { HttpRequest } from './HttpRequest'
 import { configureProxy } from './configureProxy'
 import { Configuration } from './config'
-import { logIncomingRequest } from './events/logIncomingRequest'
+import { logIncomingRequestMiddleware } from './events/logIncomingRequestMiddleware'
 import { logReqAndResMiddleware } from './events/logReqAndResMiddleware'
+import { rawBodyMiddleware } from './rawBodyMiddleware'
 
 export interface HttpServerInfo {
   useHttp: boolean
@@ -66,10 +67,12 @@ export class HttpServer {
     this.expressApp.disable('x-powered-by')
     this.expressApp.disable('etag')
 
-    this.expressApp.use(logIncomingRequest(this.context))
+    this.expressApp.use(rawBodyMiddleware as Router)
     this.expressApp.use(express.json())
     this.expressApp.use(express.urlencoded(this.configuration.formUrlEncodedOptions))
     this.expressApp.use(express.text())
+
+    this.expressApp.use(logIncomingRequestMiddleware(this.context))
     this.expressApp.use(
       CookieParse(this.configuration.cookieSecrets, this.configuration.cookieOptions)
     )

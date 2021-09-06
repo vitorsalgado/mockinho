@@ -24,11 +24,7 @@ describe('Custom Middlewares', function () {
   }
 
   const $ = mockHttp(
-    opts()
-      .dynamicHttpPort()
-      .trace()
-      .addPreMiddlewares([[customMiddleware]])
-      .use('/hey', customMiddlewareForRoute)
+    opts().dynamicHttpPort().trace().use(customMiddleware).use('/hey', customMiddlewareForRoute)
   )
 
   beforeAll(() => $.start())

@@ -4,7 +4,7 @@ import { MockFile } from './MockFile'
 export function chooseMockFileParser(
   extension: string
 ): (content: string) => MockFile | Array<MockFile> {
-  switch (extension) {
+  switch (extension.toLowerCase()) {
     case 'json':
       return parseJsonFile
     case 'yaml':

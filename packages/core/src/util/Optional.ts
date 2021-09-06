@@ -6,7 +6,7 @@ export class Optional<T> {
   static empty = <T>(): Optional<T> => new Optional<T>()
 
   static ofNullable = <T>(value?: T): Optional<T> =>
-    value ? Optional.of(value) : Optional.empty<T>()
+    typeof value === 'undefined' || value === null ? Optional.empty<T>() : Optional.of(value)
 
   static of = <T>(value: T): Optional<T> => new Optional(Optional.checkNotNull(value))
 

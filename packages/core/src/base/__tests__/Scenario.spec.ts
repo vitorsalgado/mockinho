@@ -1,5 +1,5 @@
 import { v4, validate } from 'uuid'
-import { Scenario } from '../Scenario'
+import { Scenario } from '../..'
 import { ScenarioInMemoryRepository } from '../ScenarioInMemoryRepository'
 
 describe('Scenario', function () {
@@ -9,7 +9,7 @@ describe('Scenario', function () {
 
     expect(scenario.name).toEqual(name)
     expect(validate(scenario.id)).toBeTruthy()
-    expect(scenario.state).toEqual(Scenario.STATE_STARTED)
+    expect(scenario.currentState()).toEqual(Scenario.STATE_STARTED)
     expect(scenario.isStarted()).toBeTruthy()
   })
 
@@ -19,7 +19,7 @@ describe('Scenario', function () {
 
     scenario.updateState(state)
 
-    expect(scenario.state).toEqual(state)
+    expect(scenario.currentState()).toEqual(state)
     expect(scenario.isStarted()).toBeFalsy()
   })
 
@@ -32,7 +32,7 @@ describe('Scenario', function () {
 
     expect(scenario.id).toEqual(id)
     expect(scenario.name).toEqual(name)
-    expect(scenario.state).toEqual(state)
+    expect(scenario.currentState()).toEqual(state)
     expect(scenario.isStarted()).toBeFalsy()
   })
 

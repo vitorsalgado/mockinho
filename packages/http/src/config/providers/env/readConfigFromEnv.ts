@@ -2,7 +2,7 @@ import { Mode } from '@mockinho/core'
 import { ConfigurationBuilder } from '../../ConfigurationBuilder'
 import { rec } from '../../../rec/rec'
 
-export function configFromEnv(env: Record<string, unknown>) {
+export function readConfigFromEnv(env: Record<string, unknown>) {
   return async function (builder: ConfigurationBuilder): Promise<void> {
     if (env.MOCK_MODE) builder.mode(env.MOCK_MODE as Mode)
 
@@ -37,7 +37,7 @@ export function configFromEnv(env: Record<string, unknown>) {
       builder.cookieOptions((env.MOCK_COOKIE_SECRETS as string).split(',') as Array<string>)
     }
 
-    if (env.MOCK_PROXY) builder.enableProxy(env.MOCK_PROXY as string)
+    if (env.MOCK_PROXY) builder.proxy(env.MOCK_PROXY as string)
 
     if (env.MOCK_WATCH) builder.watch()
   }

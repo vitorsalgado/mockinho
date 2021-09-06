@@ -12,7 +12,7 @@ export abstract class MockInMemoryRepository<M extends Mock> implements MockRepo
   }
 
   fetchSorted(): Array<M> {
-    return [...this.mocks.values()].sort(x => x.priority)
+    return [...this.mocks.values()].sort((a, b) => a.priority - b.priority)
   }
 
   fetchById(id: string): Optional<M> {
@@ -35,11 +35,11 @@ export abstract class MockInMemoryRepository<M extends Mock> implements MockRepo
   }
 
   removeBySource(source: MockSource): void {
-    this.removeByIds(
-      ...Array.from(this.mocks)
-        .filter(x => x[1].source === source)
-        .map(x => x[0])
-    )
+    const toRemove = Array.from(this.mocks)
+      .filter(x => x[1].source === source)
+      .map(x => x[0])
+
+    this.removeByIds(...toRemove)
   }
 
   removeAll(): void {

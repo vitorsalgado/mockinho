@@ -17,11 +17,10 @@ export function findMockForRequest<Req, Config extends BaseConfiguration, M exte
     let weight = 0
 
     mock.expectations.push(
-      ...mock.statefulExpectations.map(x => ({
-        valueGetter: x.valueGetter,
-        matcher: x.matcher(context, mock) as Matcher<unknown>,
-        weight: 0,
-        container: 'Request'
+      ...mock.statefulExpectations.map(expectation => ({
+        valueGetter: expectation.valueGetter,
+        matcher: expectation.matcher(context, mock) as Matcher<unknown>,
+        weight: 0
       }))
     )
 
@@ -36,6 +35,10 @@ export function findMockForRequest<Req, Config extends BaseConfiguration, M exte
         if (hasMatch) {
           weight += expectation.weight
           weights.set(mock.id, weight)
+        } else {
+          if (expectation.matcher.expectation) {
+            mock.meta.set(expectation.matcher.name, expectation.matcher.expectation)
+          }
         }
 
         return hasMatch

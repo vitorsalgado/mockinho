@@ -1,13 +1,12 @@
 import { yellow, yellowBright, bold } from 'colorette'
 import { HttpMock } from '../mock'
 import { Events } from './Events'
-import { extractPathname } from './utils'
 
 export function onRequestNotMatched(event: Events['requestNotMatched']): void {
   // eslint-disable-next-line no-console
   console.warn(
     `${yellowBright(bold('REQUEST WAS NOT MATCHED'))} ${new Date().toISOString()} ${yellow(
-      `<--- ${event.method} ${extractPathname(event.url)}`
+      `<--- ${event.method} ${event.path}`
     )}`
   )
 
@@ -21,26 +20,23 @@ export function onRequestNotMatched(event: Events['requestNotMatched']): void {
   return console.warn(
     `${yellow('Closest Mock:')}` +
       '\n' +
-      `Id: ${mock.id}${mock.name ? '\nName: ' + mock.name : ''}${
-        mock.sourceDescription ? '\nFile: ' + bold(mock.sourceDescription) : ''
-      }${tryGetUrlAndMethod(mock)}\n`
+      `Id: ${mock.id}\n` +
+      (mock.name ? `Name: ${mock.name}\n` : '') +
+      (mock.sourceDescription ? `File: ${bold(mock.sourceDescription)}` : '') +
+      `${tryGetUrlAndMethod(mock)}\n`
   )
 }
 
 function tryGetUrlAndMethod(mock: HttpMock): string {
+  if (mock.meta.size === 0) {
+    return ''
+  }
+
   const str = []
 
-  if (mock.meta.has('method')) {
-    str.push(mock.meta.get('method'))
+  for (const [key, value] of mock.meta.entries()) {
+    str.push(`${key}: ${value}`)
   }
 
-  if (mock.meta.has('url')) {
-    str.push(mock.meta.get('url'))
-  }
-
-  if (str.length > 0) {
-    return '\n' + 'Url: ' + bold(str.join(' '))
-  }
-
-  return ''
+  return str.join('\n')
 }

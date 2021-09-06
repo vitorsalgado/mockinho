@@ -17,7 +17,7 @@ export default {
             requiredState: { type: 'string' },
             newState: { type: 'string' }
           },
-          required: []
+          required: ['name']
         },
 
         request: {
@@ -29,6 +29,7 @@ export default {
             urlPath: { type: 'string' },
             urlPattern: { type: 'string' },
             urlPathPattern: { type: 'string' },
+            urlExact: { type: 'string' },
             querystring: {
               anyOf: [
                 { type: 'string' },

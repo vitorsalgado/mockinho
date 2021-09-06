@@ -19,6 +19,7 @@ import { MockProviderFactory } from '../mock/providers/MockProvider'
 import { FieldParser } from '../mock/providers/default/FieldParser'
 import { HttpRequest } from '../HttpRequest'
 import { Configuration } from './Configuration'
+import { Defaults } from './Defaults'
 
 export type PreMiddleware = (
   req: HttpRequest,
@@ -27,33 +28,34 @@ export type PreMiddleware = (
 ) => void | Promise<void>
 
 export class ConfigurationBuilder {
-  private static MOCK_DEFAULT_FIXTURES_DIR = '__fixtures__'
+  private static MOCK_DEFAULT_FIXTURES_DIR = Defaults.fixturesDir
 
   private _useHttp: boolean = false
-  private _httpPort: number = 0
-  private _httpHost: string = '127.0.0.1'
+  private _httpPort: number = Defaults.port
+  private _httpHost: string = Defaults.host
   private _httpOptions?: HttpServerOptions
   private _httpDynamicPort: boolean = true
   private _useHttps: boolean = false
-  private _httpsPort: number = 0
-  private _httpsHost: string = '127.0.0.1'
+  private _httpsPort: number = Defaults.port
+  private _httpsHost: string = Defaults.host
   private _httpsOptions?: HttpsServerOptions
   private _httpsDynamicPort: boolean = true
-  private _mode: Mode = 'verbose'
-  private _timeout: number = 5 * 60 * 1000
-  private _rootDir: string = process.cwd()
-  private _logLevel: Level = 'error'
+  private _mode: Mode = Defaults.mode
+  private _restartable = Defaults.restartCommand
+  private _timeout: number = Defaults.timeout
+  private _rootDir: string = Defaults.rootDir
+  private _logLevel: Level = Defaults.logLevel
   private _loadMockFiles: boolean = false
   private _mocksDirectory: string = ''
-  private _mocksExtension: string = 'mock'
-  private _proxyAll: boolean = false
+  private _mocksExtension: string = Defaults.mocksExtension
+  private _proxyAll: boolean = Defaults.proxy
   private _proxyOptions: Options = { secure: false, changeOrigin: true }
-  private _recordEnabled: boolean = false
+  private _recordEnabled: boolean = Defaults.record
   private _recordOptions?: RecordOptions
   private _mockProviderFactories: Array<MockProviderFactory<Configuration>> = []
   private _mockFieldParsers: Array<FieldParser> = []
   private _pluginFactories: Array<PluginFactory> = []
-  private _watch: boolean = false
+  private _watch: boolean = Defaults.watch
 
   private _formBodyOptions?: OptionsUrlencoded
   private _multiPartOptions?: Multer.Options
@@ -65,7 +67,7 @@ export class ConfigurationBuilder {
 
   // region General Configurations
 
-  http(port: number, host: string = '127.0.0.1'): this {
+  http(port: number, host: string = Defaults.host): this {
     return this.httpPort(port).httpHost(host).dynamicHttpPort(false)
   }
 
@@ -99,7 +101,7 @@ export class ConfigurationBuilder {
     return this
   }
 
-  https(port: number, options: HttpsServerOptions, host: string = '127.0.0.1'): this {
+  https(port: number, options: HttpsServerOptions, host: string = Defaults.host): this {
     return this.httpsPort(port).httpsHost(host).httpsOptions(options).dynamicHttpsPort(false)
   }
 
@@ -258,12 +260,7 @@ export class ConfigurationBuilder {
     return this
   }
 
-  enableProxy(target: string | Options | boolean, options?: Options): this {
-    if (typeof target === 'boolean') {
-      this._proxyAll = false
-      return this
-    }
-
+  proxy(target: string | Options, options?: Options): this {
     this._proxyAll = true
 
     if (typeof target === 'string') {
@@ -275,16 +272,16 @@ export class ConfigurationBuilder {
     return this
   }
 
-  addPreMiddlewares(middlewares: Array<Array<string | PreMiddleware>>): this {
-    this._preHandlerMiddlewares.push(...middlewares)
+  disableProxy(value: boolean = true): this {
+    this._proxyAll = !value
     return this
   }
 
   use(route: string | PreMiddleware, middleware?: PreMiddleware): this {
     if (typeof route === 'string' && middleware) {
-      this.addPreMiddlewares([[route, middleware]])
+      this._preHandlerMiddlewares.push(...[[route, middleware]])
     } else {
-      this.addPreMiddlewares([[route]])
+      this._preHandlerMiddlewares.push(...[[route]])
     }
 
     return this
@@ -317,52 +314,55 @@ export class ConfigurationBuilder {
     }
 
     if (this._recordEnabled) {
-      if (!this._recordOptions || !this._recordOptions.destination) {
-        if (!this._recordOptions) {
-          this._recordOptions = {
-            destination: this._mocksDirectory,
-            captureRequestHeaders: ['accept', 'content-type'],
-            captureResponseHeaders: [
-              'content-type',
-              'link',
-              'content-length',
-              'cache-control',
-              'retry-after',
-              'date',
-              'access-control-expose-headers',
-              'connection'
-            ],
-            filters: []
-          }
-        } else {
-          this._recordOptions.destination = this._mocksDirectory
+      if (!this._recordOptions) {
+        this._recordOptions = {
+          destination: this._mocksDirectory,
+          captureRequestHeaders: Defaults.recordOptions.captureRequestHeaders,
+          captureResponseHeaders: Defaults.recordOptions.captureResponseHeaders,
+          filters: []
         }
+      } else {
+        this._recordOptions.destination =
+          typeof this._recordOptions.destination === 'undefined' ||
+          this._recordOptions.destination === null ||
+          this._recordOptions.destination === ''
+            ? this._mocksDirectory
+            : this._recordOptions.destination
+
+        this._recordOptions.captureRequestHeaders =
+          this._recordOptions.captureRequestHeaders ?? Defaults.recordOptions.captureRequestHeaders
+
+        this._recordOptions.captureResponseHeaders =
+          this._recordOptions.captureResponseHeaders ??
+          Defaults.recordOptions.captureResponseHeaders
+
+        this._recordOptions.filters = []
       }
     }
 
-    this._preHandlerMiddlewares.forEach(x => {
-      if (x.length > 2) {
+    this._preHandlerMiddlewares.forEach(middleware => {
+      if (middleware.length > 2) {
         throw new Error(
           'Each middleware item must contain 1 or 2 items: 1 for the middleware function or 2, the route and the middleware function.'
         )
       }
 
-      if (x.length === 1) {
-        if (typeof x[0] !== 'function') {
+      if (middleware.length === 1) {
+        if (typeof middleware[0] !== 'function') {
           throw new Error(
             'When middleware item contains 1 entry, it must be a middleware function.'
           )
         }
       }
 
-      if (x.length === 2) {
-        if (typeof x[0] !== 'string') {
+      if (middleware.length === 2) {
+        if (typeof middleware[0] !== 'string') {
           throw new Error(
             'First element of middleware entry must be the route and the second the middleware function.'
           )
         }
 
-        if (typeof x[1] !== 'function') {
+        if (typeof middleware[1] !== 'function') {
           throw new Error('Second element of middleware configuration entry must be a function.')
         }
       }
@@ -381,6 +381,7 @@ export class ConfigurationBuilder {
       this._httpsHost,
       this._httpsOptions,
       this._httpsDynamicPort,
+      this._restartable,
       this._timeout,
       this._rootDir,
       this._mocksDirectory,

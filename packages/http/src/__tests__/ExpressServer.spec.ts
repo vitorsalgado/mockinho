@@ -11,12 +11,12 @@ import { Headers, MediaTypes } from '../types'
 import mockHttp from '../mockHttp'
 
 describe('Express Http Server', function () {
-  const $ = mockHttp(opts().dynamicHttpPort().trace())
+  const $ = mockHttp(opts().dynamicHttpPort())
 
   const builder = new ConfigurationBuilder()
 
   const cfg = builder
-    .httpPort(3000)
+    .httpPort(0)
     .info()
     .enableFileMocks(false)
     .logLevel('warn')
@@ -38,7 +38,7 @@ describe('Express Http Server', function () {
   it('should return server connection information', async function () {
     await httpServer.start()
 
-    expect(httpServer.info().httpPort).toEqual(3000)
+    expect(httpServer.info().httpPort).toBeGreaterThan(0)
   })
 
   it('should accept empty json requests', function () {

@@ -12,7 +12,7 @@ import { rec } from '../../../rec/rec'
 import { importMiddlewares } from '../importMiddlewares'
 import { Argv } from './Argv'
 
-export function configFromArgv(argv: Argv) {
+export function readConfigFromArgv(argv: Argv) {
   return async function (builder: ConfigurationBuilder): Promise<void> {
     if (isDef(argv.noHttp) && argv.noHttp) {
       builder.disableHttp()
@@ -53,7 +53,7 @@ export function configFromArgv(argv: Argv) {
     if (argv.mockExtension) builder.mockFileExtension(argv.mockExtension)
 
     if (isDef(argv.noProxy) && argv.noProxy) {
-      builder.enableProxy(false)
+      builder.disableProxy()
     } else {
       if (argv.proxy) {
         const opts = {} as Options
@@ -67,7 +67,7 @@ export function configFromArgv(argv: Argv) {
           opts.prependPath = argv.proxyPrependPath
         if (isDef(argv.proxyXfwd) && argv.proxyXfwd) opts.xfwd = argv.proxyXfwd
 
-        builder.enableProxy(opts)
+        builder.proxy(opts)
       }
     }
 

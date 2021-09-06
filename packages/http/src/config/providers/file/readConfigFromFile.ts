@@ -7,9 +7,11 @@ import { InitialOptions } from './InitialOptions'
 
 const Files = ['.mockhttprc.js', '.mockhttprc.ts', '.mockhttprc.json', '.mockhttprc']
 
-export function configFromFile(rootDir: string, configFile?: string) {
+export function readConfigFromFile(rootDir?: string, configFile?: string) {
   return async function (builder: ConfigurationBuilder): Promise<void> {
     let config: InitialOptions | undefined
+
+    rootDir = rootDir ?? process.cwd()
 
     if (configFile) {
       const path = Path.isAbsolute(configFile) ? configFile : Path.join(rootDir, configFile)
@@ -61,7 +63,7 @@ export function configFromFile(rootDir: string, configFile?: string) {
 
     if (config.proxy && config.proxy.enabled) {
       if (config.proxy.target) {
-        builder.enableProxy(config.proxy.target, config.proxy.options)
+        builder.proxy(config.proxy.target, config.proxy.options)
       }
     }
 

@@ -20,7 +20,7 @@ export function scenarioStatefulMatcher<C extends BaseConfiguration, M extends M
       if (scenarioOptional.isPresent()) {
         const scenario = scenarioOptional.get()
 
-        if (scenario.state === requiredState) {
+        if (scenario.currentState() === requiredState) {
           if (newState) {
             scenario.updateState(newState)
             context.scenarioRepository.save(scenario)

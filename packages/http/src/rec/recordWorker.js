@@ -28,15 +28,19 @@ parentPort.on('message', async data => {
   const requestHeaders = {}
   const responseHeaders = {}
 
-  for (const [name, value] of Object.entries(request.headers)) {
-    if (captureRequestHeaders.some(h => h === name)) {
-      requestHeaders[name] = value
+  if (captureRequestHeaders) {
+    for (const [name, value] of Object.entries(request.headers)) {
+      if (captureRequestHeaders.some(h => h === name)) {
+        requestHeaders[name] = value
+      }
     }
   }
 
-  for (const [name, value] of Object.entries(response.headers)) {
-    if (captureResponseHeaders.some(h => h === name)) {
-      responseHeaders[name] = value
+  if (captureResponseHeaders) {
+    for (const [name, value] of Object.entries(response.headers)) {
+      if (captureResponseHeaders.some(h => h === name)) {
+        responseHeaders[name] = value
+      }
     }
   }
 

@@ -2,10 +2,11 @@ import { mockHttp } from '..'
 import { MockaccinoHttp } from '..'
 import Pkg from '../../package.json'
 import { Argv } from '../config'
-import { configFromFile } from '../config/providers/file/configFromFile'
-import { configFromArgv } from '../config/providers/argv/configFromArgv'
-import { configFromEnv } from '../config/providers/env/configFromEnv'
-import { opts } from '../config/opts'
+import { opts } from '../config'
+import { Defaults } from '../config'
+import { readConfigFromFile } from '../config/providers'
+import { readConfigFromArgv } from '../config/providers'
+import { readConfigFromEnv } from '../config/providers'
 import { printInfo } from './printInfo'
 import { configureWatcher } from './configureWatcher'
 
@@ -13,9 +14,9 @@ export async function run(options: Argv): Promise<MockaccinoHttp> {
   const builder = opts().enableFileMocks().verbose()
 
   const configurationProviders = [
-    configFromFile(options.rootDir, options.config),
-    configFromEnv(process.env),
-    configFromArgv(options)
+    readConfigFromFile(options.rootDir, options.config),
+    readConfigFromEnv(process.env),
+    readConfigFromArgv(options)
   ]
 
   for (const provider of configurationProviders) {
@@ -31,6 +32,18 @@ export async function run(options: Argv): Promise<MockaccinoHttp> {
 
   process.on('SIGTERM', () => mockhttp.close())
   process.on('SIGINT', () => mockhttp.close())
+
+  process.stdin.resume()
+  process.stdin.setEncoding('utf8')
+  process.stdin.on('data', async data => {
+    const str = data.toString().trim().toLowerCase()
+
+    if (str === Defaults.restartCommand) {
+      await mockhttp.rebuild()
+    }
+  })
+
+  mockhttp.on('close', () => process.stdin.unref())
 
   return mockhttp.start().then(info => {
     printInfo(config, options, info, Pkg)

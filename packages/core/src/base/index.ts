@@ -1,5 +1,6 @@
 export * from './BaseConfiguration'
 export * from './Context'
+export * from './createMatcher'
 export * from './Expectation'
 export * from './findMockForRequest'
 export * from './FindMockResult'

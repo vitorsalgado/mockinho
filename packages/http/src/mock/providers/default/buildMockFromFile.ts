@@ -27,12 +27,15 @@ import { multipleResponses } from '../../entry/multipleResponses'
 import { InvalidMockFileError } from './InvalidMockFileError'
 import { MockFile } from './MockFile'
 import { MockFileResponse } from './MockFile'
-import { textCaseProperties } from './utils/textCaseProperties'
-import { getSingleMatcherFromObjectKeys } from './utils/getSingleMatcherFromObjectKeys'
-import { findRequiredParameter } from './utils/findRequiredParameter'
-import { findRequiredMatcherEntry } from './utils/findRequiredMatcherEntry'
-import { findOptionalParameter } from './utils/findOptionalParameter'
+import { textCaseProperties } from './util/textCaseProperties'
+import { getSingleMatcherFromObjectKeys } from './util/getSingleMatcherFromObjectKeys'
+import { findRequiredParameter } from './util/findRequiredParameter'
+import { findRequiredMatcherEntry } from './util/findRequiredMatcherEntry'
+import { findOptionalParameter } from './util/findOptionalParameter'
 import { FieldParser } from './FieldParser'
+import { extractPath } from './util/extractPath'
+
+const ABSOLUTE_URL_REGEX = /^[a-zA-Z][a-zA-Z\d+\-.]*?:/
 
 export function buildMockFromFile<Config extends Configuration>(
   configuration: Config,
@@ -49,15 +52,24 @@ export function buildMockFromFile<Config extends Configuration>(
   if (mock.name) builder.name(mock.name)
   if (mock.priority) builder.priority(mock.priority)
 
-  if (mock.request.method) {
-    builder.method(discoverMatcherByValue(mock.request.method, configuration.mockFieldParsers))
-  }
+  if (mock.request.method) builder.method(mock.request.method)
+  if (mock.request.scheme) builder.scheme(mock.request.scheme)
 
-  if (mock.request.url) builder.url(equalsTo(mock.request.url))
-  else if (mock.request.urlPath) builder.url(urlPath(mock.request.urlPath))
-  else if (mock.request.urlPattern) builder.url(matching(mock.request.urlPattern as any))
-  else if (mock.request.urlPathPattern)
-    builder.url(urlPathMatching(mock.request.urlPathPattern as any))
+  if (mock.request.url) {
+    if (ABSOLUTE_URL_REGEX.test(mock.request.url)) {
+      builder.url(equalsTo(mock.request.url, true))
+    } else {
+      builder.url(urlPath(extractPath(mock.request.url)))
+    }
+  } else if (mock.request.urlPath) {
+    builder.url(urlPath(mock.request.urlPath))
+  } else if (mock.request.urlPattern) {
+    builder.url(matching(mock.request.urlPattern))
+  } else if (mock.request.urlPathPattern) {
+    builder.url(urlPathMatching(mock.request.urlPathPattern))
+  } else if (mock.request.urlExact) {
+    builder.url(equalsTo(mock.request.url))
+  }
 
   if (mock.request.querystring) {
     for (const [key, value] of Object.entries(mock.request.querystring)) {
@@ -101,7 +113,7 @@ export function buildMockFromFile<Config extends Configuration>(
 
   if (mock.request.body) {
     if (typeof mock.request.body !== 'object') {
-      builder.requestBody(equalsTo(mock.request.body) as any)
+      builder.requestBody(equalsTo<unknown>(mock.request.body))
     } else {
       if (Object.keys(mock.request.body).length > 0) {
         const matcherKey = getSingleMatcherFromObjectKeys(filename, Object.keys(mock.request.body))
@@ -146,25 +158,23 @@ export function buildMockFromFile<Config extends Configuration>(
     builder.scenario(mock.scenario.name, mock.scenario.requiredState, mock.scenario.newState)
   }
 
-  if (mock.response) {
-    if (Array.isArray(mock.response)) {
-      const multiple = multipleResponses().type(mock.responseType)
+  if (Array.isArray(mock.response)) {
+    const multiple = multipleResponses().type(mock.responseType ?? 'sequential')
 
-      if (
-        mock.returnErrorOnNoResponse !== null &&
-        typeof mock.returnErrorOnNoResponse !== 'undefined'
-      ) {
-        multiple.errorOnNotFound(mock.returnErrorOnNoResponse)
-      }
-
-      for (const response of mock.response) {
-        multiple.add(buildResponse(response, filename))
-      }
-
-      builder.reply(multiple.build())
-    } else {
-      builder.reply(buildResponse(mock.response, filename).build())
+    if (
+      mock.returnErrorOnNoResponse !== null &&
+      typeof mock.returnErrorOnNoResponse !== 'undefined'
+    ) {
+      multiple.errorOnNotFound(mock.returnErrorOnNoResponse)
     }
+
+    for (const response of mock.response) {
+      multiple.add(buildResponse(response, filename))
+    }
+
+    builder.reply(multiple.build())
+  } else {
+    builder.reply(buildResponse(mock.response, filename).build())
   }
 
   for (const additionalBuilder of configuration.mockFieldParsers) {
@@ -183,7 +193,7 @@ function buildResponse(mock: MockFileResponse, filename: string): HttpResponseFi
   if (mock.latency) res.latency(mock.latency)
 
   if (mock.proxyFrom) {
-    res.proxyHeaders(mock.proxyHeaders)
+    if (mock.proxyHeaders) res.proxyHeaders(mock.proxyHeaders)
     res.proxyFrom(mock.proxyFrom)
   } else {
     if (mock.bodyFile) {
@@ -204,13 +214,11 @@ function discoverMatcherByValue(
   value: string,
   parsers: Array<FieldParser>,
   def = equalsTo
-): Matcher<any> {
-  if (value === '*' || value === 'any' || value === 'anything') {
-    return anything()
-  } else if (value === 'isPresent') {
+): Matcher<unknown> {
+  if (value === 'isPresent') {
     return isPresent()
   } else if (value === 'isUUID') {
-    return isUUID()
+    return isUUID() as Matcher<unknown>
   } else {
     let matcher: Matcher<unknown> | undefined
 
@@ -222,7 +230,7 @@ function discoverMatcherByValue(
       }
     }
 
-    return def(value)
+    return def(value) as Matcher<unknown>
   }
 }
 

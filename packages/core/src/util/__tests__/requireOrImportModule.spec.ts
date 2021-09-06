@@ -17,8 +17,4 @@ describe('requireOrImportModule', function () {
 
     expect(fn()).toEqual('hey')
   })
-
-  describe('when an error occurs', function () {
-    jest.mock('')
-  })
 })

@@ -1,15 +1,17 @@
 import { Stream } from 'stream'
 import { green, greenBright, gray, bold, italic } from 'colorette'
 import { nowInMs } from '@mockinho/core'
-import { extractPathname } from './utils'
 import { ifVerbose } from './utils'
 import { Events } from './Events'
 
 export function onRequestMatched(event: Events['requestMatched']): void {
+  const headers = Object.entries(event.responseDefinition.headers)
+  const hasHeaders = headers.length > 0
+
   // eslint-disable-next-line no-console
   console.log(
     `${greenBright(bold('REQUEST MATCHED'))} ${new Date().toISOString()} ${green(
-      `<--- ${event.method} ${extractPathname(event.url)}`
+      `<--- ${event.method} ${event.path}`
     )}` +
       '\n' +
       `${event.method} ${event.url}\n` +
@@ -34,9 +36,7 @@ export function onRequestMatched(event: Events['requestMatched']): void {
           `${green('Response Definition')}\n` +
           `${green('Status: ')}${event.responseDefinition.status}\n` +
           `${green('Headers:')}\n` +
-          `${Object.entries(event.responseDefinition.headers)
-            .map(([key, value]) => `${key}: ${value}`)
-            .join('\n')}\n` +
+          `${hasHeaders ? headers.map(([key, value]) => `${key}: ${value}`).join('\n') : ''}\n` +
           `${
             event.responseDefinition.body
               ? `${green('Body:')}\n` +

@@ -95,13 +95,14 @@ export class MockaccinoHttp {
     await this.applyMocksFromProviders()
 
     return this._httpServer.start().then(info => {
-      this._context.emit('started', { info })
+      this._context.emit('start', { info })
 
       return info
     })
   }
 
   rebuild(): Promise<void> {
+    this.removeFileMocks()
     return this.applyMocksFromProviders()
   }
 
@@ -138,7 +139,7 @@ export class MockaccinoHttp {
   }
 
   close(): Promise<void> {
-    return this._httpServer.close().finally(() => this._context.emit('closed'))
+    return this._httpServer.close().finally(() => this._context.emit('close'))
   }
 
   server(): Express {

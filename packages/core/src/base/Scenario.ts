@@ -1,7 +1,15 @@
 import { v4 as UUId } from 'uuid'
 
 export class Scenario {
-  constructor(public readonly id: string, public readonly name: string, public state: string) {}
+  public readonly id: string
+  public readonly name: string
+  private state: string
+
+  constructor(id: string, name: string, state: string) {
+    this.id = id
+    this.name = name
+    this.state = state
+  }
 
   static newScenario = (name: string): Scenario =>
     new Scenario(UUId(), name.toLowerCase(), Scenario.STATE_STARTED)
@@ -10,6 +18,10 @@ export class Scenario {
 
   isStarted(): boolean {
     return this.state === Scenario.STATE_STARTED
+  }
+
+  currentState(): string {
+    return this.state
   }
 
   updateState(newState: string): void {

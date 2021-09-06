@@ -1,6 +1,6 @@
 import { Mode } from '@mockinho/core'
 
-export interface Argv {
+export type Argv = Partial<{
   noHttp?: boolean
   port?: number
   host?: string
@@ -23,7 +23,7 @@ export interface Argv {
   logLevel?: string
 
   config?: string
-  rootDir: string
+  rootDir?: string
   mockDir?: string
   mockExtension?: string
 
@@ -41,4 +41,4 @@ export interface Argv {
   recordResponseHeaders?: Array<string>
 
   use?: Array<string>
-}
+}>

@@ -9,6 +9,7 @@ export interface HttpRequest extends Request {
   headers: Record<string, string>
   query: Record<string, string | Array<string>>
   body: BodyType
+  rawBody: Buffer
   isMultipart: boolean
   files: Array<Express.Multer.File>
   start: number
