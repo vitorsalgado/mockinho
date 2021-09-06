@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
 
-import { equalsTo } from '@mockinho/core-matchers'
 import { inspectedMatcher } from '../inspectedMatcher'
 import { Mock } from '../Mock'
 import { Matcher } from '../Matcher'
 
 describe('inspectedMatcher', function () {
+  const equalsTo = (expectation: string) => (value: string) => expectation === value
+
   const expectation = {
     matcher: equalsTo('test') as Matcher<unknown>,
     weight: 1,

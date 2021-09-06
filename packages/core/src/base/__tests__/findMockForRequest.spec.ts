@@ -1,5 +1,3 @@
-import { HttpRequest } from '@mockinho/http/dist/src'
-import { equalsTo } from '@mockinho/core-matchers'
 import { findMockForRequest } from '../findMockForRequest'
 import { MockInMemoryRepository } from '../MockInMemoryRepository'
 import { Mock } from '../Mock'
@@ -12,6 +10,8 @@ import { Mode } from '../Mode'
 import { scenarioStatefulMatcher } from '../scenarioStatefulMatcher'
 
 describe('findMockForRequest', function () {
+  const equalsTo = (expectation: string) => (value: string) => expectation === value
+
   class TestRepo extends MockInMemoryRepository<Mock> {
     public constructor() {
       super()
@@ -61,7 +61,7 @@ describe('findMockForRequest', function () {
     repo.save(mock1)
     repo.save(mock2)
 
-    const request = {} as HttpRequest
+    const request = {}
 
     it('should match and return matched mock in the result', function () {
       const result = findMockForRequest(request, ctx)
@@ -115,7 +115,7 @@ describe('findMockForRequest', function () {
     repo.save(mock1)
     repo.save(mock2)
 
-    const request = {} as HttpRequest
+    const request = {}
 
     it('should return result with the closest match when available', function () {
       const result = findMockForRequest(request, ctx)
@@ -163,7 +163,7 @@ describe('findMockForRequest', function () {
     repo.save(mock1)
     repo.save(mock2)
 
-    const request = {} as HttpRequest
+    const request = {}
 
     it('should return the result empty', function () {
       const result = findMockForRequest(request, ctx)

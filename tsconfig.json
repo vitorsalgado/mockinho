@@ -11,6 +11,7 @@
     "sourceMap": true,
     "declaration": true,
 
+    "useUnknownInCatchVariables": true,
     "alwaysStrict": true,
     "forceConsistentCasingInFileNames": true,
     "removeComments": true,
