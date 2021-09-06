@@ -25,7 +25,7 @@ export function parseMockFile(file: string, parser: () => MockFile | Array<MockF
     }
 
     return { error: validate.errors, file, mocks: [] }
-  } catch (ex) {
+  } catch (ex: any) {
     return {
       file,
       error: ex.message,

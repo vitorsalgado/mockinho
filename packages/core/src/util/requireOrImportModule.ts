@@ -15,7 +15,7 @@ export async function requireOrImportModule<T>(file: string): Promise<T> {
       const interop = interopRequireDefault(required)
 
       return interop.default
-    } catch (ex) {
+    } catch (ex: any) {
       if (ex.code === 'ERR_REQUIRE_ESM') {
         const imported = await import(path)
 
@@ -42,7 +42,7 @@ const loadTypeScriptConfigFile = async <T>(file: string): Promise<T> => {
         module: 'CommonJS'
       }
     })
-  } catch (e) {
+  } catch (e: any) {
     if (e.code === 'MODULE_NOT_FOUND') {
       throw new Error(
         `'ts-node' is required when configuration is a TypeScript file. Make sure it is installed.\nError: ${e.message}`

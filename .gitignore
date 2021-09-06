@@ -120,7 +120,7 @@ lerna-debug.json
 # Project
 .idea/
 .vscode/
-tools/dev
-yarn.lock
-
 ./__fixtures__
+yarn.lock
+.yarnrc.yml
+.yarn/

@@ -18,7 +18,6 @@
   "files": [
     "dist"
   ],
-  "private": false,
   "publishConfig": {
     "access": "public"
   },

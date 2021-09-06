@@ -58,7 +58,7 @@ export class HttpServer {
 
   preSetup(): void {
     for (const server of this.serverInstances) {
-      server.on('connection', socket => {
+      server.on('connection', (socket: Socket) => {
         this.sockets.add(socket)
         socket.once('close', () => this.sockets.delete(socket))
       })
@@ -68,15 +68,15 @@ export class HttpServer {
     this.expressApp.disable('etag')
 
     this.expressApp.use(rawBodyMiddleware as Router)
-    this.expressApp.use(express.json())
+    this.expressApp.use(express.json() as unknown as Router)
     this.expressApp.use(express.urlencoded(this.configuration.formUrlEncodedOptions))
     this.expressApp.use(express.text())
 
     this.expressApp.use(logIncomingRequestMiddleware(this.context))
     this.expressApp.use(
-      CookieParse(this.configuration.cookieSecrets, this.configuration.cookieOptions)
+      CookieParse(this.configuration.cookieSecrets, this.configuration.cookieOptions) as Router
     )
-    this.expressApp.use(Multer(this.configuration.multiPartOptions).any())
+    this.expressApp.use(Multer(this.configuration.multiPartOptions).any() as Router)
     this.expressApp.use(decorateRequestMiddleware as Router)
 
     this.configuration.preHandlerMiddlewares.forEach(x =>
@@ -134,11 +134,12 @@ export class HttpServer {
     }
 
     if (this.httpServer) {
-      const { port } = await new Promise<AddressInfo>(resolve =>
-        this.httpServer?.listen(httpDynamicPort ? 0 : httpPort, httpHost, () =>
-          resolve(this.httpServer?.address() as AddressInfo)
-        )
-      )
+      const { port } = await new Promise<AddressInfo>(resolve => {
+        if (this.httpServer)
+          this.httpServer.listen(httpDynamicPort ? 0 : httpPort, httpHost, () =>
+            resolve(this.httpServer?.address() as AddressInfo)
+          )
+      })
 
       info.httpPort = port
 
@@ -148,11 +149,12 @@ export class HttpServer {
     }
 
     if (this.httpsServer) {
-      const { port } = await new Promise<AddressInfo>(resolve =>
-        this.httpsServer?.listen(httpsDynamicPort ? 0 : httpsPort, httpsHost, () =>
-          resolve(this.httpsServer?.address() as AddressInfo)
-        )
-      )
+      const { port } = await new Promise<AddressInfo>(resolve => {
+        if (this.httpsServer)
+          this.httpsServer.listen(httpsDynamicPort ? 0 : httpsPort, httpsHost, () => {
+            if (this.httpsServer) resolve(this.httpsServer.address() as AddressInfo)
+          })
+      })
 
       info.httpsPort = port
 
@@ -192,7 +194,11 @@ export class HttpServer {
     }
 
     if (this.httpsServer) {
-      listeners.push(new Promise<void>(resolve => this.httpsServer?.close(() => resolve())))
+      listeners.push(
+        new Promise<void>(resolve => {
+          if (this.httpsServer) this.httpsServer.close(() => resolve())
+        })
+      )
     }
 
     await Promise.all(listeners)
