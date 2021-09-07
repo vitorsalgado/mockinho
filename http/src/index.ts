@@ -2,7 +2,7 @@ export * from '@mockinho/core-matchers'
 
 export * from './config'
 export * from './mock'
-export * from './events'
+export * from './eventlisteners'
 export * from './HttpServer'
 export * from './HttpContext'
 export * from './HttpRequest'

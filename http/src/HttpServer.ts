@@ -17,8 +17,8 @@ import { decorateRequestMiddleware } from './decorateRequestMiddleware'
 import { HttpRequest } from './HttpRequest'
 import { configureProxy } from './configureProxy'
 import { Configuration } from './config'
-import { logIncomingRequestMiddleware } from './events/logIncomingRequestMiddleware'
-import { logReqAndResMiddleware } from './events/logReqAndResMiddleware'
+import { logIncomingRequestMiddleware } from './eventlisteners/logIncomingRequestMiddleware'
+import { logReqAndResMiddleware } from './eventlisteners/logReqAndResMiddleware'
 import { rawBodyMiddleware } from './rawBodyMiddleware'
 
 export interface HttpServerInfo {

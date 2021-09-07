@@ -2,7 +2,9 @@
   "version": "0.0.0",
   "npmClient": "npm",
   "packages": [
-    "packages/*"
+    "core",
+    "core-matchers",
+    "http"
   ],
   "ignoreChanges": ["**/__fixtures__/**", "**/__tests__/**", "**/*.md", "./build", "./docs"],
   "command": {

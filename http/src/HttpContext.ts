@@ -1,7 +1,7 @@
 import { Context } from '@mockinho/core'
 import { ScenarioRepository } from '@mockinho/core'
 import { Configuration } from './config'
-import { EventListener } from './events'
+import { EventListener } from './eventlisteners'
 import { HttpMockRepository } from './mock'
 import { HttpMock } from './mock'
 

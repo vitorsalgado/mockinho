@@ -2,8 +2,8 @@
   "name": "@mockinho/http",
   "version": "0.0.0",
   "description": "Mockinho HTTP Mock Server",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js",
     "./package.json": "./package.json"
@@ -23,7 +23,7 @@
   },
   "author": "Vitor Hugo Salgado <vsalgadopb@gmail.com>",
   "homepage": "https://github.com/vitorsalgado/mockinho/tree/master/packages/http#readme",
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vitorsalgado/mockinho.git"

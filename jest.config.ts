@@ -14,8 +14,8 @@ const config: JestConfig.InitialOptions = {
     }
   },
   collectCoverageFrom: [
-    '**/packages/*/**/*.ts',
-    '!**/packages/*/**/*.config.ts',
+    '**/**/*.ts',
+    '!**/**/*.config.ts',
     '!**/__fixtures__/**',
     '!**/__tests__/**'
   ],
