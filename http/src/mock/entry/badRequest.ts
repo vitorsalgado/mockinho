@@ -1,5 +1,5 @@
-import { StatusCodes } from '../../types'
 import { DefaultResponseBuilder } from '../../types'
+import { StatusCodes } from '../../StatusCodes'
 import { response } from './response'
 
 export const badRequest = (): DefaultResponseBuilder => response().status(StatusCodes.BAD_REQUEST)

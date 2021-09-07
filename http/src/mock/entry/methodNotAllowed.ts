@@ -1,5 +1,7 @@
-import { Headers, HttpMethods, StatusCodes } from '../../types'
+import { HttpMethods } from '../../types'
 import { DefaultResponseBuilder } from '../../types'
+import { Headers } from '../../Headers'
+import { StatusCodes } from '../../StatusCodes'
 import { response } from './response'
 
 export const methodNotAllowed = (allows?: HttpMethods): DefaultResponseBuilder => {

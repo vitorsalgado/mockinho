@@ -1,6 +1,6 @@
 import { yellowBright, yellow, bold } from 'colorette'
 import { MockaccinoError } from '@mockinho/core'
-import { ErrorCodes } from '../types'
+import { ErrorCodes } from '../ErrorCodes'
 import { HttpMockRepository } from './HttpMockRepository'
 import { HttpMock } from './HttpMock'
 

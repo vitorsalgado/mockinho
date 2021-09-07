@@ -1,5 +1,6 @@
-import { Headers, StatusCodes } from '../../types'
 import { DefaultResponseBuilder } from '../../types'
+import { Headers } from '../../Headers'
+import { StatusCodes } from '../../StatusCodes'
 import { response } from './response'
 
 export const unauthorized = (wwwAuth?: string): DefaultResponseBuilder => {

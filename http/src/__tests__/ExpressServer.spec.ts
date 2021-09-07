@@ -7,8 +7,9 @@ import { HttpMockRepository } from '..'
 
 import { urlPath } from '../matchers'
 import { okJSON } from '../mock'
-import { Headers, MediaTypes } from '../types'
 import mockHttp from '../mockHttp'
+import { MediaTypes } from '../MediaTypes'
+import { Headers } from '../Headers'
 
 describe('Express Http Server', function () {
   const $ = mockHttp(opts().dynamicHttpPort())
@@ -19,7 +20,7 @@ describe('Express Http Server', function () {
     .httpPort(0)
     .info()
     .enableFileMocks(false)
-    .logLevel('warn')
+    .internalLogLevel('warn')
     .trace()
     .formUrlEncodedOptions({ limit: 1000 })
     .enableCors({ maxAge: 10 })

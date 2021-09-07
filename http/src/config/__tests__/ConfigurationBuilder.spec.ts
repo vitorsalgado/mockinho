@@ -14,7 +14,7 @@ describe('Configurations Builder', function () {
       .https(3001, { enableTrace: true }, '127.0.0.1')
       .dynamicHttpPort()
       .timeout(5000)
-      .logLevel('silent')
+      .internalLogLevel('silent')
       .mode('trace')
       .enableFileMocks(false)
       .mockDirectory(Path.join(__dirname, 'test'))

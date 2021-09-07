@@ -15,7 +15,7 @@ import { HttpMockRepository } from './mock'
 import { HttpMock } from './mock'
 import { DefaultConfiguration } from './types'
 import { MockProvider } from './mock/providers/MockProvider'
-import { HttpServer, HttpServerInfo } from './HttpServer'
+import { HttpServer, Info } from './HttpServer'
 import { HttpRequest } from './HttpRequest'
 import { defaultMockProviderFactory } from './mock/providers/default/defaultMockProviderFactory'
 
@@ -91,7 +91,7 @@ export class MockaccinoHttp {
     return new Scope(this._mockRepository, added)
   }
 
-  async start(): Promise<HttpServerInfo> {
+  async start(): Promise<Info> {
     await this.applyMocksFromProviders()
 
     return this._httpServer.start().then(info => {
@@ -146,7 +146,7 @@ export class MockaccinoHttp {
     return this._httpServer.server()
   }
 
-  info(): HttpServerInfo {
+  info(): Info {
     return this._httpServer.info()
   }
 

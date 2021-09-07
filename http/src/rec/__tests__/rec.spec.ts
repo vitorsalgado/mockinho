@@ -7,10 +7,10 @@ import { sleep } from '@mockinho/core'
 import { opts } from '../../config'
 import { okJSON } from '../../mock'
 import { get } from '../../mock'
-import { Headers } from '../../types'
-import { MediaTypes } from '../../types'
 import mockHttp from '../../mockHttp'
 import { urlPath } from '../../matchers'
+import { MediaTypes } from '../../MediaTypes'
+import { Headers } from '../../Headers'
 
 describe('Record', function () {
   const target = mockHttp(opts().dynamicHttpPort().trace())

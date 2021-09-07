@@ -6,8 +6,9 @@ import { get } from '..'
 import { mockHttp } from '..'
 import { urlPath } from '../matchers'
 import { ok, okJSON, post } from '../mock'
-import { Headers, MediaTypes } from '../types'
 import { opts } from '../config/opts'
+import { MediaTypes } from '../MediaTypes'
+import { Headers } from '../Headers'
 
 const fixture = (name: string) => Path.join(__dirname, `__fixtures__/__content__${name}`)
 

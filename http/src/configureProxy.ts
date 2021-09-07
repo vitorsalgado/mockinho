@@ -10,8 +10,8 @@ import { LoggerUtil } from '@mockinho/core'
 import { RecordDispatcher } from './rec/RecordDispatcher'
 import { HttpRequest } from './HttpRequest'
 import { HttpContext } from './HttpContext'
-import { MediaTypes } from './types'
-import { Headers } from './types'
+import { MediaTypes } from './MediaTypes'
+import { Headers } from './Headers'
 
 export function configureProxy(
   context: HttpContext,
@@ -35,13 +35,6 @@ export function configureProxy(
         proxyReq.setHeader(Headers.ContentLength, Buffer.byteLength(request.rawBody))
         proxyReq.write(request.rawBody)
       }
-
-      // if (request.body) {
-      //   const body = Buffer.from(request.body)
-      //
-      //   proxyReq.setHeader(Headers.ContentLength, Buffer.byteLength())
-      //   proxyReq.write(request.body)
-      // }
     } as (proxyReq: ClientRequest, request: IncomingMessage) => void,
 
     onError:
@@ -64,6 +57,8 @@ export function configureProxy(
           .finally(() => LoggerUtil.instance().debug('Recorder Dispatcher Terminated'))
       )
     }
+
+    dispatcher.init()
 
     opts.selfHandleResponse = true
     opts.onProxyRes = responseInterceptor(async (responseBuffer, proxyRes, req, res) => {

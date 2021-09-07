@@ -2,7 +2,7 @@
 
 import { Readable } from 'stream'
 import { onRequestReceived } from '../onRequestReceived'
-import { MediaTypes } from '../../types'
+import { MediaTypes } from '../../MediaTypes'
 
 describe('onRequestReceived', function () {
   beforeEach(() => {

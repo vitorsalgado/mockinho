@@ -1,8 +1,8 @@
 import { red } from 'colorette'
 import { bold } from 'colorette'
-import { HttpServerInfo } from '../HttpServer'
+import { Info } from '../HttpServer'
 
-export function parseServerInfo(info: HttpServerInfo): string {
+export function parseServerInfo(info: Info): string {
   let res = ''
 
   if (info.useHttp) {

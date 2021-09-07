@@ -1,5 +1,5 @@
 import { MockaccinoError } from '@mockinho/core'
-import { ErrorCodes } from '../../../types'
+import { ErrorCodes } from '../../../ErrorCodes'
 
 export class InvalidMockFileError extends MockaccinoError {
   constructor(message: string, public readonly filename: string) {

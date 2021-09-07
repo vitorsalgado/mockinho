@@ -1,5 +1,5 @@
-import { StatusCodes } from '../../types'
 import { DefaultResponseBuilder } from '../../types'
+import { StatusCodes } from '../../StatusCodes'
 import { response } from './response'
 
 export const notFound = (): DefaultResponseBuilder => response().status(StatusCodes.NOT_FOUND)

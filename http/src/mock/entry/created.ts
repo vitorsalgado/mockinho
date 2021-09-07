@@ -1,6 +1,6 @@
-import { StatusCodes } from '../../types'
 import { DefaultResponseBuilder } from '../../types'
 import { HttpResponseFixtureBuilder } from '../HttpResponseFixtureBuilder'
+import { StatusCodes } from '../../StatusCodes'
 
 export const created = (location?: string): DefaultResponseBuilder =>
   HttpResponseFixtureBuilder.newBuilder().headerLocation(location).status(StatusCodes.CREATED)

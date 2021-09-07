@@ -46,7 +46,7 @@ export function readConfigFromArgv(argv: Argv) {
 
     if (argv.timeout) builder.timeout(argv.timeout)
     if (argv.mode) builder.mode(argv.mode)
-    if (argv.logLevel) builder.logLevel(argv.logLevel as Level)
+    if (argv.logLevel) builder.internalLogLevel(argv.logLevel as Level)
 
     if (argv.rootDir) builder.rootDir(Path.resolve(argv.rootDir))
     if (argv.mockDir) builder.mockDirectory(Path.resolve(argv.mockDir))

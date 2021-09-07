@@ -4,14 +4,14 @@ import { green } from 'colorette'
 import { greenBright } from 'colorette'
 import { Configuration } from '../config'
 import { Argv } from '../config'
-import { HttpServerInfo } from '../HttpServer'
+import { Info } from '../HttpServer'
 import Banner from './banner'
 import { parseServerInfo } from './utils'
 
 export function printInfo(
   config: Configuration,
   options: Argv,
-  info: HttpServerInfo,
+  info: Info,
   pkg: Record<string, unknown>
 ): void {
   console.log(Banner)

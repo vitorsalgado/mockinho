@@ -10,7 +10,6 @@ import Multer from 'multer'
 import Cors from 'cors'
 import CookieParse from 'cookie-parser'
 import { LoggerUtil } from '@mockinho/core'
-import { ErrorCodes } from './types'
 import { HttpContext } from './HttpContext'
 import { mockFinderMiddleware } from './mockFinderMiddleware'
 import { decorateRequestMiddleware } from './decorateRequestMiddleware'
@@ -20,8 +19,9 @@ import { Configuration } from './config'
 import { logIncomingRequestMiddleware } from './eventlisteners/logIncomingRequestMiddleware'
 import { logReqAndResMiddleware } from './eventlisteners/logReqAndResMiddleware'
 import { rawBodyMiddleware } from './rawBodyMiddleware'
+import { ErrorCodes } from './ErrorCodes'
 
-export interface HttpServerInfo {
+export interface Info {
   useHttp: boolean
   httpPort: number
   httpHost: string
@@ -88,7 +88,7 @@ export class HttpServer {
     this.expressApp.use(logReqAndResMiddleware(this.context) as Router)
   }
 
-  async start(): Promise<HttpServerInfo> {
+  async start(): Promise<Info> {
     const mockFinder = mockFinderMiddleware(this.context)
 
     this.expressApp.all('*', (req, res, next) =>
@@ -124,7 +124,7 @@ export class HttpServer {
     const { httpPort, httpHost, httpDynamicPort, httpsPort, httpsHost, httpsDynamicPort } =
       this.configuration
 
-    const info: HttpServerInfo = {
+    const info: Info = {
       useHttp: this.configuration.useHttp,
       httpPort: 0,
       httpHost: this.configuration.httpHost,
@@ -166,7 +166,7 @@ export class HttpServer {
     return info
   }
 
-  info(): HttpServerInfo {
+  info(): Info {
     return {
       useHttp: this.configuration.useHttp,
       httpHost: this.configuration.httpHost,

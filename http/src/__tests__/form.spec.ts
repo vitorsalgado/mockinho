@@ -3,7 +3,8 @@ import { hasLength } from '@mockinho/core-matchers'
 import { allOf, containing, equalsTo, item, jsonPath, opts, post, urlPath } from '..'
 import { mockHttp } from '..'
 import { ok } from '../mock'
-import { Headers, MediaTypes } from '../types'
+import { MediaTypes } from '../MediaTypes'
+import { Headers } from '../Headers'
 
 describe('HTTP - Form Url Encoded', function () {
   const $ = mockHttp(opts().dynamicHttpPort().formUrlEncodedOptions({ limit: 80 }))

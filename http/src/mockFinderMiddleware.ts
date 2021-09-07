@@ -7,9 +7,9 @@ import { HttpContext } from './HttpContext'
 import { HttpRequest } from './HttpRequest'
 import { HttpResponseFixture, HttpMock } from './mock'
 import { BodyType } from './types'
-import { Headers } from './types'
-import { MediaTypes } from './types'
 import { Configuration } from './config'
+import { MediaTypes } from './MediaTypes'
+import { Headers } from './Headers'
 
 export function mockFinderMiddleware(
   context: HttpContext

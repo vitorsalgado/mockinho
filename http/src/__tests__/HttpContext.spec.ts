@@ -11,7 +11,7 @@ describe('HttpContext', function () {
       .httpPort(3000)
       .dynamicHttpPort()
       .enableFileMocks(false)
-      .logLevel('warn')
+      .internalLogLevel('warn')
       .trace()
       .formUrlEncodedOptions({ limit: 1000 })
       .enableCors({ maxAge: 10 })

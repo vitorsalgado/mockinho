@@ -170,7 +170,7 @@ export class ConfigurationBuilder {
     return this
   }
 
-  logLevel(level: Level): this {
+  internalLogLevel(level: Level): this {
     this._logLevel = level
     return this
   }

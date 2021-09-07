@@ -25,7 +25,9 @@ export class RecordDispatcher {
         captureRequestHeaders: this.configuration.recordOptions?.captureRequestHeaders
       } as RecordData
     })
+  }
 
+  init(): void {
     this.worker.on('message', (mock: string, mockBody: string) =>
       this.context.emit('recorded', { mock, mockBody })
     )
