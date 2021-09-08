@@ -29,11 +29,6 @@
     "composite": true,
     "skipLibCheck": true,
 
-    "typeRoots": [
-      "node_modules/@types",
-      "declarations.d.ts"
-    ],
-
     "baseUrl": ".",
     "outDir": "dist"
   },
