@@ -1,1 +1,4 @@
-export const anything = () => (): boolean => true
+export const anything = () =>
+  function anything(): boolean {
+    return true
+  }

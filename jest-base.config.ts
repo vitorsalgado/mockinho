@@ -9,11 +9,11 @@ const config: JestConfig.InitialOptions = {
   transform: { '^.+\\.tsx?$': 'ts-jest' },
   globals: {
     'ts-jest': {
-      tsconfig: '../../tsconfig.test.json'
+      tsconfig: '../tsconfig.test.json'
     }
   },
-  coveragePathIgnorePatterns: ['/dist/', '<rootDit>/dist', '/node_modules/'],
-  testPathIgnorePatterns: ['/dist/', '<rootDit>/dist', '/node_modules/']
+  coveragePathIgnorePatterns: ['/dist/', '<rootDit>/dist', '/node_modules/', '<rootDir>/examples'],
+  testPathIgnorePatterns: ['/dist/', '<rootDit>/dist', '/node_modules/', '<rootDir>/examples']
 }
 
 export default config

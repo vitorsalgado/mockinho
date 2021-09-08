@@ -1,20 +1,20 @@
 import { red } from 'colorette'
 import { bold } from 'colorette'
-import { Info } from '../HttpServer'
+import { Info } from '../Info'
 
 export function parseServerInfo(info: Info): string {
   let res = ''
 
-  if (info.useHttp) {
-    res += `http://${info.httpHost}:${info.httpPort}`
+  if (info.http.enabled) {
+    res += `http://${info.http.host}:${info.http.port}`
   }
 
-  if (info.useHttps) {
+  if (info.https.enabled) {
     if (res.length > 0) {
       res += ', '
     }
 
-    res += `https://${info.httpsHost}:${info.httpsPort}`
+    res += `https://${info.https.host}:${info.https.port}`
   }
 
   return res

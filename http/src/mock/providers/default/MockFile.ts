@@ -1,4 +1,5 @@
 import { MultiResponseStrategy } from '../../HttpMultipleResponseFixtureBuilder'
+import { HttpMethods } from '../../../types'
 
 export interface MockFileResponse {
   status: number
@@ -25,7 +26,7 @@ export interface MockFile {
 
   request: {
     scheme?: 'http' | 'https'
-    method?: string
+    method?: HttpMethods
     url?: string
     urlPath?: string
     urlPattern?: RegExp

@@ -4,7 +4,7 @@ import { Level } from '@mockinho/core'
 export const Defaults = {
   fixturesDir: '__fixtures__',
   port: 0,
-  host: '127.0.0.1',
+  host: 'localhost',
   mode: 'verbose' as Mode,
   timeout: 5 * 60 * 1000,
   rootDir: process.cwd(),

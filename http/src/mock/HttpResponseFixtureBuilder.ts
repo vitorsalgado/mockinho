@@ -5,6 +5,7 @@ import { CookieOptions } from 'express'
 import { isTrue, notBlank, notNull } from '@mockinho/core'
 import { BodyType } from '../types'
 import { DefaultResponseBuilder } from '../types'
+import { JsonType } from '../types'
 import { HttpRequest } from '../HttpRequest'
 import { HttpContext } from '../HttpContext'
 import { MediaTypes } from '../MediaTypes'
@@ -114,7 +115,7 @@ export class HttpResponseFixtureBuilder {
     return this
   }
 
-  bodyJSON(body: Record<string, unknown>): this {
+  bodyJSON(body: JsonType): this {
     notNull(body)
 
     return this.body(JSON.stringify(body)).header(Headers.ContentType, MediaTypes.APPLICATION_JSON)
@@ -142,11 +143,7 @@ export class HttpResponseFixtureBuilder {
     return this
   }
 
-  cookieJson(
-    key: string,
-    value: Record<string, unknown> | Array<unknown>,
-    options?: CookieOptions
-  ): this {
+  cookieJson(key: string, value: JsonType, options?: CookieOptions): this {
     this.cookie(key, JSON.stringify(value), options)
 
     return this

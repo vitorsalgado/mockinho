@@ -1,6 +1,6 @@
 import { HttpMock } from '../mock'
 import { HttpMethods } from '../types'
-import { Info } from '../HttpServer'
+import { Info } from '../Info'
 import { Transaction } from './Transaction'
 
 export interface Events {

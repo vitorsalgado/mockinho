@@ -1,15 +1,15 @@
 import { Matcher } from '@mockinho/core'
 import { equalsTo } from './equalsTo'
 
-export const containing = <V>(expectation: string): Matcher<V> =>
+export const containing = <V>(expected: string): Matcher<V> =>
   function containing(value): boolean {
     if (value === null || typeof value === 'undefined') {
       return false
     }
 
     if (Array.isArray(value)) {
-      return value.some(x => equalsTo(expectation)(x))
+      return value.some(x => equalsTo(expected)(x))
     }
 
-    return String(value).indexOf(expectation) > -1
+    return String(value).indexOf(expected) > -1
   }

@@ -15,9 +15,10 @@ import { HttpMockRepository } from './mock'
 import { HttpMock } from './mock'
 import { DefaultConfiguration } from './types'
 import { MockProvider } from './mock/providers/MockProvider'
-import { HttpServer, Info } from './HttpServer'
+import { HttpServer } from './HttpServer'
 import { HttpRequest } from './HttpRequest'
 import { defaultMockProviderFactory } from './mock/providers/default/defaultMockProviderFactory'
+import { Info } from './Info'
 
 export class MockaccinoHttp {
   // --

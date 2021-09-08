@@ -39,7 +39,7 @@ describe('Express Http Server', function () {
   it('should return server connection information', async function () {
     await httpServer.start()
 
-    expect(httpServer.info().httpPort).toBeGreaterThan(0)
+    expect(httpServer.info().http.port).toBeGreaterThan(0)
   })
 
   it('should accept empty json requests', function () {

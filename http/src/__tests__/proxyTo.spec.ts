@@ -32,7 +32,7 @@ describe('Proxied Responses', function () {
         get(urlPath('/test'))
           .header('content-type', containing('json'))
           .proxyTo(
-            `http://localhost:${P.info().httpPort}`,
+            `http://localhost:${P.info().http.port}`,
             response()
               .header('test', 'ok')
               .proxyHeader('proxy-header', '100')

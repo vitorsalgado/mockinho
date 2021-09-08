@@ -18,7 +18,9 @@ describe('Forward Proxy', function () {
   describe('when forward proxying requests', function () {
     it('should return success response from target', async function () {
       const $ = mockHttp(
-        opts().dynamicHttpPort().proxy(`http://${target.info().httpHost}:${target.info().httpPort}`)
+        opts()
+          .dynamicHttpPort()
+          .proxy(`http://${target.info().http.host}:${target.info().http.port}`)
       )
 
       try {
@@ -50,7 +52,9 @@ describe('Forward Proxy', function () {
 
     it('should return error response from target', async function () {
       const $ = mockHttp(
-        opts().dynamicHttpPort().proxy(`http://${target.info().httpHost}:${target.info().httpPort}`)
+        opts()
+          .dynamicHttpPort()
+          .proxy(`http://${target.info().http.host}:${target.info().http.port}`)
       )
 
       try {
@@ -77,7 +81,9 @@ describe('Forward Proxy', function () {
 
     it('should send the body', async function () {
       const $ = mockHttp(
-        opts().dynamicHttpPort().proxy(`http://${target.info().httpHost}:${target.info().httpPort}`)
+        opts()
+          .dynamicHttpPort()
+          .proxy(`http://${target.info().http.host}:${target.info().http.port}`)
       )
 
       try {
@@ -113,7 +119,7 @@ describe('Forward Proxy', function () {
       const $ = mockHttp(
         opts()
           .dynamicHttpPort()
-          .proxy(`http://${target.info().httpHost}:${target.info().httpPort}`, {
+          .proxy(`http://${target.info().http.host}:${target.info().http.port}`, {
             proxyTimeout: 100
           })
       )

@@ -9,7 +9,6 @@
     "**/*.spec.js",
     "*.spec.ts",
     "**/spec.ts",
-    "*.config.ts",
-    "tools"
+    "*.config.ts"
   ]
 }

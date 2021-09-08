@@ -29,7 +29,7 @@ describe('Record', function () {
       const $ = mockHttp(
         opts()
           .dynamicHttpPort()
-          .proxy(`http://${target.info().httpHost}:${target.info().httpPort}`)
+          .proxy(`http://${target.info().http.host}:${target.info().http.port}`)
           .record({ destination: recordDir })
       )
 

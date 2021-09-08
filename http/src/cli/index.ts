@@ -5,7 +5,6 @@ import Yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs'
 import { Mode } from '@mockinho/core'
-import Pkg from '../../package.json'
 import { Argv } from '../config'
 import { run } from './run'
 import { printErrorAndExit } from './utils'
@@ -15,7 +14,7 @@ export default Yargs(hideBin(process.argv))
   .scriptName('mockhttp')
   .usage('Usage: $0 [options]')
   .epilog('Take a look on this opensource project on https://github.com/vitorsalgado/mockinho')
-  .version('v', Pkg.version)
+  .version('v', '1.0.0')
   .alias('v', 'version')
   .help('h')
   .alias('h', 'help')

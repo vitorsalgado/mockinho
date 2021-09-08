@@ -24,13 +24,15 @@ const config: JestConfig.InitialOptions = {
     '/node_modules/',
     '<rootDir>/scripts',
     '/dist/',
-    '<rootDir>/tools'
+    '<rootDir>/tools',
+    '<rootDir>/examples'
   ],
   testPathIgnorePatterns: [
     '<rootDir>/dist/',
     '/node_modules/',
     '<rootDir>/scripts',
-    '<rootDir>/tools'
+    '<rootDir>/tools',
+    '<rootDir>/examples'
   ],
   testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)']
 }

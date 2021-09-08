@@ -1,6 +1,6 @@
 import { requireOrImportModule } from '@mockinho/core'
 import { ConfigurationBuilder } from '../ConfigurationBuilder'
-import { PreMiddleware } from '../ConfigurationBuilder'
+import { PreMiddleware } from '../PreMiddleware'
 
 const SEPARATOR = '|'
 

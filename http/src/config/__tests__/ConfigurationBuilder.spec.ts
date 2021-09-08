@@ -27,7 +27,7 @@ describe('Configurations Builder', function () {
     const cfg = builder.build()
 
     expect(cfg.httpPort).toEqual(3000)
-    expect(cfg.httpHost).toEqual('127.0.0.1')
+    expect(cfg.httpHost).toEqual(Defaults.host)
     expect(cfg.useHttps).toBeTruthy()
     expect(cfg.httpsPort).toEqual(3001)
     expect(cfg.httpsOptions).toEqual({ enableTrace: true })

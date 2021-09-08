@@ -1,13 +1,12 @@
 {
-  "extends": "../tsconfig.build.json",
-  "compilerOptions": {
-    "rootDir": ".",
-    "outDir": "dist",
-    "allowJs": true
-  },
-  "include": ["src", "package.json"],
-  "references": [
-    { "path": "../core", "prepend": false },
-    { "path": "../core-matchers", "prepend": false }
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "dist",
+    "node_modules",
+    "**/__tests__/",
+    "**/__fixtures__",
+    "*.spec.ts",
+    "*.spec.js",
+    "*.config.ts"
   ]
 }

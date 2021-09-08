@@ -20,16 +20,7 @@ import { logIncomingRequestMiddleware } from './eventlisteners/logIncomingReques
 import { logReqAndResMiddleware } from './eventlisteners/logReqAndResMiddleware'
 import { rawBodyMiddleware } from './rawBodyMiddleware'
 import { ErrorCodes } from './ErrorCodes'
-
-export interface Info {
-  useHttp: boolean
-  httpPort: number
-  httpHost: string
-
-  useHttps: boolean
-  httpsPort: number
-  httpsHost: string
-}
+import { Info } from './Info'
 
 export class HttpServer {
   private readonly configuration: Configuration
@@ -38,6 +29,7 @@ export class HttpServer {
   private readonly sockets: Set<Socket> = new Set<Socket>()
   private readonly httpServer?: NodeHttpServer
   private readonly httpsServer?: NodeHttpsServer
+  private readonly information: Info
 
   constructor(private readonly context: HttpContext) {
     this.configuration = context.configuration
@@ -53,6 +45,22 @@ export class HttpServer {
       this.httpsServer = createHttpsServer(this.configuration.httpsOptions, this.expressApp)
       this.httpsServer.setTimeout(this.configuration.timeout)
       this.serverInstances.push(this.httpsServer)
+    }
+
+    this.information = {
+      http: {
+        enabled: this.configuration.useHttp,
+        port: 0,
+        host: this.configuration.httpHost,
+        baseUrl: ''
+      },
+
+      https: {
+        enabled: this.configuration.useHttps,
+        port: 0,
+        host: this.configuration.httpsHost,
+        baseUrl: ''
+      }
     }
   }
 
@@ -124,15 +132,6 @@ export class HttpServer {
     const { httpPort, httpHost, httpDynamicPort, httpsPort, httpsHost, httpsDynamicPort } =
       this.configuration
 
-    const info: Info = {
-      useHttp: this.configuration.useHttp,
-      httpPort: 0,
-      httpHost: this.configuration.httpHost,
-      useHttps: this.configuration.useHttps,
-      httpsPort: 0,
-      httpsHost: this.configuration.httpsHost
-    }
-
     if (this.httpServer) {
       const { port } = await new Promise<AddressInfo>(resolve => {
         if (this.httpServer)
@@ -141,7 +140,9 @@ export class HttpServer {
           )
       })
 
-      info.httpPort = port
+      this.information.http.port = port
+      this.information.http.host = this.configuration.httpHost
+      this.information.http.baseUrl = `http://${this.configuration.httpHost}:${port}`
 
       this.httpServer.on('error', (err: Error & Record<string, unknown>) =>
         this.context.emit('exception', err)
@@ -156,25 +157,20 @@ export class HttpServer {
           })
       })
 
-      info.httpsPort = port
+      this.information.https.port = port
+      this.information.https.host = this.configuration.httpsHost
+      this.information.https.baseUrl = `http://${this.configuration.httpsHost}:${port}`
 
       this.httpsServer.on('error', (err: Error & Record<string, unknown>) =>
         this.context.emit('exception', err)
       )
     }
 
-    return info
+    return this.information
   }
 
   info(): Info {
-    return {
-      useHttp: this.configuration.useHttp,
-      httpHost: this.configuration.httpHost,
-      httpPort: this.httpServer ? (this.httpServer.address() as AddressInfo).port : 0,
-      useHttps: this.configuration.useHttps,
-      httpsHost: this.configuration.httpsHost,
-      httpsPort: this.httpsServer ? (this.httpsServer.address() as AddressInfo).port : 0
-    }
+    return this.information
   }
 
   server(): Express {

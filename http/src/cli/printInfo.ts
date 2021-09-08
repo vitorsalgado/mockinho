@@ -4,18 +4,13 @@ import { green } from 'colorette'
 import { greenBright } from 'colorette'
 import { Configuration } from '../config'
 import { Argv } from '../config'
-import { Info } from '../HttpServer'
+import { Info } from '../Info'
 import Banner from './banner'
 import { parseServerInfo } from './utils'
 
-export function printInfo(
-  config: Configuration,
-  options: Argv,
-  info: Info,
-  pkg: Record<string, unknown>
-): void {
+export function printInfo(config: Configuration, options: Argv, info: Info): void {
   console.log(Banner)
-  console.log(green('Version: ') + pkg.version)
+  console.log(green('Version: ') + '1.0.0')
   console.log(green('Log Mode: ') + config.mode)
   console.log(green('Mocks: ') + config.mockDirectory)
   console.log(green('Mock Extensions: ') + '*.' + config.mockFilesExtension + '.<yaml|yml|json>')

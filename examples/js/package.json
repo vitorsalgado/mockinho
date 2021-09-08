@@ -1,0 +1,21 @@
+{
+  "name": "@mockinho/example-js",
+  "version": "0.0.0",
+  "description": "Mockinho JavaScript Example",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "start": "ts-node src/server.ts"
+  },
+  "private": true,
+  "author": "Vitor Hugo Salgado <vsalgadopb@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@mockinho/http": "^0.0.0",
+    "axios": "^0.21.4",
+    "dotenv": "^10.0.0",
+    "fastify": "^3.21.0",
+    "pino": "^6.13.2",
+    "pino-pretty": "^6.0.0"
+  }
+}

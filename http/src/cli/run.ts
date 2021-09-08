@@ -1,6 +1,5 @@
 import { mockHttp } from '..'
 import { MockaccinoHttp } from '..'
-import Pkg from '../../package.json'
 import { Argv } from '../config'
 import { opts } from '../config'
 import { Defaults } from '../config'
@@ -46,7 +45,7 @@ export async function run(options: Argv): Promise<MockaccinoHttp> {
   mockhttp.on('close', () => process.stdin.unref())
 
   return mockhttp.start().then(info => {
-    printInfo(config, options, info, Pkg)
+    printInfo(config, options, info)
 
     return mockhttp
   })

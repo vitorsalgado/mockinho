@@ -14,6 +14,7 @@ import { Expectation } from '@mockinho/core'
 import { DefaultMockBuilder } from '../types'
 import { BodyType } from '../types'
 import { Schemes } from '../types'
+import { HttpMethods } from '../types'
 import { HttpRequest } from '../HttpRequest'
 import { HttpContext } from '../HttpContext'
 import { bearerToken, urlPath } from '../matchers'
@@ -67,7 +68,7 @@ export class HttpMockBuilder extends MockBuilder {
     return this
   }
 
-  method(matcher: Matcher<string> | string | Array<string>): this {
+  method(matcher: Matcher<HttpMethods> | HttpMethods | Array<HttpMethods>): this {
     notNull(matcher)
 
     const meta = 'Method'

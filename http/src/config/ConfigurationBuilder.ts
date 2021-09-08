@@ -7,8 +7,6 @@ import Multer from 'multer'
 import { CorsOptions } from 'cors'
 import { CookieParseOptions } from 'cookie-parser'
 import CookieParse from 'cookie-parser'
-import { Response } from 'express'
-import { NextFunction } from 'express'
 import { notBlank } from '@mockinho/core'
 import { PluginFactory } from '@mockinho/core'
 import { Level } from '@mockinho/core'
@@ -17,15 +15,9 @@ import { RecordOptions } from '../rec/RecordOptions'
 import { RecordOptionsBuilder } from '../rec/RecordOptionsBuilder'
 import { MockProviderFactory } from '../mock/providers/MockProvider'
 import { FieldParser } from '../mock/providers/default/FieldParser'
-import { HttpRequest } from '../HttpRequest'
 import { Configuration } from './Configuration'
 import { Defaults } from './Defaults'
-
-export type PreMiddleware = (
-  req: HttpRequest,
-  res: Response,
-  next: NextFunction
-) => void | Promise<void>
+import { PreMiddleware } from './PreMiddleware'
 
 export class ConfigurationBuilder {
   private static MOCK_DEFAULT_FIXTURES_DIR = Defaults.fixturesDir

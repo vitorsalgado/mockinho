@@ -4,7 +4,9 @@
   "packages": [
     "core",
     "core-matchers",
-    "http"
+    "http",
+
+    "examples/*"
   ],
   "ignoreChanges": ["**/__fixtures__/**", "**/__tests__/**", "**/*.md", "./build", "./docs"],
   "command": {

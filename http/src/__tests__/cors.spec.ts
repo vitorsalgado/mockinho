@@ -1,6 +1,7 @@
 import Supertest from 'supertest'
-import { del, head, opts, patch, put, options } from '..'
+import { del, head, opts, patch, put } from '..'
 import { mockHttp } from '..'
+import { request } from '..'
 import { urlPath } from '../matchers'
 import { get, ok, post } from '../mock'
 
@@ -19,7 +20,7 @@ describe('CORS', function () {
       del(urlPath('/test')).reply(ok()),
       patch(urlPath('/test')).reply(ok()),
       head(urlPath('/test')).reply(ok()),
-      options(urlPath('/test')).reply(ok())
+      request(urlPath('/test')).method('OPTIONS').reply(ok())
     )
 
     await Supertest($.server()).get('/test').expect(200)

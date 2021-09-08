@@ -1,7 +1,7 @@
 import { Expectation } from '@mockinho/core'
 import { Mock } from '@mockinho/core'
 import { MockSource } from '@mockinho/core'
-import { StatefulExpectation } from '@mockinho/core/dist/base/StatefulExpectation'
+import { StatefulExpectation } from '@mockinho/core'
 import { HttpResponseFixtureBuilderFunction } from './HttpResponseFixtureBuilder'
 
 export class HttpMock extends Mock {
