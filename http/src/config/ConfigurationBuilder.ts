@@ -16,7 +16,8 @@ import { MockProviderFactory } from '../mock/providers/MockProvider'
 import { FieldParser } from '../mock/providers/default/FieldParser'
 import { Configuration } from './Configuration'
 import { Defaults } from './Defaults'
-import { PreMiddleware } from './PreMiddleware'
+import { Middleware } from './Middleware'
+import { MiddlewareRoute } from './MiddlewareRoute'
 
 export class ConfigurationBuilder {
   private static MOCK_DEFAULT_FIXTURES_DIR = Defaults.fixturesDir
@@ -53,7 +54,7 @@ export class ConfigurationBuilder {
   private _corsOptions?: CorsOptions
   private _cookieSecrets: Array<string> = []
   private _cookieOptions?: CookieParseOptions
-  private _preHandlerMiddlewares: Array<Array<string | PreMiddleware>> = []
+  private _middlewares: Array<MiddlewareRoute> = []
 
   // region General Configurations
 
@@ -262,11 +263,15 @@ export class ConfigurationBuilder {
     return this
   }
 
-  use(route: string | PreMiddleware, middleware?: PreMiddleware): this {
-    if (typeof route === 'string' && middleware) {
-      this._preHandlerMiddlewares.push(...[[route, middleware]])
+  use(route: string | Middleware, middleware?: Middleware): this {
+    if (typeof route === 'string') {
+      if (!middleware) {
+        throw new Error('A second parameter middleware is required when a route is provided.')
+      }
+
+      this._middlewares.push({ route, middleware })
     } else {
-      this._preHandlerMiddlewares.push(...[[route]])
+      this._middlewares.push({ route: '*', middleware: route })
     }
 
     return this
@@ -322,34 +327,6 @@ export class ConfigurationBuilder {
       }
     }
 
-    this._preHandlerMiddlewares.forEach(middleware => {
-      if (middleware.length > 2) {
-        throw new Error(
-          'Each middleware item must contain 1 or 2 items: 1 for the middleware function or 2, the route and the middleware function.'
-        )
-      }
-
-      if (middleware.length === 1) {
-        if (typeof middleware[0] !== 'function') {
-          throw new Error(
-            'When middleware item contains 1 entry, it must be a middleware function.'
-          )
-        }
-      }
-
-      if (middleware.length === 2) {
-        if (typeof middleware[0] !== 'string') {
-          throw new Error(
-            'First element of middleware entry must be the route and the second the middleware function.'
-          )
-        }
-
-        if (typeof middleware[1] !== 'function') {
-          throw new Error('Second element of middleware configuration entry must be a function.')
-        }
-      }
-    })
-
     return new Configuration(
       this._mode,
       this._logLevel,
@@ -382,7 +359,7 @@ export class ConfigurationBuilder {
       this._cookieOptions,
       this._proxyAll,
       this._proxyOptions,
-      this._preHandlerMiddlewares
+      this._middlewares
     )
   }
 }

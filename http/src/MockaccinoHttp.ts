@@ -6,6 +6,7 @@ import { PinoLogger } from '@mockinho/core'
 import { LoggerUtil } from '@mockinho/core'
 import { ConfigurationBuilder } from './config'
 import { Configuration } from './config'
+import { Middleware } from './config'
 import { onRequestMatched, onRequestNotMatched, onRequestReceived } from './hooks'
 import { Hooks } from './hooks'
 import { HttpContext } from './HttpContext'
@@ -90,21 +91,20 @@ export class MockaccinoHttp {
     return this
   }
 
-  configuration(): Configuration {
-    return this._configuration
+  use(route: string | Middleware, middleware?: Middleware): void {
+    this._httpServer.use(route, middleware)
   }
 
-  resetMocks(): void {
-    this._mockRepository.removeAll()
+  resetMocks(source?: MockSource): void {
+    if (source) {
+      this._mockRepository.removeBySource(source)
+    } else {
+      this._mockRepository.removeAll()
+    }
   }
 
   resetFileMocks(): void {
     this._mockRepository.removeBySource('file')
-  }
-
-  resetMocksBy(source: MockSource = 'code'): void {
-    notBlank(source)
-    this._mockRepository.removeBySource(source)
   }
 
   finalize(): Promise<void> {
@@ -122,6 +122,10 @@ export class MockaccinoHttp {
 
   serverInfo(): Info {
     return this._httpServer.info()
+  }
+
+  configuration(): Configuration {
+    return this._configuration
   }
 
   // region Internal

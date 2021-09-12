@@ -2,7 +2,7 @@ import { Response } from 'express'
 import { NextFunction } from 'express'
 import { HttpRequest } from '../HttpRequest'
 
-export type PreMiddleware = (
+export type Middleware = (
   req: HttpRequest,
   res: Response,
   next: NextFunction

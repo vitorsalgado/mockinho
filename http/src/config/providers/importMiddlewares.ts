@@ -1,6 +1,6 @@
 import { requireOrImportModule } from '@mockinho/core'
 import { ConfigurationBuilder } from '../ConfigurationBuilder'
-import { PreMiddleware } from '../PreMiddleware'
+import { Middleware } from '../Middleware'
 
 const SEPARATOR = '|'
 
@@ -12,11 +12,11 @@ export async function importMiddlewares(
     if (component.includes(SEPARATOR)) {
       const values = component.split(SEPARATOR)
       const path = values[0]
-      const middleware = await requireOrImportModule<{ default: PreMiddleware }>(values[1])
+      const middleware = await requireOrImportModule<{ default: Middleware }>(values[1])
 
       builder.use(path, middleware.default)
     } else {
-      const middleware = await requireOrImportModule<{ default: PreMiddleware }>(component)
+      const middleware = await requireOrImportModule<{ default: Middleware }>(component)
 
       builder.use(middleware.default)
     }

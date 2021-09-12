@@ -6,6 +6,7 @@ import { HttpRequest } from '../../HttpRequest'
 import { Defaults } from '../Defaults'
 import { RecordOptions } from '../../mock/record'
 import { defaultMockProviderFactory } from '../../mock/providers/default/defaultMockProviderFactory'
+import { FieldParser } from '../../mock/providers/default/FieldParser'
 
 describe('Configurations Builder', function () {
   it('should build configurations with builder values', function () {
@@ -118,46 +119,19 @@ describe('Configurations Builder', function () {
 
     it('should not accept one entry without a function', function () {
       const builder = new ConfigurationBuilder()
-
-      builder.use('/test')
-
-      expect(() => builder.build()).toThrowError()
+      expect(() => builder.use('/test')).toThrowError()
     })
 
     it('should accept one element with a middleware function', function () {
       const cfg = new ConfigurationBuilder().use(middleware).build()
 
-      expect(cfg.preHandlerMiddlewares).toHaveLength(1)
-      expect(typeof cfg.preHandlerMiddlewares[0][0] === 'function').toBeTruthy()
+      expect(cfg.middlewares).toHaveLength(1)
     })
 
     it('should accept two elements with a string first and then the middleware function', function () {
       const cfg = new ConfigurationBuilder().use('/test', middleware).build()
 
-      expect(cfg.preHandlerMiddlewares).toHaveLength(1)
-      expect(typeof cfg.preHandlerMiddlewares[0][0] === 'string').toBeTruthy()
-      expect(typeof cfg.preHandlerMiddlewares[0][1] === 'function').toBeTruthy()
-    })
-
-    describe('when using .use()', function () {
-      it('should add middleware without route when providing only a function', function () {
-        const cfg = new ConfigurationBuilder().use(middleware).build()
-
-        expect(cfg.preHandlerMiddlewares).toHaveLength(1)
-        expect(typeof cfg.preHandlerMiddlewares[0][0] === 'function').toBeTruthy()
-      })
-
-      it('should add middleware for a route when providing two parameters', function () {
-        const cfg = new ConfigurationBuilder().use('/test', middleware).build()
-
-        expect(cfg.preHandlerMiddlewares).toHaveLength(1)
-        expect(typeof cfg.preHandlerMiddlewares[0][0] === 'string').toBeTruthy()
-        expect(typeof cfg.preHandlerMiddlewares[0][1] === 'function').toBeTruthy()
-      })
-
-      it('should fail if middleware route is not a string', function () {
-        expect(() => new ConfigurationBuilder().use(100 as any, middleware).build()).toThrowError()
-      })
+      expect(cfg.middlewares).toHaveLength(1)
     })
   })
 
@@ -230,7 +204,7 @@ describe('Configurations Builder', function () {
 
     it('should add field parsers', function () {
       const builder = new ConfigurationBuilder()
-      const cfg = builder.addMockFieldParser({} as any).build()
+      const cfg = builder.addMockFieldParser({} as FieldParser).build()
 
       expect(cfg.mockFieldParsers).toHaveLength(1)
     })

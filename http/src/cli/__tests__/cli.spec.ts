@@ -45,7 +45,7 @@ describe('cli', function () {
         expect(config.proxyEnabled).toBeTruthy()
         expect(config.proxyOptions.target).toEqual('http://some.nice.place')
         expect(config.proxyOptions.headers).toEqual({ 'x-test': 'abc', 'x-ctx': 'test' })
-        expect(config.preHandlerMiddlewares).toEqual([])
+        expect(config.middlewares).toEqual([])
       } finally {
         await mockhttp.finalize()
       }
@@ -70,7 +70,7 @@ describe('cli', function () {
         expect(config.mockFilesExtension).toEqual('test-js')
         expect(config.recordEnabled).toBeFalsy()
         expect(config.proxyEnabled).toBeFalsy()
-        expect(config.preHandlerMiddlewares).toEqual([])
+        expect(config.middlewares).toEqual([])
       } finally {
         await mockhttp.close()
       }

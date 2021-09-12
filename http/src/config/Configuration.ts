@@ -5,15 +5,13 @@ import Multer from 'multer'
 import { CorsOptions } from 'cors'
 import { CookieParseOptions } from 'cookie-parser'
 import { Options } from 'http-proxy-middleware'
-import { Response } from 'express'
-import { NextFunction } from 'express'
 import { BaseConfiguration } from '@mockinho/core'
 import { Mode } from '@mockinho/core'
 import { Level } from '@mockinho/core'
 import { RecordOptions } from '../mock/record'
 import { MockProviderFactory } from '../mock/providers/MockProvider'
 import { FieldParser } from '../mock/providers/default/FieldParser'
-import { HttpRequest } from '../HttpRequest'
+import { MiddlewareRoute } from './MiddlewareRoute'
 
 export class Configuration extends BaseConfiguration {
   public constructor(
@@ -48,11 +46,7 @@ export class Configuration extends BaseConfiguration {
     public readonly cookieOptions: CookieParseOptions | undefined,
     public readonly proxyEnabled: boolean,
     public readonly proxyOptions: Options,
-    public readonly preHandlerMiddlewares: Array<
-      Array<
-        string | ((req: HttpRequest, res: Response, next: NextFunction) => void | Promise<void>)
-      >
-    >
+    public readonly middlewares: Array<MiddlewareRoute>
   ) {
     super(logLevel, mode)
   }

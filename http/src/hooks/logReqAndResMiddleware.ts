@@ -1,17 +1,19 @@
 import { Response } from 'express'
 import { NextFunction } from 'express'
+import { Request } from 'express'
 import { nowInMs } from '@mockinho/core'
 import { HttpContext } from '../HttpContext'
 import { HttpRequest } from '../HttpRequest'
 
 export function logReqAndResMiddleware(context: HttpContext) {
-  return function (req: HttpRequest, res: Response, next: NextFunction): void {
-    res.on('close', () =>
+  return function (request: Request, response: Response, next: NextFunction): void {
+    const req = request as HttpRequest
+
+    response.on('close', () =>
       context.emit('onRequestEnd', {
         id: req.id,
         elapsed: nowInMs() - req.start,
         proxied: req.proxied,
-
         request: {
           method: req.method,
           href: req.href,
@@ -22,11 +24,7 @@ export function logReqAndResMiddleware(context: HttpContext) {
           isMultipart: req.isMultipart,
           files: req.files
         },
-
-        response: {
-          status: res.statusCode,
-          headers: res.getHeaders()
-        }
+        response: { status: response.statusCode, headers: response.getHeaders() }
       })
     )
 

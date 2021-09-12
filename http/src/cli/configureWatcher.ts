@@ -62,12 +62,12 @@ export function configureWatcher(config: Configuration, mockhttp: MockaccinoHttp
             return
           }
 
-          mockhttp.resetMocksBy('file')
+          mockhttp.resetMocks('file')
           await mockhttp.rebuild()
 
           console.log('Mocks from ' + blue(filename) + ' were ' + blue('updated'))
         } else {
-          mockhttp.resetMocksBy('file')
+          mockhttp.resetMocks('file')
           await mockhttp.rebuild()
 
           console.log('Mocks from ' + blue(filename) + ' were ' + blue('removed'))

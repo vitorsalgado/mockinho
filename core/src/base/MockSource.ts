@@ -1,1 +1,1 @@
-export type MockSource = string | 'code' | 'file'
+export type MockSource = 'code' | 'file'

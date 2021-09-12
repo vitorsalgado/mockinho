@@ -5,7 +5,7 @@ import Multer from 'multer'
 import { CorsOptions } from 'cors'
 import { Options } from 'http-proxy-middleware'
 import { Mode } from '@mockinho/core'
-import { RecordOptions } from '../../../mock/record/RecordOptions'
+import { RecordOptions } from '../../../mock/record'
 
 export type InitialOptions = Partial<{
   readonly mode?: Mode

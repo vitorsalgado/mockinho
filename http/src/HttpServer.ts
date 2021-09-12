@@ -5,7 +5,6 @@ import { Socket } from 'net'
 import express, { Express, Request, Response } from 'express'
 import { NextFunction } from 'express'
 import { Router } from 'express'
-import { RequestHandler } from 'express'
 import Multer from 'multer'
 import Cors from 'cors'
 import CookieParse from 'cookie-parser'
@@ -16,11 +15,13 @@ import { decorateRequestMiddleware } from './decorateRequestMiddleware'
 import { HttpRequest } from './HttpRequest'
 import { configureProxy } from './configureProxy'
 import { Configuration } from './config'
+import { Middleware } from './config'
 import { logIncomingRequestMiddleware } from './hooks/logIncomingRequestMiddleware'
 import { logReqAndResMiddleware } from './hooks/logReqAndResMiddleware'
 import { rawBodyMiddleware } from './rawBodyMiddleware'
 import { ErrorCodes } from './ErrorCodes'
 import { Info } from './Info'
+import { MiddlewareRoute } from './config/MiddlewareRoute'
 
 export class HttpServer {
   private readonly configuration: Configuration
@@ -30,6 +31,7 @@ export class HttpServer {
   private readonly httpServer?: NodeHttpServer
   private readonly httpsServer?: NodeHttpsServer
   private readonly information: Info
+  private readonly additionalMiddlewares: Array<MiddlewareRoute> = []
 
   constructor(private readonly context: HttpContext) {
     this.configuration = context.configuration
@@ -62,6 +64,8 @@ export class HttpServer {
         baseUrl: ''
       }
     }
+
+    this.additionalMiddlewares.push(...this.configuration.middlewares)
   }
 
   preSetup(): void {
@@ -86,17 +90,14 @@ export class HttpServer {
     )
     this.expressApp.use(Multer(this.configuration.multiPartOptions).any() as Router)
     this.expressApp.use(decorateRequestMiddleware as Router)
-
-    this.configuration.preHandlerMiddlewares.forEach(x =>
-      x.length === 2
-        ? this.expressApp.use(x[0] as string, x[1] as RequestHandler)
-        : this.expressApp.use(x[0] as RequestHandler)
-    )
-
-    this.expressApp.use(logReqAndResMiddleware(this.context) as Router)
+    this.expressApp.use(logReqAndResMiddleware(this.context))
   }
 
   async start(): Promise<Info> {
+    this.additionalMiddlewares.forEach(middleware =>
+      this.expressApp.use(middleware.route, middleware.middleware as Router)
+    )
+
     const mockFinder = mockFinderMiddleware(this.context)
 
     this.expressApp.all('*', (req, res, next) =>
@@ -167,6 +168,18 @@ export class HttpServer {
     }
 
     return this.information
+  }
+
+  use(route: string | Middleware, middleware?: Middleware): void {
+    if (typeof route === 'string') {
+      if (!middleware) {
+        throw new Error('A second parameter middleware is required when a route is provided.')
+      }
+
+      this.additionalMiddlewares.push({ route, middleware })
+    } else {
+      this.additionalMiddlewares.push({ route: '*', middleware: route })
+    }
   }
 
   info(): Info {
