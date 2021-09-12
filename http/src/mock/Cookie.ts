@@ -6,7 +6,7 @@ export interface Cookie {
   options?: CookieOptions
 }
 
-export interface ClearCookie {
+export interface CookieToClear {
   key: string
   options?: CookieOptions
 }

@@ -14,8 +14,8 @@ describe('Proxied Responses', function () {
   beforeAll(() => Promise.all([$.start(), P.start()]))
   afterAll(() => Promise.all([$.finalize(), P.finalize()]))
   afterEach(() => {
-    $.removeAll()
-    P.removeAll()
+    $.resetMocks()
+    P.resetMocks()
   })
 
   describe('when proxying request', function () {
@@ -32,7 +32,7 @@ describe('Proxied Responses', function () {
         get(urlPath('/test'))
           .header('content-type', containing('json'))
           .proxyTo(
-            `http://localhost:${P.info().http.port}`,
+            `http://localhost:${P.serverInfo().http.port}`,
             response()
               .header('test', 'ok')
               .proxyHeader('proxy-header', '100')

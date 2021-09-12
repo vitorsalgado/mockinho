@@ -19,7 +19,7 @@ describe('Responses', function () {
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
-  afterEach(() => $.removeBy('code'))
+  afterEach(() => $.resetMocksBy('code'))
 
   describe('when using .bodyWith()', function () {
     it('should be able to build response using request values', function () {

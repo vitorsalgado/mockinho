@@ -1,4 +1,3 @@
-import { HttpMultipleResponseFixtureBuilder } from '../HttpMultipleResponseFixtureBuilder'
+import { MultipleResponseBuilder } from '../MultipleResponseBuilder'
 
-export const multipleResponses = (): HttpMultipleResponseFixtureBuilder =>
-  new HttpMultipleResponseFixtureBuilder()
+export const multipleResponses = (): MultipleResponseBuilder => new MultipleResponseBuilder()

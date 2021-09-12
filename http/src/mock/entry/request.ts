@@ -1,6 +1,5 @@
 import { Matcher } from '@mockinho/core'
-import { DefaultMockBuilder } from '../../types'
 import { HttpMockBuilder } from '../HttpMockBuilder'
 
-export const request = (urlMatcher: Matcher<string> | string): DefaultMockBuilder =>
+export const request = (urlMatcher: Matcher<string> | string): HttpMockBuilder =>
   HttpMockBuilder.newBuilder().url(urlMatcher)

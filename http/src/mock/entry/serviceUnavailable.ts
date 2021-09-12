@@ -1,10 +1,10 @@
-import { DefaultResponseBuilder } from '../../types'
+import { JsonType } from '@mockinho/core'
 import { StatusCodes } from '../../StatusCodes'
-import { JsonType } from '../../types'
+import { ResponseBuilder } from '../ResponseBuilder'
 import { response } from './response'
 
-export const serviceUnavailable = (): DefaultResponseBuilder =>
+export const serviceUnavailable = (): ResponseBuilder =>
   response().status(StatusCodes.SERVICE_UNAVAILABLE)
 
-export const serviceUnavailableJSON = (body: JsonType): DefaultResponseBuilder =>
+export const serviceUnavailableJSON = (body: JsonType): ResponseBuilder =>
   serviceUnavailable().bodyJSON(body)

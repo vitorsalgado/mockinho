@@ -1,10 +1,10 @@
-import { DefaultResponseBuilder } from '../../types'
+import { JsonType } from '@mockinho/core'
 import { Headers } from '../../Headers'
 import { StatusCodes } from '../../StatusCodes'
-import { JsonType } from '../../types'
+import { ResponseBuilder } from '../ResponseBuilder'
 import { response } from './response'
 
-export const unauthorized = (wwwAuth?: string): DefaultResponseBuilder => {
+export const unauthorized = (wwwAuth?: string): ResponseBuilder => {
   const builder = response().status(StatusCodes.UNAUTHORIZED)
 
   if (wwwAuth) {
@@ -14,5 +14,5 @@ export const unauthorized = (wwwAuth?: string): DefaultResponseBuilder => {
   return builder
 }
 
-export const unauthorizedJSON = (body: JsonType, wwwAuth?: string): DefaultResponseBuilder =>
+export const unauthorizedJSON = (body: JsonType, wwwAuth?: string): ResponseBuilder =>
   unauthorized(wwwAuth).bodyJSON(body)

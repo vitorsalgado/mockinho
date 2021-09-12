@@ -1,15 +1,16 @@
 import { Readable } from 'stream'
-import { Response, NextFunction } from 'express'
+import { NextFunction } from 'express'
+import { Response } from 'express'
 import HttpProxy from 'http-proxy'
 import { findMockForRequest } from '@mockinho/core'
 import { FindMockResult } from '@mockinho/core'
 import { HttpContext } from './HttpContext'
 import { HttpRequest } from './HttpRequest'
-import { HttpResponseFixture, HttpMock } from './mock'
-import { BodyType } from './types'
+import { ResponseFixture, HttpMock } from './mock'
 import { Configuration } from './config'
 import { MediaTypes } from './MediaTypes'
 import { Headers } from './Headers'
+import { BodyType } from '.'
 
 export function mockFinderMiddleware(
   context: HttpContext
@@ -119,7 +120,7 @@ function onRequestNotMatched(
   req: HttpRequest,
   result: FindMockResult<HttpMock>
 ) {
-  context.emit('requestNotMatched', {
+  context.emit('onRequestNotMatched', {
     url: req.url,
     path: req.path,
     method: req.method,
@@ -131,10 +132,10 @@ function onRequestMatched(
   context: HttpContext,
   verbose: boolean,
   req: HttpRequest,
-  response: HttpResponseFixture,
+  response: ResponseFixture,
   matched: HttpMock
 ) {
-  context.emit('requestMatched', {
+  context.emit('onRequestMatched', {
     verbose,
     start: req.start,
     url: req.url,

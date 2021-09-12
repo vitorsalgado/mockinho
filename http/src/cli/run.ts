@@ -42,7 +42,7 @@ export async function run(options: Argv): Promise<MockaccinoHttp> {
     }
   })
 
-  mockhttp.on('close', () => process.stdin.unref())
+  mockhttp.on('onClose', () => process.stdin.unref())
 
   return mockhttp.start().then(info => {
     printInfo(config, options, info)

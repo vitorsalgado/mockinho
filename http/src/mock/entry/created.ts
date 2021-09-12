@@ -1,10 +1,9 @@
-import { DefaultResponseBuilder } from '../../types'
-import { HttpResponseFixtureBuilder } from '../HttpResponseFixtureBuilder'
+import { JsonType } from '@mockinho/core'
+import { ResponseBuilder } from '../ResponseBuilder'
 import { StatusCodes } from '../../StatusCodes'
-import { JsonType } from '../../types'
 
-export const created = (location?: string): DefaultResponseBuilder =>
-  HttpResponseFixtureBuilder.newBuilder().headerLocation(location).status(StatusCodes.CREATED)
+export const created = (location?: string): ResponseBuilder =>
+  ResponseBuilder.newBuilder().headerLocation(location).status(StatusCodes.CREATED)
 
-export const createdJSON = (body: JsonType, location?: string): DefaultResponseBuilder =>
+export const createdJSON = (body: JsonType, location?: string): ResponseBuilder =>
   created(location).bodyJSON(body)

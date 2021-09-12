@@ -20,12 +20,12 @@ describe('Events', function () {
     const notMatched = jest.fn()
     const complete = jest.fn()
 
-    $.on('start', evt => start(evt.info))
-      .on('close', close)
-      .on('request', req)
-      .on('requestMatched', matched)
-      .on('requestNotMatched', notMatched)
-      .on('complete', complete)
+    $.on('onStart', evt => start(evt.info))
+      .on('onClose', close)
+      .on('onRequestStart', req)
+      .on('onRequestMatched', matched)
+      .on('onRequestNotMatched', notMatched)
+      .on('onRequestEnd', complete)
 
     await $.start()
 

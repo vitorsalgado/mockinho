@@ -7,7 +7,7 @@ import { responseInterceptor } from 'http-proxy-middleware'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import { Express } from 'express'
 import { LoggerUtil } from '@mockinho/core'
-import { RecordDispatcher } from './rec/RecordDispatcher'
+import { RecordDispatcher } from './mock/record'
 import { HttpRequest } from './HttpRequest'
 import { HttpContext } from './HttpContext'
 import { MediaTypes } from './MediaTypes'
@@ -40,7 +40,7 @@ export function configureProxy(
     onError:
       opts.onError ??
       ((error, req, res) => {
-        context.emit('exception', error)
+        context.emit('onError', error)
 
         res.writeHead(500, { 'content-type': MediaTypes.TEXT_PLAIN })
         res.end('Proxy Error: ' + error.message)

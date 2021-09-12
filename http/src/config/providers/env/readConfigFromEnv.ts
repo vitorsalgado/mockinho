@@ -1,6 +1,6 @@
 import { Mode } from '@mockinho/core'
 import { ConfigurationBuilder } from '../../ConfigurationBuilder'
-import { rec } from '../../../rec/rec'
+import { rec } from '../../../mock/record/rec'
 
 export function readConfigFromEnv(env: Record<string, unknown>) {
   return async function (builder: ConfigurationBuilder): Promise<void> {

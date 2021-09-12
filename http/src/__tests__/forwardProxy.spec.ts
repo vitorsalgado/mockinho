@@ -13,14 +13,14 @@ describe('Forward Proxy', function () {
 
   beforeAll(() => target.start())
   afterAll(() => target.finalize())
-  afterEach(() => target.removeAll())
+  afterEach(() => target.resetMocks())
 
   describe('when forward proxying requests', function () {
     it('should return success response from target', async function () {
       const $ = mockHttp(
         opts()
           .dynamicHttpPort()
-          .proxy(`http://${target.info().http.host}:${target.info().http.port}`)
+          .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`)
       )
 
       try {
@@ -54,7 +54,7 @@ describe('Forward Proxy', function () {
       const $ = mockHttp(
         opts()
           .dynamicHttpPort()
-          .proxy(`http://${target.info().http.host}:${target.info().http.port}`)
+          .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`)
       )
 
       try {
@@ -83,7 +83,7 @@ describe('Forward Proxy', function () {
       const $ = mockHttp(
         opts()
           .dynamicHttpPort()
-          .proxy(`http://${target.info().http.host}:${target.info().http.port}`)
+          .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`)
       )
 
       try {
@@ -119,7 +119,7 @@ describe('Forward Proxy', function () {
       const $ = mockHttp(
         opts()
           .dynamicHttpPort()
-          .proxy(`http://${target.info().http.host}:${target.info().http.port}`, {
+          .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`, {
             proxyTimeout: 100
           })
       )

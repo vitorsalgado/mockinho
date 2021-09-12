@@ -12,7 +12,7 @@ describe('Form MultiPart', function () {
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
-  afterEach(() => $.removeAll())
+  afterEach(() => $.resetMocks())
 
   it('should process multipart requests', async function () {
     const scope = $.mock(

@@ -22,7 +22,7 @@ import { trim } from '@mockinho/core-matchers'
 import { Configuration } from '../../../config'
 import { urlPath, urlPathMatching } from '../../../matchers'
 import { HttpMockBuilder, response } from '../..'
-import { HttpResponseFixtureBuilder } from '../..'
+import { ResponseBuilder } from '../..'
 import { multipleResponses } from '../../entry/multipleResponses'
 import { InvalidMockFileError } from './InvalidMockFileError'
 import { MockFile } from './MockFile'
@@ -186,7 +186,7 @@ export function buildMockFromFile<Config extends Configuration>(
 
 // region Utils
 
-function buildResponse(mock: MockFileResponse, filename: string): HttpResponseFixtureBuilder {
+function buildResponse(mock: MockFileResponse, filename: string): ResponseBuilder {
   const res = response().status(mock.status ?? 200)
 
   if (mock.headers) res.headers(mock.headers)

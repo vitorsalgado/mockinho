@@ -4,7 +4,7 @@ import { NextFunction } from 'express'
 import { ConfigurationBuilder } from '../ConfigurationBuilder'
 import { HttpRequest } from '../../HttpRequest'
 import { Defaults } from '../Defaults'
-import { RecordOptions } from '../../rec/RecordOptions'
+import { RecordOptions } from '../../mock/record'
 import { defaultMockProviderFactory } from '../../mock/providers/default/defaultMockProviderFactory'
 
 describe('Configurations Builder', function () {
@@ -178,7 +178,6 @@ describe('Configurations Builder', function () {
         'access-control-expose-headers',
         'connection'
       ])
-      expect(cfg.recordOptions?.filters).toEqual([])
     })
 
     it('should accept an option object instead of a option builder', function () {
@@ -234,15 +233,6 @@ describe('Configurations Builder', function () {
       const cfg = builder.addMockFieldParser({} as any).build()
 
       expect(cfg.mockFieldParsers).toHaveLength(1)
-    })
-  })
-
-  describe('plugins', function () {
-    it('should add plugins', function () {
-      const builder = new ConfigurationBuilder()
-      const cfg = builder.addPlugin(() => ({ name: 'test' })).build()
-
-      expect(cfg.pluginFactories).toHaveLength(1)
     })
   })
 })

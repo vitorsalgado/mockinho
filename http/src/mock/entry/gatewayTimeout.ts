@@ -1,10 +1,9 @@
-import { DefaultResponseBuilder } from '../../types'
+import { JsonType } from '@mockinho/core'
 import { StatusCodes } from '../../StatusCodes'
-import { JsonType } from '../../types'
+import { ResponseBuilder } from '../ResponseBuilder'
 import { response } from './response'
 
-export const gatewayTimeout = (): DefaultResponseBuilder =>
-  response().status(StatusCodes.GATEWAY_TIMEOUT)
+export const gatewayTimeout = (): ResponseBuilder => response().status(StatusCodes.GATEWAY_TIMEOUT)
 
-export const gatewayTimeoutJSON = (body: JsonType): DefaultResponseBuilder =>
+export const gatewayTimeoutJSON = (body: JsonType): ResponseBuilder =>
   gatewayTimeout().bodyJSON(body)

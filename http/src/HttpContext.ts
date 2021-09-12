@@ -1,12 +1,12 @@
 import { Context } from '@mockinho/core'
 import { ScenarioRepository } from '@mockinho/core'
 import { Configuration } from './config'
-import { EventListener } from './eventlisteners'
+import { HookListener } from './hooks'
 import { HttpMockRepository } from './mock'
 import { HttpMock } from './mock'
 
 export class HttpContext
-  extends EventListener
+  extends HookListener
   implements Context<Configuration, HttpMock, HttpMockRepository>
 {
   constructor(

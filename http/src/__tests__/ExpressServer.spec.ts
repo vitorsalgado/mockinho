@@ -34,7 +34,7 @@ describe('Express Http Server', function () {
     await $.finalize()
     await httpServer.close()
   })
-  afterEach(() => $.removeAll())
+  afterEach(() => $.resetMocks())
 
   it('should return server connection information', async function () {
     await httpServer.start()

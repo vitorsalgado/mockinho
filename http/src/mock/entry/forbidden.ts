@@ -1,8 +1,8 @@
-import { DefaultResponseBuilder } from '../../types'
+import { JsonType } from '@mockinho/core'
 import { StatusCodes } from '../../StatusCodes'
-import { JsonType } from '../../types'
+import { ResponseBuilder } from '../ResponseBuilder'
 import { response } from './response'
 
-export const forbidden = (): DefaultResponseBuilder => response().status(StatusCodes.FORBIDDEN)
+export const forbidden = (): ResponseBuilder => response().status(StatusCodes.FORBIDDEN)
 
-export const forbiddenJSON = (body: JsonType): DefaultResponseBuilder => forbidden().bodyJSON(body)
+export const forbiddenJSON = (body: JsonType): ResponseBuilder => forbidden().bodyJSON(body)

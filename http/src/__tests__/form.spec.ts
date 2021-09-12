@@ -11,7 +11,7 @@ describe('HTTP - Form Url Encoded', function () {
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
-  afterEach(() => $.removeAll())
+  afterEach(() => $.resetMocks())
 
   it('should accept form-url-encoded requests', function () {
     $.mock(

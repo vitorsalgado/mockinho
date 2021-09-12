@@ -1,9 +1,8 @@
-import { DefaultResponseBuilder } from '../../types'
-import { JsonType } from '../../types'
+import { JsonType } from '@mockinho/core'
 import { StatusCodes } from '../../StatusCodes'
+import { ResponseBuilder } from '../ResponseBuilder'
 import { response } from './response'
 
-export const badGateway = (): DefaultResponseBuilder => response().status(StatusCodes.BAD_GATEWAY)
+export const badGateway = (): ResponseBuilder => response().status(StatusCodes.BAD_GATEWAY)
 
-export const badGatewayJSON = (body: JsonType): DefaultResponseBuilder =>
-  badGateway().bodyJSON(body)
+export const badGatewayJSON = (body: JsonType): ResponseBuilder => badGateway().bodyJSON(body)

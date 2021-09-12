@@ -1,4 +1,3 @@
-import { HttpResponseFixtureBuilder } from '../HttpResponseFixtureBuilder'
-import { DefaultResponseBuilder } from '../../types'
+import { ResponseBuilder } from '../ResponseBuilder'
 
-export const response = (): DefaultResponseBuilder => HttpResponseFixtureBuilder.newBuilder()
+export const response = (): ResponseBuilder => ResponseBuilder.newBuilder()

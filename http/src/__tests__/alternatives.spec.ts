@@ -7,7 +7,7 @@ import { ok } from '..'
 import { HttpMock } from '..'
 import { urlPath } from '..'
 import { MediaTypes } from '..'
-import { HttpResponseFixture } from '..'
+import { ResponseFixture } from '..'
 import { post } from '..'
 import { Headers } from '..'
 import { extractQuery } from '../mock/util/extractors'
@@ -17,7 +17,7 @@ describe('Builder Alternatives', function () {
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
-  afterEach(() => $.removeAll())
+  afterEach(() => $.resetMocks())
 
   describe('when using $.mock', function () {
     it('should accept a function providing a HttpMock', function () {
@@ -55,7 +55,7 @@ describe('Builder Alternatives', function () {
         post(urlPath('/test'))
           .reply((context, request, mock) =>
             Promise.resolve(
-              new HttpResponseFixture(
+              new ResponseFixture(
                 200,
                 {
                   'content-type': MediaTypes.APPLICATION_JSON,

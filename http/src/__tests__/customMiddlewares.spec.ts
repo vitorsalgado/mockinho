@@ -29,7 +29,7 @@ describe('Custom Middlewares', function () {
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
-  afterEach(() => $.removeAll())
+  afterEach(() => $.resetMocks())
 
   describe('when providing a custom middleware without a specific route', function () {
     it('should apply it in all routes', function () {

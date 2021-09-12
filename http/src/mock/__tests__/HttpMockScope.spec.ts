@@ -11,7 +11,7 @@ describe('HTTP Scope', function () {
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
-  afterEach(() => $.removeAll())
+  afterEach(() => $.resetMocks())
 
   it('isDone() should return true when all mocks where called', async function () {
     const scope = $.mock(

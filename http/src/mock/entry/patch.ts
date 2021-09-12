@@ -1,6 +1,6 @@
 import { Matcher } from '@mockinho/core'
-import { DefaultMockBuilder } from '../../types'
+import { HttpMockBuilder } from '../HttpMockBuilder'
 import { forMethod } from './forMethod'
 
-export const patch = (urlMatcher: Matcher<string> | string): DefaultMockBuilder =>
+export const patch = (urlMatcher: Matcher<string> | string): HttpMockBuilder =>
   forMethod('PATCH', urlMatcher)

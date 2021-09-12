@@ -8,12 +8,10 @@ import { Options } from 'http-proxy-middleware'
 import { Response } from 'express'
 import { NextFunction } from 'express'
 import { BaseConfiguration } from '@mockinho/core'
-import { PluginFactory } from '@mockinho/core'
 import { Mode } from '@mockinho/core'
 import { Level } from '@mockinho/core'
-import { RecordOptions } from '../rec/RecordOptions'
+import { RecordOptions } from '../mock/record'
 import { MockProviderFactory } from '../mock/providers/MockProvider'
-import { DefaultConfiguration } from '../types'
 import { FieldParser } from '../mock/providers/default/FieldParser'
 import { HttpRequest } from '../HttpRequest'
 
@@ -39,9 +37,8 @@ export class Configuration extends BaseConfiguration {
     public readonly mockFilesEnabled: boolean,
     public readonly recordEnabled: boolean,
     public readonly recordOptions: RecordOptions | undefined,
-    public readonly mockProviderFactories: Array<MockProviderFactory<DefaultConfiguration>>,
+    public readonly mockProviderFactories: Array<MockProviderFactory<Configuration>>,
     public readonly mockFieldParsers: Array<FieldParser>,
-    public readonly pluginFactories: Array<PluginFactory>,
     public readonly watch: boolean,
     public readonly formUrlEncodedOptions: OptionsUrlencoded,
     public readonly multiPartOptions: Multer.Options,

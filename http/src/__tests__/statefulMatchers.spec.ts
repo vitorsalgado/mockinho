@@ -14,7 +14,7 @@ describe('Stateful Matchers', function () {
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
-  afterEach(() => $.removeAll())
+  afterEach(() => $.resetMocks())
 
   describe('when using repeatTimes() matcher', function () {
     describe('and it did not reach maximum allowed value', function () {

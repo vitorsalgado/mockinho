@@ -1,14 +1,14 @@
 import { Express } from 'express'
 import { HttpRequest } from '../../HttpRequest'
-import { HttpMethods } from '../../types'
-import { Schemes } from '../../types'
-import { BodyType } from '../../types'
+import { BodyType } from '../../BodyType'
+import { Methods } from '../../Methods'
+import { Schemes } from '../../Schemes'
 
 export const extractRequest = (request: HttpRequest): HttpRequest => request
 
 export const extractScheme = (request: HttpRequest): Schemes => request.protocol as Schemes
 
-export const extractMethod = (request: HttpRequest): HttpMethods => request.method
+export const extractMethod = (request: HttpRequest): Methods => request.method
 
 export const extractUrl = (request: HttpRequest): string => request.href
 

@@ -11,17 +11,16 @@ import { notEmpty } from '@mockinho/core'
 import { MockSource } from '@mockinho/core'
 import { MockBuilder } from '@mockinho/core'
 import { Expectation } from '@mockinho/core'
-import { DefaultMockBuilder } from '../types'
-import { BodyType } from '../types'
-import { Schemes } from '../types'
-import { HttpMethods } from '../types'
 import { HttpRequest } from '../HttpRequest'
 import { HttpContext } from '../HttpContext'
 import { bearerToken, urlPath } from '../matchers'
 import { Headers } from '../Headers'
+import { BodyType } from '../BodyType'
+import { Methods } from '../Methods'
+import { Schemes } from '../Schemes'
 import { HttpMock } from './HttpMock'
-import { HttpResponseFixtureBuilder } from './HttpResponseFixtureBuilder'
-import { HttpResponseFixtureBuilderFunction } from './HttpResponseFixtureBuilder'
+import { ResponseBuilder } from './ResponseBuilder'
+import { ResponseBuilderFunction } from './ResponseBuilder'
 import { extractCookieAsJson } from './util/extractors'
 import { extractCookie } from './util/extractors'
 import { extractFileByFieldName } from './util/extractors'
@@ -40,7 +39,7 @@ import { extractRequest } from './util/extractors'
 export class HttpMockBuilder extends MockBuilder {
   private readonly _expectations: Array<Expectation<unknown, unknown>> = []
   private readonly _meta: Map<string, unknown> = new Map<string, unknown>()
-  private _responseBuilder!: HttpResponseFixtureBuilderFunction
+  private _responseBuilder!: ResponseBuilderFunction
 
   constructor(
     private readonly _source: MockSource = 'code',
@@ -49,7 +48,7 @@ export class HttpMockBuilder extends MockBuilder {
     super()
   }
 
-  static newBuilder = (): DefaultMockBuilder => new HttpMockBuilder() as DefaultMockBuilder
+  static newBuilder = (): HttpMockBuilder => new HttpMockBuilder()
 
   url(matcher: Matcher<string> | string): this {
     notNull(matcher)
@@ -68,7 +67,7 @@ export class HttpMockBuilder extends MockBuilder {
     return this
   }
 
-  method(matcher: Matcher<HttpMethods> | HttpMethods | Array<HttpMethods>): this {
+  method(matcher: Matcher<Methods> | Methods | Array<Methods>): this {
     notNull(matcher)
 
     const meta = 'Method'
@@ -272,7 +271,7 @@ export class HttpMockBuilder extends MockBuilder {
     return this
   }
 
-  proxyTo(target: string, response: HttpResponseFixtureBuilder): this {
+  proxyTo(target: string, response: ResponseBuilder): this {
     response.proxyFrom(target)
 
     this._responseBuilder = response.build()
@@ -280,9 +279,8 @@ export class HttpMockBuilder extends MockBuilder {
     return this
   }
 
-  reply(response: HttpResponseFixtureBuilder | HttpResponseFixtureBuilderFunction): this {
-    this._responseBuilder =
-      response instanceof HttpResponseFixtureBuilder ? response.build() : response
+  reply(response: ResponseBuilder | ResponseBuilderFunction): this {
+    this._responseBuilder = response instanceof ResponseBuilder ? response.build() : response
     return this
   }
 

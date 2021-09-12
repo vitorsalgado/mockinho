@@ -102,7 +102,9 @@ describe('cli', function () {
       try {
         mockhttp.mock(get('/test').reply(ok()))
 
-        await Supertest(`http://localhost:${mockhttp.info().http.port}`).get('/test').expect(200)
+        await Supertest(`http://localhost:${mockhttp.serverInfo().http.port}`)
+          .get('/test')
+          .expect(200)
 
         expect(config.useHttp).toBeTruthy()
         expect(config.httpPort).toEqual(0)
@@ -138,7 +140,9 @@ describe('cli', function () {
       try {
         mockhttp.mock(get('/test').reply(ok()))
 
-        await Supertest(`http://localhost:${mockhttp.info().http.port}`).get('/test').expect(200)
+        await Supertest(`http://localhost:${mockhttp.serverInfo().http.port}`)
+          .get('/test')
+          .expect(200)
 
         expect(config.recordEnabled).toBeTruthy()
         expect(config.recordOptions?.destination).toEqual(
@@ -272,7 +276,9 @@ describe('cli', function () {
       try {
         mockhttp.mock(get('/test').reply(ok()))
 
-        await Supertest(`http://localhost:${mockhttp.info().http.port}`).get('/test').expect(200)
+        await Supertest(`http://localhost:${mockhttp.serverInfo().http.port}`)
+          .get('/test')
+          .expect(200)
 
         expect(config.useHttp).toBeTruthy()
         expect(config.httpPort).toEqual(0)

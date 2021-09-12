@@ -8,7 +8,7 @@ import { Level } from '@mockinho/core'
 import { ConfigurationBuilder } from '../../ConfigurationBuilder'
 import { isDef } from '../../../cli/utils'
 import { keyValue } from '../../../cli/utils'
-import { rec } from '../../../rec/rec'
+import { rec } from '../../../mock/record/rec'
 import { importMiddlewares } from '../importMiddlewares'
 import { Argv } from './Argv'
 

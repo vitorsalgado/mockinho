@@ -62,12 +62,12 @@ export function configureWatcher(config: Configuration, mockhttp: MockaccinoHttp
             return
           }
 
-          mockhttp.removeBy('file')
+          mockhttp.resetMocksBy('file')
           await mockhttp.rebuild()
 
           console.log('Mocks from ' + blue(filename) + ' were ' + blue('updated'))
         } else {
-          mockhttp.removeBy('file')
+          mockhttp.resetMocksBy('file')
           await mockhttp.rebuild()
 
           console.log('Mocks from ' + blue(filename) + ' were ' + blue('removed'))
@@ -79,7 +79,7 @@ export function configureWatcher(config: Configuration, mockhttp: MockaccinoHttp
     }
   )
 
-  mockhttp.on('close', () => fsWatcher.close())
+  mockhttp.on('onClose', () => fsWatcher.close())
 }
 
 function extractFilename(path: string) {

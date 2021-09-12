@@ -12,7 +12,7 @@ describe('HTTP - Working With File Body Mocks', function () {
 
     beforeAll(() => $.start())
     afterAll(() => $.finalize())
-    afterEach(() => $.removeAll())
+    afterEach(() => $.resetMocks())
 
     it('should throw exception when mock does not exist', function () {
       $.mock(post(urlPath('/test')).reply(ok().bodyFile('nonexistent-body-stub.json')))
@@ -42,7 +42,7 @@ describe('HTTP - Working With File Body Mocks', function () {
 
     beforeAll(() => $.start())
     afterAll(() => $.finalize())
-    afterEach(() => $.removeAll())
+    afterEach(() => $.resetMocks())
 
     it('should throw exception when mock does not exist', function () {
       $.mock(post(urlPath('/test')).reply(ok().bodyFile('nonexistent-body-stub.json')))

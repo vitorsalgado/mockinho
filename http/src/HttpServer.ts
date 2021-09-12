@@ -16,8 +16,8 @@ import { decorateRequestMiddleware } from './decorateRequestMiddleware'
 import { HttpRequest } from './HttpRequest'
 import { configureProxy } from './configureProxy'
 import { Configuration } from './config'
-import { logIncomingRequestMiddleware } from './eventlisteners/logIncomingRequestMiddleware'
-import { logReqAndResMiddleware } from './eventlisteners/logReqAndResMiddleware'
+import { logIncomingRequestMiddleware } from './hooks/logIncomingRequestMiddleware'
+import { logReqAndResMiddleware } from './hooks/logReqAndResMiddleware'
 import { rawBodyMiddleware } from './rawBodyMiddleware'
 import { ErrorCodes } from './ErrorCodes'
 import { Info } from './Info'
@@ -76,7 +76,7 @@ export class HttpServer {
     this.expressApp.disable('etag')
 
     this.expressApp.use(rawBodyMiddleware as Router)
-    this.expressApp.use(express.json() as unknown as Router)
+    this.expressApp.use(express.json())
     this.expressApp.use(express.urlencoded(this.configuration.formUrlEncodedOptions))
     this.expressApp.use(express.text())
 
@@ -114,7 +114,7 @@ export class HttpServer {
     this.expressApp.use(
       (error: Error & Record<string, unknown>, req: Request, res: Response, next: NextFunction) => {
         if (error) {
-          this.context.emit('exception', error)
+          this.context.emit('onError', error)
 
           LoggerUtil.instance().error(error)
 
@@ -145,7 +145,7 @@ export class HttpServer {
       this.information.http.baseUrl = `http://${this.configuration.httpHost}:${port}`
 
       this.httpServer.on('error', (err: Error & Record<string, unknown>) =>
-        this.context.emit('exception', err)
+        this.context.emit('onError', err)
       )
     }
 
@@ -162,7 +162,7 @@ export class HttpServer {
       this.information.https.baseUrl = `http://${this.configuration.httpsHost}:${port}`
 
       this.httpsServer.on('error', (err: Error & Record<string, unknown>) =>
-        this.context.emit('exception', err)
+        this.context.emit('onError', err)
       )
     }
 

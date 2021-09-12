@@ -1,10 +1,10 @@
-import { DefaultResponseBuilder } from '../../types'
+import { JsonType } from '@mockinho/core'
 import { StatusCodes } from '../../StatusCodes'
-import { JsonType } from '../../types'
+import { ResponseBuilder } from '../ResponseBuilder'
 import { response } from './response'
 
-export const internalServerError = (): DefaultResponseBuilder =>
+export const internalServerError = (): ResponseBuilder =>
   response().status(StatusCodes.INTERNAL_SERVER_ERROR)
 
-export const internalServerErrorJSON = (body: JsonType): DefaultResponseBuilder =>
+export const internalServerErrorJSON = (body: JsonType): ResponseBuilder =>
   internalServerError().bodyJSON(body)

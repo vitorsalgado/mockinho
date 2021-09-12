@@ -14,7 +14,7 @@ describe('Cookies', function () {
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
-  afterEach(() => $.removeAll())
+  afterEach(() => $.resetMocks())
 
   describe('when a signed cookie is sent', function () {
     it('should apply matchers on the unsigned value', function () {

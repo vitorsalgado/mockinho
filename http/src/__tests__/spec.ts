@@ -17,7 +17,7 @@ describe('Mockinho HTTP', function () {
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
-  afterEach(() => $.removeAll())
+  afterEach(() => $.resetMocks())
 
   describe('GET', function () {
     it('should mock a GET request and return json body with 200 (OK)', function () {

@@ -8,11 +8,10 @@ import { CorsOptions } from 'cors'
 import { CookieParseOptions } from 'cookie-parser'
 import CookieParse from 'cookie-parser'
 import { notBlank } from '@mockinho/core'
-import { PluginFactory } from '@mockinho/core'
 import { Level } from '@mockinho/core'
 import { Mode } from '@mockinho/core'
-import { RecordOptions } from '../rec/RecordOptions'
-import { RecordOptionsBuilder } from '../rec/RecordOptionsBuilder'
+import { RecordOptions } from '../mock/record'
+import { RecordOptionsBuilder } from '../mock/record'
 import { MockProviderFactory } from '../mock/providers/MockProvider'
 import { FieldParser } from '../mock/providers/default/FieldParser'
 import { Configuration } from './Configuration'
@@ -46,7 +45,6 @@ export class ConfigurationBuilder {
   private _recordOptions?: RecordOptions
   private _mockProviderFactories: Array<MockProviderFactory<Configuration>> = []
   private _mockFieldParsers: Array<FieldParser> = []
-  private _pluginFactories: Array<PluginFactory> = []
   private _watch: boolean = Defaults.watch
 
   private _formBodyOptions?: OptionsUrlencoded
@@ -211,11 +209,6 @@ export class ConfigurationBuilder {
     return this
   }
 
-  addPlugin(...plugins: Array<PluginFactory>): this {
-    this._pluginFactories.push(...plugins)
-    return this
-  }
-
   // endregion
 
   // region Express
@@ -310,8 +303,7 @@ export class ConfigurationBuilder {
         this._recordOptions = {
           destination: this._mocksDirectory,
           captureRequestHeaders: Defaults.recordOptions.captureRequestHeaders,
-          captureResponseHeaders: Defaults.recordOptions.captureResponseHeaders,
-          filters: []
+          captureResponseHeaders: Defaults.recordOptions.captureResponseHeaders
         }
       } else {
         this._recordOptions.destination =
@@ -327,8 +319,6 @@ export class ConfigurationBuilder {
         this._recordOptions.captureResponseHeaders =
           this._recordOptions.captureResponseHeaders ??
           Defaults.recordOptions.captureResponseHeaders
-
-        this._recordOptions.filters = []
       }
     }
 
@@ -383,7 +373,6 @@ export class ConfigurationBuilder {
       this._recordOptions,
       this._mockProviderFactories,
       this._mockFieldParsers,
-      this._pluginFactories,
       this._watch,
       this._formBodyOptions,
       this._multiPartOptions,

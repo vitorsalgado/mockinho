@@ -10,7 +10,7 @@ describe('CORS', function () {
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
-  afterEach(() => $.removeAll())
+  afterEach(() => $.resetMocks())
 
   it('server should work with CORS setup', async function () {
     const scope = $.mock(
