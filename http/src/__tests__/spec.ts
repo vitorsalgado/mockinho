@@ -1,6 +1,6 @@
 import * as Path from 'path'
 import Supertest from 'supertest'
-import { containing, equalsTo, jsonPath } from '@mockinho/core-matchers'
+import { contains, equalsTo, jsonPath } from '@mockinho/core-matchers'
 import { fromFile } from '@mockinho/core'
 import { get } from '..'
 import { mockHttp } from '..'
@@ -25,7 +25,7 @@ describe('Mockinho HTTP', function () {
 
       $.mock(
         get(urlPath('/test'))
-          .header('content-type', containing('json'))
+          .header('content-type', contains('json'))
           .reply(okJSON({ data: expected }))
       )
 
@@ -57,7 +57,7 @@ describe('Mockinho HTTP', function () {
     it('should mock a POST request with json body matching field name value', function () {
       $.mock(
         post(urlPath('/test'))
-          .header('content-type', containing('json'))
+          .header('content-type', contains('json'))
           .requestBody(jsonPath('user.name', equalsTo('tester')))
           .reply(ok().body('done').header(Headers.ContentType, MediaTypes.TEXT_PLAIN))
       )
@@ -92,7 +92,7 @@ describe('Mockinho HTTP', function () {
         post(urlPath('/test'))
           .name('Stub 1')
           .scenario('Test', 'started', 'phase 2')
-          .header(Headers.ContentType, containing('json'))
+          .header(Headers.ContentType, contains('json'))
           .requestBody(jsonPath('message', equalsTo('hey')))
           .reply(okJSON({ data: 'started' }))
       )
@@ -101,7 +101,7 @@ describe('Mockinho HTTP', function () {
         post(urlPath('/test'))
           .name('Stub 2')
           .scenario('Test', 'phase 2', 'phase 3')
-          .header(Headers.ContentType, containing('json'))
+          .header(Headers.ContentType, contains('json'))
           .requestBody(jsonPath('message', equalsTo('hey')))
           .reply(okJSON({ data: 'phase 2' }))
       )

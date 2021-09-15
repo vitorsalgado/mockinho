@@ -15,7 +15,7 @@
       },
       "filter": {
         "not": {
-          "containing": "test"
+          "contains": "test"
         }
       }
     },
@@ -27,7 +27,7 @@
         ]
       },
       "Accept": {
-        "containing": "json"
+        "contains": "json"
       },
       "X-Correlation-Id": {
         "allOf": [

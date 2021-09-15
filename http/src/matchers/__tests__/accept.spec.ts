@@ -1,4 +1,4 @@
-import { containing, equalsTo } from '@mockinho/core-matchers'
+import { contains, equalsTo } from '@mockinho/core-matchers'
 import { HttpRequest } from '../../HttpRequest'
 import { accept } from '../accept'
 
@@ -16,7 +16,7 @@ describe('Accept', function () {
       body: null
     } as any
 
-    const correct = accept(containing('json'))(req)
+    const correct = accept(contains('json'))(req)
     const wrong = accept(equalsTo('xml'))(req)
 
     expect(correct).toBeTruthy()

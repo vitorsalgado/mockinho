@@ -1,6 +1,6 @@
 import Supertest from 'supertest'
 import { hasLength } from '@mockinho/core-matchers'
-import { allOf, containing, equalsTo, item, jsonPath, opts, post, urlPath } from '..'
+import { allOf, contains, equalsTo, item, jsonPath, opts, post, urlPath } from '..'
 import { mockHttp } from '..'
 import { ok } from '../mock'
 import { MediaTypes } from '../MediaTypes'
@@ -23,7 +23,7 @@ describe('HTTP - Form Url Encoded', function () {
             jsonPath('description', equalsTo('some description')),
             jsonPath('age', equalsTo('32')),
             jsonPath('job', hasLength(2)),
-            jsonPath('job', item(0, containing('tea'))),
+            jsonPath('job', item(0, contains('tea'))),
             jsonPath('job', item(1, equalsTo('developer')))
           )
         )

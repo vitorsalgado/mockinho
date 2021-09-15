@@ -1,8 +1,8 @@
 import { Matcher } from '@mockinho/core'
 import { equalsTo } from './equalsTo'
 
-export const containing = <V>(expected: string): Matcher<V> =>
-  function containing(value): boolean {
+export const contains = <V>(expected: string): Matcher<V> =>
+  function contains(value): boolean {
     if (value === null || typeof value === 'undefined') {
       return false
     }
@@ -11,5 +11,5 @@ export const containing = <V>(expected: string): Matcher<V> =>
       return value.some(x => equalsTo(expected)(x))
     }
 
-    return String(value).indexOf(expected) > -1
+    return String(value).includes(expected)
   }

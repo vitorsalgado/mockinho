@@ -1,9 +1,9 @@
-import { matching } from '../regex'
+import { matches } from '../matches'
 
-describe('Regex', function () {
+describe('matches', function () {
   it('should test value based on provided regex pattern', function () {
     const regex = /test/gi
-    const matcher = matching(regex)
+    const matcher = matches(regex)
     const value = 'test'
 
     expect(matcher(value)).toBeTruthy()

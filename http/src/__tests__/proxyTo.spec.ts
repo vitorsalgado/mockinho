@@ -1,5 +1,5 @@
 import Supertest from 'supertest'
-import { containing } from '@mockinho/core-matchers'
+import { contains } from '@mockinho/core-matchers'
 import { anything } from '@mockinho/core-matchers'
 import { equalsTo } from '@mockinho/core-matchers'
 import { opts, get, urlPath, Headers, MediaTypes } from '..'
@@ -32,7 +32,7 @@ describe('Proxied Responses', function () {
 
       $.mock(
         get(urlPath('/test'))
-          .header('content-type', containing('json'))
+          .header('content-type', contains('json'))
           .proxyTo(
             `http://localhost:${P.serverInfo().http.port}`,
             response()

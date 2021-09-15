@@ -2,11 +2,11 @@ import Path from 'path'
 import { notBlank, notNull } from '@mockinho/core'
 import { Matcher } from '@mockinho/core'
 import { isPresent } from '@mockinho/core-matchers'
-import { matching } from '@mockinho/core-matchers'
+import { matches } from '@mockinho/core-matchers'
 import { equalsTo } from '@mockinho/core-matchers'
 import { anything } from '@mockinho/core-matchers'
 import { item } from '@mockinho/core-matchers'
-import { containing } from '@mockinho/core-matchers'
+import { contains } from '@mockinho/core-matchers'
 import { anyOf } from '@mockinho/core-matchers'
 import { jsonPath } from '@mockinho/core-matchers'
 import { isUUID } from '@mockinho/core-matchers'
@@ -19,6 +19,8 @@ import { repeatTimes } from '@mockinho/core-matchers'
 import { hasLength } from '@mockinho/core-matchers'
 import { startsWith } from '@mockinho/core-matchers'
 import { trim } from '@mockinho/core-matchers'
+import { everyItem } from '@mockinho/core-matchers'
+import { empty } from '@mockinho/core-matchers'
 import { Configuration } from '../../../config'
 import { urlPath, urlPathMatching } from '../../../matchers'
 import { HttpMockBuilder, response } from '../..'
@@ -63,7 +65,7 @@ export function buildMockFromFile<Config extends Configuration>(
   } else if (mock.request.urlPath) {
     builder.url(urlPath(mock.request.urlPath))
   } else if (mock.request.urlPattern) {
-    builder.url(matching(mock.request.urlPattern))
+    builder.url(matches(mock.request.urlPattern))
   } else if (mock.request.urlPathPattern) {
     builder.url(urlPathMatching(mock.request.urlPathPattern))
   } else if (mock.request.urlExact) {
@@ -258,26 +260,36 @@ function discoverMatcherByKey(
     return equalsTo(values, true, mock.locale)
   } else if (key === 'urlPathMatching' || key === 'urlPathPattern') {
     return urlPathMatching(values)
-  } else if (key === 'contains' || key === 'containing') {
-    return containing(values)
+  } else if (key === 'contains') {
+    return contains(values)
   } else if (key === 'equals' || key === 'equalsTo') {
     return equalsTo(values)
   } else if (key === 'equalsIgnoringCase' || key === 'equalsToIgnoringCase') {
     return equalsTo(values, true, mock.locale)
-  } else if (key === 'matching' || key === 'regex') {
-    return matching(values)
+  } else if (key === 'matches' || key === 'regex') {
+    return matches(values)
   } else if (key === 'endsWith') {
     return endsWith(values)
   } else if (key === 'startsWith') {
     return startsWith(values)
   } else if (key === 'hasLength') {
     return hasLength(values)
+  } else if (key === 'empty') {
+    return empty()
   } else if (key === 'isPresent') {
     return isPresent()
   } else if (key === 'isUUID') {
     return isUUID()
   } else if (key === 'times' || key === 'repeatTimes') {
     return repeatTimes(values)
+  } else if (key === 'everyItem') {
+    if (valueIsText) {
+      return everyItem(discoverMatcherByValue(mock, values, parsers))
+    }
+
+    const [key, value] = Object.entries(values)[0]
+
+    return everyItem(discoverMatcherByKey(filename, mock, key, value, values, parsers))
   } else if (key === 'not') {
     if (valueIsText) {
       return not(discoverMatcherByValue(mock, values, parsers))

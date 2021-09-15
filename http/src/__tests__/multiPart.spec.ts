@@ -1,6 +1,6 @@
 import Path from 'path'
 import Supertest from 'supertest'
-import { equalsTo, containing, jsonPath } from '@mockinho/core-matchers'
+import { equalsTo, contains, jsonPath } from '@mockinho/core-matchers'
 import { opts, post, urlPath } from '..'
 import { mockHttp } from '..'
 import { ok } from '../mock'
@@ -23,7 +23,7 @@ describe('Form MultiPart', function () {
           files => files.some(x => x.fieldname.includes('image')),
           files => files.length === 2
         )
-        .requestFields(fieldPath('field-test-1', containing('test-value')))
+        .requestFields(fieldPath('field-test-1', contains('test-value')))
         .requestFields(jsonPath('field-test-2', equalsTo('field-test-value-2')))
         .reply(ok())
     )

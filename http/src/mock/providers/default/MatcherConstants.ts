@@ -4,12 +4,11 @@ export const MatcherConstants = [
   'isPresent',
   'isUUID',
   'contains',
-  'containing',
   'equals',
   'equalsTo',
   'equalsToIgnoringCase',
   'equalsIgnoringCase',
-  'matching',
+  'matches',
   'regex',
   'endsWith',
   'startsWith',
@@ -23,6 +22,7 @@ export const MatcherConstants = [
   'anyOf',
   'allOf',
   'item',
+  'everyItem',
 
   // Matchers Transformers
   // --

@@ -1,6 +1,6 @@
 import Path from 'path'
 import Supertest from 'supertest'
-import { containing } from '@mockinho/core-matchers'
+import { contains } from '@mockinho/core-matchers'
 import { opts, get, urlPath, Headers, MediaTypes, ok } from '..'
 import { created } from '..'
 import { badRequest } from '..'
@@ -25,7 +25,7 @@ describe('Responses', function () {
     it('should be able to build response using request values', function () {
       $.mock(
         get(urlPath('/test'))
-          .header('content-type', containing('json'))
+          .header('content-type', contains('json'))
           .reply(ok().bodyWith(request => ({ data: `Request method was: ${request.method}` })))
       )
 

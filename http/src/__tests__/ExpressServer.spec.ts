@@ -1,5 +1,5 @@
 import Supertest from 'supertest'
-import { containing } from '@mockinho/core-matchers'
+import { contains } from '@mockinho/core-matchers'
 import { ScenarioInMemoryRepository } from '@mockinho/core'
 import { HttpContext } from '../HttpContext'
 import { opts, post, ConfigurationBuilder, HttpServer } from '..'
@@ -47,7 +47,7 @@ describe('Express Http Server', function () {
 
     $.mock(
       post(urlPath('/test'))
-        .header('content-type', containing('json'))
+        .header('content-type', contains('json'))
         .reply(okJSON({ data: expected }))
     )
 
@@ -64,7 +64,7 @@ describe('Express Http Server', function () {
 
     $.mock(
       post(urlPath('/test'))
-        .header('content-type', containing('json'))
+        .header('content-type', contains('json'))
         .reply(okJSON({ data: expected }))
     )
 
