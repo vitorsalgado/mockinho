@@ -18,6 +18,8 @@ export interface MockFile {
   priority?: number
   name?: string
 
+  locale?: string | Array<string>
+
   scenario?: {
     name: string
     requiredState?: string

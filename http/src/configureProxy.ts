@@ -1,6 +1,7 @@
 import { Server as NodeHttpServer } from 'http'
 import { IncomingMessage } from 'http'
 import { ClientRequest } from 'http'
+import { ServerResponse } from 'http'
 import { Server as NodeHttpsServer } from 'https'
 import { Options } from 'http-proxy-middleware'
 import { responseInterceptor } from 'http-proxy-middleware'
@@ -18,6 +19,10 @@ export function configureProxy(
   expressApp: Express,
   serverInstances: Array<NodeHttpServer | NodeHttpsServer>
 ): void {
+  if (!context.configuration.proxyOptions.target) {
+    throw new Error('Proxy target must not be empty or undefined.')
+  }
+
   let opts: Options = context.configuration.proxyOptions
 
   opts = {
@@ -28,14 +33,22 @@ export function configureProxy(
     proxyTimeout: opts.proxyTimeout ?? 30 * 1000,
 
     onProxyReq: function (proxyReq, request: HttpRequest) {
+      const target = String(context.configuration.proxyOptions.target)
+
+      context.emit('onProxyRequest', { target })
+
       request.proxied = true
-      request.target = context.configuration.proxyOptions.target
+      request.target = target
 
       if (request.rawBody) {
         proxyReq.setHeader(Headers.ContentLength, Buffer.byteLength(request.rawBody))
         proxyReq.write(request.rawBody)
       }
     } as (proxyReq: ClientRequest, request: IncomingMessage) => void,
+
+    onProxyRes: function (proxyRes, req, res) {
+      onProxyResponse(context, req as HttpRequest, res)
+    },
 
     onError:
       opts.onError ??
@@ -81,9 +94,29 @@ export function configureProxy(
         }
       })
 
+      onProxyResponse(context, request, res)
+
       return responseBuffer
     })
   }
 
   expressApp.use('*', createProxyMiddleware(opts))
+}
+
+function onProxyResponse(
+  context: HttpContext,
+  request: HttpRequest,
+  response: ServerResponse
+): void {
+  context.emit('onProxyResponse', {
+    verbose: context.configuration.modeIsAtLeast('verbose'),
+    start: request.start,
+    method: request.method,
+    url: request.url,
+    path: request.path,
+    response: {
+      status: response.statusCode,
+      headers: response.getHeaders() as Record<string, string>
+    }
+  })
 }

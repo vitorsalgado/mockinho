@@ -3,11 +3,11 @@
 const Fs = require('fs')
 const Path = require('path')
 const Util = require('util')
+const Stream = require('stream').Stream
 const { parentPort, workerData } = require('worker_threads')
 const { isMainThread } = require('worker_threads')
 const Hash = require('object-hash')
 const Mime = require('mime-types')
-const { LoggerUtil } = require('@mockinho/core')
 
 const writeFile = Util.promisify(Fs.writeFile)
 const access = Util.promisify(Fs.access)
@@ -24,7 +24,7 @@ parentPort.on('message', async data => {
   const hasResponseBody = response.body.length && response.body.length > 0
 
   let query
-  let body
+  let requestBody
   const requestHeaders = {}
   const responseHeaders = {}
 
@@ -49,7 +49,7 @@ parentPort.on('message', async data => {
   }
 
   if (request.body) {
-    body = request.body
+    requestBody = request.body
   }
 
   const ext = Mime.extension(response.headers['content-type'])
@@ -59,7 +59,7 @@ parentPort.on('message', async data => {
       method: request.method,
       headers: requestHeaders,
       query,
-      body
+      body: requestBody
     },
     { algorithm: 'sha1' }
   ).substr(0, 8)
@@ -77,13 +77,18 @@ parentPort.on('message', async data => {
       urlPath: request.path,
       headers: requestHeaders,
       querystring: query,
-      body
+      body:
+        !(requestBody instanceof Buffer) && !(requestBody instanceof Stream)
+          ? {
+              equalsTo: requestBody
+            }
+          : undefined
     },
 
     response: {
       status: response.status,
       headers: responseHeaders,
-      bodyFile: mockBodyFile
+      bodyFile: hasResponseBody ? mockBodyFile : undefined
     }
   }
 
@@ -102,6 +107,6 @@ parentPort.on('message', async data => {
       hasResponseBody ? writeFile(mockBodyPath, response.body) : Promise.resolve()
     ])
       .then(() => parentPort.postMessage({ mock: mockFile, mockBody: mockBodyFile }))
-      .catch(err => LoggerUtil.instance().error(err))
+      .catch(err => parentPort.postMessage(err))
   }
 })

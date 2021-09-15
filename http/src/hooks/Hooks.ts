@@ -16,7 +16,7 @@ export interface Hooks {
 
   readonly onRecord: {
     readonly mock: string
-    readonly mockBody: string
+    readonly mockBody?: string
   }
 
   readonly onRequestStart: {
@@ -29,6 +29,7 @@ export interface Hooks {
   }
 
   readonly onRequestNotMatched: {
+    readonly verbose: boolean
     readonly method: Methods
     readonly url: string
     readonly path: string
@@ -50,6 +51,22 @@ export interface Hooks {
       readonly id: string
       readonly name: string
       readonly sourceDescription: string
+    }
+  }
+
+  readonly onProxyRequest: {
+    target: string
+  }
+
+  readonly onProxyResponse: {
+    readonly verbose: boolean
+    readonly start: number
+    readonly method: Methods
+    readonly url: string
+    readonly path: string
+    readonly response: {
+      readonly status: number
+      readonly headers: Record<string, string>
     }
   }
 

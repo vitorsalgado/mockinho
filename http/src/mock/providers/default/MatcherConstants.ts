@@ -7,6 +7,8 @@ export const MatcherConstants = [
   'containing',
   'equals',
   'equalsTo',
+  'equalsToIgnoringCase',
+  'equalsIgnoringCase',
   'matching',
   'regex',
   'endsWith',

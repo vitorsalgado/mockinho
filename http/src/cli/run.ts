@@ -3,9 +3,9 @@ import { MockaccinoHttp } from '..'
 import { Argv } from '../config'
 import { opts } from '../config'
 import { Defaults } from '../config'
-import { readConfigFromFile } from '../config/providers'
-import { readConfigFromArgv } from '../config/providers'
-import { readConfigFromEnv } from '../config/providers'
+import { initialOptionsReader } from '../config'
+import { argvReader } from '../config'
+import { envReader } from '../config'
 import { printInfo } from './printInfo'
 import { configureWatcher } from './configureWatcher'
 
@@ -13,9 +13,9 @@ export async function run(options: Argv): Promise<MockaccinoHttp> {
   const builder = opts().enableFileMocks().verbose()
 
   const configurationProviders = [
-    readConfigFromFile(options.rootDir, options.config),
-    readConfigFromEnv(process.env),
-    readConfigFromArgv(options)
+    initialOptionsReader(options.rootDir, options.config),
+    envReader(process.env),
+    argvReader(options)
   ]
 
   for (const provider of configurationProviders) {
@@ -25,7 +25,9 @@ export async function run(options: Argv): Promise<MockaccinoHttp> {
   const config = builder.build()
   const mockhttp = mockHttp(config)
 
-  if (config.watch) {
+  // Watch remains disabled when record is enabled
+  // to avoid issues with newly created files from recorded responses
+  if (config.watch && !config.recordEnabled) {
     configureWatcher(config, mockhttp)
   }
 

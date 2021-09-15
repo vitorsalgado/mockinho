@@ -17,6 +17,11 @@ import { MockProvider } from './mock/providers/MockProvider'
 import { HttpServer } from './HttpServer'
 import { defaultMockProviderFactory } from './mock/providers/default/defaultMockProviderFactory'
 import { Info } from './Info'
+import { Plugin } from './Plugin'
+import { PluginRegistration } from './Plugin'
+import { onProxyRequest } from './hooks/builtin/onProxyRequest'
+import { onProxyResponse } from './hooks/builtin/onProxyResponse'
+import { onRecord } from './hooks/builtin/onRecord'
 
 export class MockaccinoHttp {
   // region Ctor
@@ -27,6 +32,7 @@ export class MockaccinoHttp {
   private readonly _mockRepository: HttpMockRepository
   private readonly _scenarioRepository: ScenarioRepository
   private readonly _mockProviders: Array<MockProvider> = []
+  private readonly _plugins: Array<PluginRegistration<unknown>> = []
 
   constructor(config: ConfigurationBuilder | Configuration) {
     const configurations = config instanceof ConfigurationBuilder ? config.build() : config
@@ -43,8 +49,12 @@ export class MockaccinoHttp {
       this.on('onRequestStart', onRequestReceived)
       this.on('onRequestNotMatched', onRequestNotMatched)
       this.on('onRequestMatched', onRequestMatched)
+      this.on('onProxyRequest', onProxyRequest)
+      this.on('onProxyResponse', onProxyResponse)
+      this.on('onRecord', onRecord)
     }
 
+    this._plugins.push(...configurations.plugins.map(plugin => ({ plugin })))
     this._mockProviders.push(defaultMockProviderFactory(this._configuration, this._httpServer))
     this._mockProviders.push(
       ...this._configuration.mockProviderFactories.map(provider =>
@@ -70,7 +80,15 @@ export class MockaccinoHttp {
     return new Scope(this._mockRepository, added)
   }
 
-  start(): Promise<Info> {
+  mockProvider(provider: MockProvider): void {
+    this._mockProviders.push(provider)
+  }
+
+  async start(): Promise<Info> {
+    for (const plugin of this._plugins) {
+      await plugin.plugin(this, this._configuration, plugin.opts)
+    }
+
     return Promise.all([this.applyMocksFromProviders(), this._httpServer.start()]).then(
       ([_, info]) => {
         this._context.emit('onStart', { info })
@@ -93,6 +111,10 @@ export class MockaccinoHttp {
 
   use(route: string | Middleware, middleware?: Middleware): void {
     this._httpServer.use(route, middleware)
+  }
+
+  register<Options>(plugin: Plugin<Options>, opts?: Options): void {
+    this._plugins.push({ plugin: plugin as Plugin<unknown>, opts })
   }
 
   resetMocks(source?: MockSource): void {

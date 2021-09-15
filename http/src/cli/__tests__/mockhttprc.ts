@@ -28,7 +28,7 @@ const config: InitialOptions = {
     }
   },
 
-  middlewares: []
+  plugins: ['./__fixtures__/plugin-ts.ts']
 }
 
 export default config

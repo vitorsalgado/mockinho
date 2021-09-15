@@ -21,10 +21,7 @@ export const Defaults = {
       'link',
       'content-length',
       'cache-control',
-      'retry-after',
-      'date',
-      'access-control-expose-headers',
-      'connection'
+      'retry-after'
     ]
   }
 }

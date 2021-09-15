@@ -13,13 +13,14 @@ export function onRequestReceived(event: Hooks['onRequestStart']): void {
       `---> ${event.method} ${event.path}`
     )}` +
       '\n' +
-      `${event.method} ${event.url}\n` +
+      bold(`${event.method} ${event.url}\n`) +
       ifVerbose(
         event.verbose,
-        `${blue('Headers:')}\n` +
-          `${
-            hasHeaders ? headers.map(([key, value]) => `${key}: ${value}`).join('\n') + '\n' : ''
-          }` +
+        `${
+          hasHeaders
+            ? `${blue('Headers:')}\n` + headers.map(([key, value]) => `${key}: ${value}`).join('\n')
+            : ''
+        }` +
           `${
             event.body !== null &&
             typeof event.body !== 'undefined' &&
@@ -29,7 +30,7 @@ export function onRequestReceived(event: Hooks['onRequestStart']): void {
               (typeof event.body === 'object' &&
                 Object.keys(event.body as Record<string, unknown>).length === 0)
             )
-              ? `${blue('Body:')}\n` + JSON.stringify(event.body)
+              ? `\n${blue('Body:')}\n` + JSON.stringify(event.body)
               : ''
           }\n`
       )

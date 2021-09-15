@@ -38,7 +38,11 @@ export type Argv = Partial<{
   record?: boolean
   recordDir?: string
   recordRequestHeaders?: Array<string>
+  noRecordRequestHeaders?: boolean
   recordResponseHeaders?: Array<string>
+  noRecordResponseHeaders?: boolean
 
-  use?: Array<string>
+  plugin?: Array<string>
+
+  [key: string]: unknown
 }>

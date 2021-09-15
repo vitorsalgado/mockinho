@@ -3,7 +3,7 @@ import * as Fs from 'fs'
 import Os from 'os'
 import Supertest from 'supertest'
 import { sleep } from '@mockinho/core'
-import { Argv } from '../../config/providers/argv/Argv'
+import { Argv } from '../../config/providers/commandlineargs/Argv'
 import { run } from '../run'
 
 describe.skip('watcher', function () {

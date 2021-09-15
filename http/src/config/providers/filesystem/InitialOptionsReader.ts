@@ -2,12 +2,21 @@ import Fs from 'fs'
 import Path from 'path'
 import { requireOrImportModule } from '@mockinho/core'
 import { ConfigurationBuilder } from '../../ConfigurationBuilder'
-import { importMiddlewares } from '../importMiddlewares'
+import { importPlugins } from '../importPlugins'
 import { InitialOptions } from './InitialOptions'
 
-const Files = ['.mockhttprc.js', '.mockhttprc.ts', '.mockhttprc.json', '.mockhttprc']
+const Files = [
+  'mockhttprc.js',
+  'mockhttprc.ts',
+  'mockhttprc.json',
+  'mockhttprc',
+  '.mockhttprc.js',
+  '.mockhttprc.ts',
+  '.mockhttprc.json',
+  '.mockhttprc'
+]
 
-export function readConfigFromFile(rootDir?: string, configFile?: string) {
+export function initialOptionsReader(rootDir?: string, configFile?: string) {
   return async function (builder: ConfigurationBuilder): Promise<void> {
     let config: InitialOptions | undefined
 
@@ -35,6 +44,8 @@ export function readConfigFromFile(rootDir?: string, configFile?: string) {
     if (!config) {
       return
     }
+
+    builder.file(config)
 
     if (config.mode) builder.mode(config.mode)
 
@@ -71,8 +82,8 @@ export function readConfigFromFile(rootDir?: string, configFile?: string) {
       builder.watch()
     }
 
-    if (config.middlewares) {
-      await importMiddlewares(config.middlewares, builder)
+    if (config.plugins) {
+      await importPlugins(config.plugins, builder, rootDir)
     }
   }
 }

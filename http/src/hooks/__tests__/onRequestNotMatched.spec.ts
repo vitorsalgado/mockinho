@@ -13,6 +13,7 @@ describe('onRequestNotMatched', function () {
 
   it('should log without a closest match', function () {
     onRequestNotMatched({
+      verbose: false,
       method: 'GET',
       url: 'http://localhost:8080',
       path: '/'
@@ -26,6 +27,7 @@ describe('onRequestNotMatched', function () {
       .build(fakeContext())
 
     onRequestNotMatched({
+      verbose: true,
       method: 'PATCH',
       url: 'http://localhost:8080/test',
       path: '/test',
@@ -42,6 +44,7 @@ describe('onRequestNotMatched', function () {
       .build(fakeContext())
 
     onRequestNotMatched({
+      verbose: false,
       method: 'PATCH',
       url: 'http://localhost:8080',
       path: '/',
@@ -60,6 +63,7 @@ describe('onRequestNotMatched', function () {
       .build(fakeContext())
 
     onRequestNotMatched({
+      verbose: true,
       method: 'PATCH',
       url: 'http://localhost:8080/test',
       path: '/test',
@@ -78,6 +82,7 @@ describe('onRequestNotMatched', function () {
       .build(fakeContext())
 
     onRequestNotMatched({
+      verbose: false,
       method: 'PATCH',
       url: 'http://localhost:8080',
       path: '/',

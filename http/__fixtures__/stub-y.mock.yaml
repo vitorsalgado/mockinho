@@ -8,11 +8,8 @@ request:
   querystring:
     q:
       equalsTo: ORANGE
-      caseInsensitive: false
-      locale: pt
     sort:
-      equalsTo: aSc
-      ignoreCase: true
+      equalsToIgnoringCase: aSc
     filter:
       upperCase:
         equalsTo: NONE

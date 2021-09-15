@@ -46,5 +46,7 @@ export type InitialOptions = Partial<{
   readonly corsOptions?: CorsOptions
   readonly cookieSecrets?: string | Array<string>
 
-  readonly middlewares?: Array<string>
+  readonly plugins?: Array<string>
+
+  readonly [key: string]: unknown
 }>

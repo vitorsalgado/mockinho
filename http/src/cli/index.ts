@@ -10,6 +10,7 @@ import { run } from './run'
 import { printErrorAndExit } from './utils'
 import { Groups } from './groups'
 
+// noinspection TypeScriptValidateJSTypes
 export default Yargs(hideBin(process.argv))
   .scriptName('mockhttp')
   .usage('Usage: $0 [options]')
@@ -105,11 +106,6 @@ export default Yargs(hideBin(process.argv))
       type: 'boolean'
     },
 
-    use: {
-      describe: 'Custom exported middleware locations',
-      group: Groups.server,
-      type: 'array'
-    },
     cors: {
       describe: 'Enable CORS',
       group: Groups.server,
@@ -155,6 +151,11 @@ export default Yargs(hideBin(process.argv))
       group: Groups.record,
       type: 'string'
     },
+    'no-record-request-headers': {
+      describe: 'No request headers will be captured',
+      group: Groups.record,
+      type: 'boolean'
+    },
     'record-capture-request-headers': {
       describe: 'Request headers to be captured during record',
       group: Groups.record,
@@ -164,6 +165,11 @@ export default Yargs(hideBin(process.argv))
       describe: 'Response headers to be captured during record',
       group: Groups.record,
       type: 'array'
+    },
+    'no-record-response-headers': {
+      describe: 'No response headers will be captured',
+      group: Groups.record,
+      type: 'boolean'
     },
 
     proxy: {
@@ -201,6 +207,12 @@ export default Yargs(hideBin(process.argv))
       describe: 'Adds x-forward headers',
       group: Groups.proxy,
       type: 'boolean'
+    },
+
+    plugin: {
+      describe: 'Exported plugin path',
+      group: Groups.server,
+      type: 'array'
     },
 
     watch: {

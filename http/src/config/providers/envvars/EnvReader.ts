@@ -1,8 +1,8 @@
 import { Mode } from '@mockinho/core'
 import { ConfigurationBuilder } from '../../ConfigurationBuilder'
-import { rec } from '../../../mock/record/rec'
+import { rec } from '../../../mock/record'
 
-export function readConfigFromEnv(env: Record<string, unknown>) {
+export function envReader(env: Record<string, unknown>) {
   return async function (builder: ConfigurationBuilder): Promise<void> {
     if (env.MOCK_MODE) builder.mode(env.MOCK_MODE as Mode)
 
@@ -22,11 +22,11 @@ export function readConfigFromEnv(env: Record<string, unknown>) {
       if (env.MOCK_RECORD_DESTINATION) recSpec.destination(env.MOCK_RECORD_DESTINATION as string)
       if (env.MOCK_RECORD_CAPTURE_REQUEST_HEADERS)
         recSpec.captureRequestHeaders(
-          ...((env.MOCK_RECORD_CAPTURE_REQUEST_HEADERS as string).split(',') as Array<string>)
+          (env.MOCK_RECORD_CAPTURE_REQUEST_HEADERS as string).split(',') as Array<string>
         )
       if (env.MOCK_RECORD_CAPTURE_RESPONSE_HEADERS)
         recSpec.captureResponseHeaders(
-          ...((env.MOCK_RECORD_CAPTURE_RESPONSE_HEADERS as string).split(',') as Array<string>)
+          (env.MOCK_RECORD_CAPTURE_RESPONSE_HEADERS as string).split(',') as Array<string>
         )
 
       builder.record(recSpec)

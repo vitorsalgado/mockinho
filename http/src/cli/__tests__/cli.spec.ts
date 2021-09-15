@@ -1,4 +1,6 @@
 import Path from 'path'
+import Fs from 'fs'
+import Os from 'os'
 import Supertest from 'supertest'
 import { run } from '../run'
 import { Argv } from '../../config'
@@ -30,11 +32,16 @@ describe('cli', function () {
       const argv: Argv = { rootDir: __dirname }
       const mockhttp = await run(argv)
       const config = mockhttp.configuration()
+      const tsconfig = await import('./mockhttprc')
 
       try {
         mockhttp.mock(get('/test').reply(ok()))
 
         await Supertest(mockhttp.server()).get('/test').expect(200)
+        await Supertest(mockhttp.server())
+          .get('/ts/plugin')
+          .expect(200)
+          .expect(({ body }) => expect(body).toEqual({ hello: 'world', ctx: 'ts' }))
 
         expect(config.mode).toEqual('info')
         expect(config.httpPort).toEqual(0)
@@ -46,6 +53,7 @@ describe('cli', function () {
         expect(config.proxyOptions.target).toEqual('http://some.nice.place')
         expect(config.proxyOptions.headers).toEqual({ 'x-test': 'abc', 'x-ctx': 'test' })
         expect(config.middlewares).toEqual([])
+        expect(config.file).toEqual(tsconfig.default)
       } finally {
         await mockhttp.finalize()
       }
@@ -54,14 +62,19 @@ describe('cli', function () {
 
   describe('when specifying a custom javascript config file', function () {
     it('should read the specific configuration and not the default ones', async function () {
-      const argv: Argv = { rootDir: __dirname, config: '.mockhttprc-custom.js' }
+      const argv: Argv = { rootDir: __dirname, config: 'mockhttprc-custom.js' }
       const mockhttp = await run(argv)
       const config = mockhttp.configuration()
+      const jsconfig = await import('./mockhttprc-custom')
 
       try {
         mockhttp.mock(get('/test-js').reply(ok()))
 
         await Supertest(mockhttp.server()).get('/test-js').expect(200)
+        await Supertest(mockhttp.server())
+          .get('/js/plugin')
+          .expect(200)
+          .expect(({ body }) => expect(body).toEqual({ hello: 'world', ctx: 'js' }))
 
         expect(config.mode).toEqual('silent')
         expect(config.httpPort).toEqual(0)
@@ -71,6 +84,7 @@ describe('cli', function () {
         expect(config.recordEnabled).toBeFalsy()
         expect(config.proxyEnabled).toBeFalsy()
         expect(config.middlewares).toEqual([])
+        expect(config.file).toEqual(jsconfig.default)
       } finally {
         await mockhttp.close()
       }
@@ -79,6 +93,9 @@ describe('cli', function () {
 
   describe('when environment variables are set', function () {
     it('should consider the values from env vars instead of the ones in file configuration', async function () {
+      const tmp = Fs.mkdtempSync(Path.join(Os.tmpdir(), 'mockaccino-'))
+      const recordDir = Path.join(tmp, 'record_destination')
+
       process.env.MOCK_MODE = 'silent'
       process.env.MOCK_HTTP_PORT = '0'
       process.env.MOCK_HTTP_HOST = 'localhost'
@@ -88,7 +105,7 @@ describe('cli', function () {
       process.env.MOCK_DIRECTORY = 'test'
       process.env.MOCK_FILES_EXTENSION = 'none'
       process.env.MOCK_RECORD = 'true'
-      process.env.MOCK_RECORD_DESTINATION = 'record_destination'
+      process.env.MOCK_RECORD_DESTINATION = recordDir
       process.env.MOCK_RECORD_CAPTURE_REQUEST_HEADERS = 'header1,header2'
       process.env.MOCK_RECORD_CAPTURE_RESPONSE_HEADERS = 'res1,res2,res3'
       process.env.MOCK_CORS = 'false'
@@ -116,9 +133,7 @@ describe('cli', function () {
         expect(config.mockDirectory).toEqual(Path.join(process.cwd(), 'test'))
         expect(config.mockFilesExtension).toEqual('none')
         expect(config.recordEnabled).toBeTruthy()
-        expect(config.recordOptions?.destination).toEqual(
-          Path.join(process.cwd(), 'record_destination')
-        )
+        expect(config.recordOptions?.destination).toEqual(recordDir)
         expect(config.recordOptions?.captureRequestHeaders).toEqual(['header1', 'header2'])
         expect(config.recordOptions?.captureResponseHeaders).toEqual(['res1', 'res2', 'res3'])
         expect(config.corsEnabled).toBeTruthy()
@@ -127,6 +142,7 @@ describe('cli', function () {
         expect(config.proxyOptions.target).toEqual('https://example.org')
       } finally {
         await mockhttp.close()
+        Fs.rmdirSync(tmp, { recursive: true })
       }
     })
 
@@ -156,6 +172,9 @@ describe('cli', function () {
 
   describe('when running with argv', function () {
     it('should have priority over all other configuration providers', async function () {
+      const tmp = Fs.mkdtempSync(Path.join(Os.tmpdir(), 'mockaccino-cli-'))
+      const mockDir = Path.join(tmp, 'data')
+
       process.env.MOCK_HTTP_PORT = '8080'
       process.env.MOCK_HTTP_HOST = '0.0.0.0'
       process.env.MOCK_HTTPS_PORT = '8443'
@@ -179,11 +198,12 @@ describe('cli', function () {
         httpsPort: undefined,
         httpsHost: undefined,
         rootDir: __dirname,
-        mockDir: 'data',
+        mockDir: mockDir,
         record: false,
         cors: false,
         cookieSecrets: [],
-        proxy: undefined
+        proxy: undefined,
+        plugin: ['./__fixtures__/plugin-js.js', './__fixtures__/plugin-ts.ts']
       }
       const mockhttp = await run(argv)
       const config = mockhttp.configuration()
@@ -192,6 +212,14 @@ describe('cli', function () {
         mockhttp.mock(get('/test').reply(ok()))
 
         await Supertest(mockhttp.server()).get('/test').expect(200)
+        await Supertest(mockhttp.server())
+          .get('/js/plugin')
+          .expect(200)
+          .expect(({ body }) => expect(body).toEqual({ hello: 'world', ctx: 'js' }))
+        await Supertest(mockhttp.server())
+          .get('/ts/plugin')
+          .expect(200)
+          .expect(({ body }) => expect(body).toEqual({ hello: 'world', ctx: 'ts' }))
 
         expect(config.mode).toEqual('info')
         expect(config.useHttp).toBeTruthy()
@@ -199,19 +227,24 @@ describe('cli', function () {
         expect(config.httpHost).toEqual('localhost')
         expect(config.useHttps).toBeFalsy()
         expect(config.timeout).toEqual(15000)
-        expect(config.mockDirectory).toEqual(Path.join(process.cwd(), 'data'))
+        expect(config.mockDirectory).toEqual(mockDir)
         expect(config.mockFilesExtension).toEqual('mock')
         expect(config.recordEnabled).toBeFalsy()
         expect(config.corsEnabled).toBeFalsy()
         expect(config.cookieSecrets).toEqual([])
         expect(config.proxyEnabled).toBeTruthy()
         expect(config.watch).toBeTruthy()
+        expect(config.argv).toEqual(argv)
       } finally {
         await mockhttp.close()
+        Fs.rmdirSync(tmp, { recursive: true })
       }
     })
 
     it('should set all parameters correctly', async function () {
+      const tmp = Fs.mkdtempSync(Path.join(Os.tmpdir(), 'mockaccino-cli-'))
+      const mockDir = Path.join(tmp, 'data')
+
       const argv: Argv = {
         mode: 'silent',
         noHttp: false,
@@ -222,7 +255,7 @@ describe('cli', function () {
         httpsPort: undefined,
         httpsHost: undefined,
         rootDir: __dirname,
-        mockDir: 'data',
+        mockDir: mockDir,
         mockExtension: 'test',
         record: true,
         cors: true,
@@ -245,7 +278,7 @@ describe('cli', function () {
         expect(config.httpHost).toEqual('localhost')
         expect(config.useHttps).toBeFalsy()
         expect(config.timeout).toEqual(15000)
-        expect(config.mockDirectory).toEqual(Path.join(process.cwd(), 'data'))
+        expect(config.mockDirectory).toEqual(mockDir)
         expect(config.mockFilesExtension).toEqual('test')
         expect(config.recordEnabled).toBeTruthy()
         expect(config.corsEnabled).toBeTruthy()
@@ -253,8 +286,10 @@ describe('cli', function () {
         expect(config.proxyEnabled).toBeTruthy()
         expect(config.proxyOptions.headers).toEqual({ 'x-test': 'abc', 'x-ctx': 'test' })
         expect(config.watch).toBeTruthy()
+        expect(config.argv).toEqual(argv)
       } finally {
         await mockhttp.close()
+        Fs.rmdirSync(tmp, { recursive: true })
       }
     })
 

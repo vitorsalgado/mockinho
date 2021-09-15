@@ -7,9 +7,16 @@ import { Defaults } from '../Defaults'
 import { RecordOptions } from '../../mock/record'
 import { defaultMockProviderFactory } from '../../mock/providers/default/defaultMockProviderFactory'
 import { FieldParser } from '../../mock/providers/default/FieldParser'
+import { Plugin } from '../../Plugin'
+import { get } from '../../mock'
+import { okJSON } from '../../mock'
 
 describe('Configurations Builder', function () {
   it('should build configurations with builder values', function () {
+    const plugin: Plugin<{ message: string }> = (instance, config, opts) => {
+      instance.mock(get('/plugin').reply(okJSON({ message: opts?.message })))
+    }
+
     const builder = new ConfigurationBuilder()
       .httpPort(3000)
       .https(3001, { enableTrace: true }, '127.0.0.1')
@@ -24,6 +31,7 @@ describe('Configurations Builder', function () {
       .enableCors({ maxAge: 10 })
       .multiPartOptions({ limits: { fieldNameSize: 1000 } })
       .cookieOptions('super-secret', {})
+      .plugin(plugin)
 
     const cfg = builder.build()
 
@@ -44,6 +52,7 @@ describe('Configurations Builder', function () {
     expect(cfg.multiPartOptions).toEqual({ limits: { fieldNameSize: 1000 } })
     expect(cfg.cookieSecrets).toEqual(['super-secret'])
     expect(cfg.cookieOptions).toEqual({})
+    expect(cfg.plugins).toEqual([plugin])
   })
 
   it('should set mock body content dir to __content__ as the default', function () {
@@ -141,17 +150,12 @@ describe('Configurations Builder', function () {
       const cfg = builder.record().build()
 
       expect(cfg.recordOptions?.destination).toEqual(cfg.mockDirectory)
-      expect(cfg.recordOptions?.captureRequestHeaders).toEqual(['accept', 'content-type'])
-      expect(cfg.recordOptions?.captureResponseHeaders).toEqual([
-        'content-type',
-        'link',
-        'content-length',
-        'cache-control',
-        'retry-after',
-        'date',
-        'access-control-expose-headers',
-        'connection'
-      ])
+      expect(cfg.recordOptions?.captureRequestHeaders).toEqual(
+        Defaults.recordOptions.captureRequestHeaders
+      )
+      expect(cfg.recordOptions?.captureResponseHeaders).toEqual(
+        Defaults.recordOptions.captureResponseHeaders
+      )
     })
 
     it('should accept an option object instead of a option builder', function () {

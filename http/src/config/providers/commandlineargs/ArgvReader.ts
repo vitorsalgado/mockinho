@@ -8,12 +8,16 @@ import { Level } from '@mockinho/core'
 import { ConfigurationBuilder } from '../../ConfigurationBuilder'
 import { isDef } from '../../../cli/utils'
 import { keyValue } from '../../../cli/utils'
-import { rec } from '../../../mock/record/rec'
-import { importMiddlewares } from '../importMiddlewares'
+import { rec } from '../../../mock/record'
+import { importPlugins } from '../importPlugins'
 import { Argv } from './Argv'
 
-export function readConfigFromArgv(argv: Argv) {
+export function argvReader(argv: Argv) {
   return async function (builder: ConfigurationBuilder): Promise<void> {
+    const rootDir = argv.rootDir ?? process.cwd()
+
+    builder.argv(argv)
+
     if (isDef(argv.noHttp) && argv.noHttp) {
       builder.disableHttp()
     } else {
@@ -75,11 +79,25 @@ export function readConfigFromArgv(argv: Argv) {
       if (argv.record) {
         const recOptions = rec()
 
-        if (argv.recordDir) recOptions.destination(argv.recordDir)
-        if (argv.recordRequestHeaders)
-          recOptions.captureRequestHeaders(...argv.recordRequestHeaders)
-        if (argv.recordResponseHeaders)
-          recOptions.captureResponseHeaders(...argv.recordResponseHeaders)
+        if (argv.recordDir) {
+          recOptions.destination(argv.recordDir)
+        }
+
+        if (isDef(argv.noRecordRequestHeaders) && argv.noRecordRequestHeaders) {
+          recOptions.captureRequestHeaders([])
+        } else {
+          if (argv.recordRequestHeaders) {
+            recOptions.captureRequestHeaders(argv.recordRequestHeaders)
+          }
+        }
+
+        if (isDef(argv.noRecordResponseHeaders) && argv.noRecordResponseHeaders) {
+          recOptions.captureResponseHeaders([])
+        } else {
+          if (argv.recordResponseHeaders) {
+            recOptions.captureResponseHeaders(argv.recordResponseHeaders)
+          }
+        }
 
         builder.record(recOptions)
       } else {
@@ -87,10 +105,12 @@ export function readConfigFromArgv(argv: Argv) {
       }
     }
 
-    if (isDef(argv.watch) && argv.watch) builder.watch(argv.watch)
+    if (isDef(argv.watch) && argv.watch) {
+      builder.watch(argv.watch)
+    }
 
-    if (argv.use) {
-      await importMiddlewares(argv.use, builder)
+    if (argv.plugin) {
+      await importPlugins(argv.plugin, builder, rootDir)
     }
   }
 }

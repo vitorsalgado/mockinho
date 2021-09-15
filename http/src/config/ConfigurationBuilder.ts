@@ -14,10 +14,13 @@ import { RecordOptions } from '../mock/record'
 import { RecordOptionsBuilder } from '../mock/record'
 import { MockProviderFactory } from '../mock/providers/MockProvider'
 import { FieldParser } from '../mock/providers/default/FieldParser'
+import { Plugin } from '../Plugin'
 import { Configuration } from './Configuration'
 import { Defaults } from './Defaults'
 import { Middleware } from './Middleware'
 import { MiddlewareRoute } from './MiddlewareRoute'
+import { Argv } from './providers'
+import { InitialOptions } from './providers'
 
 export class ConfigurationBuilder {
   private static MOCK_DEFAULT_FIXTURES_DIR = Defaults.fixturesDir
@@ -44,10 +47,9 @@ export class ConfigurationBuilder {
   private _proxyOptions: Options = { secure: false, changeOrigin: true }
   private _recordEnabled: boolean = Defaults.record
   private _recordOptions?: RecordOptions
-  private _mockProviderFactories: Array<MockProviderFactory<Configuration>> = []
+  private _mockProviderFactories: Array<MockProviderFactory> = []
   private _mockFieldParsers: Array<FieldParser> = []
   private _watch: boolean = Defaults.watch
-
   private _formBodyOptions?: OptionsUrlencoded
   private _multiPartOptions?: Multer.Options
   private _cors: boolean = false
@@ -55,8 +57,10 @@ export class ConfigurationBuilder {
   private _cookieSecrets: Array<string> = []
   private _cookieOptions?: CookieParseOptions
   private _middlewares: Array<MiddlewareRoute> = []
-
-  // region General Configurations
+  private _plugins: Array<Plugin<unknown>> = []
+  private _props: Map<string, unknown> = new Map<string, unknown>()
+  private _argv?: Argv
+  private _file?: InitialOptions
 
   http(port: number, host: string = Defaults.host): this {
     return this.httpPort(port).httpHost(host).dynamicHttpPort(false)
@@ -200,7 +204,7 @@ export class ConfigurationBuilder {
     return this
   }
 
-  addMockProviderFactory(...factory: Array<MockProviderFactory<Configuration>>): this {
+  addMockProviderFactory(...factory: Array<MockProviderFactory>): this {
     this._mockProviderFactories.push(...factory)
     return this
   }
@@ -209,10 +213,6 @@ export class ConfigurationBuilder {
     this._mockFieldParsers.push(...parser)
     return this
   }
-
-  // endregion
-
-  // region Express
 
   formUrlEncodedOptions(options: OptionsUrlencoded): this {
     this._formBodyOptions = options
@@ -277,7 +277,25 @@ export class ConfigurationBuilder {
     return this
   }
 
-  // endregion
+  plugin(...plugin: Array<Plugin<any>>): this {
+    this._plugins.push(...plugin)
+    return this
+  }
+
+  props<T>(key: string, value: T): this {
+    this._props.set(key, value)
+    return this
+  }
+
+  argv(argv: Argv): this {
+    this._argv = argv
+    return this
+  }
+
+  file(file: InitialOptions): this {
+    this._file = file
+    return this
+  }
 
   build(): Configuration {
     if (!this._useHttp && !this._useHttps) {
@@ -359,7 +377,11 @@ export class ConfigurationBuilder {
       this._cookieOptions,
       this._proxyAll,
       this._proxyOptions,
-      this._middlewares
+      this._middlewares,
+      this._plugins,
+      this._props,
+      this._argv,
+      this._file
     )
   }
 }

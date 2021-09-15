@@ -13,5 +13,5 @@ describe('cli cmd', function () {
     expect(cli).toBeDefined()
 
     await cli.finalize()
-  })
+  }, 10000)
 })

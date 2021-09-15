@@ -1,22 +1,28 @@
+/* eslint-disable no-console */
+
 import { yellow, yellowBright, bold } from 'colorette'
 import { HttpMock } from '../../mock'
 import { Hooks } from '../Hooks'
 
 export function onRequestNotMatched(event: Hooks['onRequestNotMatched']): void {
-  // eslint-disable-next-line no-console
   console.warn(
-    `${yellowBright(bold('REQUEST WAS NOT MATCHED'))} ${new Date().toISOString()} ${yellow(
+    `${yellowBright(bold('REQUEST NOT MATCHED'))} ${new Date().toISOString()} ${yellow(
       `<--- ${event.method} ${event.path}`
     )}`
   )
 
-  const mock = event.closestMatch
-
-  if (!mock) {
+  if (!event.verbose) {
+    console.warn()
     return
   }
 
-  // eslint-disable-next-line no-console
+  const mock = event.closestMatch
+
+  if (!mock) {
+    console.warn()
+    return
+  }
+
   return console.warn(
     `${yellow('Closest Mock:')}` +
       '\n' +

@@ -2,11 +2,12 @@ import './recordWorker'
 
 import Path from 'path'
 import { Worker } from 'worker_threads'
-import { notNull } from '@mockinho/core'
+import { execSync } from 'child_process'
 import { Configuration } from '../../config'
 import { HttpContext } from '../../HttpContext'
 import { RecordArgs } from './RecordArgs'
 import { RecordOptions } from './RecordOptions'
+import { Result } from './Result'
 
 export class RecordDispatcher {
   private readonly worker: Worker
@@ -15,7 +16,9 @@ export class RecordDispatcher {
   constructor(private readonly context: HttpContext) {
     this.configuration = context.configuration
 
-    notNull(this.configuration.recordOptions)
+    if (!this.configuration.recordOptions || !this.configuration.recordOptions.destination) {
+      throw new Error('You must provide at least the record destination.')
+    }
 
     this.worker = new Worker(Path.join(__dirname, 'recordWorker.js'), {
       workerData: {
@@ -25,12 +28,24 @@ export class RecordDispatcher {
         captureRequestHeaders: this.configuration.recordOptions?.captureRequestHeaders
       } as RecordOptions & { extension: string }
     })
+
+    try {
+      execSync(`mkdir -p ${Path.join(this.configuration.recordOptions.destination)}`)
+    } catch (e) {
+      const error = e as Error
+      this.context.emit('onError', error)
+    }
   }
 
   init(): void {
-    this.worker.on('message', (mock: string, mockBody: string) =>
-      this.context.emit('onRecord', { mock, mockBody })
-    )
+    this.worker.on('message', (result: Result | Error) => {
+      if (result instanceof Error) {
+        this.context.emit('onError', result)
+        return
+      }
+
+      this.context.emit('onRecord', result)
+    })
   }
 
   record(message: RecordArgs): void {

@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
-import { green } from 'colorette'
 import { greenBright } from 'colorette'
+import { bold } from 'colorette'
 import { Configuration } from '../config'
 import { Argv } from '../config'
 import { Info } from '../Info'
@@ -10,27 +10,28 @@ import { parseServerInfo } from './utils'
 
 export function printInfo(config: Configuration, options: Argv, info: Info): void {
   console.log(Banner)
-  console.log(green('Version: ') + '1.0.0')
-  console.log(green('Log Mode: ') + config.mode)
-  console.log(green('Mocks: ') + config.mockDirectory)
-  console.log(green('Mock Extensions: ') + '*.' + config.mockFilesExtension + '.<yaml|yml|json>')
+  console.log(bold('Version: ') + '1.0.0')
+  console.log(bold('Log Mode: ') + config.mode)
+  console.log(bold('Mocks: ') + config.mockDirectory)
+  console.log(bold('Mock Extensions: ') + '*.' + config.mockFilesExtension + '.<yaml|yml|json>')
 
   if (config.corsEnabled) {
-    console.log(green('CORS: ') + config.corsEnabled)
+    console.log(bold('CORS: ') + config.corsEnabled)
   }
 
   if (config.recordEnabled) {
-    console.log(green('Recording: ') + config.recordOptions?.destination)
+    console.log(bold('Recording: ') + config.recordOptions?.destination)
   }
 
   if (config.proxyEnabled) {
-    console.log(green('Proxy: ') + config.proxyOptions.target)
+    console.log(bold('Proxy: ') + config.proxyOptions.target)
   }
 
   if (options.watch) {
-    console.log(green('Watching: ') + options.watch)
+    console.log(bold('Watching: ') + options.watch)
   }
 
+  console.log()
   console.log(greenBright('Listening on: ') + parseServerInfo(info))
   console.log()
 }

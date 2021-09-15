@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 'use strict'
 
 const Path = require('path')
@@ -22,5 +24,5 @@ module.exports = {
     enabled: false
   },
 
-  preHandlerMiddlewares: []
+  plugins: ['./__fixtures__/plugin-js.js']
 }

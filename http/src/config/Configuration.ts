@@ -11,7 +11,10 @@ import { Level } from '@mockinho/core'
 import { RecordOptions } from '../mock/record'
 import { MockProviderFactory } from '../mock/providers/MockProvider'
 import { FieldParser } from '../mock/providers/default/FieldParser'
+import { Plugin } from '../Plugin'
 import { MiddlewareRoute } from './MiddlewareRoute'
+import { Argv } from './providers'
+import { InitialOptions } from './providers'
 
 export class Configuration extends BaseConfiguration {
   public constructor(
@@ -35,7 +38,7 @@ export class Configuration extends BaseConfiguration {
     public readonly mockFilesEnabled: boolean,
     public readonly recordEnabled: boolean,
     public readonly recordOptions: RecordOptions | undefined,
-    public readonly mockProviderFactories: Array<MockProviderFactory<Configuration>>,
+    public readonly mockProviderFactories: Array<MockProviderFactory>,
     public readonly mockFieldParsers: Array<FieldParser>,
     public readonly watch: boolean,
     public readonly formUrlEncodedOptions: OptionsUrlencoded,
@@ -46,7 +49,11 @@ export class Configuration extends BaseConfiguration {
     public readonly cookieOptions: CookieParseOptions | undefined,
     public readonly proxyEnabled: boolean,
     public readonly proxyOptions: Options,
-    public readonly middlewares: Array<MiddlewareRoute>
+    public readonly middlewares: Array<MiddlewareRoute>,
+    public readonly plugins: Array<Plugin<unknown>>,
+    public readonly props: Map<string, unknown>,
+    public readonly argv?: Argv,
+    public readonly file?: InitialOptions
   ) {
     super(logLevel, mode)
   }

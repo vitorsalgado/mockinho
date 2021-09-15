@@ -27,7 +27,6 @@ import { multipleResponses } from '../../entry/multipleResponses'
 import { InvalidMockFileError } from './InvalidMockFileError'
 import { MockFile } from './MockFile'
 import { MockFileResponse } from './MockFile'
-import { textCaseProperties } from './util/textCaseProperties'
 import { getSingleMatcherFromObjectKeys } from './util/getSingleMatcherFromObjectKeys'
 import { findRequiredParameter } from './util/findRequiredParameter'
 import { findRequiredMatcherEntry } from './util/findRequiredMatcherEntry'
@@ -81,6 +80,7 @@ export function buildMockFromFile<Config extends Configuration>(
           key,
           discoverMatcherByKey(
             filename,
+            mock,
             matcherKey,
             value[matcherKey],
             value,
@@ -101,6 +101,7 @@ export function buildMockFromFile<Config extends Configuration>(
           key,
           discoverMatcherByKey(
             filename,
+            mock,
             matcherKey,
             value[matcherKey],
             value,
@@ -120,6 +121,7 @@ export function buildMockFromFile<Config extends Configuration>(
         builder.requestBody(
           discoverMatcherByKey(
             filename,
+            mock,
             matcherKey,
             mock.request.body[matcherKey],
             mock.request.body,
@@ -144,6 +146,7 @@ export function buildMockFromFile<Config extends Configuration>(
           key,
           discoverMatcherByKey(
             filename,
+            mock,
             matcherKey,
             value[matcherKey],
             value,
@@ -211,6 +214,7 @@ function buildResponse(mock: MockFileResponse, filename: string): ResponseBuilde
 }
 
 function discoverMatcherByValue(
+  mock: MockFile,
   value: string,
   parsers: Array<FieldParser>,
   def = equalsTo
@@ -223,7 +227,7 @@ function discoverMatcherByValue(
     let matcher: Matcher<unknown> | undefined
 
     for (const parser of parsers) {
-      matcher = parser.discoverMatcherByValue(value)
+      matcher = parser.discoverMatcherByValue(mock, value)
 
       if (matcher) {
         return matcher
@@ -236,6 +240,7 @@ function discoverMatcherByValue(
 
 function discoverMatcherByKey(
   filename: string,
+  mock: MockFile,
   key: string,
   values: any,
   root: any,
@@ -248,15 +253,17 @@ function discoverMatcherByKey(
   // ---
 
   if (key === 'urlPath') {
-    const textCase = textCaseProperties(root)
-    return urlPath(values, textCase.ignoreCase, textCase.locale)
+    return urlPath(values, true, mock.locale)
+  } else if (key === 'url') {
+    return equalsTo(values, true, mock.locale)
   } else if (key === 'urlPathMatching' || key === 'urlPathPattern') {
     return urlPathMatching(values)
   } else if (key === 'contains' || key === 'containing') {
     return containing(values)
-  } else if (key === 'url' || key === 'equals' || key === 'equalsTo') {
-    const textCase = textCaseProperties(root)
-    return equalsTo(values, textCase.ignoreCase, textCase.locale)
+  } else if (key === 'equals' || key === 'equalsTo') {
+    return equalsTo(values)
+  } else if (key === 'equalsIgnoringCase' || key === 'equalsToIgnoringCase') {
+    return equalsTo(values, true, mock.locale)
   } else if (key === 'matching' || key === 'regex') {
     return matching(values)
   } else if (key === 'endsWith') {
@@ -273,12 +280,12 @@ function discoverMatcherByKey(
     return repeatTimes(values)
   } else if (key === 'not') {
     if (valueIsText) {
-      return not(discoverMatcherByValue(values, parsers))
+      return not(discoverMatcherByValue(mock, values, parsers))
     }
 
     const [notK, notV] = Object.entries(values)[0]
 
-    return not(discoverMatcherByKey(filename, notK, notV, values, parsers))
+    return not(discoverMatcherByKey(filename, mock, notK, notV, values, parsers))
   } else if (key === 'jsonPath' || key === 'fieldPath') {
     const path = findRequiredParameter<string>(
       'path',
@@ -293,18 +300,21 @@ function discoverMatcherByKey(
     )
     const [k, v] = matcherEntry
 
-    return jsonPath(path as string, discoverMatcherByKey(filename, k, v, matcherEntry, parsers))
+    return jsonPath(
+      path as string,
+      discoverMatcherByKey(filename, mock, k, v, matcherEntry, parsers)
+    )
   } else if (key === 'anyOf') {
     const anyOfMatchers = []
 
     for (const entry of values) {
       if (typeof entry === 'string') {
-        anyOfMatchers.push(discoverMatcherByValue(entry, parsers))
+        anyOfMatchers.push(discoverMatcherByValue(mock, entry, parsers))
         continue
       }
 
       for (const [k, v] of Object.entries(entry)) {
-        anyOfMatchers.push(discoverMatcherByKey(filename, k, v, entry, parsers))
+        anyOfMatchers.push(discoverMatcherByKey(filename, mock, k, v, entry, parsers))
       }
     }
 
@@ -314,7 +324,7 @@ function discoverMatcherByKey(
 
     for (const entry of values) {
       for (const [k, v] of Object.entries(entry)) {
-        allOfMatchers.push(discoverMatcherByKey(filename, k, v, entry, parsers))
+        allOfMatchers.push(discoverMatcherByKey(filename, mock, k, v, entry, parsers))
       }
     }
 
@@ -333,7 +343,7 @@ function discoverMatcherByKey(
     )
     const [k, v] = matcherEntry
 
-    return item(index, discoverMatcherByKey(filename, k, v, matcherEntry, parsers))
+    return item(index, discoverMatcherByKey(filename, mock, k, v, matcherEntry, parsers))
   }
 
   // Matcher Transformers
@@ -347,7 +357,7 @@ function discoverMatcherByKey(
     )
     const [k, v] = matcherEntry
 
-    return toLowerCase(discoverMatcherByKey(filename, k, v, matcherEntry, parsers), locales)
+    return toLowerCase(discoverMatcherByKey(filename, mock, k, v, matcherEntry, parsers), locales)
   } else if (key === 'upperCase') {
     const locales = findOptionalParameter('locale', valueEntries, undefined)
     const matcherEntry = findRequiredMatcherEntry(
@@ -357,7 +367,7 @@ function discoverMatcherByKey(
     )
     const [k, v] = matcherEntry
 
-    return toUpperCase(discoverMatcherByKey(filename, k, v, matcherEntry, parsers), locales)
+    return toUpperCase(discoverMatcherByKey(filename, mock, k, v, matcherEntry, parsers), locales)
   } else if (key === 'trim') {
     const matcherEntry = findRequiredMatcherEntry(
       valueEntries,
@@ -366,7 +376,7 @@ function discoverMatcherByKey(
     )
     const [k, v] = matcherEntry
 
-    return trim(discoverMatcherByKey(filename, k, v, matcherEntry, parsers))
+    return trim(discoverMatcherByKey(filename, mock, k, v, matcherEntry, parsers))
   }
 
   // Will try to find a matcher in the field parsers
@@ -374,7 +384,7 @@ function discoverMatcherByKey(
     let matcher: Matcher<unknown> | undefined
 
     for (const parser of parsers) {
-      matcher = parser.discoverMatcherByKey(filename, key, values, root)
+      matcher = parser.discoverMatcherByKey(filename, mock, key, values, root)
 
       if (matcher) {
         return matcher

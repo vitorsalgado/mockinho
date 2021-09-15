@@ -4,10 +4,11 @@ import { HttpMockBuilder } from '../..'
 import { MockFile } from './MockFile'
 
 export interface FieldParser {
-  discoverMatcherByValue<T>(value: string): Matcher<T> | undefined
+  discoverMatcherByValue<T>(mock: MockFile, value: string): Matcher<T> | undefined
 
   discoverMatcherByKey<T>(
     filename: string,
+    mock: MockFile,
     key: string,
     values: any,
     root: any

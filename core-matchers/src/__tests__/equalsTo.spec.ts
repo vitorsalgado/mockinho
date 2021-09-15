@@ -60,7 +60,7 @@ describe('EqualsTo', function () {
         active: true,
         list: [
           { job: 'None', title: 'Something' },
-          { Job: 'Developer', title: 'Nice Developer', date: '2020-05-05' }
+          { job: 'Developer', title: 'Nice Developer', date: '2020-05-05' }
         ],
         StrangeKey: {
           sub1: {
@@ -77,7 +77,7 @@ describe('EqualsTo', function () {
         active: true,
         list: [
           { job: 'None', title: 'Something' },
-          { Job: 'Developer', title: 'Nice Developer', date: '2020-05-05' }
+          { job: 'Developer', title: 'Nice Developer', date: '2020-05-05' }
         ],
         StrangeKey: {
           sub1: {
@@ -94,7 +94,7 @@ describe('EqualsTo', function () {
         active: true,
         list: [
           { job: 'None', title: 'Something' },
-          { Job: 'Developer', title: 'Nice Developer', date: '2020-05-05' }
+          { job: 'Developer', title: 'Nice Developer', date: '2020-05-05' }
         ],
         StrangeKey: {
           sub1: {
@@ -109,7 +109,7 @@ describe('EqualsTo', function () {
         name: 'test',
         age: 1000,
         active: true,
-        list: [{ Job: 'Developer', title: 'Nice Developer', date: '2020-05-05' }],
+        list: [{ job: 'Developer', title: 'Nice Developer', date: '2020-05-05' }],
         StrangeKey: {
           sub1: {
             sub2: {
@@ -132,7 +132,7 @@ describe('EqualsTo', function () {
         },
         list: [
           { job: 'None', title: 'Something' },
-          { Job: 'Developer', title: 'Nice Developer', date: '2020-05-05' }
+          { job: 'Developer', title: 'Nice Developer', date: '2020-05-05' }
         ]
       }
 
@@ -146,20 +146,20 @@ describe('EqualsTo', function () {
       const obj = {
         list: [
           { job: 'None', title: 'Something' },
-          { Job: 'Developer', title: 'Nice Developer', date: '2020-05-05' }
+          { job: 'Developer', title: 'Nice Developer', date: '2020-05-05' }
         ]
       }
 
       const ordered = {
         list: [
           { title: 'Something', job: 'None' },
-          { Job: 'Developer', date: '2020-05-05', title: 'Nice Developer' }
+          { job: 'Developer', date: '2020-05-05', title: 'Nice Developer' }
         ]
       }
 
       const unordered = {
         list: [
-          { Job: 'Developer', title: 'Nice Developer', date: '2020-05-05' },
+          { job: 'Developer', title: 'Nice Developer', date: '2020-05-05' },
           { job: 'None', title: 'Something' }
         ]
       }

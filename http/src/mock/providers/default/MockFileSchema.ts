@@ -9,6 +9,7 @@ export default {
         id: { type: 'string' },
         priority: { type: 'number' },
         name: { type: 'string' },
+        locale: { anyOf: [{ type: 'string' }, { type: 'array' }] },
 
         scenario: {
           type: 'object',

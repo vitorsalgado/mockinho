@@ -83,13 +83,13 @@ export function mockFinderMiddleware(
         return
       }
 
-      onRequestMatched(context, isVerbose, req, response, matched)
+      onRequestMatched(isVerbose, context, req, response, matched)
       replier()
 
       return
     }
 
-    onRequestNotMatched(context, req, result)
+    onRequestNotMatched(isVerbose, context, req, result)
 
     if (configurations.proxyEnabled) {
       return next()
@@ -116,11 +116,13 @@ export function mockFinderMiddleware(
 // region Events
 
 function onRequestNotMatched(
+  verbose: boolean,
   context: HttpContext,
   req: HttpRequest,
   result: FindMockResult<HttpMock>
 ) {
   context.emit('onRequestNotMatched', {
+    verbose,
     url: req.url,
     path: req.path,
     method: req.method,
@@ -129,8 +131,8 @@ function onRequestNotMatched(
 }
 
 function onRequestMatched(
-  context: HttpContext,
   verbose: boolean,
+  context: HttpContext,
   req: HttpRequest,
   response: ResponseFixture,
   matched: HttpMock

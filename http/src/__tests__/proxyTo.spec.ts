@@ -6,6 +6,8 @@ import { opts, get, urlPath, Headers, MediaTypes } from '..'
 import { okJSON } from '..'
 import { response } from '..'
 import { mockHttp } from '..'
+import { configureProxy } from '../configureProxy'
+import { HttpContext } from '..'
 
 describe('Proxied Responses', function () {
   const $ = mockHttp(opts().dynamicHttpPort().trace())
@@ -48,6 +50,19 @@ describe('Proxied Responses', function () {
           expect(res.headers.test).toEqual('ok')
           expect(res.body.hello).toEqual('world')
         })
+    })
+  })
+
+  describe('when configuring proxy', function () {
+    it('should not accept an empty target', function () {
+      const ctx = {
+        configuration: {
+          proxyOptions: {
+            target: undefined
+          }
+        }
+      }
+      expect(() => configureProxy(ctx as HttpContext, null as any, null as any))
     })
   })
 })
