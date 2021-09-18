@@ -1,3 +1,7 @@
+/* eslint-disable no-console */
+
+import { red } from 'colorette'
+import { bold } from 'colorette'
 import { mockHttp } from '..'
 import { MockaccinoHttp } from '..'
 import { Argv } from '../config'
@@ -34,6 +38,15 @@ export async function run(options: Argv): Promise<MockaccinoHttp> {
   process.on('SIGTERM', () => mockhttp.close())
   process.on('SIGINT', () => mockhttp.close())
 
+  process.on('unhandledRejection', reason =>
+    console.error(red(`Unhandled Rejection. Reason: ${reason}`))
+  )
+  process.on('uncaughtException', error => {
+    console.error(red(`Found an unexpected error. Reason: ${error.message}`))
+    console.error(red(bold('Error:')))
+    console.error(error)
+  })
+
   process.stdin.resume()
   process.stdin.setEncoding('utf8')
   process.stdin.on('data', async data => {
@@ -44,7 +57,9 @@ export async function run(options: Argv): Promise<MockaccinoHttp> {
     }
   })
 
-  mockhttp.on('onClose', () => process.stdin.unref())
+  mockhttp.on('onClose', () => {
+    if (process.stdin && process.stdin.unref) process.stdin.unref()
+  })
 
   return mockhttp.start().then(info => {
     printInfo(config, options, info)

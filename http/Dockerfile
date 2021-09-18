@@ -1,13 +1,14 @@
 # Build Stage
 # ---
 FROM node:14 AS builder
+
 WORKDIR /opt/app
 
-COPY package*.json ./
-RUN npm install --omit optional
 COPY . .
-RUN npm run build
-RUN rm -rf node_modules && npm i --production --ignore-scripts
+
+RUN npm i && \
+    npm run bootstrap && \
+    npm run build
 
 # Run Stage
 # ---
@@ -15,11 +16,16 @@ FROM gcr.io/distroless/nodejs:14
 
 USER nobody
 
-COPY --chown=nobody --from=builder /opt/app /opt/app
-WORKDIR /opt/app
+COPY --from=builder /opt/app /mockapp
+
+WORKDIR /mockapp
+VOLUME /mockapp
 
 ARG NODE_ENV=production
-ENV NODE_ENV $NODE_ENV
-ENV PATH /opt/node_app/node_modules/.bin:$PATH
 
-CMD ["dist/index.js"]
+ENV NODE_ENV $NODE_ENV
+ENV PATH /mockapp/node_modules/.bin:/mockapp/http/node_modules/.bin:$PATH
+
+EXPOSE 8080 8443
+
+ENTRYPOINT ["/nodejs/bin/node", "/mockapp/http/dist/cli/index.js"]
