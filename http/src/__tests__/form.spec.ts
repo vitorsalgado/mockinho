@@ -1,5 +1,5 @@
 import Supertest from 'supertest'
-import { hasLength } from '@mockinho/core-matchers'
+import { hasLength } from '@mockdog/core-matchers'
 import { allOf, contains, equalsTo, item, jsonPath, opts, post, urlPath } from '..'
 import { mockHttp } from '..'
 import { ok } from '../mock'

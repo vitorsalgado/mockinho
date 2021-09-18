@@ -1,4 +1,4 @@
-import { equalsTo } from '@mockinho/core-matchers'
+import { equalsTo } from '@mockdog/core-matchers'
 import { fileContent } from '../fileContent'
 
 describe('fileContent', function () {

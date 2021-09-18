@@ -1,4 +1,4 @@
-import { Matcher } from '@mockinho/core'
+import { Matcher } from '@mockdog/core'
 import { Configuration } from '../../../config'
 import { HttpMockBuilder } from '../..'
 import { MockFile } from './MockFile'

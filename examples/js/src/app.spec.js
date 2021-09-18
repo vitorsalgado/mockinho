@@ -2,12 +2,12 @@ const {
   mockHttp,
   get,
   equalsTo,
-  containing,
+  contains,
   okJSON,
   Headers,
   MediaTypes,
   opts
-} = require('@mockinho/http')
+} = require('@mockdog/http')
 const buildFastify = require('./app')
 const supertest = require('supertest')
 
@@ -18,7 +18,7 @@ describe('Js Example', function () {
   beforeAll(async () => {
     await $.start()
 
-    fastify = buildFastify({}, { api: $.info().http.baseUrl })
+    fastify = buildFastify({}, { api: $.serverInfo().http.baseUrl })
 
     await fastify.ready()
   })
@@ -32,7 +32,7 @@ describe('Js Example', function () {
     $.mock(
       get('/deputados')
         .query('siglaPartido', equalsTo('pt'))
-        .header(Headers.ContentType, containing('json'))
+        .header(Headers.ContentType, contains('json'))
         .reply(
           okJSON({ dados: [{ id: 'test-id', nome: 'test-name' }] }).header(
             Headers.ContentType,

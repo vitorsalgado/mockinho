@@ -1,4 +1,4 @@
-import { Matcher } from '@mockinho/core'
+import { Matcher } from '@mockdog/core'
 import { equalsTo } from './equalsTo'
 
 export const contains = <V>(expected: string): Matcher<V> =>

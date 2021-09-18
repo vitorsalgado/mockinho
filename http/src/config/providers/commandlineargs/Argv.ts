@@ -1,4 +1,4 @@
-import { Mode } from '@mockinho/core'
+import { Mode } from '@mockdog/core'
 
 export type Argv = Partial<{
   noHttp?: boolean

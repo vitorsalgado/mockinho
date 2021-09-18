@@ -1,7 +1,7 @@
 {
-  "name": "@mockinho/http",
+  "name": "@mockdog/http",
   "version": "0.0.0",
-  "description": "Mockinho HTTP Mock Server",
+  "description": "MockDog HTTP Mock Server",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -23,18 +23,18 @@
     "access": "public"
   },
   "author": "Vitor Hugo Salgado <vsalgadopb@gmail.com>",
-  "homepage": "https://github.com/vitorsalgado/mockinho/tree/master/packages/http#readme",
+  "homepage": "https://github.com/vitorsalgado/mockdog/tree/master/packages/http#readme",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vitorsalgado/mockinho.git"
+    "url": "git+https://github.com/vitorsalgado/mockdog.git"
   },
   "bugs": {
-    "url": "https://github.com/vitorsalgado/mockinho/issues"
+    "url": "https://github.com/vitorsalgado/mockdog/issues"
   },
   "dependencies": {
-    "@mockinho/core": "^0.0.0",
-    "@mockinho/core-matchers": "^0.0.0",
+    "@mockdog/core": "^0.0.0",
+    "@mockdog/core-matchers": "^0.0.0",
     "ajv": "^8.6.2",
     "chokidar": "^3.5.2",
     "colorette": "^1.3.0",

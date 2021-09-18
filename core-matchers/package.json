@@ -1,7 +1,7 @@
 {
-  "name": "@mockinho/core-matchers",
+  "name": "@mockdog/core-matchers",
   "version": "0.0.0",
-  "description": "Mockinho Core Matchers",
+  "description": "MockDog Core Matchers",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -22,17 +22,17 @@
     "access": "public"
   },
   "author": "Vitor Hugo Salgado <vsalgadopb@gmail.com>",
-  "homepage": "https://github.com/vitorsalgado/mockinho/tree/master/packages/core-matchers#readme",
+  "homepage": "https://github.com/vitorsalgado/mockdog/tree/master/packages/core-matchers#readme",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vitorsalgado/mockinho.git"
+    "url": "git+https://github.com/vitorsalgado/mockdog.git"
   },
   "bugs": {
-    "url": "https://github.com/vitorsalgado/mockinho/issues"
+    "url": "https://github.com/vitorsalgado/mockdog/issues"
   },
   "dependencies": {
-    "@mockinho/core": "^0.0.0",
+    "@mockdog/core": "^0.0.0",
     "uuid": "^8.3.2"
   }
 }

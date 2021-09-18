@@ -1,4 +1,4 @@
-import { ScenarioInMemoryRepository } from '@mockinho/core'
+import { ScenarioInMemoryRepository } from '@mockdog/core'
 import { HttpContext } from '../HttpContext'
 import { ConfigurationBuilder } from '../config'
 import { HttpMockRepository } from '../mock'

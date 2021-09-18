@@ -1,7 +1,7 @@
-import { Expectation } from '@mockinho/core'
-import { Mock } from '@mockinho/core'
-import { MockSource } from '@mockinho/core'
-import { ExpectationWithContext } from '@mockinho/core'
+import { Expectation } from '@mockdog/core'
+import { Mock } from '@mockdog/core'
+import { MockSource } from '@mockdog/core'
+import { ExpectationWithContext } from '@mockdog/core'
 import { ResponseBuilderFunction } from './ResponseBuilder'
 
 export class HttpMock extends Mock {

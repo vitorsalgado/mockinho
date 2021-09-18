@@ -1,5 +1,5 @@
-import { Context } from '@mockinho/core'
-import { ScenarioRepository } from '@mockinho/core'
+import { Context } from '@mockdog/core'
+import { ScenarioRepository } from '@mockdog/core'
 import { Configuration } from './config'
 import { HookListener } from './hooks'
 import { HttpMockRepository } from './mock'

@@ -1,5 +1,5 @@
-import { encodeBase64, Matcher } from '@mockinho/core'
-import { equalsTo } from '@mockinho/core-matchers'
+import { encodeBase64, Matcher } from '@mockdog/core'
+import { equalsTo } from '@mockdog/core-matchers'
 import { HttpRequest } from '../HttpRequest'
 
 export const basicAuthorization = (

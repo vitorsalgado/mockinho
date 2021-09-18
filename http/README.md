@@ -1,3 +1,3 @@
-# @mockinho/http
+# @mockdog/http
 
-Mockinho HTTP Mock Server
+MockDog HTTP Mock Server

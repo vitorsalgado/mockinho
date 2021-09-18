@@ -1,4 +1,4 @@
-import { Matcher } from '@mockinho/core'
+import { Matcher } from '@mockdog/core'
 
 export const isPresent = <T>(): Matcher<T> =>
   function isPresent(value): boolean {

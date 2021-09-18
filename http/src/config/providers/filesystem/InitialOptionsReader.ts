@@ -1,6 +1,6 @@
 import Fs from 'fs'
 import Path from 'path'
-import { requireOrImportModule } from '@mockinho/core'
+import { requireOrImportModule } from '@mockdog/core'
 import { ConfigurationBuilder } from '../../ConfigurationBuilder'
 import { importPlugins } from '../importPlugins'
 import { InitialOptions } from './InitialOptions'

@@ -1,3 +1,3 @@
-# @mockinho/core
+# @mockdog/core
 
-Mockinho Core Modules.
+MockDog Core Modules.

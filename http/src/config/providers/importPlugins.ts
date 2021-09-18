@@ -1,5 +1,5 @@
 import Path from 'path'
-import { requireOrImportModule } from '@mockinho/core'
+import { requireOrImportModule } from '@mockdog/core'
 import { ConfigurationBuilder } from '../ConfigurationBuilder'
 import { Plugin } from '../../Plugin'
 

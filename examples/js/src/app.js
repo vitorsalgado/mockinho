@@ -2,7 +2,7 @@
 
 const Fastify = require('fastify')
 const Axios = require('axios').default
-const { MediaTypes } = require('@mockinho/http')
+const { MediaTypes } = require('@mockdog/http')
 
 module.exports = function buildFastify(opts, config) {
   const app = Fastify(opts)

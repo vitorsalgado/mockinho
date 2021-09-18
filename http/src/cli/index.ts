@@ -4,7 +4,7 @@ import 'dotenv/config'
 import Yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs'
-import { Mode } from '@mockinho/core'
+import { Mode } from '@mockdog/core'
 import { Argv } from '../config'
 import { run } from './run'
 import { printErrorAndExit } from './utils'
@@ -14,7 +14,7 @@ import { Groups } from './groups'
 export default Yargs(hideBin(process.argv))
   .scriptName('mockhttp')
   .usage('Usage: $0 [options]')
-  .epilog('Take a look on this opensource project on https://github.com/vitorsalgado/mockinho')
+  .epilog('Take a look on this opensource project on https://github.com/vitorsalgado/mockdog')
   .version('v', '1.0.0')
   .alias('v', 'version')
   .help('h')
@@ -121,7 +121,7 @@ export default Yargs(hideBin(process.argv))
     config: {
       alias: 'c',
       describe:
-        'The path to a configuration file. If none is provided, Mockaccino will try to find one using the default naming conventions',
+        'The path to a configuration file. If none is provided, MockDog will try to find one using the default naming conventions',
       type: 'string'
     },
     'root-dir': {

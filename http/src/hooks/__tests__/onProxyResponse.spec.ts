@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import { nowInMs } from '@mockinho/core'
+import { nowInMs } from '@mockdog/core'
 import { onProxyResponse } from '../builtin/onProxyResponse'
 
 describe('onProxyResponse', function () {

@@ -1,5 +1,5 @@
-import { Matcher } from '@mockinho/core'
-import { equalsTo } from '@mockinho/core-matchers'
+import { Matcher } from '@mockdog/core'
+import { equalsTo } from '@mockdog/core-matchers'
 import { HttpRequest } from '../HttpRequest'
 
 export const bearerToken = (expectation: Matcher<string> | string): Matcher<HttpRequest> =>

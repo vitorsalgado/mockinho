@@ -1,6 +1,6 @@
 import Supertest from 'supertest'
-import { contains } from '@mockinho/core-matchers'
-import { ScenarioInMemoryRepository } from '@mockinho/core'
+import { contains } from '@mockdog/core-matchers'
+import { ScenarioInMemoryRepository } from '@mockdog/core'
 import { HttpContext } from '../HttpContext'
 import { opts, post, ConfigurationBuilder, HttpServer } from '..'
 import { HttpMockRepository } from '..'

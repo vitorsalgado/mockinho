@@ -1,10 +1,10 @@
 import { yellowBright, yellow, bold } from 'colorette'
-import { MockaccinoError } from '@mockinho/core'
+import { MockDogError } from '@mockdog/core'
 import { ErrorCodes } from '../ErrorCodes'
 import { HttpMockRepository } from './HttpMockRepository'
 import { HttpMock } from './HttpMock'
 
-export class PendingScopeError extends MockaccinoError {
+export class PendingScopeError extends MockDogError {
   constructor(pending: Array<HttpMock>) {
     super(
       `There are still mocked requests have not been called.\n${pending.join('\n')}`,

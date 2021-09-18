@@ -1,4 +1,4 @@
-import { Matcher } from '@mockinho/core'
+import { Matcher } from '@mockdog/core'
 import { jsonPath } from './jsonPath'
 import { isPresent } from './isPresent'
 

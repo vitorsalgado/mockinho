@@ -1,4 +1,4 @@
-import { JsonType } from '@mockinho/core'
+import { JsonType } from '@mockdog/core'
 import { ResponseBuilder } from '../ResponseBuilder'
 import { StatusCodes } from '../../StatusCodes'
 

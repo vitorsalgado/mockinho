@@ -1,4 +1,4 @@
-import { Matcher } from '@mockinho/core'
+import { Matcher } from '@mockdog/core'
 
 export const empty = <T>(): Matcher<Array<T> | string> =>
   function empty(value): boolean {

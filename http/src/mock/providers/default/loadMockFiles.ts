@@ -2,7 +2,7 @@
 
 import * as Fs from 'fs'
 import { red, bold } from 'colorette'
-import { listFilenames, noNullElements, notBlank, notEmpty } from '@mockinho/core'
+import { listFilenames, noNullElements, notBlank, notEmpty } from '@mockdog/core'
 import { InvalidMockFileError } from './InvalidMockFileError'
 import { MockFile } from './MockFile'
 import { loadSingleMockFile } from './loadSingleMockFile'

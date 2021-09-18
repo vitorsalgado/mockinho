@@ -1,9 +1,9 @@
 import { Express } from 'express'
-import { notBlank, notEmpty, MockSource } from '@mockinho/core'
-import { ScenarioRepository } from '@mockinho/core'
-import { ScenarioInMemoryRepository } from '@mockinho/core'
-import { PinoLogger } from '@mockinho/core'
-import { LoggerUtil } from '@mockinho/core'
+import { notBlank, notEmpty, MockSource } from '@mockdog/core'
+import { ScenarioRepository } from '@mockdog/core'
+import { ScenarioInMemoryRepository } from '@mockdog/core'
+import { PinoLogger } from '@mockdog/core'
+import { LoggerUtil } from '@mockdog/core'
 import { ConfigurationBuilder } from './config'
 import { Configuration } from './config'
 import { Middleware } from './config'
@@ -23,7 +23,7 @@ import { onProxyRequest } from './hooks/builtin/onProxyRequest'
 import { onProxyResponse } from './hooks/builtin/onProxyResponse'
 import { onRecord } from './hooks/builtin/onRecord'
 
-export class MockaccinoHttp {
+export class MockDogHttp {
   // region Ctor
 
   private readonly _context: HttpContext

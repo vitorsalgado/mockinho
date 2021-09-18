@@ -1,4 +1,4 @@
-import { equalsTo } from '@mockinho/core-matchers'
+import { equalsTo } from '@mockdog/core-matchers'
 import { fieldPath } from '../fieldPath'
 
 describe('Field Path', function () {

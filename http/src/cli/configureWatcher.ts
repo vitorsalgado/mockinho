@@ -5,12 +5,12 @@ import Path from 'path'
 import { blue } from 'colorette'
 import { red } from 'colorette'
 import { Configuration } from '../config'
-import { MockaccinoHttp } from '../MockaccinoHttp'
+import { MockDogHttp } from '../MockDogHttp'
 import { loadSingleMockFile } from '../mock/providers/default/loadSingleMockFile'
 import { buildMockFromFile } from '../mock/providers/default/buildMockFromFile'
 import { watcher } from './watcher'
 
-export function configureWatcher(config: Configuration, mockhttp: MockaccinoHttp): void {
+export function configureWatcher(config: Configuration, mockhttp: MockDogHttp): void {
   const fsWatcher = watcher(
     config.mockDirectory,
     {

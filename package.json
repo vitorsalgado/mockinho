@@ -1,5 +1,5 @@
 {
-  "name": "@mockinho/monorepo",
+  "name": "@mockdog/monorepo",
   "version": "0.0.0",
   "description": "Node.js Mock Server",
   "private": true,
@@ -29,7 +29,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vitorsalgado/mockinho.git"
+    "url": "git+https://github.com/vitorsalgado/mockdog.git"
   },
   "author": {
     "name": "Vitor Hugo Salgado",
@@ -38,9 +38,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vitorsalgado/mockinho/issues"
+    "url": "https://github.com/vitorsalgado/mockdog/issues"
   },
-  "homepage": "https://github.com/vitorsalgado/mockinho#readme",
+  "homepage": "https://github.com/vitorsalgado/mockdog#readme",
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",

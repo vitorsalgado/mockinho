@@ -1,6 +1,6 @@
-import { Matcher } from '@mockinho/core'
-import { notNull } from '@mockinho/core'
-import { notEmpty } from '@mockinho/core'
+import { Matcher } from '@mockdog/core'
+import { notNull } from '@mockdog/core'
+import { notEmpty } from '@mockdog/core'
 import { equalsTo } from './equalsTo'
 
 export const anyItem = (expected: Array<string>): Matcher<string> => {

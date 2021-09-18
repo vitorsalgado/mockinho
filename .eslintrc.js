@@ -51,6 +51,6 @@ module.exports = {
     'import/parsers': {
       '@typescript-eslint/parser': ['.ts']
     },
-    'import/internal-regex': '^@mockinho/'
+    'import/internal-regex': '^@mockdog/'
   }
 }

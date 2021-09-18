@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 import { Readable } from 'stream'
-import { nowInMs } from '@mockinho/core'
+import { nowInMs } from '@mockdog/core'
 import { ResponseFixture } from '../../mock'
 import { onRequestMatched } from '../builtin/onRequestMatched'
 

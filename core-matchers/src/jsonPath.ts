@@ -1,5 +1,5 @@
-import { LoggerUtil, Matcher } from '@mockinho/core'
-import { reach } from '@mockinho/core'
+import { LoggerUtil, Matcher } from '@mockdog/core'
+import { reach } from '@mockdog/core'
 
 export const jsonPath = <T>(path: string, matcher: Matcher<T>): Matcher<unknown> =>
   function jsonPath(value): boolean {

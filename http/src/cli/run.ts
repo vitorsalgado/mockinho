@@ -3,7 +3,7 @@
 import { red } from 'colorette'
 import { bold } from 'colorette'
 import { mockHttp } from '..'
-import { MockaccinoHttp } from '..'
+import { MockDogHttp } from '..'
 import { Argv } from '../config'
 import { opts } from '../config'
 import { Defaults } from '../config'
@@ -13,7 +13,7 @@ import { envReader } from '../config'
 import { printInfo } from './printInfo'
 import { configureWatcher } from './configureWatcher'
 
-export async function run(options: Argv): Promise<MockaccinoHttp> {
+export async function run(options: Argv): Promise<MockDogHttp> {
   const builder = opts().enableFileMocks().verbose()
 
   const configurationProviders = [

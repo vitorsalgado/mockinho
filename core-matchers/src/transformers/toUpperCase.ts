@@ -1,4 +1,4 @@
-import { Matcher } from '@mockinho/core'
+import { Matcher } from '@mockdog/core'
 
 export function toUpperCase(
   matcher: Matcher<string>,

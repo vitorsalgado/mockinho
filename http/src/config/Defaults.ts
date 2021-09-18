@@ -1,5 +1,5 @@
-import { Mode } from '@mockinho/core'
-import { Level } from '@mockinho/core'
+import { Mode } from '@mockdog/core'
+import { Level } from '@mockdog/core'
 
 export const Defaults = {
   fixturesDir: '__fixtures__',

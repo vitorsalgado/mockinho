@@ -2,8 +2,8 @@ import Fs from 'fs'
 import Path from 'path'
 import Os from 'os'
 import Supertest from 'supertest'
-import { listFilenames } from '@mockinho/core'
-import { sleep } from '@mockinho/core'
+import { listFilenames } from '@mockdog/core'
+import { sleep } from '@mockdog/core'
 import { opts } from '../../../config'
 import { okJSON } from '../..'
 import { get } from '../..'
@@ -21,7 +21,7 @@ describe('Record', function () {
 
   describe('when recording', function () {
     it('should return success response from target', async function () {
-      const tmp = Fs.mkdtempSync(Path.join(Os.tmpdir(), 'mockaccino-'))
+      const tmp = Fs.mkdtempSync(Path.join(Os.tmpdir(), 'mockdog-'))
       const recordDir = Path.join(tmp, '__fixtures__')
 
       Fs.mkdirSync(recordDir)

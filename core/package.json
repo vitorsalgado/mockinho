@@ -1,7 +1,7 @@
 {
-  "name": "@mockinho/core",
+  "name": "@mockdog/core",
   "version": "0.0.0",
-  "description": "Mockinho Core Modules",
+  "description": "MockDog Core Modules",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -22,14 +22,14 @@
     "access": "public"
   },
   "author": "Vitor Hugo Salgado <vsalgadopb@gmail.com>",
-  "homepage": "https://github.com/vitorsalgado/mockinho/tree/master/packages/core#readme",
+  "homepage": "https://github.com/vitorsalgado/mockdog/tree/master/packages/core#readme",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vitorsalgado/mockinho.git"
+    "url": "git+https://github.com/vitorsalgado/mockdog.git"
   },
   "bugs": {
-    "url": "https://github.com/vitorsalgado/mockinho/issues"
+    "url": "https://github.com/vitorsalgado/mockdog/issues"
   },
   "dependencies": {
     "colorette": "^1.3.0",

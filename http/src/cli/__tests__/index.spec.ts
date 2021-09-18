@@ -1,4 +1,4 @@
-import { MockaccinoHttp } from '../../MockaccinoHttp'
+import { MockDogHttp } from '../../MockDogHttp'
 
 describe('cli cmd', function () {
   it('should execute without errors', async function () {
@@ -8,7 +8,7 @@ describe('cli cmd', function () {
     process.argv.push('-h')
 
     const module = await import('..')
-    const cli = (await module.default) as MockaccinoHttp
+    const cli = (await module.default) as MockDogHttp
 
     expect(cli).toBeDefined()
 

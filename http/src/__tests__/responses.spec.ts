@@ -1,6 +1,6 @@
 import Path from 'path'
 import Supertest from 'supertest'
-import { contains } from '@mockinho/core-matchers'
+import { contains } from '@mockdog/core-matchers'
 import { opts, get, urlPath, Headers, MediaTypes, ok } from '..'
 import { created } from '..'
 import { badRequest } from '..'

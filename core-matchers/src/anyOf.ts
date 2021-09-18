@@ -1,4 +1,4 @@
-import { Matcher, notEmpty } from '@mockinho/core'
+import { Matcher, notEmpty } from '@mockdog/core'
 
 export const anyOf = <T>(...expectations: Array<Matcher<T>>): Matcher<T> => {
   notEmpty(expectations)

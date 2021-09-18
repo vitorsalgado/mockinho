@@ -1,6 +1,6 @@
 import Supertest from 'supertest'
-import { equalsTo } from '@mockinho/core-matchers'
-import { Matcher } from '@mockinho/core'
+import { equalsTo } from '@mockdog/core-matchers'
+import { Matcher } from '@mockdog/core'
 import { mockHttp } from '..'
 import { opts } from '..'
 import { ok } from '..'

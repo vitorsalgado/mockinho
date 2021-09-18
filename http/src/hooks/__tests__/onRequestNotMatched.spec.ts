@@ -1,5 +1,5 @@
-import { equalsTo } from '@mockinho/core-matchers'
-import { ScenarioInMemoryRepository } from '@mockinho/core'
+import { equalsTo } from '@mockdog/core-matchers'
+import { ScenarioInMemoryRepository } from '@mockdog/core'
 import { contentType } from '../../matchers'
 import { HttpMockBuilder, ok } from '../../mock'
 import { HttpMockRepository } from '../../mock'

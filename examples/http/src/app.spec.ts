@@ -1,13 +1,13 @@
 import supertest from 'supertest'
 import { FastifyInstance } from 'fastify'
-import { mockHttp } from '@mockinho/http'
-import { opts } from '@mockinho/http'
-import { get } from '@mockinho/http'
-import { Headers } from '@mockinho/http'
-import { okJSON } from '@mockinho/http'
-import { MediaTypes } from '@mockinho/http'
-import { containing } from '@mockinho/http'
-import { equalsTo } from '@mockinho/http'
+import { mockHttp } from '@mockdog/http'
+import { opts } from '@mockdog/http'
+import { get } from '@mockdog/http'
+import { Headers } from '@mockdog/http'
+import { okJSON } from '@mockdog/http'
+import { MediaTypes } from '@mockdog/http'
+import { contains } from '@mockdog/http'
+import { equalsTo } from '@mockdog/http'
 import { buildFastify } from './app'
 
 describe('HTTP Example', function () {
@@ -17,7 +17,7 @@ describe('HTTP Example', function () {
   beforeAll(async () => {
     await $.start()
 
-    fastify = buildFastify({}, { api: $.info().http.baseUrl })
+    fastify = buildFastify({}, { api: $.serverInfo().http.baseUrl })
 
     await fastify.ready()
   })
@@ -31,7 +31,7 @@ describe('HTTP Example', function () {
     $.mock(
       get('/deputados')
         .query('siglaPartido', equalsTo('pt'))
-        .header(Headers.ContentType, containing('json'))
+        .header(Headers.ContentType, contains('json'))
         .reply(
           okJSON({ dados: [{ id: 'test-id', nome: 'test-name' }] }).header(
             Headers.ContentType,

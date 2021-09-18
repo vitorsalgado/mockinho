@@ -1,4 +1,4 @@
-import { Matcher } from '@mockinho/core'
+import { Matcher } from '@mockdog/core'
 
 export const repeatTimes = (max: number): Matcher => {
   if (max <= 0) {

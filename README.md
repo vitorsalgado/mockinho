@@ -1,4 +1,4 @@
-<h1 align="center">Mockinho - Node.js Mock Server</h1>
+<h1 align="center">MockDog - Node.js Mock Server</h1>
 
 <p align="center">
     <img src="docs/assets/logo.png" alt="Logo" />
@@ -8,11 +8,11 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/vitorsalgado/mockinho/actions/workflows/ci.yml">
-    <img src="https://github.com/vitorsalgado/mockinho/actions/workflows/ci.yml/badge.svg" alt="GitHub Action Status" />
+  <a href="https://github.com/vitorsalgado/mockdog/actions/workflows/ci.yml">
+    <img src="https://github.com/vitorsalgado/mockdog/actions/workflows/ci.yml/badge.svg" alt="GitHub Action Status" />
   </a>
-  <a href="https://codecov.io/gh/vitorsalgado/mockinho">
-    <img src="https://codecov.io/gh/vitorsalgado/mockinho/branch/main/graph/badge.svg?token=TZPFH0EY9R"/>
+  <a href="https://codecov.io/gh/vitorsalgado/mockdog">
+    <img src="https://codecov.io/gh/vitorsalgado/mockdog/branch/main/graph/badge.svg?token=TZPFH0EY9R"/>
   </a>
   <a href="https://github.com/prettier/prettier">
     <img src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat" alt="Prettier"/>

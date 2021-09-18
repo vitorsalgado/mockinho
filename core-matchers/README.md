@@ -1,3 +1,3 @@
-# @mockinho/core-matchers
+# @mockdog/core-matchers
 
-Mockinho Core Matchers.
+MockDog Core Matchers.

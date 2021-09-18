@@ -1,5 +1,5 @@
 import Supertest from 'supertest'
-import { repeatTimes } from '@mockinho/core-matchers'
+import { repeatTimes } from '@mockdog/core-matchers'
 import { opts } from '..'
 import { get } from '..'
 import { urlPath } from '..'

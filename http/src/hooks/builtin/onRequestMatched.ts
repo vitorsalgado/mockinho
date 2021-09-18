@@ -1,6 +1,6 @@
 import { Stream } from 'stream'
 import { green, greenBright, gray, bold, italic } from 'colorette'
-import { nowInMs } from '@mockinho/core'
+import { nowInMs } from '@mockdog/core'
 import { ifVerbose } from '../utils'
 import { Hooks } from '../Hooks'
 

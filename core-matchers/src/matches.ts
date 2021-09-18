@@ -1,4 +1,4 @@
-import { Matcher } from '@mockinho/core'
+import { Matcher } from '@mockdog/core'
 
 export const matches = (pattern: RegExp | string): Matcher<string> => {
   const regExp = new RegExp(pattern)

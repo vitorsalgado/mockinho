@@ -1,4 +1,4 @@
-import { Mode } from '@mockinho/core'
+import { Mode } from '@mockdog/core'
 import { ConfigurationBuilder } from '../../ConfigurationBuilder'
 import { rec } from '../../../mock/record'
 

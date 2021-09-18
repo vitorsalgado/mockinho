@@ -1,5 +1,5 @@
 export default {
-  description: 'Mockaccino Mock File Representation',
+  description: 'MockDog Mock File Representation',
   anyOf: [{ $ref: '#/definitions/mock' }, { type: 'array', items: { $ref: '#/definitions/mock' } }],
 
   definitions: {

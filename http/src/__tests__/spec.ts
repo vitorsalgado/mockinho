@@ -1,18 +1,18 @@
 import * as Path from 'path'
 import Supertest from 'supertest'
-import { contains, equalsTo, jsonPath } from '@mockinho/core-matchers'
-import { fromFile } from '@mockinho/core'
+import { contains, equalsTo, jsonPath } from '@mockdog/core-matchers'
+import { fromFile } from '@mockdog/core'
 import { get } from '..'
 import { mockHttp } from '..'
 import { urlPath } from '../matchers'
 import { ok, okJSON, post } from '../mock'
-import { opts } from '../config/opts'
+import { opts } from '../config'
 import { MediaTypes } from '../MediaTypes'
 import { Headers } from '../Headers'
 
 const fixture = (name: string) => Path.join(__dirname, `__fixtures__/__content__${name}`)
 
-describe('Mockinho HTTP', function () {
+describe('MockDog HTTP', function () {
   const $ = mockHttp(opts().dynamicHttpPort().trace())
 
   beforeAll(() => $.start())

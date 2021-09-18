@@ -4,7 +4,7 @@ import { OptionsUrlencoded } from 'body-parser'
 import Multer from 'multer'
 import { CorsOptions } from 'cors'
 import { Options } from 'http-proxy-middleware'
-import { Mode } from '@mockinho/core'
+import { Mode } from '@mockdog/core'
 import { RecordOptions } from '../../../mock/record'
 
 export type InitialOptions = Partial<{

@@ -1,6 +1,6 @@
 import Path from 'path'
 import Supertest from 'supertest'
-import { equalsTo, contains, jsonPath } from '@mockinho/core-matchers'
+import { equalsTo, contains, jsonPath } from '@mockdog/core-matchers'
 import { opts, post, urlPath } from '..'
 import { mockHttp } from '..'
 import { ok } from '../mock'

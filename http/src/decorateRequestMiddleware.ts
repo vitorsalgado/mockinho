@@ -2,7 +2,7 @@ import { Request } from 'express'
 import { Response } from 'express'
 import { NextFunction } from 'express'
 import { v4 as UUId } from 'uuid'
-import { nowInMs } from '@mockinho/core'
+import { nowInMs } from '@mockdog/core'
 
 export function decorateRequestMiddleware(
   request: Request & { [key: string]: unknown },

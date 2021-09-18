@@ -7,7 +7,7 @@ import { Argv } from '../../config'
 import { Defaults } from '../../config'
 import { get } from '../../mock'
 import { ok } from '../../mock'
-import { MockaccinoHttp } from '../../MockaccinoHttp'
+import { MockDogHttp } from '../../MockDogHttp'
 
 describe('cli', function () {
   const OLD_ENV = process.env
@@ -22,7 +22,7 @@ describe('cli', function () {
 
   it('should import cli without errors', async function () {
     const imported = await import('..')
-    const cli = (await imported.default) as MockaccinoHttp
+    const cli = (await imported.default) as MockDogHttp
 
     await cli.finalize()
   })
@@ -93,7 +93,7 @@ describe('cli', function () {
 
   describe('when environment variables are set', function () {
     it('should consider the values from env vars instead of the ones in file configuration', async function () {
-      const tmp = Fs.mkdtempSync(Path.join(Os.tmpdir(), 'mockaccino-'))
+      const tmp = Fs.mkdtempSync(Path.join(Os.tmpdir(), 'mockdog-'))
       const recordDir = Path.join(tmp, 'record_destination')
 
       process.env.MOCK_MODE = 'silent'
@@ -172,7 +172,7 @@ describe('cli', function () {
 
   describe('when running with argv', function () {
     it('should have priority over all other configuration providers', async function () {
-      const tmp = Fs.mkdtempSync(Path.join(Os.tmpdir(), 'mockaccino-cli-'))
+      const tmp = Fs.mkdtempSync(Path.join(Os.tmpdir(), 'mockdog-cli-'))
       const mockDir = Path.join(tmp, 'data')
 
       process.env.MOCK_HTTP_PORT = '8080'
@@ -242,7 +242,7 @@ describe('cli', function () {
     })
 
     it('should set all parameters correctly', async function () {
-      const tmp = Fs.mkdtempSync(Path.join(Os.tmpdir(), 'mockaccino-cli-'))
+      const tmp = Fs.mkdtempSync(Path.join(Os.tmpdir(), 'mockdog-cli-'))
       const mockDir = Path.join(tmp, 'data')
 
       const argv: Argv = {
