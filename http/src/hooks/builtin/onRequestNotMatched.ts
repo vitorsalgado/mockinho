@@ -38,11 +38,7 @@ function tryGetUrlAndMethod(mock: HttpMock): string {
     return ''
   }
 
-  const str = []
-
-  for (const [key, value] of mock.meta.entries()) {
-    str.push(`${key}: ${value}`)
-  }
-
-  return str.join('\n')
+  return Array.from(mock.meta.entries())
+    .map(([key, value]) => `${key}: ${value}`)
+    .join('\n')
 }

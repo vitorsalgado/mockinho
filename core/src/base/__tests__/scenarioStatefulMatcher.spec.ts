@@ -1,4 +1,4 @@
-import { scenarioStatefulMatcher } from '../scenarioStatefulMatcher'
+import { scenarioMatcher } from '../scenarioMatcher'
 import { Context } from '../Context'
 import { BaseConfiguration } from '../BaseConfiguration'
 import { MockInMemoryRepository } from '../MockInMemoryRepository'
@@ -21,7 +21,7 @@ describe('scenarioStatefulMatcher', function () {
 
   describe('started state', function () {
     it('should return true when state is started', function () {
-      const scenario = scenarioStatefulMatcher('test')
+      const scenario = scenarioMatcher('test')
       const ctx = {
         configuration: new TestConfig(),
         scenarioRepository: new ScenarioInMemoryRepository(),
@@ -35,7 +35,7 @@ describe('scenarioStatefulMatcher', function () {
         'code',
         'desc',
         [],
-        [{ valueGetter: () => undefined, matcher: scenario }],
+        [{ valueGetter: () => undefined, matcherContext: scenario }],
         0,
         new Map<string, unknown>(),
         new Map<string, unknown>()
@@ -48,7 +48,7 @@ describe('scenarioStatefulMatcher', function () {
   })
 
   it('should return true when state is not found', function () {
-    const scenario = scenarioStatefulMatcher('test', 'added')
+    const scenario = scenarioMatcher('test', 'added')
     const ctx = {
       configuration: new TestConfig(),
       scenarioRepository: new ScenarioInMemoryRepository(),
@@ -62,7 +62,7 @@ describe('scenarioStatefulMatcher', function () {
       'code',
       'desc',
       [],
-      [{ valueGetter: () => undefined, matcher: scenario }],
+      [{ valueGetter: () => undefined, matcherContext: scenario }],
       0,
       new Map<string, unknown>(),
       new Map<string, unknown>()
@@ -76,7 +76,7 @@ describe('scenarioStatefulMatcher', function () {
   it('should added new state', function () {
     const scenarioRepository = new ScenarioInMemoryRepository()
 
-    const started = scenarioStatefulMatcher('add', Scenario.STATE_STARTED, 'added')
+    const started = scenarioMatcher('add', Scenario.STATE_STARTED, 'added')
     const ctx = {
       configuration: new TestConfig(),
       scenarioRepository: scenarioRepository,
@@ -90,7 +90,7 @@ describe('scenarioStatefulMatcher', function () {
       'code',
       'desc',
       [],
-      [{ valueGetter: () => undefined, matcher: started }],
+      [{ valueGetter: () => undefined, matcherContext: started }],
       0,
       new Map<string, unknown>(),
       new Map<string, unknown>()
@@ -109,7 +109,7 @@ describe('scenarioStatefulMatcher', function () {
 
     scenarioRepository.save(scenario)
 
-    const theMatcher = scenarioStatefulMatcher('test', 'qa', 'added')
+    const theMatcher = scenarioMatcher('test', 'qa', 'added')
 
     const ctx = {
       configuration: new TestConfig(),
@@ -124,7 +124,7 @@ describe('scenarioStatefulMatcher', function () {
       'code',
       'desc',
       [],
-      [{ valueGetter: () => undefined, matcher: theMatcher }],
+      [{ valueGetter: () => undefined, matcherContext: theMatcher }],
       0,
       new Map<string, unknown>(),
       new Map<string, unknown>()

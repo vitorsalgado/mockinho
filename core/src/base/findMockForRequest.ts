@@ -19,7 +19,7 @@ export function findMockForRequest<Req, Config extends BaseConfiguration, M exte
     mock.expectations.push(
       ...mock.statefulExpectations.map(expectation => ({
         valueGetter: expectation.valueGetter,
-        matcher: expectation.matcher(context, mock) as Matcher<unknown>,
+        matcher: expectation.matcherContext(context, mock) as Matcher<unknown>,
         weight: 0
       }))
     )

@@ -1,14 +1,14 @@
 import { BaseConfiguration } from './BaseConfiguration'
 import { Mock } from './Mock'
-import { StatefulMatcher } from './StatefulMatcher'
+import { MatcherContextHolder } from './MatcherContextHolder'
 import { Matcher } from './Matcher'
 import { Scenario } from './Scenario'
 
-export function scenarioStatefulMatcher<C extends BaseConfiguration, M extends Mock>(
+export function scenarioMatcher<C extends BaseConfiguration, M extends Mock>(
   name: string,
   requiredState: string = Scenario.STATE_STARTED,
   newState: string = ''
-): StatefulMatcher<C, M> {
+): MatcherContextHolder<C, M> {
   return function (context): Matcher {
     if (requiredState === Scenario.STATE_STARTED) {
       context.scenarioRepository.createNewIfNeeded(name)

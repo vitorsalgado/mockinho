@@ -11,6 +11,8 @@ import { notEmpty } from '@mockinho/core'
 import { MockSource } from '@mockinho/core'
 import { MockBuilder } from '@mockinho/core'
 import { Expectation } from '@mockinho/core'
+import { MatcherContextHolder } from '@mockinho/core'
+import { ExpectationWithContext } from '@mockinho/core'
 import { HttpRequest } from '../HttpRequest'
 import { HttpContext } from '../HttpContext'
 import { bearerToken, urlPath } from '../matchers'
@@ -18,6 +20,7 @@ import { Headers } from '../Headers'
 import { BodyType } from '../BodyType'
 import { Methods } from '../Methods'
 import { Schemes } from '../Schemes'
+import { Configuration } from '../config'
 import { HttpMock } from './HttpMock'
 import { ResponseBuilder } from './ResponseBuilder'
 import { ResponseBuilderFunction } from './ResponseBuilder'
@@ -267,6 +270,25 @@ export class HttpMockBuilder extends MockBuilder {
         this.spec(extractRequest, allOf(...(matchers as Array<Matcher<unknown>>)), 1)
       )
     }
+
+    return this
+  }
+
+  expectWithContext(
+    ...matchers: Array<MatcherContextHolder<Configuration, HttpMock, HttpRequest>>
+  ): this {
+    notEmpty(matchers)
+    noNullElements(matchers)
+
+    this._statefulExpectations.push(
+      ...matchers.map(
+        matcher =>
+          ({
+            valueGetter: (request: HttpRequest) => request,
+            matcherContext: matcher
+          } as ExpectationWithContext<unknown, unknown>)
+      )
+    )
 
     return this
   }

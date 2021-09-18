@@ -1,7 +1,7 @@
 import { Expectation } from '@mockinho/core'
 import { Mock } from '@mockinho/core'
 import { MockSource } from '@mockinho/core'
-import { StatefulExpectation } from '@mockinho/core'
+import { ExpectationWithContext } from '@mockinho/core'
 import { ResponseBuilderFunction } from './ResponseBuilder'
 
 export class HttpMock extends Mock {
@@ -12,7 +12,7 @@ export class HttpMock extends Mock {
     source: MockSource,
     sourceDescription: string,
     expectations: Array<Expectation<unknown, unknown>>,
-    statefulExpectations: Array<StatefulExpectation<unknown, unknown>>,
+    statefulExpectations: Array<ExpectationWithContext<unknown, unknown>>,
     public readonly responseBuilder: ResponseBuilderFunction,
     meta: Map<string, unknown>,
     properties: Map<string, unknown>

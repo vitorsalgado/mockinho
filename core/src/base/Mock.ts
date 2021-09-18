@@ -1,7 +1,7 @@
 import { v4 as UUIdV4 } from 'uuid'
 import { Expectation } from './Expectation'
 import { MockSource } from './MockSource'
-import { StatefulExpectation } from './StatefulExpectation'
+import { ExpectationWithContext } from './ExpectationWithContext'
 
 export class Mock {
   constructor(
@@ -11,7 +11,7 @@ export class Mock {
     public readonly source: MockSource,
     public readonly sourceDescription: string,
     public readonly expectations: Array<Expectation<unknown, unknown>>,
-    public readonly statefulExpectations: Array<StatefulExpectation<unknown, unknown>>,
+    public readonly statefulExpectations: Array<ExpectationWithContext<unknown, unknown>>,
     public hits: number,
     public readonly meta: Map<string, unknown>,
     public readonly properties: Map<string, unknown>

@@ -7,7 +7,8 @@ import { BaseConfiguration } from '../BaseConfiguration'
 import { Matcher } from '../Matcher'
 import { createMatcher } from '../createMatcher'
 import { Mode } from '../Mode'
-import { scenarioStatefulMatcher } from '../scenarioStatefulMatcher'
+import { scenarioMatcher } from '../scenarioMatcher'
+import { MatcherContextHolder } from '../MatcherContextHolder'
 
 describe('findMockForRequest', function () {
   const equalsTo = (expectation: string) => (value: string) => expectation === value
@@ -142,7 +143,16 @@ describe('findMockForRequest', function () {
       'code',
       'desc',
       [{ valueGetter: () => 'test', matcher: equalsTo('dev') as Matcher<unknown>, weight: 0 }],
-      [{ valueGetter: () => undefined, matcher: scenarioStatefulMatcher('test') }],
+      [
+        {
+          valueGetter: () => undefined,
+          matcherContext: scenarioMatcher('test') as MatcherContextHolder<
+            BaseConfiguration,
+            Mock,
+            unknown
+          >
+        }
+      ],
       0,
       new Map<string, unknown>(),
       new Map<string, unknown>()

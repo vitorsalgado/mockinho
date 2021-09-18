@@ -1,14 +1,17 @@
 import { Matcher } from './Matcher'
 import { Expectation } from './Expectation'
 import { Scenario } from './Scenario'
-import { StatefulExpectation } from './StatefulExpectation'
-import { scenarioStatefulMatcher } from './scenarioStatefulMatcher'
+import { ExpectationWithContext } from './ExpectationWithContext'
+import { scenarioMatcher } from './scenarioMatcher'
+import { MatcherContextHolder } from './MatcherContextHolder'
+import { BaseConfiguration } from './BaseConfiguration'
+import { Mock } from './Mock'
 
 export abstract class MockBuilder {
   protected _id: string = ''
   protected _name: string = ''
   protected _priority: number = 0
-  protected readonly _statefulExpectations: Array<StatefulExpectation<unknown, unknown>> = []
+  protected readonly _statefulExpectations: Array<ExpectationWithContext<unknown, unknown>> = []
 
   id(id: string): this {
     this._id = id
@@ -36,7 +39,11 @@ export abstract class MockBuilder {
   ): this {
     this._statefulExpectations.push({
       valueGetter: () => undefined,
-      matcher: scenarioStatefulMatcher(name, requiredState, newState)
+      matcherContext: scenarioMatcher(name, requiredState, newState) as MatcherContextHolder<
+        BaseConfiguration,
+        Mock,
+        unknown
+      >
     })
 
     return this
