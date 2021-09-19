@@ -25,6 +25,7 @@
     "core",
     "core-matchers",
     "http",
+    "http-jest",
     "examples/*"
   ],
   "repository": {
@@ -71,6 +72,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-tsdoc": "^0.2.14",
+    "fs-extra": "^10.0.0",
     "husky": "^7.0.2",
     "jest": "^27.1.0",
     "lerna": "^4.0.0",

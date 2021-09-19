@@ -1,0 +1,26 @@
+{
+  "name": "@mockdog/example-jest-environment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "start": "ts-node src/server.ts",
+    "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json"
+  },
+  "private": true,
+  "author": "Vitor Hugo Salgado <vsalgadopb@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@mockdog/http": "^0.0.0",
+    "@mockdog/http-jest": "^0.0.0",
+    "dotenv": "^10.0.0",
+    "drizzle-http": "^2.2.0",
+    "fastify": "^3.21.0",
+    "pino": "^6.13.2",
+    "pino-pretty": "^6.0.0"
+  },
+  "devDependencies": {
+    "ts-node": "^10.2.1"
+  }
+}
