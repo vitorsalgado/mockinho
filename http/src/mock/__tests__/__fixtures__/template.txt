@@ -1,0 +1,3 @@
+Title: {{model.title}}
+Mode: {{toUpper env.NODE_ENV}}
+Request Is: {{request.method}}

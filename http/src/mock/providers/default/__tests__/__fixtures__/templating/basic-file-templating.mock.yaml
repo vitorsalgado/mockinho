@@ -1,0 +1,15 @@
+---
+name: Template 1
+request:
+  method: GET
+  urlPath: '/test'
+response:
+  status: 200
+  bodyTemplateFile: template.json
+  modelFile: model.json
+  headers:
+    Content-Type: application/json
+  headerTemplates:
+    method: "{{request.method}}"
+    env: "{{toUpper env.NODE_ENV}}"
+  helpers: helpers.ts

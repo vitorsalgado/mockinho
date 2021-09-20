@@ -20,10 +20,14 @@ export function defaultMockProviderFactory(
       `.${configurations.mockFilesExtension}.yaml`
     ])
 
-    return files
-      .map(item =>
-        item.mockFile.map(mock => buildMockFromFile(configurations, mock, item.filename))
-      )
-      .flatMap(x => x)
+    const mocks: Array<HttpMockBuilder> = []
+
+    for (const item of files) {
+      for (const mock of item.mockFile) {
+        mocks.push(await buildMockFromFile(configurations, mock, item.filename))
+      }
+    }
+
+    return mocks
   }
 }

@@ -4,6 +4,7 @@ import * as Util from 'util'
 import { CookieOptions } from 'express'
 import { isTrue, notBlank, notNull } from '@mockdog/core'
 import { JsonType } from '@mockdog/core'
+import { notEmpty } from '@mockdog/core'
 import { HttpRequest } from '../HttpRequest'
 import { HttpContext } from '../HttpContext'
 import { MediaTypes } from '../MediaTypes'
@@ -14,14 +15,15 @@ import { ResponseFixture } from './ResponseFixture'
 import { Cookie } from './Cookie'
 import { CookieToClear } from './Cookie'
 import { HttpMock } from './HttpMock'
+import { ResponseDelegate } from './ResponseDelegate'
+import { Templating } from './templating'
+import { CustomHelper } from './templating'
+import { HandlebarsTemplating } from './templating'
+import { Delegate } from './templating'
+import { TemplatingBuiltInHelpers } from './templating'
 
 const access = Util.promisify(Fs.access)
-
-export type ResponseBuilderFunction = (
-  context: HttpContext,
-  request: HttpRequest,
-  mock: HttpMock
-) => Promise<ResponseFixture>
+const readFile = Util.promisify(Fs.readFile)
 
 export class ResponseBuilder {
   protected _status: number = StatusCodes.OK
@@ -29,13 +31,19 @@ export class ResponseBuilder {
   protected _bodyFile: string = ''
   protected _bodyFunction?: (request: HttpRequest) => BodyType
   protected _bodyFileRelativeToFixtures: boolean = true
+  protected _bodyTemplate?: Delegate
+  protected _bodyTemplatePath?: string
+  protected _templateHelpers?: CustomHelper
+  protected _templating: Templating = new HandlebarsTemplating()
   protected _bodyCtrl: number = 0
   protected _headers: Record<string, string> = {}
+  protected _headersWithTemplateValue: Record<string, Delegate> = {}
   protected _cookies: Array<Cookie> = []
   protected _cookiesToClear: Array<CookieToClear> = []
   protected _delay: number = 0
   protected _proxyFrom: string = ''
   protected _proxyHeaders: Record<string, string> = {}
+  protected _model?: JsonType
 
   static newBuilder = (): ResponseBuilder => new ResponseBuilder()
 
@@ -54,6 +62,15 @@ export class ResponseBuilder {
     notNull(value)
 
     this._headers[key] = value
+
+    return this
+  }
+
+  headerTemplate(key: string, templateValue: string): this {
+    notBlank(key)
+    notNull(templateValue)
+
+    this._headersWithTemplateValue[key] = this._templating.compile(templateValue)
 
     return this
   }
@@ -135,6 +152,53 @@ export class ResponseBuilder {
     return this
   }
 
+  bodyTemplate(template: string | JsonType): this {
+    notNull(template)
+
+    this._bodyCtrl++
+
+    let input: string
+
+    if (typeof template === 'string') {
+      input = template
+    } else if (typeof template === 'object') {
+      input = JSON.stringify(template)
+    } else {
+      throw new Error('Invalid template type. Template must be a string, object or array.')
+    }
+
+    this._bodyTemplate = this._templating.compile(input)
+
+    return this
+  }
+
+  bodyTemplatePath(path: string): this {
+    notNull(path)
+    notEmpty(path)
+
+    this._bodyTemplatePath = path
+    this._bodyFileRelativeToFixtures = !Path.isAbsolute(path)
+    this._bodyCtrl++
+
+    return this
+  }
+
+  model(model: JsonType): this {
+    notNull(model)
+
+    this._model = model
+
+    return this
+  }
+
+  helpers(helpers: CustomHelper): this {
+    notNull(helpers)
+
+    this._templateHelpers = helpers
+
+    return this
+  }
+
   cookie(key: string, value: string, options?: CookieOptions): this {
     this._cookies.push({ key, value, options })
     return this
@@ -166,7 +230,13 @@ export class ResponseBuilder {
 
   // endregion
 
-  build(): ResponseBuilderFunction {
+  build(): ResponseDelegate {
+    if (this._bodyCtrl > 1) {
+      throw new Error(
+        'Found more than one body strategy setup. Choose between: .body(), .bodyJSON(), .bodyFile(), .bodyWith() or .bodyTemplate()'
+      )
+    }
+
     return async (
       context: HttpContext,
       request: HttpRequest,
@@ -175,12 +245,6 @@ export class ResponseBuilder {
       notNull(context)
       notNull(this._status)
       isTrue(this._delay >= 0, 'Delay must be a positive number.')
-
-      if (this._bodyCtrl > 1) {
-        throw new Error(
-          'Found more than one body strategy setup. Choose between: .body(), .bodyJSON(), .bodyFile() or .bodyWith()'
-        )
-      }
 
       if (this._bodyFile) {
         const file = this._bodyFileRelativeToFixtures
@@ -196,6 +260,40 @@ export class ResponseBuilder {
         } else {
           this._body = this._bodyFunction(request)
         }
+      } else if (this._bodyTemplate) {
+        this._body = await this._bodyTemplate(
+          { request, model: this._model, env: process.env },
+          { ...TemplatingBuiltInHelpers, ...this._templateHelpers }
+        )
+      } else if (this._bodyTemplatePath) {
+        const file = this._bodyFileRelativeToFixtures
+          ? await ResponseBuilder.makeValidPath(
+              context.configuration.mockDirectory,
+              this._bodyTemplatePath
+            )
+          : this._bodyTemplatePath
+
+        const buf = await readFile(file)
+        const content = buf.toString()
+
+        this._body = await this._templating.compile(content)(
+          { request, model: this._model, env: process.env },
+          { ...TemplatingBuiltInHelpers, ...this._templateHelpers }
+        )
+      }
+
+      for (const [key, template] of Object.entries(this._headersWithTemplateValue)) {
+        this.header(
+          key,
+          await template(
+            {
+              request,
+              model: this._model,
+              env: process.env
+            },
+            { ...TemplatingBuiltInHelpers, ...this._templateHelpers }
+          )
+        )
       }
 
       return new ResponseFixture(

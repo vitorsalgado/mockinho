@@ -23,7 +23,6 @@ import { Schemes } from '../Schemes'
 import { Configuration } from '../config'
 import { HttpMock } from './HttpMock'
 import { ResponseBuilder } from './ResponseBuilder'
-import { ResponseBuilderFunction } from './ResponseBuilder'
 import { extractCookieAsJson } from './util/extractors'
 import { extractCookie } from './util/extractors'
 import { extractFileByFieldName } from './util/extractors'
@@ -38,11 +37,12 @@ import { extractUrl } from './util/extractors'
 import { extractMethod } from './util/extractors'
 import { extractScheme } from './util/extractors'
 import { extractRequest } from './util/extractors'
+import { ResponseDelegate } from './ResponseDelegate'
 
 export class HttpMockBuilder extends MockBuilder {
   private readonly _expectations: Array<Expectation<unknown, unknown>> = []
   private readonly _meta: Map<string, unknown> = new Map<string, unknown>()
-  private _responseBuilder!: ResponseBuilderFunction
+  private _responseBuilder!: ResponseDelegate
 
   constructor(
     private readonly _source: MockSource = 'code',
@@ -301,7 +301,7 @@ export class HttpMockBuilder extends MockBuilder {
     return this
   }
 
-  reply(response: ResponseBuilder | ResponseBuilderFunction): this {
+  reply(response: ResponseBuilder | ResponseDelegate): this {
     this._responseBuilder = response instanceof ResponseBuilder ? response.build() : response
     return this
   }

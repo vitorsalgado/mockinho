@@ -1,6 +1,8 @@
 import Path from 'path'
+import * as Fs from 'fs'
 import { notBlank, notNull } from '@mockdog/core'
 import { Matcher } from '@mockdog/core'
+import { requireOrImportModule } from '@mockdog/core'
 import { isPresent } from '@mockdog/core-matchers'
 import { matches } from '@mockdog/core-matchers'
 import { equalsTo } from '@mockdog/core-matchers'
@@ -26,6 +28,7 @@ import { urlPath, urlPathMatching } from '../../../matchers'
 import { HttpMockBuilder, response } from '../..'
 import { ResponseBuilder } from '../..'
 import { multipleResponses } from '../../entry/multipleResponses'
+import { CustomHelper } from '../../templating'
 import { InvalidMockFileError } from './InvalidMockFileError'
 import { MockFile } from './MockFile'
 import { MockFileResponse } from './MockFile'
@@ -38,11 +41,11 @@ import { extractPath } from './util/extractPath'
 
 const ABSOLUTE_URL_REGEX = /^[a-zA-Z][a-zA-Z\d+\-.]*?:/
 
-export function buildMockFromFile<Config extends Configuration>(
+export async function buildMockFromFile<Config extends Configuration>(
   configuration: Config,
   mock: MockFile,
   filename: string
-): HttpMockBuilder {
+): Promise<HttpMockBuilder> {
   notNull(configuration)
   notNull(mock)
   notBlank(filename)
@@ -174,12 +177,13 @@ export function buildMockFromFile<Config extends Configuration>(
     }
 
     for (const response of mock.response) {
-      multiple.add(buildResponse(response, filename))
+      multiple.add(await buildResponse(response, filename))
     }
 
     builder.reply(multiple.build())
   } else {
-    builder.reply(buildResponse(mock.response, filename).build())
+    const response = await buildResponse(mock.response, filename)
+    builder.reply(response.build())
   }
 
   for (const additionalBuilder of configuration.mockFieldParsers) {
@@ -191,7 +195,7 @@ export function buildMockFromFile<Config extends Configuration>(
 
 // region Utils
 
-function buildResponse(mock: MockFileResponse, filename: string): ResponseBuilder {
+async function buildResponse(mock: MockFileResponse, filename: string): Promise<ResponseBuilder> {
   const res = response().status(mock.status ?? 200)
 
   if (mock.headers) res.headers(mock.headers)
@@ -207,9 +211,40 @@ function buildResponse(mock: MockFileResponse, filename: string): ResponseBuilde
       } else {
         res.bodyFile(Path.resolve(Path.dirname(filename), mock.bodyFile))
       }
+    } else if (mock.bodyTemplate) {
+      res.bodyTemplate(mock.bodyTemplate)
+    } else if (mock.bodyTemplateFile) {
+      res.bodyTemplatePath(mock.bodyTemplateFile)
     } else if (mock.body) {
       res.body(mock.body)
     }
+  }
+
+  if (mock.modelFile) {
+    const file = Path.isAbsolute(mock.modelFile)
+      ? mock.modelFile
+      : Path.resolve(Path.dirname(filename), mock.modelFile)
+
+    const buf = Fs.readFileSync(file)
+    const content = buf.toString()
+
+    res.model(JSON.parse(content))
+  }
+
+  if (mock.headerTemplates) {
+    for (const [key, value] of Object.entries(mock.headerTemplates)) {
+      res.headerTemplate(key, value)
+    }
+  }
+
+  if (mock.helpers) {
+    const file = Path.isAbsolute(mock.helpers)
+      ? mock.helpers
+      : Path.resolve(Path.dirname(filename), mock.helpers)
+
+    const helpers = await requireOrImportModule(file)
+
+    res.helpers(helpers as CustomHelper)
   }
 
   return res

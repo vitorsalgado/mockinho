@@ -37,7 +37,9 @@ export function configureWatcher(config: Configuration, mockhttp: MockDogHttp): 
           return
         }
 
-        mockhttp.mock(...result.mocks.map(mock => buildMockFromFile(config, mock, path)))
+        for (const mock of result.mocks) {
+          mockhttp.mock(await buildMockFromFile(config, mock, path))
+        }
 
         console.log('Mocks from ' + blue(filename) + ' were ' + blue('added'))
       } catch (ex) {

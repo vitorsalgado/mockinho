@@ -92,7 +92,19 @@ export default {
           anyOf: [{ type: 'string' }, { type: 'object' }, { type: 'array' }]
         },
         bodyFile: { type: 'string' },
+        bodyTemplate: {
+          anyOf: [{ type: 'string' }, { type: 'object' }, { type: 'array' }]
+        },
+        bodyTemplateFile: { type: 'string' },
+        modelFile: { type: 'string' },
         headers: { type: 'object' },
+        headerTemplates: {
+          type: 'object',
+          patternProperties: {
+            '.*': { type: 'string' }
+          }
+        },
+        helpers: { type: 'string' },
         latency: { type: 'number' }
       },
       required: ['status']

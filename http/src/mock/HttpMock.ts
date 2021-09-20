@@ -2,7 +2,7 @@ import { Expectation } from '@mockdog/core'
 import { Mock } from '@mockdog/core'
 import { MockSource } from '@mockdog/core'
 import { ExpectationWithContext } from '@mockdog/core'
-import { ResponseBuilderFunction } from './ResponseBuilder'
+import { ResponseDelegate } from './ResponseDelegate'
 
 export class HttpMock extends Mock {
   public constructor(
@@ -13,7 +13,7 @@ export class HttpMock extends Mock {
     sourceDescription: string,
     expectations: Array<Expectation<unknown, unknown>>,
     statefulExpectations: Array<ExpectationWithContext<unknown, unknown>>,
-    public readonly responseBuilder: ResponseBuilderFunction,
+    public readonly responseBuilder: ResponseDelegate,
     meta: Map<string, unknown>,
     properties: Map<string, unknown>
   ) {

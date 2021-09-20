@@ -1,19 +1,26 @@
 import { MultiResponseStrategy } from '../../MultipleResponseBuilder'
 import { Methods } from '../../../Methods'
 
-export interface MockFileResponse {
+interface Lax {
+  [key: string]: unknown
+}
+
+export interface MockFileResponse extends Lax {
   status: number
   headers?: Record<string, string>
+  headerTemplates?: Record<string, string>
   proxyHeaders?: Record<string, string>
   proxyFrom?: string
   body?: unknown
   bodyFile?: string
+  bodyTemplate?: string
+  bodyTemplateFile?: string
+  modelFile?: string
+  helpers?: string
   latency?: number
-
-  [key: string]: unknown
 }
 
-export interface MockFile {
+export interface MockFile extends Lax {
   id?: string
   priority?: number
   name?: string
@@ -39,15 +46,12 @@ export interface MockFile {
     body?: string | Record<string, string | Record<string, string>>
     bodyFile?: string
     files?: Record<string, Record<string, string>>
-
-    [key: string]: unknown
-  }
+    helpers?: string
+  } & Lax
 
   response: MockFileResponse | Array<MockFileResponse>
 
   responseType?: MultiResponseStrategy
 
   returnErrorOnNoResponse?: boolean
-
-  [key: string]: unknown
 }

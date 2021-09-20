@@ -32,7 +32,7 @@ export async function run(options: Argv): Promise<MockDogHttp> {
   // Watch remains disabled when record is enabled
   // to avoid issues with newly created files from recorded responses
   if (config.watch && !config.recordEnabled) {
-    configureWatcher(config, mockhttp)
+    await configureWatcher(config, mockhttp)
   }
 
   process.on('SIGTERM', () => mockhttp.close())

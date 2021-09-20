@@ -5,7 +5,7 @@ import { Headers } from '../Headers'
 import { ResponseBuilder } from './ResponseBuilder'
 import { ResponseFixture } from './ResponseFixture'
 import { HttpMock } from './HttpMock'
-import { ResponseBuilderFunction } from './ResponseBuilder'
+import { ResponseDelegate } from './ResponseDelegate'
 
 export type MultiResponseStrategy = 'sequential' | 'random'
 
@@ -29,7 +29,7 @@ export class MultipleResponseBuilder extends ResponseBuilder {
     return this
   }
 
-  build(): ResponseBuilderFunction {
+  build(): ResponseDelegate {
     return async (
       context: HttpContext,
       request: HttpRequest,

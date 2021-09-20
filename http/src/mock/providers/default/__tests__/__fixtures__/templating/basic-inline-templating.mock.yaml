@@ -1,0 +1,13 @@
+---
+name: Template 2
+request:
+  method: GET
+  urlPath: '/test/inline'
+response:
+  status: 200
+  bodyTemplate: "Title is: {{model.title}}\nMode is: {{env.NODE_ENV}}"
+  modelFile: model.json
+  headers:
+    Content-Type: text/plain
+  headerTemplates:
+    method: "{{request.method}}"
