@@ -1,5 +1,5 @@
-import { Delegate } from './Delegate'
+import { TemplateParseDelegate } from './TemplateParseDelegate'
 
 export interface Templating {
-  compile(input: string): Delegate
+  compile(input: string): TemplateParseDelegate
 }

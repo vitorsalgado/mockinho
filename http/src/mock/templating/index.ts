@@ -1,6 +1,6 @@
+export * from './CustomHelper'
 export * from './HandlebarsTemplating'
+export * from './TemplateParseDelegate'
 export * from './Templating'
 export * from './TemplatingBuiltInHelpers'
 export * from './TemplatingContext'
-export { CustomHelper } from './CustomHelper'
-export { Delegate } from './Delegate'

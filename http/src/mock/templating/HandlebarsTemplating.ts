@@ -2,10 +2,10 @@ import { compile } from 'handlebars'
 import { Templating } from './Templating'
 import { TemplatingContext } from './TemplatingContext'
 import { CustomHelper } from './CustomHelper'
-import { Delegate } from './Delegate'
+import { TemplateParseDelegate } from './TemplateParseDelegate'
 
 export class HandlebarsTemplating implements Templating {
-  compile(input: string): Delegate {
+  compile(input: string): TemplateParseDelegate {
     const template = compile(input)
 
     return function (context: TemplatingContext, helpers: CustomHelper) {

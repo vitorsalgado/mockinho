@@ -19,7 +19,7 @@ import { ResponseDelegate } from './ResponseDelegate'
 import { Templating } from './templating'
 import { CustomHelper } from './templating'
 import { HandlebarsTemplating } from './templating'
-import { Delegate } from './templating'
+import { TemplateParseDelegate } from './templating'
 import { TemplatingBuiltInHelpers } from './templating'
 
 const access = Util.promisify(Fs.access)
@@ -31,13 +31,13 @@ export class ResponseBuilder {
   protected _bodyFile: string = ''
   protected _bodyFunction?: (request: HttpRequest) => BodyType
   protected _bodyFileRelativeToFixtures: boolean = true
-  protected _bodyTemplate?: Delegate
+  protected _bodyTemplate?: TemplateParseDelegate
   protected _bodyTemplatePath?: string
   protected _templateHelpers?: CustomHelper
   protected _templating: Templating = new HandlebarsTemplating()
   protected _bodyCtrl: number = 0
   protected _headers: Record<string, string> = {}
-  protected _headersWithTemplateValue: Record<string, Delegate> = {}
+  protected _headersWithTemplateValue: Record<string, TemplateParseDelegate> = {}
   protected _cookies: Array<Cookie> = []
   protected _cookiesToClear: Array<CookieToClear> = []
   protected _delay: number = 0
