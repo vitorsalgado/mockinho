@@ -1,6 +1,7 @@
 import Supertest from 'supertest'
 import { equalsTo } from '@mockdog/core-matchers'
 import { Matcher } from '@mockdog/core'
+import { modeIsAtLeast } from '@mockdog/core'
 import { mockHttp } from '..'
 import { opts } from '..'
 import { ok } from '..'
@@ -60,7 +61,7 @@ describe('Builder Alternatives', function () {
                 {
                   'content-type': MediaTypes.APPLICATION_JSON,
                   'x-id': mock.id,
-                  'x-verbose': String(context.configuration.modeIsAtLeast('verbose')),
+                  'x-verbose': String(modeIsAtLeast(context.configuration, 'verbose')),
                   'x-method': request.method
                 },
                 request.body

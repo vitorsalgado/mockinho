@@ -5,6 +5,7 @@ import { Mock } from './Mock'
 import { BaseConfiguration } from './BaseConfiguration'
 import { inspectedMatcher } from './inspectedMatcher'
 import { Matcher } from './Matcher'
+import { modeIsAtLeast } from './modeIsAtLeast'
 
 export function findMockForRequest<Req, Config extends BaseConfiguration, M extends Mock>(
   request: Req,
@@ -26,7 +27,7 @@ export function findMockForRequest<Req, Config extends BaseConfiguration, M exte
 
     if (
       mock.expectations.every(expectation => {
-        const matcher = context.configuration.modeIsAtLeast('trace')
+        const matcher = modeIsAtLeast(context.configuration, 'trace')
           ? inspectedMatcher(expectation, mock)
           : expectation.matcher
 

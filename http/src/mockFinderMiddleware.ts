@@ -4,6 +4,7 @@ import { Response } from 'express'
 import HttpProxy from 'http-proxy'
 import { findMockForRequest } from '@mockdog/core'
 import { FindMockResult } from '@mockdog/core'
+import { modeIsAtLeast } from '@mockdog/core'
 import { HttpContext } from './HttpContext'
 import { HttpRequest } from './HttpRequest'
 import { ResponseFixture, HttpMock } from './mock'
@@ -16,7 +17,7 @@ export function mockFinderMiddleware(
   context: HttpContext
 ): (request: HttpRequest, reply: Response, next: NextFunction) => Promise<void> {
   const configurations = context.configuration
-  const isVerbose = configurations.modeIsAtLeast('verbose')
+  const isVerbose = modeIsAtLeast(configurations, 'verbose')
   const proxy = HttpProxy.createProxyServer()
 
   return async function (req: HttpRequest, res: Response, next: NextFunction): Promise<void> {

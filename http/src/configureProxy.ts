@@ -8,6 +8,7 @@ import { responseInterceptor } from 'http-proxy-middleware'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import { Express } from 'express'
 import { LoggerUtil } from '@mockdog/core'
+import { modeIsAtLeast } from '@mockdog/core'
 import { RecordDispatcher } from './mock/record'
 import { HttpRequest } from './HttpRequest'
 import { HttpContext } from './HttpContext'
@@ -109,7 +110,7 @@ function onProxyResponse(
   response: ServerResponse
 ): void {
   context.emit('onProxyResponse', {
-    verbose: context.configuration.modeIsAtLeast('verbose'),
+    verbose: modeIsAtLeast(context.configuration, 'verbose'),
     start: request.start,
     method: request.method,
     url: request.url,

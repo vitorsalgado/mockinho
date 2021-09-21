@@ -16,45 +16,41 @@ import { MiddlewareRoute } from './MiddlewareRoute'
 import { Argv } from './providers'
 import { InitialOptions } from './providers'
 
-export class Configuration extends BaseConfiguration {
-  public constructor(
-    public readonly mode: Mode,
-    public readonly logLevel: Level,
-    public readonly useHttp: boolean,
-    public readonly httpPort: number,
-    public readonly httpHost: string,
-    public readonly httpOptions: HttpServerOptions | undefined,
-    public readonly httpDynamicPort: boolean,
-    public readonly useHttps: boolean,
-    public readonly httpsPort: number,
-    public readonly httpsHost: string,
-    public readonly httpsOptions: HttpsServerOptions | undefined,
-    public readonly httpsDynamicPort: boolean,
-    public readonly restartable: string,
-    public readonly timeout: number,
-    public readonly rootDir: string,
-    public readonly mockDirectory: string,
-    public readonly mockFilesExtension: string,
-    public readonly mockFilesEnabled: boolean,
-    public readonly recordEnabled: boolean,
-    public readonly recordOptions: RecordOptions | undefined,
-    public readonly mockProviderFactories: Array<MockProviderFactory>,
-    public readonly mockFieldParsers: Array<FieldParser>,
-    public readonly watch: boolean,
-    public readonly formUrlEncodedOptions: OptionsUrlencoded,
-    public readonly multiPartOptions: Multer.Options,
-    public readonly corsEnabled: boolean,
-    public readonly corsOptions: CorsOptions | undefined,
-    public readonly cookieSecrets: Array<string>,
-    public readonly cookieOptions: CookieParseOptions | undefined,
-    public readonly proxyEnabled: boolean,
-    public readonly proxyOptions: Options,
-    public readonly middlewares: Array<MiddlewareRoute>,
-    public readonly plugins: Array<Plugin<unknown>>,
-    public readonly props: Map<string, unknown>,
-    public readonly argv?: Argv,
-    public readonly file?: InitialOptions
-  ) {
-    super(logLevel, mode)
-  }
+export interface Configuration extends BaseConfiguration {
+  mode: Mode
+  logLevel: Level
+  useHttp: boolean
+  httpPort: number
+  httpHost: string
+  httpOptions: HttpServerOptions | undefined
+  httpDynamicPort: boolean
+  useHttps: boolean
+  httpsPort: number
+  httpsHost: string
+  httpsOptions: HttpsServerOptions | undefined
+  httpsDynamicPort: boolean
+  restartable: string
+  timeout: number
+  rootDir: string
+  mockDirectory: string
+  mockFilesExtension: string
+  mockFilesEnabled: boolean
+  recordEnabled: boolean
+  recordOptions: RecordOptions | undefined
+  mockProviderFactories: Array<MockProviderFactory>
+  mockFieldParsers: Array<FieldParser>
+  watch: boolean
+  formUrlEncodedOptions: OptionsUrlencoded
+  multiPartOptions: Multer.Options
+  corsEnabled: boolean
+  corsOptions: CorsOptions | undefined
+  cookieSecrets: Array<string>
+  cookieOptions: CookieParseOptions | undefined
+  proxyEnabled: boolean
+  proxyOptions: Options
+  middlewares: Array<MiddlewareRoute>
+  plugins: Array<Plugin<unknown>>
+  props: Map<string, unknown>
+  argv?: Argv
+  file?: InitialOptions
 }

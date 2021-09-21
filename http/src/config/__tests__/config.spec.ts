@@ -1,3 +1,4 @@
+import { modeIsAtLeast } from '@mockdog/core'
 import { ConfigurationBuilder } from '../ConfigurationBuilder'
 
 describe('config', function () {
@@ -5,12 +6,12 @@ describe('config', function () {
     const silent = new ConfigurationBuilder().mode('silent').build()
     const info = new ConfigurationBuilder().mode('info').build()
 
-    expect(silent.modeIsAtLeast('silent')).toBeTruthy()
-    expect(silent.modeIsAtLeast('info')).toBeFalsy()
+    expect(modeIsAtLeast(silent, 'silent')).toBeTruthy()
+    expect(modeIsAtLeast(silent, 'info')).toBeFalsy()
 
-    expect(info.modeIsAtLeast('info')).toBeTruthy()
-    expect(info.modeIsAtLeast('silent')).toBeTruthy()
-    expect(info.modeIsAtLeast('verbose')).toBeFalsy()
-    expect(info.modeIsAtLeast('trace')).toBeFalsy()
+    expect(modeIsAtLeast(info, 'info')).toBeTruthy()
+    expect(modeIsAtLeast(info, 'silent')).toBeTruthy()
+    expect(modeIsAtLeast(info, 'verbose')).toBeFalsy()
+    expect(modeIsAtLeast(info, 'trace')).toBeFalsy()
   })
 })

@@ -6,7 +6,6 @@ import { Context } from '../Context'
 import { BaseConfiguration } from '../BaseConfiguration'
 import { Matcher } from '../Matcher'
 import { createMatcher } from '../createMatcher'
-import { Mode } from '../Mode'
 import { scenarioMatcher } from '../scenarioMatcher'
 import { MatcherContextHolder } from '../MatcherContextHolder'
 
@@ -19,17 +18,15 @@ describe('findMockForRequest', function () {
     }
   }
 
-  class TestConfig extends BaseConfiguration {
-    public constructor(mode: Mode = 'verbose') {
-      super('info', mode)
-    }
-  }
+  type TestConfig = BaseConfiguration
+
+  const testConfig: TestConfig = { logLevel: 'info', mode: 'verbose' }
 
   describe('when theres is a match', function () {
     const repo = new TestRepo()
 
     const ctx = {
-      configuration: new TestConfig(),
+      configuration: testConfig,
       scenarioRepository: new ScenarioInMemoryRepository(),
       mockRepository: repo
     } as Context<TestConfig, Mock, TestRepo>
@@ -77,7 +74,7 @@ describe('findMockForRequest', function () {
     const repo = new TestRepo()
 
     const ctx = {
-      configuration: new TestConfig(),
+      configuration: testConfig,
       scenarioRepository: new ScenarioInMemoryRepository(),
       mockRepository: repo
     } as Context<TestConfig, Mock, TestRepo>
@@ -131,7 +128,7 @@ describe('findMockForRequest', function () {
     const repo = new TestRepo()
 
     const ctx = {
-      configuration: new TestConfig('trace'),
+      configuration: { mode: 'trace', logLevel: 'info' },
       scenarioRepository: new ScenarioInMemoryRepository(),
       mockRepository: repo
     } as Context<TestConfig, Mock, TestRepo>

@@ -7,11 +7,7 @@ import { ScenarioInMemoryRepository } from '../ScenarioInMemoryRepository'
 import { Scenario } from '../Scenario'
 
 describe('scenarioStatefulMatcher', function () {
-  class TestConfig extends BaseConfiguration {
-    public constructor() {
-      super('info', 'verbose')
-    }
-  }
+  type TestConfig = BaseConfiguration
 
   class TestRepo extends MockInMemoryRepository<Mock> {
     public constructor() {
@@ -19,11 +15,13 @@ describe('scenarioStatefulMatcher', function () {
     }
   }
 
+  const testConfig: TestConfig = { logLevel: 'info', mode: 'verbose' }
+
   describe('started state', function () {
     it('should return true when state is started', function () {
       const scenario = scenarioMatcher('test')
       const ctx = {
-        configuration: new TestConfig(),
+        configuration: testConfig,
         scenarioRepository: new ScenarioInMemoryRepository(),
         mockRepository: new TestRepo()
       } as Context<TestConfig, Mock, TestRepo>
@@ -50,7 +48,7 @@ describe('scenarioStatefulMatcher', function () {
   it('should return true when state is not found', function () {
     const scenario = scenarioMatcher('test', 'added')
     const ctx = {
-      configuration: new TestConfig(),
+      configuration: testConfig,
       scenarioRepository: new ScenarioInMemoryRepository(),
       mockRepository: new TestRepo()
     } as Context<TestConfig, Mock, TestRepo>
@@ -78,7 +76,7 @@ describe('scenarioStatefulMatcher', function () {
 
     const started = scenarioMatcher('add', Scenario.STATE_STARTED, 'added')
     const ctx = {
-      configuration: new TestConfig(),
+      configuration: testConfig,
       scenarioRepository: scenarioRepository,
       mockRepository: new TestRepo()
     } as Context<TestConfig, Mock, TestRepo>
@@ -112,7 +110,7 @@ describe('scenarioStatefulMatcher', function () {
     const theMatcher = scenarioMatcher('test', 'qa', 'added')
 
     const ctx = {
-      configuration: new TestConfig(),
+      configuration: testConfig,
       scenarioRepository: scenarioRepository,
       mockRepository: new TestRepo()
     } as Context<TestConfig, Mock, TestRepo>

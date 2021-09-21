@@ -4,6 +4,7 @@ import { ScenarioRepository } from '@mockdog/core'
 import { ScenarioInMemoryRepository } from '@mockdog/core'
 import { PinoLogger } from '@mockdog/core'
 import { LoggerUtil } from '@mockdog/core'
+import { modeIsAtLeast } from '@mockdog/core'
 import { ConfigurationBuilder } from './config'
 import { Configuration } from './config'
 import { Middleware } from './config'
@@ -45,7 +46,7 @@ export class MockDogHttp {
     this._context = new HttpContext(configurations, this._mockRepository, this._scenarioRepository)
     this._httpServer = new HttpServer(this._context)
 
-    if (configurations.modeIsAtLeast('info')) {
+    if (modeIsAtLeast(configurations, 'info')) {
       this.on('onRequestStart', onRequestReceived)
       this.on('onRequestNotMatched', onRequestNotMatched)
       this.on('onRequestMatched', onRequestMatched)

@@ -277,8 +277,8 @@ export class ConfigurationBuilder {
     return this
   }
 
-  plugin(...plugin: Array<Plugin<any>>): this {
-    this._plugins.push(...plugin)
+  plugin<T>(...plugin: Array<Plugin<T>>): this {
+    this._plugins.push(...(plugin as Array<Plugin<unknown>>))
     return this
   }
 
@@ -345,43 +345,43 @@ export class ConfigurationBuilder {
       }
     }
 
-    return new Configuration(
-      this._mode,
-      this._logLevel,
-      this._useHttp,
-      this._httpPort,
-      this._httpHost,
-      this._httpOptions,
-      this._httpDynamicPort,
-      this._useHttps,
-      this._httpsPort,
-      this._httpsHost,
-      this._httpsOptions,
-      this._httpsDynamicPort,
-      this._restartable,
-      this._timeout,
-      this._rootDir,
-      this._mocksDirectory,
-      this._mocksExtension,
-      this._loadMockFiles,
-      this._recordEnabled,
-      this._recordOptions,
-      this._mockProviderFactories,
-      this._mockFieldParsers,
-      this._watch,
-      this._formBodyOptions,
-      this._multiPartOptions,
-      this._cors,
-      this._corsOptions,
-      this._cookieSecrets,
-      this._cookieOptions,
-      this._proxyAll,
-      this._proxyOptions,
-      this._middlewares,
-      this._plugins,
-      this._props,
-      this._argv,
-      this._file
-    )
+    return {
+      mode: this._mode,
+      logLevel: this._logLevel,
+      useHttp: this._useHttp,
+      httpPort: this._httpPort,
+      httpHost: this._httpHost,
+      httpOptions: this._httpOptions,
+      httpDynamicPort: this._httpDynamicPort,
+      useHttps: this._useHttps,
+      httpsPort: this._httpsPort,
+      httpsHost: this._httpsHost,
+      httpsOptions: this._httpsOptions,
+      httpsDynamicPort: this._httpsDynamicPort,
+      restartable: this._restartable,
+      timeout: this._timeout,
+      rootDir: this._rootDir,
+      mockDirectory: this._mocksDirectory,
+      mockFilesExtension: this._mocksExtension,
+      mockFilesEnabled: this._loadMockFiles,
+      recordEnabled: this._recordEnabled,
+      recordOptions: this._recordOptions,
+      mockProviderFactories: this._mockProviderFactories,
+      mockFieldParsers: this._mockFieldParsers,
+      watch: this._watch,
+      formUrlEncodedOptions: this._formBodyOptions,
+      multiPartOptions: this._multiPartOptions,
+      corsEnabled: this._cors,
+      corsOptions: this._corsOptions,
+      cookieSecrets: this._cookieSecrets,
+      cookieOptions: this._cookieOptions,
+      proxyEnabled: this._proxyAll,
+      proxyOptions: this._proxyOptions,
+      middlewares: this._middlewares,
+      plugins: this._plugins,
+      props: this._props,
+      argv: this._argv,
+      file: this._file
+    }
   }
 }
