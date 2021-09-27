@@ -1,0 +1,23 @@
+{
+  "name": "@mockdog/example-grpc",
+  "version": "0.0.0",
+  "description": "MockDog gRPC Example",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "start": "ts-node src/grpc_server.ts",
+    "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json"
+  },
+  "private": true,
+  "author": "Vitor Hugo Salgado <vsalgadopb@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@grpc/grpc-js": "^1.3.7",
+    "@grpc/proto-loader": "^0.6.5",
+    "@mockdog/grpc": "^0.0.0",
+    "fastify": "^3.21.6"
+  },
+  "devDependencies": {
+    "ts-node": "^10.2.1"
+  }
+}

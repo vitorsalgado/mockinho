@@ -10,6 +10,6 @@ response:
   headers:
     Content-Type: application/json
   headerTemplates:
-    method: "{{request.method}}"
-    env: "{{toUpper env.NODE_ENV}}"
+    method: '{{request.method}}'
+    env: '{{toUpper env.NODE_ENV}}'
   helpers: helpers.ts

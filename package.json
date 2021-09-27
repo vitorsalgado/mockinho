@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "start:http": "nodemon --config http/.nodemon.config.json",
+    "start:grpc": "nodemon --config grpc/.nodemon.config.json",
     "prepare": "husky install",
     "bootstrap": "lerna bootstrap --hoist && lerna link",
     "build": "lerna run build",
@@ -16,7 +17,7 @@
     "lint": "eslint --ext .ts,.js .",
     "lint:fix": "npm run lint -- --fix",
     "lint:ci": "npm run lint && npm run prettier:ci",
-    "prettier": "prettier 'core/**' 'core-matchers/**' 'http/**' 'examples/**' --write --ignore-unknown",
+    "prettier": "prettier 'core/**' 'core-matchers/**' 'http/**' 'grpc/**' 'examples/**' --write --ignore-unknown",
     "prettier:ci": "npm run prettier -- --check",
     "clean": "lerna clean && npm run clean:build",
     "clean:build": "lerna exec -- rm -rf dist && lerna exec -- rm -rf tsconfig.tsbuildinfo && lerna exec -- rm -rf tsconfig.build.tsbuildinfo"
@@ -26,6 +27,7 @@
     "core-matchers",
     "http",
     "http-jest",
+    "grpc",
     "examples/*"
   ],
   "repository": {

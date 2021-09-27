@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package cities;
+
+service CitiesService {
+  rpc GetCity (CityRequest) returns (City) {}
+  rpc ListCities(CityRequest) returns (stream City) {}
+  rpc SendCities(stream City) returns(CitySummary) {}
+}
+
+message Point {
+  int32 latitude = 1;
+  int32 longitude = 2;
+}
+
+message CityRequest {
+  string name = 1;
+}
+
+message City {
+  string name = 1;
+  string country = 2;
+  Point location = 3;
+}
+
+message CitySummary {
+  int32 total = 1;
+}

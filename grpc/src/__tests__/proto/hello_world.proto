@@ -1,0 +1,13 @@
+syntax = "proto3";
+package helloworld;
+
+import "grpc/src/__tests__/proto/hello_world_types.proto";
+
+service HelloWorldService {
+  rpc Greetings (HelloRequest) returns (HelloResponse) {}
+  rpc Farewell (FarewellRequest) returns (FarewellResponse) {}
+}
+
+service NewHello {
+  rpc HastaLuego (FarewellRequest) returns (FarewellResponse) {}
+}

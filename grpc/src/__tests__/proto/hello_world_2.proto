@@ -1,0 +1,9 @@
+syntax = "proto3";
+package test;
+
+import "grpc/src/__tests__/proto/hello_world_types.proto";
+
+service TestService {
+  rpc Hello (HelloRequest) returns (HelloResponse) {}
+  rpc World (FarewellRequest) returns (FarewellResponse) {}
+}

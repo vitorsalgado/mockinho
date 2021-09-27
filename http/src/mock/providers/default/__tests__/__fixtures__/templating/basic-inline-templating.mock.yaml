@@ -10,4 +10,4 @@ response:
   headers:
     Content-Type: text/plain
   headerTemplates:
-    method: "{{request.method}}"
+    method: '{{request.method}}'
