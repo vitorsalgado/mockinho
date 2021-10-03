@@ -2,9 +2,9 @@ import Path from 'path'
 import { fromFile } from '../fromFile'
 
 describe('fromFile', function () {
-  it('should return a readble stream from a file', async function () {
+  it('should return a readable stream from a file', async function () {
     const stream = fromFile(Path.join(__dirname, 'test.txt'))
-    const content = []
+    const content: Array<string> = []
 
     for await (const line of stream) {
       content.push(line)

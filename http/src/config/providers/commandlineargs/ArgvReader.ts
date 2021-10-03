@@ -5,7 +5,7 @@ import Path from 'path'
 import { ServerOptions } from 'https'
 import { Options } from 'http-proxy-middleware'
 import { Level } from '@mockdog/core'
-import { ConfigurationBuilder } from '../../ConfigurationBuilder'
+import { HttpConfigurationBuilder } from '../../HttpConfigurationBuilder'
 import { isDef } from '../../../cli/utils'
 import { keyValue } from '../../../cli/utils'
 import { rec } from '../../../mock/record'
@@ -13,7 +13,7 @@ import { importPlugins } from '../importPlugins'
 import { Argv } from './Argv'
 
 export function argvReader(argv: Argv) {
-  return async function (builder: ConfigurationBuilder): Promise<void> {
+  return async function (builder: HttpConfigurationBuilder): Promise<void> {
     const rootDir = argv.rootDir ?? process.cwd()
 
     builder.argv(argv)

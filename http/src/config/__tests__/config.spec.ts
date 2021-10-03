@@ -1,10 +1,10 @@
 import { modeIsAtLeast } from '@mockdog/core'
-import { ConfigurationBuilder } from '../ConfigurationBuilder'
+import { HttpConfigurationBuilder } from '../HttpConfigurationBuilder'
 
 describe('config', function () {
   it('should return the correct mode', function () {
-    const silent = new ConfigurationBuilder().mode('silent').build()
-    const info = new ConfigurationBuilder().mode('info').build()
+    const silent = new HttpConfigurationBuilder().mode('silent').build()
+    const info = new HttpConfigurationBuilder().mode('info').build()
 
     expect(modeIsAtLeast(silent, 'silent')).toBeTruthy()
     expect(modeIsAtLeast(silent, 'info')).toBeFalsy()

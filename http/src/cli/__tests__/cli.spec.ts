@@ -37,8 +37,8 @@ describe('cli', function () {
       try {
         mockhttp.mock(get('/test').reply(ok()))
 
-        await Supertest(mockhttp.server()).get('/test').expect(200)
-        await Supertest(mockhttp.server())
+        await Supertest(mockhttp.listener()).get('/test').expect(200)
+        await Supertest(mockhttp.listener())
           .get('/ts/plugin')
           .expect(200)
           .expect(({ body }) => expect(body).toEqual({ hello: 'world', ctx: 'ts' }))
@@ -70,8 +70,8 @@ describe('cli', function () {
       try {
         mockhttp.mock(get('/test-js').reply(ok()))
 
-        await Supertest(mockhttp.server()).get('/test-js').expect(200)
-        await Supertest(mockhttp.server())
+        await Supertest(mockhttp.listener()).get('/test-js').expect(200)
+        await Supertest(mockhttp.listener())
           .get('/js/plugin')
           .expect(200)
           .expect(({ body }) => expect(body).toEqual({ hello: 'world', ctx: 'js' }))
@@ -211,12 +211,12 @@ describe('cli', function () {
       try {
         mockhttp.mock(get('/test').reply(ok()))
 
-        await Supertest(mockhttp.server()).get('/test').expect(200)
-        await Supertest(mockhttp.server())
+        await Supertest(mockhttp.listener()).get('/test').expect(200)
+        await Supertest(mockhttp.listener())
           .get('/js/plugin')
           .expect(200)
           .expect(({ body }) => expect(body).toEqual({ hello: 'world', ctx: 'js' }))
-        await Supertest(mockhttp.server())
+        await Supertest(mockhttp.listener())
           .get('/ts/plugin')
           .expect(200)
           .expect(({ body }) => expect(body).toEqual({ hello: 'world', ctx: 'ts' }))
@@ -270,7 +270,7 @@ describe('cli', function () {
       try {
         mockhttp.mock(get('/test').reply(ok()))
 
-        await Supertest(mockhttp.server()).get('/test').expect(200)
+        await Supertest(mockhttp.listener()).get('/test').expect(200)
 
         expect(config.mode).toEqual('silent')
         expect(config.useHttp).toBeTruthy()

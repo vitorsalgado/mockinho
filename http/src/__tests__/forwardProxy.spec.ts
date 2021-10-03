@@ -34,7 +34,7 @@ describe('Forward Proxy', function () {
 
         await $.start()
 
-        await Supertest($.server())
+        await Supertest($.listener())
           .get('/test')
           .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
           .set('proxy-header', '100')
@@ -66,7 +66,7 @@ describe('Forward Proxy', function () {
 
         await $.start()
 
-        await Supertest($.server())
+        await Supertest($.listener())
           .get('/test')
           .set(Headers.Accept, MediaTypes.APPLICATION_JSON)
           .expect(StatusCodes.BAD_REQUEST)
@@ -98,7 +98,7 @@ describe('Forward Proxy', function () {
 
         await $.start()
 
-        await Supertest($.server())
+        await Supertest($.listener())
           .post('/test')
           .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
           .send(JSON.stringify({ data: 'test' }))
@@ -133,7 +133,7 @@ describe('Forward Proxy', function () {
 
         await $.start()
 
-        await Supertest($.server())
+        await Supertest($.listener())
           .post('/nowhere')
           .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
           .send(JSON.stringify({ data: 'test' }))

@@ -40,7 +40,7 @@ describe('Record', function () {
 
         await $.start()
 
-        await Supertest($.server())
+        await Supertest($.listener())
           .get('/test')
           .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
           .expect(200)

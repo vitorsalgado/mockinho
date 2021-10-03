@@ -4,7 +4,7 @@ import { RpcConfiguration } from './config'
 import { RpcMockRepository } from './mock'
 import { RpcMock } from './mock'
 
-export class RpcContext implements Context<RpcConfiguration, RpcMock, RpcMockRepository> {
+export class RpcContext implements Context<RpcMock, RpcConfiguration, RpcMockRepository> {
   constructor(
     public readonly configuration: RpcConfiguration,
     public readonly mockRepository: RpcMockRepository,

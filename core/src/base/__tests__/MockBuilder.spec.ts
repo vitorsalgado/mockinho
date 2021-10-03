@@ -1,7 +1,8 @@
 import { MockBuilder } from '../MockBuilder'
+import { Mock } from '../Mock'
 
 describe('MockBuilder', function () {
-  class TestBuilder extends MockBuilder {
+  class TestBuilder extends MockBuilder<Mock> {
     props(): {
       id: string
       name: string
@@ -12,6 +13,10 @@ describe('MockBuilder', function () {
         name: this._name,
         priority: this._priority
       }
+    }
+
+    build(): Mock {
+      return undefined as unknown as Mock
     }
   }
 

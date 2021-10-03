@@ -2,9 +2,9 @@ import { ChannelOptions } from '@grpc/grpc-js'
 import { ServerCredentials } from '@grpc/grpc-js/src/server-credentials'
 import { Options as ProtoLoaderOptions } from '@grpc/proto-loader'
 import { PackageDefinition } from '@grpc/proto-loader'
-import { BaseConfiguration } from '@mockdog/core'
+import { Configuration } from '@mockdog/core'
 
-export interface RpcConfiguration extends BaseConfiguration {
+export interface RpcConfiguration extends Configuration {
   address: string
   protoFiles: Array<string>
   protoFilesDirectories?: Array<string>

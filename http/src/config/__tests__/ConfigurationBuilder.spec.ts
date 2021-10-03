@@ -1,23 +1,24 @@
 import Path from 'path'
 import { Response } from 'express'
 import { NextFunction } from 'express'
-import { ConfigurationBuilder } from '../ConfigurationBuilder'
+import { Plugin } from '@mockdog/core'
+import { HttpConfigurationBuilder } from '../HttpConfigurationBuilder'
 import { HttpRequest } from '../../HttpRequest'
 import { Defaults } from '../Defaults'
 import { RecordOptions } from '../../mock/record'
 import { defaultMockProviderFactory } from '../../mock/providers/default/defaultMockProviderFactory'
 import { FieldParser } from '../../mock/providers/default/FieldParser'
-import { Plugin } from '../../Plugin'
 import { get } from '../../mock'
 import { okJSON } from '../../mock'
+import { MockDogHttp } from '../../MockDogHttp'
 
 describe('Configurations Builder', function () {
   it('should build configurations with builder values', function () {
-    const plugin: Plugin<{ message: string }> = (instance, config, opts) => {
+    const plugin: Plugin<{ message: string }, MockDogHttp> = (instance, opts) => {
       instance.mock(get('/plugin').reply(okJSON({ message: opts?.message })))
     }
 
-    const builder = new ConfigurationBuilder()
+    const builder = new HttpConfigurationBuilder()
       .httpPort(3000)
       .https(3001, { enableTrace: true }, '127.0.0.1')
       .dynamicHttpPort()
@@ -56,17 +57,17 @@ describe('Configurations Builder', function () {
   })
 
   it('should set mock body content dir to __content__ as the default', function () {
-    const builder = new ConfigurationBuilder()
+    const builder = new HttpConfigurationBuilder()
     const cfg = builder.mockDirectory(Path.join(__dirname, 'test')).build()
 
     expect(cfg.mockDirectory).toEqual(Path.join(__dirname, 'test'))
   })
 
   it('should set mode', function () {
-    const silent = new ConfigurationBuilder().silent().build()
-    const info = new ConfigurationBuilder().info().build()
-    const verbose = new ConfigurationBuilder().verbose().build()
-    const trace = new ConfigurationBuilder().trace().build()
+    const silent = new HttpConfigurationBuilder().silent().build()
+    const info = new HttpConfigurationBuilder().info().build()
+    const verbose = new HttpConfigurationBuilder().verbose().build()
+    const trace = new HttpConfigurationBuilder().trace().build()
 
     expect(silent.mode).toEqual('silent')
     expect(info.mode).toEqual('info')
@@ -76,7 +77,7 @@ describe('Configurations Builder', function () {
 
   describe('HTTP', function () {
     it('should config http', function () {
-      const builder = new ConfigurationBuilder()
+      const builder = new HttpConfigurationBuilder()
       const opts = { maxHeaderSize: 100 }
       const cfg = builder.http(1000, 'localhost').httpOptions(opts).build()
 
@@ -87,7 +88,7 @@ describe('Configurations Builder', function () {
     })
 
     it('should use a default host when none is provided', function () {
-      const builder = new ConfigurationBuilder()
+      const builder = new HttpConfigurationBuilder()
       const cfg = builder.http(1000).build()
 
       expect(cfg.useHttp).toBeTruthy()
@@ -98,7 +99,7 @@ describe('Configurations Builder', function () {
 
   describe('HTTPS', function () {
     it('should have https as false by default', function () {
-      const builder = new ConfigurationBuilder()
+      const builder = new HttpConfigurationBuilder()
       const cfg = builder.build()
 
       expect(cfg.useHttps).toBeFalsy()
@@ -106,7 +107,7 @@ describe('Configurations Builder', function () {
     })
 
     it('should set dynamic port to true as default', function () {
-      const builder = new ConfigurationBuilder()
+      const builder = new HttpConfigurationBuilder()
       const cfg = builder.dynamicHttpsPort().build()
 
       expect(cfg.useHttps).toBeTruthy()
@@ -114,7 +115,7 @@ describe('Configurations Builder', function () {
     })
 
     it('should set dynamic port', function () {
-      const builder = new ConfigurationBuilder()
+      const builder = new HttpConfigurationBuilder()
       const cfg = builder.dynamicHttpsPort(false).build()
 
       expect(cfg.httpsDynamicPort).toBeFalsy()
@@ -127,18 +128,18 @@ describe('Configurations Builder', function () {
     }
 
     it('should not accept one entry without a function', function () {
-      const builder = new ConfigurationBuilder()
+      const builder = new HttpConfigurationBuilder()
       expect(() => builder.use('/test')).toThrowError()
     })
 
     it('should accept one element with a middleware function', function () {
-      const cfg = new ConfigurationBuilder().use(middleware).build()
+      const cfg = new HttpConfigurationBuilder().use(middleware).build()
 
       expect(cfg.middlewares).toHaveLength(1)
     })
 
     it('should accept two elements with a string first and then the middleware function', function () {
-      const cfg = new ConfigurationBuilder().use('/test', middleware).build()
+      const cfg = new HttpConfigurationBuilder().use('/test', middleware).build()
 
       expect(cfg.middlewares).toHaveLength(1)
     })
@@ -146,7 +147,7 @@ describe('Configurations Builder', function () {
 
   describe('record', function () {
     it('should set default record options when none is provided', function () {
-      const builder = new ConfigurationBuilder()
+      const builder = new HttpConfigurationBuilder()
       const cfg = builder.record().build()
 
       expect(cfg.recordOptions?.destination).toEqual(cfg.mockDirectory)
@@ -159,7 +160,7 @@ describe('Configurations Builder', function () {
     })
 
     it('should accept an option object instead of a option builder', function () {
-      const builder = new ConfigurationBuilder()
+      const builder = new HttpConfigurationBuilder()
       const cfg = builder
         .record({
           destination: 'nowhere',
@@ -180,7 +181,7 @@ describe('Configurations Builder', function () {
 
   describe('formOptions', function () {
     it('should set form opts', function () {
-      const builder = new ConfigurationBuilder()
+      const builder = new HttpConfigurationBuilder()
       const cfg = builder.formUrlEncodedOptions({}).build()
 
       expect(cfg.formUrlEncodedOptions).toEqual({ extended: false })
@@ -189,7 +190,7 @@ describe('Configurations Builder', function () {
 
   describe('proxy', function () {
     it('should disable proxy when calling .disableProxy()', function () {
-      const builder = new ConfigurationBuilder()
+      const builder = new HttpConfigurationBuilder()
       const cfg1 = builder.disableProxy().build()
       const cfg2 = builder.disableProxy(false).build()
 
@@ -200,14 +201,14 @@ describe('Configurations Builder', function () {
 
   describe('mock provider factories', function () {
     it('should add mock provider factory', function () {
-      const builder = new ConfigurationBuilder()
+      const builder = new HttpConfigurationBuilder()
       const cfg = builder.addMockProviderFactory(defaultMockProviderFactory).build()
 
       expect(cfg.mockProviderFactories).toHaveLength(1)
     })
 
     it('should add field parsers', function () {
-      const builder = new ConfigurationBuilder()
+      const builder = new HttpConfigurationBuilder()
       const cfg = builder.addMockFieldParser({} as FieldParser).build()
 
       expect(cfg.mockFieldParsers).toHaveLength(1)

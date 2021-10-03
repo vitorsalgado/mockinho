@@ -1,13 +1,13 @@
 import { scenarioMatcher } from '../scenarioMatcher'
 import { Context } from '../Context'
-import { BaseConfiguration } from '../BaseConfiguration'
+import { Configuration } from '../Configuration'
 import { MockInMemoryRepository } from '../MockInMemoryRepository'
 import { Mock } from '../Mock'
 import { ScenarioInMemoryRepository } from '../ScenarioInMemoryRepository'
 import { Scenario } from '../Scenario'
 
 describe('scenarioStatefulMatcher', function () {
-  type TestConfig = BaseConfiguration
+  type TestConfig = Configuration
 
   class TestRepo extends MockInMemoryRepository<Mock> {
     public constructor() {
@@ -15,7 +15,12 @@ describe('scenarioStatefulMatcher', function () {
     }
   }
 
-  const testConfig: TestConfig = { logLevel: 'info', mode: 'verbose' }
+  const testConfig: TestConfig = {
+    logLevel: 'info',
+    mode: 'verbose',
+    mockProviderFactories: [],
+    plugins: []
+  }
 
   describe('started state', function () {
     it('should return true when state is started', function () {
@@ -24,7 +29,7 @@ describe('scenarioStatefulMatcher', function () {
         configuration: testConfig,
         scenarioRepository: new ScenarioInMemoryRepository(),
         mockRepository: new TestRepo()
-      } as Context<TestConfig, Mock, TestRepo>
+      } as Context<Mock, TestConfig, TestRepo>
 
       const mock = new Mock(
         'test-id',
@@ -51,7 +56,7 @@ describe('scenarioStatefulMatcher', function () {
       configuration: testConfig,
       scenarioRepository: new ScenarioInMemoryRepository(),
       mockRepository: new TestRepo()
-    } as Context<TestConfig, Mock, TestRepo>
+    } as Context<Mock, TestConfig, TestRepo>
 
     const mock = new Mock(
       'test-id',
@@ -79,7 +84,7 @@ describe('scenarioStatefulMatcher', function () {
       configuration: testConfig,
       scenarioRepository: scenarioRepository,
       mockRepository: new TestRepo()
-    } as Context<TestConfig, Mock, TestRepo>
+    } as Context<Mock, TestConfig, TestRepo>
 
     const mock = new Mock(
       'test-id',
@@ -113,7 +118,7 @@ describe('scenarioStatefulMatcher', function () {
       configuration: testConfig,
       scenarioRepository: scenarioRepository,
       mockRepository: new TestRepo()
-    } as Context<TestConfig, Mock, TestRepo>
+    } as Context<Mock, TestConfig, TestRepo>
 
     const mock = new Mock(
       'test-id',

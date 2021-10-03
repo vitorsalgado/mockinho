@@ -2,7 +2,7 @@ import Supertest from 'supertest'
 import { contains } from '@mockdog/core-matchers'
 import { ScenarioInMemoryRepository } from '@mockdog/core'
 import { HttpContext } from '../HttpContext'
-import { opts, post, ConfigurationBuilder, HttpServer } from '..'
+import { opts, post, HttpConfigurationBuilder, HttpServer } from '..'
 import { HttpMockRepository } from '..'
 
 import { urlPath } from '../matchers'
@@ -14,7 +14,7 @@ import { Headers } from '../Headers'
 describe('Express Http Server', function () {
   const $ = mockHttp(opts().dynamicHttpPort())
 
-  const builder = new ConfigurationBuilder()
+  const builder = new HttpConfigurationBuilder()
 
   const cfg = builder
     .httpPort(0)
@@ -51,7 +51,7 @@ describe('Express Http Server', function () {
         .reply(okJSON({ data: expected }))
     )
 
-    return Supertest($.server())
+    return Supertest($.listener())
       .post('/test?q=term')
       .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
       .send(undefined)
@@ -68,7 +68,7 @@ describe('Express Http Server', function () {
         .reply(okJSON({ data: expected }))
     )
 
-    return Supertest($.server())
+    return Supertest($.listener())
       .post('/test?q=term')
       .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
       .send('<?xml version="1.0" encoding="UTF-8"?><test><name>tester</name></test>')

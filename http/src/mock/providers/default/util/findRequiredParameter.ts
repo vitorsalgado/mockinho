@@ -1,4 +1,4 @@
-import { InvalidMockFileError } from '../InvalidMockFileError'
+import { LoadMockError } from '@mockdog/core'
 
 export function findRequiredParameter<T>(
   parameter: string,
@@ -9,7 +9,7 @@ export function findRequiredParameter<T>(
   const entry = values.find(([k]) => k === parameter)
 
   if (!entry) {
-    throw new InvalidMockFileError(errorMessage, filename)
+    throw new LoadMockError(errorMessage, filename)
   }
 
   return entry[1] as T

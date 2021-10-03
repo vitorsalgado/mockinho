@@ -14,7 +14,7 @@ describe('HTTP - File Mocking', function () {
     afterAll(() => $.finalize())
 
     it('should match and return a mock from a complex request mapping', function () {
-      return Supertest($.server())
+      return Supertest($.listener())
         .post('/test/100/another-route?q=orange&filter=code&sort=ASC')
         .set('content-type', 'application/json')
         .set('Accept', 'application/json')
@@ -35,7 +35,7 @@ describe('HTTP - File Mocking', function () {
     })
 
     it('should match and return from a yaml mock', function () {
-      return Supertest($.server())
+      return Supertest($.listener())
         .post('/test/100/another-route/200?q=ORANGE&sort=AsC&filter=none&from=NoWheRe')
         .set('content-type', 'application/json')
         .set('Accept', 'application/json')

@@ -1,9 +1,9 @@
 import { Mode } from '@mockdog/core'
-import { ConfigurationBuilder } from '../../ConfigurationBuilder'
+import { HttpConfigurationBuilder } from '../../HttpConfigurationBuilder'
 import { rec } from '../../../mock/record'
 
 export function envReader(env: Record<string, unknown>) {
-  return async function (builder: ConfigurationBuilder): Promise<void> {
+  return async function (builder: HttpConfigurationBuilder): Promise<void> {
     if (env.MOCK_MODE) builder.mode(env.MOCK_MODE as Mode)
 
     if (env.MOCK_HTTP_PORT) builder.httpPort(parseInt(env.MOCK_HTTP_PORT as string))

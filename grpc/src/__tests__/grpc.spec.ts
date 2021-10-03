@@ -3,7 +3,7 @@ import * as ProtoLoader from '@grpc/proto-loader'
 import * as grpc from '@grpc/grpc-js'
 import { listFilenames } from '@mockdog/core'
 
-describe('grpc', function () {
+describe.skip('grpc', function () {
   it('should ', function (done) {
     const configuration = {
       protoFiles: [],

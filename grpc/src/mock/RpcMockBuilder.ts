@@ -1,13 +1,22 @@
+import { MetadataValue } from '@grpc/grpc-js'
 import { MockBuilder } from '@mockdog/core'
 import { Expectation } from '@mockdog/core'
 import { MockSource } from '@mockdog/core'
-import { RpcContext } from '../RpcContext'
+import { Matcher } from '@mockdog/core'
+import { notEmpty } from '@mockdog/core'
+import { noNullElements } from '@mockdog/core'
+import { notBlank } from '@mockdog/core'
+import { notNull } from '@mockdog/core'
+import { ExpectationWithContext } from '@mockdog/core'
+import { allOf } from '@mockdog/core-matchers'
+import { contains } from '@mockdog/core-matchers'
+import { RpcCall } from '../RpcCall'
 import { ResponseBuilderDelegate } from './ResponseBuilderDelegate'
 import { Response } from './Response'
 import { ResponseBuilder } from './ResponseBuilder'
 import { RpcMock } from './RpcMock'
 
-export class RpcMockBuilder extends MockBuilder {
+export class RpcMockBuilder extends MockBuilder<RpcMock> {
   protected readonly _expectations: Array<Expectation<unknown, unknown>> = []
   protected readonly _meta: Map<string, unknown> = new Map<string, unknown>()
   protected _responseBuilder!: ResponseBuilderDelegate<Response>
@@ -23,12 +32,54 @@ export class RpcMockBuilder extends MockBuilder {
     return new RpcMockBuilder()
   }
 
+  service(service: string): RpcMockBuilder {
+    notBlank(service)
+
+    this._expectations.push(
+      this.spec((call: RpcCall) => call.context.service, contains(service), 5)
+    )
+
+    return this
+  }
+
+  method(method: string): RpcMockBuilder {
+    notBlank(method)
+
+    this._expectations.push(
+      this.spec((call: RpcCall) => call.context.serviceMethod, contains(method), 5)
+    )
+
+    return this
+  }
+
+  meta(key: string, matcher: Matcher<MetadataValue[]>): this {
+    notBlank(key)
+    notNull(matcher)
+
+    this._expectations.push(this.spec((call: RpcCall) => call.metadata.get(key), matcher, 0.5))
+
+    return this
+  }
+
+  requestData(...matchers: Array<Matcher<unknown>>): this {
+    notEmpty(matchers)
+    noNullElements(matchers)
+
+    if (matchers.length === 0) {
+      this._expectations.push(this.spec((call: RpcCall) => call.request, matchers[0], 5))
+    }
+
+    this._expectations.push(this.spec((call: RpcCall) => call.request, allOf(...matchers), 5))
+
+    return this
+  }
+
   reply(response: ResponseBuilder<Response> | ResponseBuilderDelegate<Response>): RpcMockBuilder {
     this._responseBuilder = response instanceof ResponseBuilder ? response.build() : response
     return this
   }
 
-  build(_context: RpcContext): RpcMock {
+  build(): RpcMock {
     return new RpcMock(
       this._id,
       this._name,
@@ -36,7 +87,7 @@ export class RpcMockBuilder extends MockBuilder {
       this._source,
       this._sourceDescription,
       this._expectations,
-      this._statefulExpectations,
+      this._statefulExpectations as Array<ExpectationWithContext<unknown, unknown>>,
       this._responseBuilder,
       this._meta,
       new Map<string, unknown>()

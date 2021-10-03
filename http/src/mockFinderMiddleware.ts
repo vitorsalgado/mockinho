@@ -8,7 +8,7 @@ import { modeIsAtLeast } from '@mockdog/core'
 import { HttpContext } from './HttpContext'
 import { HttpRequest } from './HttpRequest'
 import { ResponseFixture, HttpMock } from './mock'
-import { Configuration } from './config'
+import { HttpConfiguration } from './config'
 import { MediaTypes } from './MediaTypes'
 import { Headers } from './Headers'
 import { BodyType } from '.'
@@ -23,7 +23,7 @@ export function mockFinderMiddleware(
   return async function (req: HttpRequest, res: Response, next: NextFunction): Promise<void> {
     proxy.removeAllListeners()
 
-    const result = findMockForRequest<HttpRequest, Configuration, HttpMock>(req, context)
+    const result = findMockForRequest<HttpRequest, HttpMock, HttpConfiguration>(req, context)
 
     if (result.hasMatch()) {
       const matched = result.matched()
@@ -51,7 +51,7 @@ export function mockFinderMiddleware(
       let body: BodyType
 
       if (response.body instanceof Readable) {
-        const data = []
+        const data: Array<string | unknown> = []
         let acc = 0
 
         for await (const chunk of response.body) {
@@ -63,7 +63,7 @@ export function mockFinderMiddleware(
           if (data.every(d => typeof d === 'string')) {
             body = Buffer.from(data.join('')).toString('utf-8')
           } else {
-            body = Buffer.concat(data, acc)
+            body = Buffer.concat(data as unknown as Uint8Array[], acc)
           }
         }
       } else {

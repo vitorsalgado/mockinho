@@ -29,7 +29,7 @@ describe('Responses', function () {
           .reply(ok().bodyWith(request => ({ data: `Request method was: ${request.method}` })))
       )
 
-      return Supertest($.server())
+      return Supertest($.listener())
         .get('/test?q=term')
         .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
         .expect(200)
@@ -45,11 +45,11 @@ describe('Responses', function () {
         )
       )
 
-      await Supertest($.server()).get('/test').expect(StatusCodes.OK)
-      await Supertest($.server()).get('/test').expect(StatusCodes.CREATED)
-      await Supertest($.server()).get('/test').expect(StatusCodes.BAD_REQUEST)
+      await Supertest($.listener()).get('/test').expect(StatusCodes.OK)
+      await Supertest($.listener()).get('/test').expect(StatusCodes.CREATED)
+      await Supertest($.listener()).get('/test').expect(StatusCodes.BAD_REQUEST)
 
-      await Supertest($.server())
+      await Supertest($.listener())
         .get('/test')
         .expect(StatusCodes.INTERNAL_SERVER_ERROR)
         .expect(res => res.header['content-type'].includes('text/plain'))
@@ -66,23 +66,29 @@ describe('Responses', function () {
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       for await (const _ of count()) {
-        await Supertest($.server())
+        await Supertest($.listener())
           .get('/test/random')
           .expect(res => res.status === StatusCodes.OK || StatusCodes.BAD_REQUEST)
       }
     })
 
     it('should set sequential multiple responses based on file configuration', async function () {
-      await Supertest($.server()).get('/test/sequential').expect(StatusCodes.OK)
-      await Supertest($.server()).get('/test/sequential').expect(StatusCodes.BAD_REQUEST)
+      await Supertest($.listener()).get('/test/sequential').expect(StatusCodes.OK)
+      await Supertest($.listener()).get('/test/sequential').expect(StatusCodes.BAD_REQUEST)
     })
 
     describe('when .returnErrorOnNoResponse() is false', function () {
       it('should return the first route on collection', async function () {
-        await Supertest($.server()).get('/test/sequential/error-no-response').expect(StatusCodes.OK)
+        await Supertest($.listener())
+          .get('/test/sequential/error-no-response')
+          .expect(StatusCodes.OK)
 
-        await Supertest($.server()).get('/test/sequential/error-no-response').expect(StatusCodes.OK)
-        await Supertest($.server()).get('/test/sequential/error-no-response').expect(StatusCodes.OK)
+        await Supertest($.listener())
+          .get('/test/sequential/error-no-response')
+          .expect(StatusCodes.OK)
+        await Supertest($.listener())
+          .get('/test/sequential/error-no-response')
+          .expect(StatusCodes.OK)
       })
     })
   })

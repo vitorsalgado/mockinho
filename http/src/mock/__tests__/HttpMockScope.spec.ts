@@ -1,7 +1,6 @@
 import Supertest from 'supertest'
 import { opts, post } from '../..'
 import { mockHttp } from '../..'
-import { PendingScopeError } from '../..'
 import { urlPath } from '../../matchers'
 import { get } from '..'
 import { okJSON } from '../entry'
@@ -26,7 +25,7 @@ describe('HTTP Scope', function () {
     expect(scope.isDone()).toBeFalsy()
     expect(scope.pendingMocks()).toHaveLength(2)
 
-    await Supertest($.server())
+    await Supertest($.listener())
       .get('/test')
       .expect(200)
       .expect(res => expect(res.body.data).toEqual('get ok'))
@@ -34,12 +33,12 @@ describe('HTTP Scope', function () {
     expect(scope.isDone()).toBeFalsy()
     expect(scope.pendingMocks()).toHaveLength(1)
 
-    await Supertest($.server()).get('/other-test').expect(500)
+    await Supertest($.listener()).get('/other-test').expect(500)
 
     expect(scope.isDone()).toBeFalsy()
     expect(scope.pendingMocks()).toHaveLength(1)
 
-    await Supertest($.server())
+    await Supertest($.listener())
       .post('/test')
       .expect(200)
       .expect(res => expect(res.body.data).toEqual('post ok'))
@@ -57,12 +56,12 @@ describe('HTTP Scope', function () {
       post(urlPath('/test')).reply(okJSON({ data: 'post ok' }))
     )
 
-    await Supertest($.server())
+    await Supertest($.listener())
       .get('/test')
       .expect(200)
       .expect(res => expect(res.body.data).toEqual('get ok'))
 
-    expect(() => scope.ensureIsDone()).toThrowError(PendingScopeError)
+    expect(() => scope.ensureIsDone()).toThrowError()
   })
 
   it('should print pending mocks', async function () {
@@ -91,7 +90,7 @@ describe('HTTP Scope', function () {
       post(urlPath('/test')).reply(okJSON({ data: 'post ok' }))
     )
 
-    await Supertest($.server())
+    await Supertest($.listener())
       .get('/test')
       .expect(200)
       .expect(res => expect(res.body.data).toEqual('get ok'))
@@ -101,7 +100,7 @@ describe('HTTP Scope', function () {
 
     scope.abortPendingMocks()
 
-    await Supertest($.server()).post('/test').expect(500)
+    await Supertest($.listener()).post('/test').expect(500)
 
     expect(scope.isDone()).toBeTruthy()
     expect(scope.pendingMocks()).toHaveLength(0)
@@ -113,21 +112,21 @@ describe('HTTP Scope', function () {
       post(urlPath('/test')).reply(okJSON({ data: 'post ok' }))
     )
 
-    await Supertest($.server())
+    await Supertest($.listener())
       .get('/test')
       .expect(200)
       .expect(res => expect(res.body.data).toEqual('get ok'))
 
-    await Supertest($.server())
+    await Supertest($.listener())
       .post('/test')
       .expect(200)
       .expect(res => expect(res.body.data).toEqual('post ok'))
 
     scope.clean()
 
-    await Supertest($.server()).get('/test').expect(500)
+    await Supertest($.listener()).get('/test').expect(500)
 
-    await Supertest($.server()).post('/test').expect(500)
+    await Supertest($.listener()).post('/test').expect(500)
 
     expect(scope.pendingMocks()).toHaveLength(0)
     expect(scope.isDone()).toBeTruthy()

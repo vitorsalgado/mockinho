@@ -1,11 +1,11 @@
 import { ScenarioInMemoryRepository } from '@mockdog/core'
 import { HttpContext } from '../HttpContext'
-import { ConfigurationBuilder } from '../config'
+import { HttpConfigurationBuilder } from '../config'
 import { HttpMockRepository } from '../mock'
 
 describe('HttpContext', function () {
   it('should provide deps instances', function () {
-    const builder = new ConfigurationBuilder()
+    const builder = new HttpConfigurationBuilder()
 
     const cfg = builder
       .httpPort(3000)

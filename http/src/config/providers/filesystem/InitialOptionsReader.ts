@@ -1,7 +1,7 @@
 import Fs from 'fs'
 import Path from 'path'
 import { requireOrImportModule } from '@mockdog/core'
-import { ConfigurationBuilder } from '../../ConfigurationBuilder'
+import { HttpConfigurationBuilder } from '../../HttpConfigurationBuilder'
 import { importPlugins } from '../importPlugins'
 import { InitialOptions } from './InitialOptions'
 
@@ -17,7 +17,7 @@ const Files = [
 ]
 
 export function initialOptionsReader(rootDir?: string, configFile?: string) {
-  return async function (builder: ConfigurationBuilder): Promise<void> {
+  return async function (builder: HttpConfigurationBuilder): Promise<void> {
     let config: InitialOptions | undefined
 
     rootDir = rootDir ?? process.cwd()

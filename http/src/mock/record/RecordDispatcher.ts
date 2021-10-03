@@ -3,7 +3,7 @@ import './recordWorker'
 import Path from 'path'
 import { Worker } from 'worker_threads'
 import { execSync } from 'child_process'
-import { Configuration } from '../../config'
+import { HttpConfiguration } from '../../config'
 import { HttpContext } from '../../HttpContext'
 import { RecordArgs } from './RecordArgs'
 import { RecordOptions } from './RecordOptions'
@@ -11,7 +11,7 @@ import { Result } from './Result'
 
 export class RecordDispatcher {
   private readonly worker: Worker
-  private readonly configuration: Configuration
+  private readonly configuration: HttpConfiguration
 
   constructor(private readonly context: HttpContext) {
     this.configuration = context.configuration

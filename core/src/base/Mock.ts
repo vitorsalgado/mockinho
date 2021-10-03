@@ -2,6 +2,7 @@ import { v4 as UUIdV4 } from 'uuid'
 import { Expectation } from './Expectation'
 import { MockSource } from './MockSource'
 import { ExpectationWithContext } from './ExpectationWithContext'
+import { Configuration } from './Configuration'
 
 export class Mock {
   constructor(
@@ -11,7 +12,7 @@ export class Mock {
     public readonly source: MockSource,
     public readonly sourceDescription: string,
     public readonly expectations: Array<Expectation<unknown, unknown>>,
-    public readonly statefulExpectations: Array<ExpectationWithContext<unknown, unknown>>,
+    private readonly _statefulExpectations: Array<ExpectationWithContext<unknown, unknown>>,
     public hits: number,
     public readonly meta: Map<string, unknown>,
     public readonly properties: Map<string, unknown>
@@ -27,5 +28,13 @@ export class Mock {
 
   hasBeenCalled(): boolean {
     return this.hits > 0
+  }
+
+  statefulExpectations<MOCK extends Mock, CONFIG extends Configuration>(): Array<
+    ExpectationWithContext<unknown, unknown, MOCK, CONFIG>
+  > {
+    return [...this._statefulExpectations] as unknown as Array<
+      ExpectationWithContext<unknown, unknown, MOCK, CONFIG>
+    >
   }
 }

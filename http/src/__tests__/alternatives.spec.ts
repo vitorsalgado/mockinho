@@ -44,7 +44,7 @@ describe('Builder Alternatives', function () {
           )
       )
 
-      return Supertest($.server()).post('/test?term=test').expect(200)
+      return Supertest($.listener()).post('/test?term=test').expect(200)
     })
   })
 
@@ -71,7 +71,7 @@ describe('Builder Alternatives', function () {
           .id('test-id')
       )
 
-      return Supertest($.server())
+      return Supertest($.listener())
         .post('/test')
         .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
         .send(body)

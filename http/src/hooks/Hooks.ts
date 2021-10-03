@@ -1,11 +1,11 @@
 import { HttpMock } from '../mock'
-import { Info } from '../Info'
+import { HttpServerInfo } from '../HttpServerInfo'
 import { Methods } from '../Methods'
 import { Transaction } from './Transaction'
 
 export interface Hooks {
   readonly onStart: {
-    readonly info: Info
+    readonly info: HttpServerInfo
   }
 
   readonly onClose: void

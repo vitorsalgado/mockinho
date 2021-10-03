@@ -21,7 +21,7 @@ export class UnaryResponseBuilder extends ResponseBuilder<UnaryResponse> {
   build(): ResponseBuilderDelegate<UnaryResponse> {
     return async (_context, _request, _mock) => {
       return {
-        data: this.data,
+        data: this._data,
         metadata: this._metadata,
         flags: this._flags,
         error: this._error

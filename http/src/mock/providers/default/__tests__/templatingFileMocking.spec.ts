@@ -15,7 +15,7 @@ describe('Templating File Mock', function () {
   afterAll(() => $.finalize())
 
   it('should use template body from file when using "bodyTemplateFile" property', function () {
-    return Supertest($.server())
+    return Supertest($.listener())
       .get('/test')
       .expect(200)
       .expect(res => {
@@ -26,7 +26,7 @@ describe('Templating File Mock', function () {
   })
 
   it('should use template body mock definition when using "bodyTemplate" property', function () {
-    return Supertest($.server())
+    return Supertest($.listener())
       .get('/test/inline')
       .expect(200)
       .expect(res => {

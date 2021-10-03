@@ -17,7 +17,7 @@ describe('HTTP - Working With File Body Mocks', function () {
     it('should throw exception when mock does not exist', function () {
       $.mock(post(urlPath('/test')).reply(ok().bodyFile('nonexistent-body-stub.json')))
 
-      return Supertest($.server()).post('/test').expect(500)
+      return Supertest($.listener()).post('/test').expect(500)
     })
 
     it('should use body mock located in the default directory', function () {
@@ -29,7 +29,7 @@ describe('HTTP - Working With File Body Mocks', function () {
           )
       )
 
-      return Supertest($.server())
+      return Supertest($.listener())
         .get('/test')
         .set(Headers.Accept, MediaTypes.APPLICATION_JSON)
         .expect(200)
@@ -47,7 +47,7 @@ describe('HTTP - Working With File Body Mocks', function () {
     it('should throw exception when mock does not exist', function () {
       $.mock(post(urlPath('/test')).reply(ok().bodyFile('nonexistent-body-stub.json')))
 
-      return Supertest($.server()).post('/test').expect(500)
+      return Supertest($.listener()).post('/test').expect(500)
     })
 
     it('should use body mock located in the default directory', function () {
@@ -59,7 +59,7 @@ describe('HTTP - Working With File Body Mocks', function () {
           )
       )
 
-      return Supertest($.server())
+      return Supertest($.listener())
         .get('/test')
         .set(Headers.Accept, MediaTypes.APPLICATION_JSON)
         .expect(200)

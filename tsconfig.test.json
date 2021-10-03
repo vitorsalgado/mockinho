@@ -4,6 +4,7 @@
     "noUnusedParameters": false,
     "noUnusedLocals": false,
     "allowUnusedLabels": true,
+    "noImplicitAny": false,
     "outDir": "dist"
   }
 }

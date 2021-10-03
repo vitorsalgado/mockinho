@@ -42,7 +42,7 @@ describe('Proxied Responses', function () {
           )
       )
 
-      return Supertest($.server())
+      return Supertest($.listener())
         .get('/test')
         .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
         .expect(200)

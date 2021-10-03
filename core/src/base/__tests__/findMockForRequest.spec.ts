@@ -3,7 +3,7 @@ import { MockInMemoryRepository } from '../MockInMemoryRepository'
 import { Mock } from '../Mock'
 import { ScenarioInMemoryRepository } from '../ScenarioInMemoryRepository'
 import { Context } from '../Context'
-import { BaseConfiguration } from '../BaseConfiguration'
+import { Configuration } from '../Configuration'
 import { Matcher } from '../Matcher'
 import { createMatcher } from '../createMatcher'
 import { scenarioMatcher } from '../scenarioMatcher'
@@ -18,9 +18,14 @@ describe('findMockForRequest', function () {
     }
   }
 
-  type TestConfig = BaseConfiguration
+  type TestConfig = Configuration
 
-  const testConfig: TestConfig = { logLevel: 'info', mode: 'verbose' }
+  const testConfig: TestConfig = {
+    logLevel: 'info',
+    mode: 'verbose',
+    mockProviderFactories: [],
+    plugins: []
+  }
 
   describe('when theres is a match', function () {
     const repo = new TestRepo()
@@ -29,7 +34,7 @@ describe('findMockForRequest', function () {
       configuration: testConfig,
       scenarioRepository: new ScenarioInMemoryRepository(),
       mockRepository: repo
-    } as Context<TestConfig, Mock, TestRepo>
+    } as Context<Mock, TestConfig, TestRepo>
 
     const mock1 = new Mock(
       'test-id-1',
@@ -77,7 +82,7 @@ describe('findMockForRequest', function () {
       configuration: testConfig,
       scenarioRepository: new ScenarioInMemoryRepository(),
       mockRepository: repo
-    } as Context<TestConfig, Mock, TestRepo>
+    } as Context<Mock, TestConfig, TestRepo>
 
     const mock1 = new Mock(
       'test-id-1',
@@ -128,10 +133,10 @@ describe('findMockForRequest', function () {
     const repo = new TestRepo()
 
     const ctx = {
-      configuration: { mode: 'trace', logLevel: 'info' },
+      configuration: { mode: 'trace', logLevel: 'info', plugins: [], mockProviderFactories: [] },
       scenarioRepository: new ScenarioInMemoryRepository(),
       mockRepository: repo
-    } as Context<TestConfig, Mock, TestRepo>
+    } as Context<Mock, TestConfig, TestRepo>
 
     const mock1 = new Mock(
       'test-id-1',
@@ -144,8 +149,8 @@ describe('findMockForRequest', function () {
         {
           valueGetter: () => undefined,
           matcherContext: scenarioMatcher('test') as MatcherContextHolder<
-            BaseConfiguration,
             Mock,
+            Configuration,
             unknown
           >
         }

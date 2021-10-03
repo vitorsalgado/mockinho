@@ -1,9 +1,10 @@
 import Supertest from 'supertest'
+import { Plugin } from '@mockdog/core'
 import { mockHttp } from '../mockHttp'
 import { opts } from '../config'
-import { Plugin } from '../Plugin'
 import { get } from '../mock'
 import { okJSON } from '../mock'
+import { MockDogHttp } from '../MockDogHttp'
 
 interface TestOptions {
   name: string
@@ -20,7 +21,7 @@ describe('plugins', function () {
   })
 
   it('should register sync plugin', async function () {
-    const plugin: Plugin<TestOptions> = (instance, config, opts) => {
+    const plugin: Plugin<TestOptions, MockDogHttp> = (instance, opts) => {
       instance.mock(
         get('/plugin').reply(okJSON({ name: opts?.name, description: opts?.description }))
       )
@@ -30,7 +31,7 @@ describe('plugins', function () {
 
     await $.start()
 
-    await Supertest($.server())
+    await Supertest($.listener())
       .get('/plugin')
       .expect(200)
       .expect(({ body }) => {
@@ -40,7 +41,7 @@ describe('plugins', function () {
   })
 
   it('should register async plugin', async function () {
-    const plugin: Plugin<TestOptions> = (instance, config, opts) =>
+    const plugin: Plugin<TestOptions, MockDogHttp> = (instance, opts) =>
       new Promise(resolve => {
         setTimeout(() => {
           instance.mock(
@@ -54,7 +55,7 @@ describe('plugins', function () {
 
     await $.start()
 
-    await Supertest($.server())
+    await Supertest($.listener())
       .get('/plugin-async')
       .expect(200)
       .expect(({ body }) => {
@@ -64,13 +65,13 @@ describe('plugins', function () {
   })
 
   it('should register multiple plugins', async function () {
-    const syncPlugin: Plugin<TestOptions> = (instance, config, opts) => {
+    const syncPlugin: Plugin<TestOptions, MockDogHttp> = (instance, opts) => {
       instance.mock(
         get('/plugin').reply(okJSON({ name: opts?.name, description: opts?.description }))
       )
     }
 
-    const asyncPlugin: Plugin<TestOptions> = (instance, config, opts) =>
+    const asyncPlugin: Plugin<TestOptions, MockDogHttp> = (instance, opts) =>
       new Promise(resolve => {
         setTimeout(() => {
           instance.mock(
@@ -85,7 +86,7 @@ describe('plugins', function () {
 
     await $.start()
 
-    await Supertest($.server())
+    await Supertest($.listener())
       .get('/plugin')
       .expect(200)
       .expect(({ body }) => {
@@ -93,7 +94,7 @@ describe('plugins', function () {
         expect(body.description).toEqual('test-description')
       })
 
-    await Supertest($.server())
+    await Supertest($.listener())
       .get('/plugin-async')
       .expect(200)
       .expect(({ body }) => {

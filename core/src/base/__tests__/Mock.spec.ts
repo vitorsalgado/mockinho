@@ -22,7 +22,7 @@ describe('Mock', function () {
     expect(mock.source).toEqual('code')
     expect(mock.sourceDescription).toEqual('desc')
     expect(mock.expectations).toEqual([])
-    expect(mock.statefulExpectations).toEqual([])
+    expect(mock.statefulExpectations()).toEqual([])
     expect(mock.meta.size).toEqual(0)
     expect(mock.properties.size).toEqual(0)
   })

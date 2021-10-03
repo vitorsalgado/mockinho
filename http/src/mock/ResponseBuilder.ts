@@ -5,6 +5,10 @@ import { CookieOptions } from 'express'
 import { isTrue, notBlank, notNull } from '@mockdog/core'
 import { JsonType } from '@mockdog/core'
 import { notEmpty } from '@mockdog/core'
+import { TemplateParseDelegate } from '@mockdog/core'
+import { Helper } from '@mockdog/core'
+import { Templating } from '@mockdog/core'
+import { HandlebarsTemplating } from '@mockdog/core'
 import { HttpRequest } from '../HttpRequest'
 import { HttpContext } from '../HttpContext'
 import { MediaTypes } from '../MediaTypes'
@@ -16,11 +20,7 @@ import { Cookie } from './Cookie'
 import { CookieToClear } from './Cookie'
 import { HttpMock } from './HttpMock'
 import { ResponseDelegate } from './ResponseDelegate'
-import { Templating } from './templating'
-import { CustomHelper } from './templating'
-import { HandlebarsTemplating } from './templating'
-import { TemplateParseDelegate } from './templating'
-import { TemplatingBuiltInHelpers } from './templating'
+import { TemplateModel } from './TemplateModel'
 
 const access = Util.promisify(Fs.access)
 const readFile = Util.promisify(Fs.readFile)
@@ -31,13 +31,15 @@ export class ResponseBuilder {
   protected _bodyFile: string = ''
   protected _bodyFunction?: (request: HttpRequest) => BodyType
   protected _bodyFileRelativeToFixtures: boolean = true
-  protected _bodyTemplate?: TemplateParseDelegate
+  protected _bodyTemplate?: TemplateParseDelegate<TemplateModel>
   protected _bodyTemplatePath?: string
-  protected _templateHelpers?: CustomHelper
-  protected _templating: Templating = new HandlebarsTemplating()
+  protected _templateHelpers?: Helper
+  protected _templating: Templating<TemplateModel> = new HandlebarsTemplating<TemplateModel>()
+
   protected _bodyCtrl: number = 0
   protected _headers: Record<string, string> = {}
-  protected _headersWithTemplateValue: Record<string, TemplateParseDelegate> = {}
+  protected _headersWithTemplateValue: Record<string, TemplateParseDelegate<TemplateModel>> = {}
+
   protected _cookies: Array<Cookie> = []
   protected _cookiesToClear: Array<CookieToClear> = []
   protected _delay: number = 0
@@ -191,7 +193,7 @@ export class ResponseBuilder {
     return this
   }
 
-  helpers(helpers: CustomHelper): this {
+  helpers(helpers: Helper): this {
     notNull(helpers)
 
     this._templateHelpers = helpers
@@ -263,7 +265,7 @@ export class ResponseBuilder {
       } else if (this._bodyTemplate) {
         this._body = await this._bodyTemplate(
           { request, model: this._model, env: process.env },
-          { ...TemplatingBuiltInHelpers, ...this._templateHelpers }
+          { ...this._templateHelpers }
         )
       } else if (this._bodyTemplatePath) {
         const file = this._bodyFileRelativeToFixtures
@@ -278,7 +280,7 @@ export class ResponseBuilder {
 
         this._body = await this._templating.compile(content)(
           { request, model: this._model, env: process.env },
-          { ...TemplatingBuiltInHelpers, ...this._templateHelpers }
+          { ...this._templateHelpers }
         )
       }
 
@@ -291,7 +293,7 @@ export class ResponseBuilder {
               model: this._model,
               env: process.env
             },
-            { ...TemplatingBuiltInHelpers, ...this._templateHelpers }
+            { ...this._templateHelpers }
           )
         )
       }

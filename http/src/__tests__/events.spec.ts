@@ -36,13 +36,13 @@ describe('Events', function () {
         .reply(ok())
     )
 
-    await Supertest($.server())
+    await Supertest($.listener())
       .post('/test')
       .set(Headers.ContentType, MediaTypes.APPLICATION_FORM_URL_ENCODED)
       .send('name=the+name&description=some+description&age=32&job=teacher&job=developer')
       .expect(200)
 
-    await Supertest($.server()).get('/none').expect(500)
+    await Supertest($.listener()).get('/none').expect(500)
 
     await $.close()
 

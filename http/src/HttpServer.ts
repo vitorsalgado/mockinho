@@ -9,28 +9,29 @@ import Multer from 'multer'
 import Cors from 'cors'
 import CookieParse from 'cookie-parser'
 import { LoggerUtil } from '@mockdog/core'
+import { MockServer } from '@mockdog/core'
 import { HttpContext } from './HttpContext'
 import { mockFinderMiddleware } from './mockFinderMiddleware'
 import { decorateRequestMiddleware } from './decorateRequestMiddleware'
 import { HttpRequest } from './HttpRequest'
 import { configureProxy } from './configureProxy'
-import { Configuration } from './config'
+import { HttpConfiguration } from './config'
 import { Middleware } from './config'
 import { logIncomingRequestMiddleware } from './hooks/logIncomingRequestMiddleware'
 import { logReqAndResMiddleware } from './hooks/logReqAndResMiddleware'
 import { rawBodyMiddleware } from './rawBodyMiddleware'
 import { ErrorCodes } from './ErrorCodes'
-import { Info } from './Info'
+import { HttpServerInfo } from './HttpServerInfo'
 import { MiddlewareRoute } from './config/MiddlewareRoute'
 
-export class HttpServer {
-  private readonly configuration: Configuration
+export class HttpServer implements MockServer<HttpServerInfo> {
+  private readonly configuration: HttpConfiguration
   private readonly serverInstances: Array<NodeHttpServer | NodeHttpsServer> = []
   private readonly expressApp: Express
   private readonly sockets: Set<Socket> = new Set<Socket>()
   private readonly httpServer?: NodeHttpServer
   private readonly httpsServer?: NodeHttpsServer
-  private readonly information: Info
+  private readonly information: HttpServerInfo
   private readonly additionalMiddlewares: Array<MiddlewareRoute> = []
 
   constructor(private readonly context: HttpContext) {
@@ -68,7 +69,7 @@ export class HttpServer {
     this.additionalMiddlewares.push(...this.configuration.middlewares)
   }
 
-  preSetup(): void {
+  initialSetup(): void {
     for (const server of this.serverInstances) {
       server.on('connection', (socket: Socket) => {
         this.sockets.add(socket)
@@ -93,7 +94,7 @@ export class HttpServer {
     this.expressApp.use(logReqAndResMiddleware(this.context))
   }
 
-  async start(): Promise<Info> {
+  async start(): Promise<HttpServerInfo> {
     this.additionalMiddlewares.forEach(middleware =>
       this.expressApp.use(middleware.route, middleware.middleware as Router)
     )
@@ -182,7 +183,7 @@ export class HttpServer {
     }
   }
 
-  info(): Info {
+  info(): HttpServerInfo {
     return this.information
   }
 

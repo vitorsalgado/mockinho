@@ -30,7 +30,7 @@ describe('HTTP - Form Url Encoded', function () {
         .reply(ok().body('done'))
     )
 
-    return Supertest($.server())
+    return Supertest($.listener())
       .post('/test?q=term')
       .set(Headers.ContentType, MediaTypes.APPLICATION_FORM_URL_ENCODED)
       .send('name=the+name&description=some+description&age=32&job=teacher&job=developer')
@@ -45,7 +45,7 @@ describe('HTTP - Form Url Encoded', function () {
         .reply(ok().body('done'))
     )
 
-    return Supertest($.server())
+    return Supertest($.listener())
       .post('/test?q=term')
       .set(Headers.ContentType, MediaTypes.APPLICATION_FORM_URL_ENCODED)
       .send(

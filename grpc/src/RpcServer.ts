@@ -2,22 +2,19 @@ import * as grpc from '@grpc/grpc-js'
 import { UntypedServiceImplementation } from '@grpc/grpc-js'
 import * as ProtoLoader from '@grpc/proto-loader'
 import { listFilenames } from '@mockdog/core'
+import { MockServer } from '@mockdog/core'
 import { RpcContext } from './RpcContext'
 import { RpcConfiguration } from './config'
 import { OperationType } from './OperationType'
 import { Method } from './types'
 import { UnaryMockFinderHandler } from './mock/UnaryMockFinderHandler'
+import { RpcServerInfo } from './RpcServerInfo'
 
-export interface Info {
-  port: number
-  address: string
-}
-
-export class RpcServer {
+export class RpcServer implements MockServer<RpcServerInfo> {
   private readonly context: RpcContext
   private readonly configuration: RpcConfiguration
   private readonly server: grpc.Server
-  private readonly information: Info
+  private readonly information: RpcServerInfo
 
   constructor(context: RpcContext) {
     this.context = context
@@ -29,7 +26,7 @@ export class RpcServer {
     }
   }
 
-  preSetup(): void {
+  initialSetup(): void {
     const grpcObject = RpcServer.loadPackageDefinition(this.configuration)
 
     for (const [, entries] of Object.entries(grpcObject)) {
@@ -53,7 +50,8 @@ export class RpcServer {
               mockFinder = UnaryMockFinderHandler(this.context)
               break
             default:
-              throw new Error(`No Mock Finder Handler found for the type: ${type.toString()}`)
+              mockFinder = UnaryMockFinderHandler(this.context)
+            // throw new Error(`No Mock Finder Handler found for the type: ${type.toString()}`)
           }
 
           methods[method] = mockFinder({
@@ -68,7 +66,7 @@ export class RpcServer {
     }
   }
 
-  start(): Promise<Info> {
+  start(): Promise<RpcServerInfo> {
     return new Promise((resolve, reject) =>
       this.server.bindAsync(
         this.configuration.address,
@@ -80,6 +78,10 @@ export class RpcServer {
 
           this.server.start()
           this.information.port = port
+          this.information.address = `${this.configuration.address.substr(
+            0,
+            this.configuration.address.indexOf(':')
+          )}:${port}`
 
           return resolve(this.information)
         }
@@ -87,11 +89,11 @@ export class RpcServer {
     )
   }
 
-  close(): void {
+  async close(): Promise<void> {
     this.server.forceShutdown()
   }
 
-  info(): Info {
+  info(): RpcServerInfo {
     return this.information
   }
 

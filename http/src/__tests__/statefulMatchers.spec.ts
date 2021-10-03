@@ -27,7 +27,7 @@ describe('Stateful Matchers', function () {
             .reply(okJSON({ data: expected }))
         )
 
-        return Supertest($.server())
+        return Supertest($.listener())
           .get('/test')
           .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
           .expect(200)
@@ -39,17 +39,17 @@ describe('Stateful Matchers', function () {
       it('should fail to return response fixture', async function () {
         $.mock(get(urlPath('/test')).expect(repeatTimes(2)).reply(ok()))
 
-        await Supertest($.server())
+        await Supertest($.listener())
           .get('/test')
           .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
           .expect(200)
 
-        await Supertest($.server())
+        await Supertest($.listener())
           .get('/test')
           .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
           .expect(200)
 
-        await Supertest($.server())
+        await Supertest($.listener())
           .get('/test')
           .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
           .expect(500)
@@ -68,7 +68,7 @@ describe('Stateful Matchers', function () {
             .reply(okJSON({ data: expected }))
         )
 
-        return Supertest($.server())
+        return Supertest($.listener())
           .get('/test')
           .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
           .expect(200)
@@ -80,17 +80,17 @@ describe('Stateful Matchers', function () {
       it('should fail to return response fixture', async function () {
         $.mock(get(urlPath('/test')).repeatTimes(2).reply(ok()))
 
-        await Supertest($.server())
+        await Supertest($.listener())
           .get('/test')
           .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
           .expect(200)
 
-        await Supertest($.server())
+        await Supertest($.listener())
           .get('/test')
           .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
           .expect(200)
 
-        await Supertest($.server())
+        await Supertest($.listener())
           .get('/test')
           .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
           .expect(500)

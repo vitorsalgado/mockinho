@@ -11,7 +11,7 @@ describe('FaultReadableStream', function () {
     })
     const stream = new FaultReadableStream(splitInto(JSON.stringify(data), 2), promise)
 
-    const res = []
+    const res: Array<string> = []
 
     for await (const chunk of stream) {
       res.push(chunk)

@@ -39,7 +39,7 @@ describe('Custom Middlewares', function () {
           .reply(ok())
       )
 
-      return Supertest($.server())
+      return Supertest($.listener())
         .get('/test')
         .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
         .expect(StatusCodes.OK)
@@ -60,12 +60,12 @@ describe('Custom Middlewares', function () {
           .reply(created())
       )
 
-      await Supertest($.server())
+      await Supertest($.listener())
         .get('/test')
         .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
         .expect(StatusCodes.OK)
 
-      await Supertest($.server())
+      await Supertest($.listener())
         .get('/hey')
         .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
         .expect(StatusCodes.CREATED)

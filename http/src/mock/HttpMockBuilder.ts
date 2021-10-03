@@ -13,14 +13,14 @@ import { MockBuilder } from '@mockdog/core'
 import { Expectation } from '@mockdog/core'
 import { MatcherContextHolder } from '@mockdog/core'
 import { ExpectationWithContext } from '@mockdog/core'
+import { Configuration } from '@mockdog/core'
 import { HttpRequest } from '../HttpRequest'
-import { HttpContext } from '../HttpContext'
 import { bearerToken, urlPath } from '../matchers'
 import { Headers } from '../Headers'
 import { BodyType } from '../BodyType'
 import { Methods } from '../Methods'
 import { Schemes } from '../Schemes'
-import { Configuration } from '../config'
+import { HttpConfiguration } from '../config'
 import { HttpMock } from './HttpMock'
 import { ResponseBuilder } from './ResponseBuilder'
 import { extractCookieAsJson } from './util/extractors'
@@ -39,7 +39,7 @@ import { extractScheme } from './util/extractors'
 import { extractRequest } from './util/extractors'
 import { ResponseDelegate } from './ResponseDelegate'
 
-export class HttpMockBuilder extends MockBuilder {
+export class HttpMockBuilder extends MockBuilder<HttpMock> {
   private readonly _expectations: Array<Expectation<unknown, unknown>> = []
   private readonly _meta: Map<string, unknown> = new Map<string, unknown>()
   private _responseBuilder!: ResponseDelegate
@@ -275,7 +275,7 @@ export class HttpMockBuilder extends MockBuilder {
   }
 
   expectWithContext(
-    ...matchers: Array<MatcherContextHolder<Configuration, HttpMock, HttpRequest>>
+    ...matchers: Array<MatcherContextHolder<HttpMock, HttpConfiguration, HttpRequest>>
   ): this {
     notEmpty(matchers)
     noNullElements(matchers)
@@ -286,7 +286,7 @@ export class HttpMockBuilder extends MockBuilder {
           ({
             valueGetter: (request: HttpRequest) => request,
             matcherContext: matcher
-          } as ExpectationWithContext<unknown, unknown>)
+          } as unknown as ExpectationWithContext<unknown, unknown, HttpMock, Configuration>)
       )
     )
 
@@ -306,9 +306,7 @@ export class HttpMockBuilder extends MockBuilder {
     return this
   }
 
-  build(context: HttpContext): HttpMock {
-    notNull(context)
-
+  build(): HttpMock {
     this.validate()
 
     return new HttpMock(

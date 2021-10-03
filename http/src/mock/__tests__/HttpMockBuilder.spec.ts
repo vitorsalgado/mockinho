@@ -33,9 +33,9 @@ describe('Http Mock Builder', function () {
           .reply(ok())
       )
 
-      await Supertest($.server()).get('/test').expect(200)
-      await Supertest($.server()).get('/test').expect(200)
-      await Supertest($.server()).get('/test').expect(500)
+      await Supertest($.listener()).get('/test').expect(200)
+      await Supertest($.listener()).get('/test').expect(200)
+      await Supertest($.listener()).get('/test').expect(500)
     })
   })
 })

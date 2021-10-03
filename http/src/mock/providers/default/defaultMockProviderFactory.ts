@@ -1,24 +1,26 @@
-import { Configuration } from '../../../config'
-import { HttpServer } from '../../../HttpServer'
+import { loadMockFiles } from '@mockdog/core'
+import { HttpConfiguration } from '../../../config'
 import { HttpMockBuilder } from '../..'
-import { MockProvider } from '../MockProvider'
-import { loadMockFiles } from './loadMockFiles'
+import { HttpMockProvider } from '../HttpMockProvider'
 import { buildMockFromFile } from './buildMockFromFile'
+import { MockFile } from './MockFile'
+import MockFileSchema from './MockFileSchema'
 
-export function defaultMockProviderFactory(
-  configurations: Configuration,
-  _server: HttpServer
-): MockProvider {
+export function defaultMockProviderFactory(configurations: HttpConfiguration): HttpMockProvider {
   return async function (): Promise<Array<HttpMockBuilder>> {
     if (!configurations.mockFilesEnabled) {
       return []
     }
 
-    const files = await loadMockFiles(configurations.mockDirectory, [
-      `.${configurations.mockFilesExtension}.json`,
-      `.${configurations.mockFilesExtension}.yml`,
-      `.${configurations.mockFilesExtension}.yaml`
-    ])
+    const files = await loadMockFiles<MockFile>(
+      configurations.mockDirectory,
+      [
+        `.${configurations.mockFilesExtension}.json`,
+        `.${configurations.mockFilesExtension}.yml`,
+        `.${configurations.mockFilesExtension}.yaml`
+      ],
+      MockFileSchema
+    )
 
     const mocks: Array<HttpMockBuilder> = []
 

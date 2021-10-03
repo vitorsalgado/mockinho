@@ -1,8 +1,9 @@
-import { ConfigurationBuilder } from './config'
-import { Configuration } from './config'
+import { HttpConfigurationBuilder } from './config'
+import { HttpConfiguration } from './config'
 import { MockDogHttp } from './MockDogHttp'
 
-export const mockHttp = (configurations: ConfigurationBuilder | Configuration): MockDogHttp =>
-  new MockDogHttp(configurations)
+export const mockHttp = (
+  configurations: HttpConfigurationBuilder | HttpConfiguration
+): MockDogHttp => new MockDogHttp(configurations)
 
 export default mockHttp

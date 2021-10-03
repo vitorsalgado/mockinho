@@ -3,6 +3,8 @@ import * as Fs from 'fs'
 import { notBlank, notNull } from '@mockdog/core'
 import { Matcher } from '@mockdog/core'
 import { requireOrImportModule } from '@mockdog/core'
+import { Helper } from '@mockdog/core'
+import { LoadMockError } from '@mockdog/core'
 import { isPresent } from '@mockdog/core-matchers'
 import { matches } from '@mockdog/core-matchers'
 import { equalsTo } from '@mockdog/core-matchers'
@@ -23,13 +25,11 @@ import { startsWith } from '@mockdog/core-matchers'
 import { trim } from '@mockdog/core-matchers'
 import { everyItem } from '@mockdog/core-matchers'
 import { empty } from '@mockdog/core-matchers'
-import { Configuration } from '../../../config'
+import { HttpConfiguration } from '../../../config'
 import { urlPath, urlPathMatching } from '../../../matchers'
 import { HttpMockBuilder, response } from '../..'
 import { ResponseBuilder } from '../..'
 import { multipleResponses } from '../../entry/multipleResponses'
-import { CustomHelper } from '../../templating'
-import { InvalidMockFileError } from './InvalidMockFileError'
 import { MockFile } from './MockFile'
 import { MockFileResponse } from './MockFile'
 import { getSingleMatcherFromObjectKeys } from './util/getSingleMatcherFromObjectKeys'
@@ -41,8 +41,8 @@ import { extractPath } from './util/extractPath'
 
 const ABSOLUTE_URL_REGEX = /^[a-zA-Z][a-zA-Z\d+\-.]*?:/
 
-export async function buildMockFromFile<Config extends Configuration>(
-  configuration: Config,
+export async function buildMockFromFile(
+  configuration: HttpConfiguration,
   mock: MockFile,
   filename: string
 ): Promise<HttpMockBuilder> {
@@ -244,7 +244,7 @@ async function buildResponse(mock: MockFileResponse, filename: string): Promise<
 
     const helpers = await requireOrImportModule(file)
 
-    res.helpers(helpers as CustomHelper)
+    res.helpers(helpers as Helper)
   }
 
   return res
@@ -352,7 +352,7 @@ function discoverMatcherByKey(
       discoverMatcherByKey(filename, mock, k, v, matcherEntry, parsers)
     )
   } else if (key === 'anyOf') {
-    const anyOfMatchers = []
+    const anyOfMatchers: Array<Matcher<unknown>> = []
 
     for (const entry of values) {
       if (typeof entry === 'string') {
@@ -367,7 +367,7 @@ function discoverMatcherByKey(
 
     return anyOf(...anyOfMatchers)
   } else if (key === 'allOf') {
-    const allOfMatchers = []
+    const allOfMatchers: Array<Matcher<unknown>> = []
 
     for (const entry of values) {
       for (const [k, v] of Object.entries(entry)) {
@@ -440,7 +440,10 @@ function discoverMatcherByKey(
 
     // No Matcher Found
     // Throw Error
-    throw new InvalidMockFileError(`No matcher found for: ${key} -- ${values} in ${root}`, filename)
+    throw new LoadMockError(
+      `No matcher found for: ${key} -- ${values} in ${root}. File: ${filename}`,
+      filename
+    )
   }
 }
 

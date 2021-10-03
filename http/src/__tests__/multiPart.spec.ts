@@ -28,7 +28,7 @@ describe('Form MultiPart', function () {
         .reply(ok())
     )
 
-    await Supertest($.server())
+    await Supertest($.listener())
       .post('/test')
       .attach('text', Path.join(__dirname, '__fixtures__/mp-text.txt'))
       .attach('image', Path.join(__dirname, '__fixtures__/mp-logo.png'))

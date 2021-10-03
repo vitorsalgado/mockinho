@@ -2,13 +2,13 @@
 
 import { greenBright } from 'colorette'
 import { bold } from 'colorette'
-import { Configuration } from '../config'
+import { HttpConfiguration } from '../config'
 import { Argv } from '../config'
-import { Info } from '../Info'
+import { HttpServerInfo } from '../HttpServerInfo'
 import Banner from './banner'
 import { parseServerInfo } from './utils'
 
-export function printInfo(config: Configuration, options: Argv, info: Info): void {
+export function printInfo(config: HttpConfiguration, options: Argv, info: HttpServerInfo): void {
   console.log(Banner)
   console.log(bold('Version: ') + '1.0.0')
   console.log(bold('Log Mode: ') + config.mode)

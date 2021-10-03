@@ -1,18 +1,23 @@
 import { FastifyInstance } from 'fastify'
+import supertest from 'supertest'
 import { mockRpc } from '@mockdog/grpc'
 import { options } from '@mockdog/grpc'
-import { buildFastify } from '@mockdog/example-http/dist/app'
-import { getPackageDefinition } from './grpc_server'
+import { RpcMockBuilder } from '@mockdog/grpc/dist/mock'
+import { UnaryResponseBuilder } from '@mockdog/grpc/dist/mock'
+import { jsonPath } from '@mockdog/core-matchers'
+import { equalsTo } from '@mockdog/core-matchers'
+import { buildFastify } from './app'
+import { getPackageDefinition } from './app'
 
 describe('gRPC Example', function () {
-  const $ = mockRpc(options().address('0.0.0.0:50052').packageDefinition(getPackageDefinition()))
+  const $ = mockRpc(options().address('0.0.0.0:0').packageDefinition(getPackageDefinition()))
 
   let fastify: FastifyInstance
 
   beforeAll(async () => {
     await $.start()
 
-    fastify = buildFastify({}, { api: $.serverInfo().address })
+    fastify = buildFastify({}, { grpcAddress: $.serverInfo().address })
 
     await fastify.ready()
   })
@@ -23,6 +28,26 @@ describe('gRPC Example', function () {
   })
 
   it('should ', function () {
-    //
+    $.mock(
+      RpcMockBuilder.newBuilder()
+        .requestData(jsonPath('name', equalsTo('sao-paulo')))
+        .reply(
+          new UnaryResponseBuilder().data({
+            name: 'sao paulo',
+            country: 'brasil',
+            location: { latitude: 20, longitude: 10 }
+          })
+        )
+    )
+
+    return supertest(fastify.server)
+      .get('/cities/sao-paulo')
+      .set('content-type', 'application/json')
+      .set('accept', 'application/json')
+      .expect(response => {
+        expect(response.body.name).toEqual('sao paulo')
+        expect(response.body.country).toEqual('brasil')
+      })
+      .expect(200)
   })
 })

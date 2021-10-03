@@ -2,15 +2,15 @@ import { Context } from './Context'
 import { FindMockResult } from './FindMockResult'
 import { MockRepository } from './MockRepository'
 import { Mock } from './Mock'
-import { BaseConfiguration } from './BaseConfiguration'
 import { inspectedMatcher } from './inspectedMatcher'
 import { Matcher } from './Matcher'
 import { modeIsAtLeast } from './modeIsAtLeast'
+import { Configuration } from './Configuration'
 
-export function findMockForRequest<Req, Config extends BaseConfiguration, M extends Mock>(
-  request: Req,
-  context: Context<Config, M, MockRepository<M>>
-): FindMockResult<M> {
+export function findMockForRequest<REQUEST, MOCK extends Mock, CONFIG extends Configuration>(
+  request: REQUEST,
+  context: Context<MOCK, CONFIG, MockRepository<MOCK>>
+): FindMockResult<MOCK> {
   const mocks = context.mockRepository.fetchSorted()
   const weights = new Map<string, number>()
 
@@ -18,7 +18,7 @@ export function findMockForRequest<Req, Config extends BaseConfiguration, M exte
     let weight = 0
 
     mock.expectations.push(
-      ...mock.statefulExpectations.map(expectation => ({
+      ...mock.statefulExpectations<MOCK, CONFIG>().map(expectation => ({
         valueGetter: expectation.valueGetter,
         matcher: expectation.matcherContext(context, mock) as Matcher<unknown>,
         weight: 0

@@ -1,11 +1,11 @@
 import Path from 'path'
 import { requireOrImportModule } from '@mockdog/core'
-import { ConfigurationBuilder } from '../ConfigurationBuilder'
-import { Plugin } from '../../Plugin'
+import { Plugin } from '@mockdog/core'
+import { HttpConfigurationBuilder } from '../HttpConfigurationBuilder'
 
 export async function importPlugins(
   components: Array<string>,
-  builder: ConfigurationBuilder,
+  builder: HttpConfigurationBuilder,
   rootDir: string
 ): Promise<void> {
   await Promise.all(

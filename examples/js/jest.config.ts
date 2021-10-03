@@ -5,7 +5,7 @@ import Base from '../../jest-base.config'
 
 const config: JestConfig.InitialOptions = {
   ...Base,
-  displayName: 'example-http',
+  displayName: 'example-js',
   globals: {
     'ts-jest': {
       tsconfig: '../../tsconfig.test.json'

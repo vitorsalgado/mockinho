@@ -1,11 +1,11 @@
 import { Optional } from '../util'
 import { Mock } from './Mock'
 
-export class FindMockResult<S extends Mock> {
+export class FindMockResult<MOCK extends Mock> {
   constructor(
     private readonly _hasMatch: boolean,
-    private readonly _matchedMock?: S,
-    private readonly _closesMatch?: S
+    private readonly _matchedMock?: MOCK,
+    private readonly _closesMatch?: MOCK
   ) {
     if (_hasMatch && !_matchedMock) {
       throw new TypeError('If there is a match, you need to provide the matched mock.')
@@ -22,7 +22,7 @@ export class FindMockResult<S extends Mock> {
     return this._hasMatch
   }
 
-  matched(): S {
+  matched(): MOCK {
     if (!this._matchedMock) {
       throw new ReferenceError(
         'Tried to get the matched mock when it is null. Check if hasMatch() first.'

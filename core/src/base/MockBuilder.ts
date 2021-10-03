@@ -3,15 +3,14 @@ import { Expectation } from './Expectation'
 import { Scenario } from './Scenario'
 import { ExpectationWithContext } from './ExpectationWithContext'
 import { scenarioMatcher } from './scenarioMatcher'
-import { MatcherContextHolder } from './MatcherContextHolder'
-import { BaseConfiguration } from './BaseConfiguration'
 import { Mock } from './Mock'
 
-export abstract class MockBuilder {
+export abstract class MockBuilder<MOCK extends Mock> {
   protected _id: string = ''
   protected _name: string = ''
   protected _priority: number = 0
-  protected readonly _statefulExpectations: Array<ExpectationWithContext<unknown, unknown>> = []
+  protected readonly _statefulExpectations: Array<ExpectationWithContext<unknown, unknown, MOCK>> =
+    []
 
   id(id: string): this {
     this._id = id
@@ -39,15 +38,13 @@ export abstract class MockBuilder {
   ): this {
     this._statefulExpectations.push({
       valueGetter: () => undefined,
-      matcherContext: scenarioMatcher(name, requiredState, newState) as MatcherContextHolder<
-        BaseConfiguration,
-        Mock,
-        unknown
-      >
+      matcherContext: scenarioMatcher(name, requiredState, newState)
     })
 
     return this
   }
+
+  abstract build(): MOCK
 
   protected spec<T, V>(
     valueGetter: (request: V) => T,

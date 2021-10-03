@@ -1,0 +1,15 @@
+{
+  "id": "5",
+  "name": 50000,
+  "request": {
+    "method": "GET",
+    "urlPath": "/user/1"
+  },
+  "response": {
+    "status": 200,
+    "bodyFile": "user.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

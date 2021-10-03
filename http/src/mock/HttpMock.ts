@@ -2,6 +2,7 @@ import { Expectation } from '@mockdog/core'
 import { Mock } from '@mockdog/core'
 import { MockSource } from '@mockdog/core'
 import { ExpectationWithContext } from '@mockdog/core'
+import { HttpConfiguration } from '../config'
 import { ResponseDelegate } from './ResponseDelegate'
 
 export class HttpMock extends Mock {
@@ -12,7 +13,9 @@ export class HttpMock extends Mock {
     source: MockSource,
     sourceDescription: string,
     expectations: Array<Expectation<unknown, unknown>>,
-    statefulExpectations: Array<ExpectationWithContext<unknown, unknown>>,
+    statefulExpectations: Array<
+      ExpectationWithContext<unknown, unknown, HttpMock, HttpConfiguration>
+    >,
     public readonly responseBuilder: ResponseDelegate,
     meta: Map<string, unknown>,
     properties: Map<string, unknown>
@@ -24,7 +27,7 @@ export class HttpMock extends Mock {
       source,
       sourceDescription,
       expectations,
-      statefulExpectations,
+      statefulExpectations as Array<ExpectationWithContext<unknown, unknown>>,
       0,
       meta,
       properties

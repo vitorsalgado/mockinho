@@ -1,5 +1,5 @@
+import { LoadMockError } from '@mockdog/core'
 import { MatcherConstants } from '../MatcherConstants'
-import { InvalidMockFileError } from '../InvalidMockFileError'
 
 export function findRequiredMatcherEntry(
   values: [string, unknown][],
@@ -10,7 +10,7 @@ export function findRequiredMatcherEntry(
 
   if (!entry) {
     if (!entry) {
-      throw new InvalidMockFileError(errorMessage, filename)
+      throw new LoadMockError(errorMessage, filename)
     }
   }
 

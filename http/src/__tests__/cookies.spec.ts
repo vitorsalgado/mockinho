@@ -24,7 +24,7 @@ describe('Cookies', function () {
           .reply(ok().body('done').cookie('cookie-test-res', 'test-res'))
       )
 
-      return Supertest($.server())
+      return Supertest($.listener())
         .post('/test')
         .set('Cookie', `${cookieSignedName}=${cookieSignedValue}`)
         .expect(200)
@@ -38,7 +38,7 @@ describe('Cookies', function () {
         post(urlPath('/test')).cookie(cookieSignedName, equalsTo('test')).reply(ok().body('done'))
       )
 
-      return Supertest($.server())
+      return Supertest($.listener())
         .post('/test')
         .set('Cookie', `${cookieSignedName}=test`)
         .expect(200)
@@ -54,7 +54,7 @@ describe('Cookies', function () {
           .reply(ok().body('done'))
       )
 
-      return Supertest($.server())
+      return Supertest($.listener())
         .post('/test')
         .set('Cookie', `${cookieSignedName}=${JSON.stringify({ data: { hello: 'world' } })}`)
         .expect(200)
@@ -76,7 +76,7 @@ describe('Cookies', function () {
         )
       )
 
-      return Supertest($.server())
+      return Supertest($.listener())
         .post('/test')
         .set('Cookie', `${cookieSignedName}=${JSON.stringify({ data: { hello: 'world' } })}`)
         .expect(200)

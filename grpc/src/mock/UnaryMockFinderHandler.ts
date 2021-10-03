@@ -19,7 +19,7 @@ export function UnaryMockFinderHandler(
       const extendedCall: RpcCall = call as unknown as RpcCall
       extendedCall.context = callContext
 
-      const result = findMockForRequest<RpcCall, RpcConfiguration, RpcMock>(extendedCall, context)
+      const result = findMockForRequest<RpcCall, RpcMock, RpcConfiguration>(extendedCall, context)
 
       if (result.hasMatch()) {
         const mock = result.matched()

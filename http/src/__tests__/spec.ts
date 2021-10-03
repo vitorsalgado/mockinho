@@ -29,7 +29,7 @@ describe('MockDog HTTP', function () {
           .reply(okJSON({ data: expected }))
       )
 
-      return Supertest($.server())
+      return Supertest($.listener())
         .get('/test?q=term')
         .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
         .expect(200)
@@ -45,7 +45,7 @@ describe('MockDog HTTP', function () {
       //   )
       // )
 
-      return Supertest($.server())
+      return Supertest($.listener())
         .get('/test')
         .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
         .expect(200)
@@ -62,7 +62,7 @@ describe('MockDog HTTP', function () {
           .reply(ok().body('done').header(Headers.ContentType, MediaTypes.TEXT_PLAIN))
       )
 
-      return Supertest($.server())
+      return Supertest($.listener())
         .post('/test?q=term')
         .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
         .send({ user: { name: 'tester' }, address: { street: 'street A' }, age: 50 })
@@ -79,7 +79,7 @@ describe('MockDog HTTP', function () {
         )
       )
 
-      return Supertest($.server())
+      return Supertest($.listener())
         .post('/test')
         .expect(200)
         .expect(res => expect(res.body.data.status).toEqual('OK'))
@@ -106,7 +106,7 @@ describe('MockDog HTTP', function () {
           .reply(okJSON({ data: 'phase 2' }))
       )
 
-      await Supertest($.server())
+      await Supertest($.listener())
         .post('/test')
         .set('content', 'nothing')
         .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
@@ -114,7 +114,7 @@ describe('MockDog HTTP', function () {
         .expect(200)
         .expect(res => expect(res.body.data).toEqual('started'))
 
-      await Supertest($.server())
+      await Supertest($.listener())
         .post('/test')
         .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
         .set('content', 'nothing')
@@ -122,7 +122,7 @@ describe('MockDog HTTP', function () {
         .expect(200)
         .expect(res => expect(res.body.data).toEqual('phase 2'))
 
-      await Supertest($.server()).post('/').expect(500)
+      await Supertest($.listener()).post('/').expect(500)
     })
   })
 })

@@ -4,13 +4,15 @@ import * as Fs from 'fs'
 import Path from 'path'
 import { blue } from 'colorette'
 import { red } from 'colorette'
-import { Configuration } from '../config'
+import { loadSingleMockFile } from '@mockdog/core'
+import { HttpConfiguration } from '../config'
 import { MockDogHttp } from '../MockDogHttp'
-import { loadSingleMockFile } from '../mock/providers/default/loadSingleMockFile'
 import { buildMockFromFile } from '../mock/providers/default/buildMockFromFile'
+import MockFileSchema from '../mock/providers/default/MockFileSchema'
+import { MockFile } from '../mock/providers/default/MockFile'
 import { watcher } from './watcher'
 
-export function configureWatcher(config: Configuration, mockhttp: MockDogHttp): void {
+export function configureWatcher(config: HttpConfiguration, mockhttp: MockDogHttp): void {
   const fsWatcher = watcher(
     config.mockDirectory,
     {
@@ -31,7 +33,7 @@ export function configureWatcher(config: Configuration, mockhttp: MockDogHttp): 
       const filename = extractFilename(path)
 
       try {
-        const result = await loadSingleMockFile(path)
+        const result = await loadSingleMockFile<MockFile>(path, MockFileSchema)
 
         if (result.error) {
           return
@@ -58,7 +60,7 @@ export function configureWatcher(config: Configuration, mockhttp: MockDogHttp): 
         const exists = Fs.existsSync(Path.resolve(path))
 
         if (exists) {
-          const result = await loadSingleMockFile(path)
+          const result = await loadSingleMockFile<MockFile>(path, MockFileSchema)
 
           if (result.error) {
             return

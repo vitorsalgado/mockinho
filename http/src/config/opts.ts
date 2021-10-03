@@ -1,3 +1,3 @@
-import { ConfigurationBuilder } from './ConfigurationBuilder'
+import { HttpConfigurationBuilder } from './HttpConfigurationBuilder'
 
-export const opts = (): ConfigurationBuilder => new ConfigurationBuilder()
+export const opts = (): HttpConfigurationBuilder => new HttpConfigurationBuilder()

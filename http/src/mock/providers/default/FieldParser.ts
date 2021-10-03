@@ -1,5 +1,5 @@
 import { Matcher } from '@mockdog/core'
-import { Configuration } from '../../../config'
+import { HttpConfiguration } from '../../../config'
 import { HttpMockBuilder } from '../..'
 import { MockFile } from './MockFile'
 
@@ -15,7 +15,7 @@ export interface FieldParser {
   ): Matcher<T> | undefined
 
   parse(
-    configurations: Configuration,
+    configurations: HttpConfiguration,
     filename: string,
     mock: MockFile,
     mockBuilder: HttpMockBuilder

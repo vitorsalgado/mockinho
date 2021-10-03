@@ -1,0 +1,43 @@
+{
+  "id": "1",
+  "priority": 1,
+  "name": "Test Stub 1",
+  "request": {
+    "method": "GET",
+    "url": "/test",
+    "querystring": {
+      "q": { "equalsTo": "term" }
+    },
+    "headers": {
+      "Content-Type": {
+        "allOf": [
+          { "contains": "json" },
+          { "startsWith": "application" }
+        ]
+      },
+      "Accept": {
+        "equalsTo": "none"
+      }
+    },
+    "body": {
+      "anyOf": [
+        {
+          "jsonPath": {
+            "path": "user.name",
+            "equalsTo": "test"
+          }
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "message": "hello",
+      "content": "world"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

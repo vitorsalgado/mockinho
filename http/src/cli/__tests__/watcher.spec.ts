@@ -49,7 +49,7 @@ describe.skip('watcher', function () {
 
         await sleep(2500)
 
-        await Supertest(mockhttp.server())
+        await Supertest(mockhttp.listener())
           .get('/test/watcher')
           .expect(200)
           .expect(({ body }) => expect(body.hello).toEqual('world'))

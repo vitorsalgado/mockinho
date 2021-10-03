@@ -25,7 +25,7 @@ describe('Templating', function () {
       )
     )
 
-    await Supertest($.server())
+    await Supertest($.listener())
       .get('/test')
       .expect(200)
       .expect(response => expect(response.text).toEqual('this is a test using: JEST!'))
@@ -42,7 +42,7 @@ describe('Templating', function () {
       )
     )
 
-    await Supertest($.server())
+    await Supertest($.listener())
       .get('/test')
       .expect(200)
       .expect(response => expect(response.body).toEqual({ testLib: 'jest!' }))
@@ -59,7 +59,7 @@ describe('Templating', function () {
       )
     )
 
-    await Supertest($.server())
+    await Supertest($.listener())
       .get('/test')
       .expect(200)
       .expect(response => expect(response.body).toEqual({ testLib: 'jest!' }))
@@ -74,7 +74,7 @@ describe('Templating', function () {
       )
     )
 
-    await Supertest($.server())
+    await Supertest($.listener())
       .get('/test')
       .expect(200)
       .expect(response => expect(response.text).toEqual('NODE_ENV is: test'))
@@ -89,7 +89,7 @@ describe('Templating', function () {
       )
     )
 
-    await Supertest($.server())
+    await Supertest($.listener())
       .get('/test')
       .expect(200)
       .expect(response => expect(response.text).toEqual('Method is: GET'))
@@ -106,7 +106,7 @@ describe('Templating', function () {
       )
     )
 
-    await Supertest($.server())
+    await Supertest($.listener())
       .get('/test')
       .expect(200)
       .expect(response =>
@@ -128,7 +128,7 @@ describe('Templating', function () {
       )
     )
 
-    await Supertest($.server())
+    await Supertest($.listener())
       .get('/test')
       .expect(200)
       .expect(response => expect(response.body.id).toBeDefined())

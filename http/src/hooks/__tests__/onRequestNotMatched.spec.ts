@@ -1,16 +1,9 @@
 import { equalsTo } from '@mockdog/core-matchers'
-import { ScenarioInMemoryRepository } from '@mockdog/core'
 import { contentType } from '../../matchers'
 import { HttpMockBuilder, ok } from '../../mock'
-import { HttpMockRepository } from '../../mock'
 import { onRequestNotMatched } from '../builtin/onRequestNotMatched'
-import { HttpContext } from '../../HttpContext'
-import { opts } from '../../config'
 
 describe('onRequestNotMatched', function () {
-  const fakeContext = () =>
-    new HttpContext(opts().build(), new HttpMockRepository(), new ScenarioInMemoryRepository())
-
   it('should log without a closest match', function () {
     onRequestNotMatched({
       verbose: false,
@@ -21,10 +14,7 @@ describe('onRequestNotMatched', function () {
   })
 
   it('should log with mock without name and id', function () {
-    const mock = HttpMockBuilder.newBuilder()
-      .expect(contentType('something'))
-      .reply(ok())
-      .build(fakeContext())
+    const mock = HttpMockBuilder.newBuilder().expect(contentType('something')).reply(ok()).build()
 
     onRequestNotMatched({
       verbose: true,
@@ -41,7 +31,7 @@ describe('onRequestNotMatched', function () {
       .name('nice name')
       .expect(contentType('something'))
       .reply(ok())
-      .build(fakeContext())
+      .build()
 
     onRequestNotMatched({
       verbose: false,
@@ -60,7 +50,7 @@ describe('onRequestNotMatched', function () {
       .url('http://localhost:8080')
       .method('PATCH')
       .reply(ok())
-      .build(fakeContext())
+      .build()
 
     onRequestNotMatched({
       verbose: true,
@@ -79,7 +69,7 @@ describe('onRequestNotMatched', function () {
       .url(equalsTo('http://localhost:8080'))
       .method(equalsTo('GET'))
       .reply(ok())
-      .build(fakeContext())
+      .build()
 
     onRequestNotMatched({
       verbose: false,

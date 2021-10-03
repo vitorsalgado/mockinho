@@ -1,9 +1,9 @@
-import { BaseConfiguration } from './BaseConfiguration'
 import { Mock } from './Mock'
 import { MockRepository } from './MockRepository'
 import { Matcher } from './Matcher'
 import { Context } from './Context'
+import { Configuration } from './Configuration'
 
-export interface MatcherContextHolder<C extends BaseConfiguration, M extends Mock, A = void> {
-  (ctx: Context<C, M, MockRepository<M>>, mock: M): Matcher<A>
+export interface MatcherContextHolder<MOCK extends Mock, CONFIG extends Configuration, ARG = void> {
+  (ctx: Context<MOCK, CONFIG, MockRepository<MOCK>>, mock: MOCK): Matcher<ARG>
 }

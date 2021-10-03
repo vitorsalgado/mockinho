@@ -1,0 +1,11 @@
+---
+id: '6'
+name: User 2
+request:
+  method: GET
+  urlPath: '/user/2'
+response:
+  status: 200
+  bodyFile: user.json
+  headers:
+    Content-Type: application/json
