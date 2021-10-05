@@ -7,6 +7,6 @@
   "include": ["src"],
   "references": [
     { "path": "../../http", "prepend": false },
-    { "path": "../../http-jest", "prepend": false }
+    { "path": "../../http-jest-extension", "prepend": false }
   ]
 }

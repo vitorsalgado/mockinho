@@ -1,5 +1,5 @@
 {
-  "name": "@mockdog/http-jest",
+  "name": "@mockdog/http-jest-extension",
   "version": "0.0.0",
   "description": "MockDog Jest Extension",
   "main": "./dist/index.js",
