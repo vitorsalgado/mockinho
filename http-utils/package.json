@@ -1,0 +1,34 @@
+{
+  "name": "@mockdog/http-utils",
+  "version": "0.0.0",
+  "description": "HTTP Utils",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json",
+    "test": "jest --detectOpenHandles"
+  },
+  "license": "MIT",
+  "directories": {
+    "dist": "dist"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "Vitor Hugo Salgado <vsalgadopb@gmail.com>",
+  "homepage": "https://github.com/vitorsalgado/mockdog/tree/main/http-jest-extension#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitorsalgado/mockdog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vitorsalgado/mockdog/issues"
+  }
+}
