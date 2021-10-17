@@ -5,7 +5,7 @@ import { notNull } from '@mockdog/core'
 import { ResponseBuilderDelegate } from './ResponseBuilderDelegate'
 import { Response } from './Response'
 
-export abstract class ResponseBuilder<R extends Response> {
+export abstract class ResponseBuilder<REQUEST, RESPONSE extends Response> {
   protected _metadata: Metadata = new Metadata()
   protected _flags?: number
 
@@ -25,5 +25,5 @@ export abstract class ResponseBuilder<R extends Response> {
     return this
   }
 
-  abstract build(): ResponseBuilderDelegate<R>
+  abstract build(): ResponseBuilderDelegate<REQUEST, RESPONSE>
 }

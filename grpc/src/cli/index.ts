@@ -2,7 +2,7 @@
 
 import Path from 'path'
 import { mockRpc } from '../mockRpc'
-import { options } from '../config/options'
+import { options } from '../config'
 
 mockRpc(options().protoDirectories(Path.join(__dirname, '../', '__tests__', 'proto')))
   .start()

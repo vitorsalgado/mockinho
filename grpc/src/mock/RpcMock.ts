@@ -6,7 +6,7 @@ import { ResponseBuilderDelegate } from './ResponseBuilderDelegate'
 import { Response } from './Response'
 
 export class RpcMock extends Mock {
-  private readonly _responseBuilder: ResponseBuilderDelegate<Response>
+  private readonly _responseBuilder: ResponseBuilderDelegate<unknown, Response>
 
   public constructor(
     id: string,
@@ -16,7 +16,7 @@ export class RpcMock extends Mock {
     sourceDescription: string,
     expectations: Array<Expectation<unknown, unknown>>,
     statefulExpectations: Array<ExpectationWithContext<unknown, unknown>>,
-    responseBuilder: ResponseBuilderDelegate<Response>,
+    responseBuilder: ResponseBuilderDelegate<unknown, Response>,
     meta: Map<string, unknown>,
     properties: Map<string, unknown>
   ) {
@@ -36,8 +36,11 @@ export class RpcMock extends Mock {
     this._responseBuilder = responseBuilder
   }
 
-  responseBuilder<R extends Response = Response>(): ResponseBuilderDelegate<R> {
-    return this._responseBuilder as ResponseBuilderDelegate<R>
+  responseBuilder<REQUEST, RESPONSE extends Response = Response>(): ResponseBuilderDelegate<
+    REQUEST,
+    RESPONSE
+  > {
+    return this._responseBuilder as ResponseBuilderDelegate<REQUEST, RESPONSE>
   }
 
   toString(): string {

@@ -3,12 +3,13 @@ import { ServerStatusResponse } from '@grpc/grpc-js/build/src/server-call'
 import { ResponseBuilder } from './ResponseBuilder'
 import { ResponseBuilderDelegate } from './ResponseBuilderDelegate'
 import { UnaryResponse } from './UnaryResponse'
+import { UnaryExtendedCall } from './UnaryExtendedCall'
 
-export class UnaryResponseBuilder extends ResponseBuilder<UnaryResponse> {
+export class UnaryResponseBuilder extends ResponseBuilder<UnaryExtendedCall, UnaryResponse> {
   protected _data?: unknown = undefined
   protected _error: ServerErrorResponse | ServerStatusResponse | null = null
 
-  data(data: unknown): this {
+  data<T = unknown>(data: T): this {
     this._data = data
     return this
   }
@@ -18,7 +19,7 @@ export class UnaryResponseBuilder extends ResponseBuilder<UnaryResponse> {
     return this
   }
 
-  build(): ResponseBuilderDelegate<UnaryResponse> {
+  build(): ResponseBuilderDelegate<UnaryExtendedCall, UnaryResponse> {
     return async (_context, _request, _mock) => {
       return {
         data: this._data,

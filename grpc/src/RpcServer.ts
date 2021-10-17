@@ -9,6 +9,8 @@ import { OperationType } from './OperationType'
 import { Method } from './types'
 import { UnaryMockFinderHandler } from './mock/UnaryMockFinderHandler'
 import { RpcServerInfo } from './RpcServerInfo'
+import { ServerStreamingMockFinderHandler } from './mock/ServerStreamingMockFinderHandler'
+import { ClientStreamingMockFinderHandler } from './mock/ClientStreamingMockFinderHandler'
 
 export class RpcServer implements MockServer<RpcServerInfo> {
   private readonly context: RpcContext
@@ -48,6 +50,12 @@ export class RpcServer implements MockServer<RpcServerInfo> {
           switch (type) {
             case OperationType.UNARY:
               mockFinder = UnaryMockFinderHandler(this.context)
+              break
+            case OperationType.SERVER_STREAM:
+              mockFinder = ServerStreamingMockFinderHandler(this.context)
+              break
+            case OperationType.CLIENT_STREAM:
+              mockFinder = ClientStreamingMockFinderHandler(this.context)
               break
             default:
               mockFinder = UnaryMockFinderHandler(this.context)

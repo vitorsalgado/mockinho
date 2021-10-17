@@ -1,0 +1,2 @@
+{ "name": "sao paulo", "country": "brasil", "location": { "latitude": 10, "longitude": 20 } }
+{ "name": "santiago", "country": "chile", "location": { "latitude": 10, "longitude": 20 } }

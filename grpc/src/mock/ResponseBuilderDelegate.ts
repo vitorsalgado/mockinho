@@ -1,10 +1,9 @@
 import { RpcContext } from '../RpcContext'
-import { RpcCall } from '../RpcCall'
 import { RpcMock } from './RpcMock'
 import { Response } from './Response'
 
-export type ResponseBuilderDelegate<R extends Response> = (
+export type ResponseBuilderDelegate<REQUEST, RESPONSE extends Response> = (
   context: RpcContext,
-  request: RpcCall,
+  request: REQUEST,
   mock: RpcMock
-) => Promise<R>
+) => Promise<RESPONSE>

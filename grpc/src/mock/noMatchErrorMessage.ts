@@ -1,7 +1,7 @@
 import { FindMockResult } from '@mockdog/core'
 import { RpcMock } from './RpcMock'
 
-export function unmatchedText(result: FindMockResult<RpcMock>): string {
+export function noMatchErrorMessage(result: FindMockResult<RpcMock>): string {
   return (
     `Unmatched Request.${result
       .closestMatch()

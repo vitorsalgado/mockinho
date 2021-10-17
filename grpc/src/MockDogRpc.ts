@@ -27,7 +27,7 @@ export class MockDogRpc extends MockApp<
     super(context, server)
   }
 
-  setup(): void {
+  protected setup(): void {
     // No setup needed
   }
 }

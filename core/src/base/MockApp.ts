@@ -45,7 +45,7 @@ export abstract class MockApp<
     this._mockServer.initialSetup()
   }
 
-  abstract setup(): void
+  protected abstract setup(): void
 
   mock(...mockBuilder: Array<MockBuilder<MOCK> | ((context: CONTEXT) => MOCK)>): Scope<MOCK> {
     notEmpty(mockBuilder)

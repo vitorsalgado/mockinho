@@ -5,9 +5,10 @@ import { RpcCallContext } from '../RpcCallContext'
 import { UnaryHandler } from '../types'
 import { UnaryCall } from '../types'
 import { UnaryCallback } from '../types'
-import { RpcCall } from '../RpcCall'
 import { RpcConfiguration } from '../config'
-import { unmatchedText } from './unmatchedText'
+import { UnaryExtendedCall } from './UnaryExtendedCall'
+import { noMatchErrorMessage } from './noMatchErrorMessage'
+import { extendCall } from './extendCall'
 import { RpcMock } from '.'
 import { UnaryResponse } from '.'
 
@@ -16,16 +17,18 @@ export function UnaryMockFinderHandler(
 ): (methodContext: RpcCallContext) => UnaryHandler {
   return function (callContext: RpcCallContext): UnaryHandler {
     return function (call: UnaryCall, callback: UnaryCallback): void {
-      const extendedCall: RpcCall = call as unknown as RpcCall
-      extendedCall.context = callContext
+      const extendedCall = extendCall<UnaryExtendedCall>(call, callContext)
 
-      const result = findMockForRequest<RpcCall, RpcMock, RpcConfiguration>(extendedCall, context)
+      const result = findMockForRequest<UnaryExtendedCall, RpcMock, RpcConfiguration>(
+        extendedCall,
+        context
+      )
 
       if (result.hasMatch()) {
         const mock = result.matched()
 
         mock
-          .responseBuilder<UnaryResponse>()(context, extendedCall, mock)
+          .responseBuilder<UnaryCall, UnaryResponse>()(context, extendedCall, mock)
           .then(response => {
             const replier = () =>
               callback(response.error, response.data, response.metadata, response.flags)
@@ -46,7 +49,7 @@ export function UnaryMockFinderHandler(
       callback({
         code: grpc.status.UNIMPLEMENTED,
         message: 'Request was not matched.',
-        details: unmatchedText(result)
+        details: noMatchErrorMessage(result)
       })
     }
   }
