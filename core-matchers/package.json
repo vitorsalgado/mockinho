@@ -32,7 +32,6 @@
     "url": "https://github.com/vitorsalgado/mockdog/issues"
   },
   "dependencies": {
-    "@mockdog/core": "^0.0.0",
-    "uuid": "^8.3.2"
+    "@mockdog/core": "^0.0.0"
   }
 }

@@ -1,10 +1,12 @@
-import { v1, v4 } from 'uuid'
 import { isUUID } from '../isUUID'
 
 describe('isUUID', function () {
+  const v1UUID = '478a6e30-6cf3-11ec-8a13-23d3bb133a53'
+  const v4UUID = '7534e034-fc4f-4d71-ab48-f644f234f035'
+
   it('should return true for a valid UUID', function () {
-    expect(isUUID()(v1())).toBeTruthy()
-    expect(isUUID()(v4())).toBeTruthy()
+    expect(isUUID()(v1UUID)).toBeTruthy()
+    expect(isUUID()(v4UUID)).toBeTruthy()
     expect(isUUID()('7f428f62-16af-4fe8-b3ac-b3e87bc02d71')).toBeTruthy()
     expect(isUUID()('560bd5e4-ee8f-11eb-9a03-0242ac130003')).toBeTruthy()
   })
