@@ -1,20 +1,17 @@
 {
   "compilerOptions": {
-    "lib": ["ES2020"],
-    "target": "ES2020",
+    "target": "ESNext",
     "module": "CommonJS",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "importHelpers": false,
     "resolveJsonModule": true,
     "sourceMap": true,
     "declaration": true,
 
-    "allowJs": true,
-    "useUnknownInCatchVariables": true,
-    "alwaysStrict": true,
-    "forceConsistentCasingInFileNames": true,
+    "strictBindCallApply": true,
     "removeComments": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -25,10 +22,11 @@
     "noImplicitReturns": true,
     "strict": true,
     "noFallthroughCasesInSwitch": true,
-    "emitDecoratorMetadata": true,
+    "emitDecoratorMetadata": false,
     "experimentalDecorators": true,
     "composite": true,
     "skipLibCheck": true,
+    "noEmitHelpers": false,
 
     "baseUrl": ".",
     "outDir": "dist"

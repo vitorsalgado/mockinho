@@ -1,31 +1,22 @@
 module.exports = {
+  root: true,
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint/eslint-plugin', 'eslint-plugin-tsdoc', 'import'],
-  extends: [
-    'plugin:@typescript-eslint/recommended',
-    'standard',
-    'plugin:import/recommended',
-    'plugin:import/typescript',
-    'prettier'
-  ],
+  plugins: ['@typescript-eslint/eslint-plugin', 'import', 'eslint-plugin-tsdoc'],
+  extends: ['plugin:@typescript-eslint/recommended', 'prettier'],
   env: {
     jest: true,
     node: true
   },
   rules: {
-    'no-unused-vars': 'off',
-    'space-before-function-paren': 'off',
-
     'tsdoc/syntax': 'error',
     'no-console': 'error',
 
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-    'no-dupe-class-members': 'off',
     '@typescript-eslint/no-dupe-class-members': ['error'],
-    'no-useless-constructor': 'off',
     '@typescript-eslint/no-useless-constructor': ['error'],
     '@typescript-eslint/no-inferrable-types': ['off'],
     '@typescript-eslint/ban-types': ['warn'],
+    '@typescript-eslint/no-explicit-any': ['warn'],
 
     'import/order': [
       'error',

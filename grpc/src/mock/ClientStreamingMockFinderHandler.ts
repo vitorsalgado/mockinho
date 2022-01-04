@@ -72,7 +72,6 @@ export function ClientStreamingMockFinderHandler(
           return
         }
 
-        // eslint-disable-next-line node/no-callback-literal
         callback({
           code: grpc.status.UNIMPLEMENTED,
           message: 'Request was not matched.',
