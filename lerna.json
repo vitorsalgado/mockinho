@@ -6,7 +6,6 @@
     "core_matchers",
     "http",
     "http-jest-extension",
-    "http-utils",
     "grpc",
     "examples/*"
   ],
