@@ -1,11 +1,10 @@
 import Pino from 'pino'
-import { LevelWithSilent } from 'pino'
 import { Logger } from './Logger'
 
 export class PinoLogger implements Logger {
   private readonly pino: Pino.Logger
 
-  constructor(level: LevelWithSilent) {
+  constructor(level: Pino.Level) {
     this.pino = Pino({
       prettyPrint: {
         levelFirst: true,

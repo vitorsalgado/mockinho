@@ -1,5 +1,5 @@
 import { v4, validate } from 'uuid'
-import { Scenario } from '../..'
+import { Scenario } from '../Scenario'
 import { ScenarioInMemoryRepository } from '../ScenarioInMemoryRepository'
 
 describe('Scenario', function () {
