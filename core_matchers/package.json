@@ -10,7 +10,8 @@
   },
   "scripts": {
     "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --project tsconfig.build.json",
-    "test": "jest --detectOpenHandles"
+    "test": "jest --detectOpenHandles",
+    "lint": "eslint --fix --ext .ts ."
   },
   "directories": {
     "dist": "dist"

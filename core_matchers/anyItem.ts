@@ -1,7 +1,7 @@
 import { Matcher } from '@mockdog/core'
 import { notNull } from '@mockdog/core'
 import { notEmpty } from '@mockdog/core'
-import { equalsTo } from './equalsTo'
+import { equalsTo } from './equalsTo.js'
 
 export const anyItem = (expected: Array<string>): Matcher<string> => {
   notNull(expected)

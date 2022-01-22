@@ -1,5 +1,5 @@
 import { Matcher } from '@mockdog/core'
-import { equalsTo } from './equalsTo'
+import { equalsTo } from './equalsTo.js'
 
 export const contains = <V>(expected: string): Matcher<V> =>
   function contains(value): boolean {
