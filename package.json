@@ -17,14 +17,14 @@
     "lint": "eslint --ext .ts,.js .",
     "lint:fix": "npm run lint -- --fix",
     "lint:ci": "npm run lint && npm run prettier:ci",
-    "prettier": "prettier 'core/**' 'core-matchers/**' 'http/**' 'grpc/**' 'examples/**' --write --ignore-unknown",
+    "prettier": "prettier 'core/**' 'core_matchers/**' 'http/**' 'grpc/**' 'examples/**' --write --ignore-unknown",
     "prettier:ci": "npm run prettier -- --check",
     "clean": "lerna clean && npm run clean:build",
     "clean:build": "lerna exec -- rm -rf dist && lerna exec -- rm -rf tsconfig.tsbuildinfo && lerna exec -- rm -rf tsconfig.build.tsbuildinfo"
   },
   "workspaces": [
     "core",
-    "core-matchers",
+    "core_matchers",
     "http",
     "http-jest-extension",
     "http-utils",
