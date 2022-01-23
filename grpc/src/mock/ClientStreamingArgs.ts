@@ -1,5 +1,5 @@
 import { ServerReadableStream } from '@grpc/grpc-js'
-import { Args } from './Args'
+import { Args } from './Args.js'
 
 export class ClientStreamingArgs implements Args<ServerReadableStream<unknown, unknown>> {
   constructor(

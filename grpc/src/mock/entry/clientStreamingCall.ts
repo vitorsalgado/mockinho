@@ -1,6 +1,6 @@
-import { RpcMockBuilder } from '../RpcMockBuilder'
-import { ClientStreamingExtendedCall } from '../ClientStreamingExtendedCall'
-import { UnaryResponse } from '../UnaryResponse'
+import { RpcMockBuilder } from '../RpcMockBuilder.js'
+import { ClientStreamingExtendedCall } from '../ClientStreamingExtendedCall.js'
+import { UnaryResponse } from '../UnaryResponse.js'
 
 export function clientStreamingCall(): RpcMockBuilder<ClientStreamingExtendedCall, UnaryResponse> {
   return RpcMockBuilder.newBuilder()

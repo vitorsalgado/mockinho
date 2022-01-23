@@ -1,6 +1,6 @@
-import { UnaryCall } from '../types'
-import { RpcCallContext } from '../RpcCallContext'
-import { UnaryExtendedCall } from './UnaryExtendedCall'
+import { UnaryCall } from '../types.js'
+import { RpcCallContext } from '../RpcCallContext.js'
+import { UnaryExtendedCall } from './UnaryExtendedCall.js'
 
 export function extendCall<T extends UnaryExtendedCall>(
   call: UnaryCall,

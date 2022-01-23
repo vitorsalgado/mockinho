@@ -4,13 +4,19 @@ import type { Config as JestConfig } from '@jest/types'
 import Base from '../jest-base.config'
 
 const config: JestConfig.InitialOptions = {
+  ...Base,
+
   displayName: 'grpc',
+  extensionsToTreatAsEsm: ['.ts'],
   globals: {
     'ts-jest': {
-      tsconfig: '../tsconfig.test.json'
+      tsconfig: '../tsconfig.test.json',
+      useESM: true
     }
   },
-  ...Base
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1'
+  }
 }
 
 export default config

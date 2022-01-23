@@ -1,13 +1,13 @@
 import { findMockForRequest } from '@mockdog/core'
-import { RpcContext } from '../RpcContext'
-import { RpcCallContext } from '../RpcCallContext'
-import { ServerStreamingHandler } from '../types'
-import { ServerStreamingCall } from '../types'
-import { RpcConfiguration } from '../config'
-import { RpcMock } from './RpcMock'
-import { ServerStreamingExtendedCall } from './ServerStreamingExtendedCall'
-import { ServerStreamingResponse } from './ServerStreamingResponse'
-import { noMatchError } from './noMatchError'
+import { RpcContext } from '../RpcContext.js'
+import { RpcCallContext } from '../RpcCallContext.js'
+import { ServerStreamingHandler } from '../types.js'
+import { ServerStreamingCall } from '../types.js'
+import { RpcConfiguration } from '../config/mod.js'
+import { RpcMock } from './RpcMock.js'
+import { ServerStreamingExtendedCall } from './ServerStreamingExtendedCall.js'
+import { ServerStreamingResponse } from './ServerStreamingResponse.js'
+import { noMatchError } from './noMatchError.js'
 
 export function ServerStreamingMockFinderHandler(
   context: RpcContext
@@ -30,14 +30,18 @@ export function ServerStreamingMockFinderHandler(
       const mock = result.matched()
 
       mock
-        .responseBuilder<ServerStreamingResponse>()(context, extendedCall, mock)
+        .responseBuilder<ServerStreamingResponse>()(
+          context,
+          extendedCall as unknown as ServerStreamingResponse,
+          mock
+        )
         .then(async response => {
           if (response.metadata) {
             call.sendMetadata(response.metadata)
           }
 
           const replier = () => {
-            response.stream.pipe(call)
+            (response as any).stream.pipe(call)
           }
 
           if (response.delay) {

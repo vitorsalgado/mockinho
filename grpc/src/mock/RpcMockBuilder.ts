@@ -10,11 +10,11 @@ import { notNull } from '@mockdog/core'
 import { ExpectationWithContext } from '@mockdog/core'
 import { allOf } from '@mockdog/core-matchers'
 import { contains } from '@mockdog/core-matchers'
-import { UnaryExtendedCall } from './UnaryExtendedCall'
-import { ResponseBuilderDelegate } from './ResponseBuilderDelegate'
-import { Response } from './Response'
-import { ResponseBuilder } from './ResponseBuilder'
-import { RpcMock } from './RpcMock'
+import { UnaryExtendedCall } from './UnaryExtendedCall.js'
+import { ResponseBuilderDelegate } from './ResponseBuilderDelegate.js'
+import { Response } from './Response.js'
+import { ResponseBuilder } from './ResponseBuilder.js'
+import { RpcMock } from './RpcMock.js'
 
 export class RpcMockBuilder<REQUEST, RESPONSE extends Response> extends MockBuilder<RpcMock> {
   protected readonly _expectations: Array<Expectation<unknown, unknown>> = []

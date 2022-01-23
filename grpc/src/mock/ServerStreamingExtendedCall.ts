@@ -1,4 +1,4 @@
-import { ServerStreamingCall } from '../types'
-import { RpcCallExtension } from './RpcCallExtension'
+import { ServerStreamingCall } from '../types.js'
+import { RpcCallExtension } from './RpcCallExtension.js'
 
 export type ServerStreamingExtendedCall = ServerStreamingCall & RpcCallExtension

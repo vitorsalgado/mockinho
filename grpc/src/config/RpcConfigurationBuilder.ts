@@ -4,8 +4,8 @@ import { PackageDefinition } from '@grpc/proto-loader'
 import { notNull } from '@mockdog/core'
 import { notEmpty } from '@mockdog/core'
 import { notBlank } from '@mockdog/core'
-import { RpcConfiguration } from './RpcConfiguration'
-import { Defaults } from './Defaults'
+import { RpcConfiguration } from './RpcConfiguration.js'
+import { Defaults } from './Defaults.js'
 
 export class RpcConfigurationBuilder {
   protected _protoFiles: Array<string> = []

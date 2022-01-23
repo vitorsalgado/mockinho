@@ -2,24 +2,24 @@ import * as grpc from '@grpc/grpc-js'
 import { ServerReadableStream } from '@grpc/grpc-js'
 import { findMockForRequest } from '@mockdog/core'
 import { FindMockResult } from '@mockdog/core'
-import { RpcContext } from '../RpcContext'
-import { RpcCallContext } from '../RpcCallContext'
-import { UnaryCallback } from '../types'
-import { ClientStreamingHandler } from '../types'
-import { RpcConfiguration } from '../config'
-import { RpcCallArgs } from '../RpcCallArgs'
-import { noMatchErrorMessage } from './noMatchErrorMessage'
-import { UnaryExtendedCall } from './UnaryExtendedCall'
-import { ClientStreamingArgs } from './ClientStreamingArgs'
-import { RpcMock } from '.'
-import { UnaryResponse } from '.'
+import { RpcContext } from '../RpcContext.js'
+import { RpcCallContext } from '../RpcCallContext.js'
+import { UnaryCallback } from '../types.js'
+import { ClientStreamingHandler } from '../types.js'
+import { RpcConfiguration } from '../config/mod.js'
+import { RpcCallArgs } from '../RpcCallArgs.js'
+import { noMatchErrorMessage } from './noMatchErrorMessage.js'
+import { UnaryExtendedCall } from './UnaryExtendedCall.js'
+import { ClientStreamingArgs } from './ClientStreamingArgs.js'
+import { RpcMock } from './RpcMock.js'
+import { UnaryResponse } from './UnaryResponse.js'
 
 export function ClientStreamingMockFinderHandler(
   context: RpcContext
 ): (methodContext: RpcCallContext) => ClientStreamingHandler {
   return function (callContext: RpcCallContext): ClientStreamingHandler {
     return function (call: ServerReadableStream<unknown, unknown>, callback: UnaryCallback): void {
-      ;(call as unknown as UnaryExtendedCall).context = callContext
+      (call as unknown as UnaryExtendedCall).context = callContext
 
       let result: FindMockResult<RpcMock> | undefined
 

@@ -2,8 +2,8 @@ import { Metadata } from '@grpc/grpc-js'
 import { MetadataValue } from '@grpc/grpc-js'
 import { notBlank } from '@mockdog/core'
 import { notNull } from '@mockdog/core'
-import { ResponseBuilderDelegate } from './ResponseBuilderDelegate'
-import { Response } from './Response'
+import { ResponseBuilderDelegate } from './ResponseBuilderDelegate.js'
+import { Response } from './Response.js'
 
 export abstract class ResponseBuilder<REQUEST, RESPONSE extends Response> {
   protected _metadata: Metadata = new Metadata()

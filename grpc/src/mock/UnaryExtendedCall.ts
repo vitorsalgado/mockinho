@@ -1,4 +1,4 @@
-import { UnaryCall } from '../types'
-import { RpcCallExtension } from './RpcCallExtension'
+import { UnaryCall } from '../types.js'
+import { RpcCallExtension } from './RpcCallExtension.js'
 
 export type UnaryExtendedCall = UnaryCall & RpcCallExtension

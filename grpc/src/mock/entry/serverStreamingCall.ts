@@ -1,6 +1,6 @@
-import { RpcMockBuilder } from '../RpcMockBuilder'
-import { ServerStreamingExtendedCall } from '../ServerStreamingExtendedCall'
-import { ServerStreamingResponse } from '../ServerStreamingResponse'
+import { RpcMockBuilder } from '../RpcMockBuilder.js'
+import { ServerStreamingExtendedCall } from '../ServerStreamingExtendedCall.js'
+import { ServerStreamingResponse } from '../ServerStreamingResponse.js'
 
 export function serverStreamingCall(): RpcMockBuilder<
   ServerStreamingExtendedCall,

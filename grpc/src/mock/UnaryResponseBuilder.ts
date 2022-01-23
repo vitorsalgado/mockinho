@@ -1,9 +1,9 @@
 import { ServerErrorResponse } from '@grpc/grpc-js/build/src/server-call'
 import { ServerStatusResponse } from '@grpc/grpc-js/build/src/server-call'
-import { ResponseBuilder } from './ResponseBuilder'
-import { ResponseBuilderDelegate } from './ResponseBuilderDelegate'
-import { UnaryResponse } from './UnaryResponse'
-import { UnaryExtendedCall } from './UnaryExtendedCall'
+import { ResponseBuilder } from './ResponseBuilder.js'
+import { ResponseBuilderDelegate } from './ResponseBuilderDelegate.js'
+import { UnaryResponse } from './UnaryResponse.js'
+import { UnaryExtendedCall } from './UnaryExtendedCall.js'
 
 export class UnaryResponseBuilder extends ResponseBuilder<UnaryExtendedCall, UnaryResponse> {
   protected _data?: unknown = undefined

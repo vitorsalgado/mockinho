@@ -2,8 +2,8 @@ import { Mock } from '@mockdog/core'
 import { MockSource } from '@mockdog/core'
 import { ExpectationWithContext } from '@mockdog/core'
 import { Expectation } from '@mockdog/core'
-import { ResponseBuilderDelegate } from './ResponseBuilderDelegate'
-import { Response } from './Response'
+import { ResponseBuilderDelegate } from './ResponseBuilderDelegate.js'
+import { Response } from './Response.js'
 
 export class RpcMock extends Mock {
   private readonly _responseBuilder: ResponseBuilderDelegate<unknown, Response>

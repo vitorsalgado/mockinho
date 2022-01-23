@@ -3,10 +3,10 @@ import { Readable } from 'stream'
 import { ReadableOptions } from 'stream'
 import { ServerErrorResponse } from '@grpc/grpc-js/build/src/server-call'
 import { ServerStatusResponse } from '@grpc/grpc-js/build/src/server-call'
-import { ResponseBuilder } from './ResponseBuilder'
-import { ResponseBuilderDelegate } from './ResponseBuilderDelegate'
-import { ServerStreamingResponse } from './ServerStreamingResponse'
-import { ServerStreamingExtendedCall } from './ServerStreamingExtendedCall'
+import { ResponseBuilder } from './ResponseBuilder.js'
+import { ResponseBuilderDelegate } from './ResponseBuilderDelegate.js'
+import { ServerStreamingResponse } from './ServerStreamingResponse.js'
+import { ServerStreamingExtendedCall } from './ServerStreamingExtendedCall.js'
 
 export class ServerStreamingResponseBuilder extends ResponseBuilder<
   ServerStreamingExtendedCall,

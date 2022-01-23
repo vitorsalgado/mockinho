@@ -1,5 +1,5 @@
 import { FindMockResult } from '@mockdog/core'
-import { RpcMock } from './RpcMock'
+import { RpcMock } from './RpcMock.js'
 
 export function noMatchErrorMessage(result: FindMockResult<RpcMock>): string {
   return (

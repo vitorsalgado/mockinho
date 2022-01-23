@@ -1,12 +1,12 @@
 import { ScenarioInMemoryRepository } from '@mockdog/core'
 import { MockApp } from '@mockdog/core'
-import { RpcServer } from './RpcServer'
-import { RpcContext } from './RpcContext'
-import { RpcConfigurationBuilder } from './config'
-import { RpcConfiguration } from './config'
-import { RpcMockRepository } from './mock'
-import { RpcMock } from './mock'
-import { RpcServerInfo } from './RpcServerInfo'
+import { RpcServer } from './RpcServer.js'
+import { RpcContext } from './RpcContext.js'
+import { RpcConfigurationBuilder } from './config/mod.js'
+import { RpcConfiguration } from './config/mod.js'
+import { RpcMockRepository } from './mock/mod.js'
+import { RpcMock } from './mock/mod.js'
+import { RpcServerInfo } from './RpcServerInfo.js'
 
 export class MockDogRpc extends MockApp<
   RpcMock,
