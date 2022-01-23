@@ -33,12 +33,12 @@
     "url": "https://github.com/vitorsalgado/mockdog/issues"
   },
   "dependencies": {
-    "ajv": "^8.8.2",
+    "ajv": "^8.9.0",
     "colorette": "^2.0.16",
     "handlebars": "^4.7.7",
     "js-yaml": "^4.1.0",
-    "pino": "^7.6.2",
-    "pino-pretty": "^7.3.0",
+    "pino": "^7.6.4",
+    "pino-pretty": "^7.5.0",
     "uuid": "^8.3.2"
   }
 }

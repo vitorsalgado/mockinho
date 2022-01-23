@@ -34,6 +34,6 @@
   "dependencies": {
     "@mockdog/http": "^0.0.0",
     "colorette": "^2.0.16",
-    "jest-environment-node": "^27.4.4"
+    "jest-environment-node": "^27.4.6"
   }
 }

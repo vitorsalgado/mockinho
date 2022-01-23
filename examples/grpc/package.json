@@ -12,10 +12,10 @@
   "author": "Vitor Hugo Salgado <vsalgadopb@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@grpc/grpc-js": "^1.4.5",
-    "@grpc/proto-loader": "^0.6.7",
+    "@grpc/grpc-js": "^1.5.3",
+    "@grpc/proto-loader": "^0.6.9",
     "@mockdog/grpc": "^0.0.0",
-    "fastify": "^3.25.3"
+    "fastify": "^3.27.0"
   },
   "devDependencies": {
     "ts-node": "^10.4.0"
