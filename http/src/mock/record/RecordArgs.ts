@@ -1,5 +1,5 @@
-import { BodyType } from '../../BodyType'
-import { Methods } from '../../Methods'
+import { BodyType } from '../../BodyType.js'
+import { Methods } from '../../Methods.js'
 
 export interface RecordArgs {
   request: {

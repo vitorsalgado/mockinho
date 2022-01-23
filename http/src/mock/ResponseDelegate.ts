@@ -1,7 +1,7 @@
-import { HttpContext } from '../HttpContext'
-import { HttpRequest } from '../HttpRequest'
-import { HttpMock } from './HttpMock'
-import { ResponseFixture } from './ResponseFixture'
+import { HttpContext } from '../HttpContext.js'
+import { HttpRequest } from '../HttpRequest.js'
+import { HttpMock } from './HttpMock.js'
+import { ResponseFixture } from './ResponseFixture.js'
 
 export type ResponseDelegate = (
   context: HttpContext,

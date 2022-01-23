@@ -1,5 +1,5 @@
 import Path from 'path'
-import { InitialOptions } from '../../config'
+import { InitialOptions } from '../../config/index.js'
 
 const config: InitialOptions = {
   mode: 'info',

@@ -1,3 +1,3 @@
-import { HttpConfigurationBuilder } from './HttpConfigurationBuilder'
+import { HttpConfigurationBuilder } from './HttpConfigurationBuilder.js'
 
 export const opts = (): HttpConfigurationBuilder => new HttpConfigurationBuilder()

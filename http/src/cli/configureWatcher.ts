@@ -5,12 +5,12 @@ import Path from 'path'
 import { blue } from 'colorette'
 import { red } from 'colorette'
 import { loadSingleMockFile } from '@mockdog/core'
-import { HttpConfiguration } from '../config'
-import { MockDogHttp } from '../MockDogHttp'
-import { buildMockFromFile } from '../mock/providers/default/buildMockFromFile'
-import MockFileSchema from '../mock/providers/default/MockFileSchema'
-import { MockFile } from '../mock/providers/default/MockFile'
-import { watcher } from './watcher'
+import { HttpConfiguration } from '../config/index.js'
+import { MockDogHttp } from '../MockDogHttp.js'
+import { buildMockFromFile } from '../mock/providers/default/buildMockFromFile.js'
+import MockFileSchema from '../mock/providers/default/MockFileSchema.js'
+import { MockFile } from '../mock/providers/default/MockFile.js'
+import { watcher } from './watcher.js'
 
 export function configureWatcher(config: HttpConfiguration, mockhttp: MockDogHttp): void {
   const fsWatcher = watcher(

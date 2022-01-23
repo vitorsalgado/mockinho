@@ -2,8 +2,8 @@ import { Response } from 'express'
 import { NextFunction } from 'express'
 import { Request } from 'express'
 import { nowInMs } from '@mockdog/core'
-import { HttpContext } from '../HttpContext'
-import { HttpRequest } from '../HttpRequest'
+import { HttpContext } from '../HttpContext.js'
+import { HttpRequest } from '../HttpRequest.js'
 
 export function logReqAndResMiddleware(context: HttpContext) {
   return function (request: Request, response: Response, next: NextFunction): void {

@@ -1,13 +1,13 @@
-import './recordWorker'
+import './recordWorker.js'
 
 import Path from 'path'
 import { Worker } from 'worker_threads'
 import { execSync } from 'child_process'
-import { HttpConfiguration } from '../../config'
-import { HttpContext } from '../../HttpContext'
-import { RecordArgs } from './RecordArgs'
-import { RecordOptions } from './RecordOptions'
-import { Result } from './Result'
+import { HttpConfiguration } from '../../config/index.js'
+import { HttpContext } from '../../HttpContext.js'
+import { RecordArgs } from './RecordArgs.js'
+import { RecordOptions } from './RecordOptions.js'
+import { Result } from './Result.js'
 
 export class RecordDispatcher {
   private readonly worker: Worker

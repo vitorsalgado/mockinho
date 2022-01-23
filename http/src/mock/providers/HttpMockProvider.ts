@@ -1,7 +1,7 @@
 import { MockProvider } from '@mockdog/core'
-import { HttpServer } from '../../HttpServer'
-import { HttpMockBuilder } from '..'
-import { HttpConfiguration } from '../../config'
+import { HttpServer } from '../../HttpServer.js'
+import { HttpMockBuilder } from '../HttpMockBuilder.js'
+import { HttpConfiguration } from '../../config/index.js'
 
 export type HttpMockProvider = MockProvider<HttpMockBuilder>
 

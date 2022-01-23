@@ -1,5 +1,5 @@
 import EventEmitter from 'events'
-import { Hooks } from './Hooks'
+import { Hooks } from './Hooks.js'
 
 export class HookListener extends EventEmitter {
   on<E extends keyof Hooks>(event: E, listener: (args: Hooks[E]) => void): this {

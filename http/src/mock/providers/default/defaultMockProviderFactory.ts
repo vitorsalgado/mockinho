@@ -1,10 +1,10 @@
 import { loadMockFiles } from '@mockdog/core'
-import { HttpConfiguration } from '../../../config'
-import { HttpMockBuilder } from '../..'
-import { HttpMockProvider } from '../HttpMockProvider'
-import { buildMockFromFile } from './buildMockFromFile'
-import { MockFile } from './MockFile'
-import MockFileSchema from './MockFileSchema'
+import { HttpConfiguration } from '../../../config/index.js'
+import { HttpMockBuilder } from '../../HttpMockBuilder.js'
+import { HttpMockProvider } from '../HttpMockProvider.js'
+import { buildMockFromFile } from './buildMockFromFile.js'
+import { MockFile } from './MockFile.js'
+import MockFileSchema from './MockFileSchema.js'
 
 export function defaultMockProviderFactory(configurations: HttpConfiguration): HttpMockProvider {
   return async function (): Promise<Array<HttpMockBuilder>> {

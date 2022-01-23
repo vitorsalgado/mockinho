@@ -1,6 +1,6 @@
 import { red } from 'colorette'
 import { bold } from 'colorette'
-import { HttpServerInfo } from '../HttpServerInfo'
+import { HttpServerInfo } from '../HttpServerInfo.js'
 
 export function parseServerInfo(info: HttpServerInfo): string {
   let res = ''

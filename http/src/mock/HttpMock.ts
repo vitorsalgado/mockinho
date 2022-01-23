@@ -2,8 +2,8 @@ import { Expectation } from '@mockdog/core'
 import { Mock } from '@mockdog/core'
 import { MockSource } from '@mockdog/core'
 import { ExpectationWithContext } from '@mockdog/core'
-import { HttpConfiguration } from '../config'
-import { ResponseDelegate } from './ResponseDelegate'
+import { HttpConfiguration } from '../config/index.js'
+import { ResponseDelegate } from './ResponseDelegate.js'
 
 export class HttpMock extends Mock {
   public constructor(

@@ -1,6 +1,6 @@
 import { Mode } from '@mockdog/core'
-import { HttpConfigurationBuilder } from '../../HttpConfigurationBuilder'
-import { rec } from '../../../mock/record'
+import { HttpConfigurationBuilder } from '../../HttpConfigurationBuilder.js'
+import { rec } from '../../../mock/record/index.js'
 
 export function envReader(env: Record<string, unknown>) {
   return async function (builder: HttpConfigurationBuilder): Promise<void> {

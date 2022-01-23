@@ -5,12 +5,12 @@ import Path from 'path'
 import { ServerOptions } from 'https'
 import { Options } from 'http-proxy-middleware'
 import { Level } from '@mockdog/core'
-import { HttpConfigurationBuilder } from '../../HttpConfigurationBuilder'
-import { isDef } from '../../../cli/utils'
-import { keyValue } from '../../../cli/utils'
-import { rec } from '../../../mock/record'
-import { importPlugins } from '../importPlugins'
-import { Argv } from './Argv'
+import { HttpConfigurationBuilder } from '../../HttpConfigurationBuilder.js'
+import { isDef } from '../../../cli/utils.js'
+import { keyValue } from '../../../cli/utils.js'
+import { rec } from '../../../mock/record/index.js'
+import { importPlugins } from '../importPlugins.js'
+import { Argv } from './Argv.js'
 
 export function argvReader(argv: Argv) {
   return async function (builder: HttpConfigurationBuilder): Promise<void> {

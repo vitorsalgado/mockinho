@@ -1,7 +1,7 @@
-import { HttpMock } from '../mock'
-import { HttpServerInfo } from '../HttpServerInfo'
-import { Methods } from '../Methods'
-import { Transaction } from './Transaction'
+import { HttpMock } from '../mock/index.js'
+import { HttpServerInfo } from '../HttpServerInfo.js'
+import { Methods } from '../Methods.js'
+import { Transaction } from './Transaction.js'
 
 export interface Hooks {
   readonly onStart: {

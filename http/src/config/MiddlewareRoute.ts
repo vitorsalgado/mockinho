@@ -1,4 +1,4 @@
-import { Middleware } from './Middleware'
+import { Middleware } from './Middleware.js'
 
 export interface MiddlewareRoute {
   route: string

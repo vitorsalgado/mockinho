@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 
 import { yellow, yellowBright, bold } from 'colorette'
-import { HttpMock } from '../../mock'
-import { Hooks } from '../Hooks'
+import { HttpMock } from '../../mock/index.js'
+import { Hooks } from '../Hooks.js'
 
 export function onRequestNotMatched(event: Hooks['onRequestNotMatched']): void {
   console.warn(

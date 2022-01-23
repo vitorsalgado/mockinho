@@ -1,9 +1,9 @@
 import Fs from 'fs'
 import Path from 'path'
 import { requireOrImportModule } from '@mockdog/core'
-import { HttpConfigurationBuilder } from '../../HttpConfigurationBuilder'
-import { importPlugins } from '../importPlugins'
-import { InitialOptions } from './InitialOptions'
+import { HttpConfigurationBuilder } from '../../HttpConfigurationBuilder.js'
+import { importPlugins } from '../importPlugins.js'
+import { InitialOptions } from './InitialOptions.js'
 
 const Files = [
   'mockhttprc.js',

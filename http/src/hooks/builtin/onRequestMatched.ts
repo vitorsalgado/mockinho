@@ -1,8 +1,8 @@
 import { Stream } from 'stream'
 import { green, greenBright, gray, bold, italic } from 'colorette'
 import { nowInMs } from '@mockdog/core'
-import { ifVerbose } from '../utils'
-import { Hooks } from '../Hooks'
+import { ifVerbose } from '../utils.js'
+import { Hooks } from '../Hooks.js'
 
 export function onRequestMatched(event: Hooks['onRequestMatched']): void {
   const headers = Object.entries(event.responseDefinition.headers)

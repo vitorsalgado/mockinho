@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 import { bold } from 'colorette'
-import { Hooks } from '../Hooks'
+import { Hooks } from '../Hooks.js'
 
 export function onRecord(event: Hooks['onRecord']): void {
   console.log(`${bold('RECORDED RESPONSE')}`)

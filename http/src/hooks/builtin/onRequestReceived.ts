@@ -1,7 +1,7 @@
 import { Stream } from 'stream'
 import { blue, blueBright, bold } from 'colorette'
-import { Hooks } from '../Hooks'
-import { ifVerbose } from '../utils'
+import { Hooks } from '../Hooks.js'
+import { ifVerbose } from '../utils.js'
 
 export function onRequestReceived(event: Hooks['onRequestStart']): void {
   const headers = Object.entries(event.headers)

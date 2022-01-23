@@ -1,5 +1,5 @@
-import { MultiResponseStrategy } from '../../MultipleResponseBuilder'
-import { Methods } from '../../../Methods'
+import { MultiResponseStrategy } from '../../MultipleResponseBuilder.js'
+import { Methods } from '../../../Methods.js'
 
 interface Lax {
   [key: string]: unknown

@@ -1,5 +1,5 @@
 import { LoadMockError } from '@mockdog/core'
-import { MatcherConstants } from '../MatcherConstants'
+import { MatcherConstants } from '../MatcherConstants.js'
 
 export function findRequiredMatcherEntry(
   values: [string, unknown][],

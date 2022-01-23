@@ -32,7 +32,7 @@ describe('cli', function () {
       const argv: Argv = { rootDir: __dirname }
       const mockhttp = await run(argv)
       const config = mockhttp.configuration()
-      const tsconfig = await import('./mockhttprc')
+      const tsconfig = await import('./mockhttprc.js')
 
       try {
         mockhttp.mock(get('/test').reply(ok()))

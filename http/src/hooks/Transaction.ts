@@ -1,5 +1,5 @@
 import { Express } from 'express'
-import { Methods } from '../Methods'
+import { Methods } from '../Methods.js'
 
 export interface Transaction {
   id: string

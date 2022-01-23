@@ -1,6 +1,6 @@
 import { encodeBase64, Matcher } from '@mockdog/core'
 import { equalsTo } from '@mockdog/core-matchers'
-import { HttpRequest } from '../HttpRequest'
+import { HttpRequest } from '../HttpRequest.js'
 
 export const basicAuthorization = (
   username: string | Matcher<string>,

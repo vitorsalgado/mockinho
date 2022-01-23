@@ -2,11 +2,11 @@
 
 import { greenBright } from 'colorette'
 import { bold } from 'colorette'
-import { HttpConfiguration } from '../config'
-import { Argv } from '../config'
-import { HttpServerInfo } from '../HttpServerInfo'
-import Banner from './banner'
-import { parseServerInfo } from './utils'
+import { HttpConfiguration } from '../config/index.js'
+import { Argv } from '../config/index.js'
+import { HttpServerInfo } from '../HttpServerInfo.js'
+import Banner from './banner.js'
+import { parseServerInfo } from './utils.js'
 
 export function printInfo(config: HttpConfiguration, options: Argv, info: HttpServerInfo): void {
   console.log(Banner)

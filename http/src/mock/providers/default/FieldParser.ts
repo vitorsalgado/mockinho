@@ -1,7 +1,7 @@
 import { Matcher } from '@mockdog/core'
-import { HttpConfiguration } from '../../../config'
-import { HttpMockBuilder } from '../..'
-import { MockFile } from './MockFile'
+import { HttpConfiguration } from '../../../config/index.js'
+import { HttpMockBuilder } from '../../HttpMockBuilder.js'
+import { MockFile } from './MockFile.js'
 
 export interface FieldParser {
   discoverMatcherByValue<T>(mock: MockFile, value: string): Matcher<T> | undefined

@@ -1,5 +1,5 @@
 import { LoadMockError } from '@mockdog/core'
-import { MatcherConstants } from '../MatcherConstants'
+import { MatcherConstants } from '../MatcherConstants.js'
 
 export function getSingleMatcherFromObjectKeys(filename: string, keys: string[]): string {
   const matchers = keys.filter(x => MatcherConstants.includes(x))

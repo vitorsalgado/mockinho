@@ -2,16 +2,16 @@
 
 import { red } from 'colorette'
 import { bold } from 'colorette'
-import { mockHttp } from '..'
-import { MockDogHttp } from '..'
-import { Argv } from '../config'
-import { opts } from '../config'
-import { Defaults } from '../config'
-import { initialOptionsReader } from '../config'
-import { argvReader } from '../config'
-import { envReader } from '../config'
-import { printInfo } from './printInfo'
-import { configureWatcher } from './configureWatcher'
+import { mockHttp } from '../mockHttp.js'
+import { MockDogHttp } from '../MockDogHttp.js'
+import { Argv } from '../config/index.js'
+import { opts } from '../config/index.js'
+import { Defaults } from '../config/index.js'
+import { initialOptionsReader } from '../config/index.js'
+import { argvReader } from '../config/index.js'
+import { envReader } from '../config/index.js'
+import { printInfo } from './printInfo.js'
+import { configureWatcher } from './configureWatcher.js'
 
 export async function run(options: Argv): Promise<MockDogHttp> {
   const builder = opts().enableFileMocks().verbose()

@@ -11,7 +11,8 @@
   "scripts": {
     "start": "nodemon --config .nodemon.config.json",
     "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json",
-    "test": "jest --detectOpenHandles"
+    "test": "jest --detectOpenHandles",
+    "lint": "eslint --fix --ext .ts ."
   },
   "directories": {
     "dist": "dist"

@@ -2,8 +2,8 @@
 
 import { green, greenBright, bold } from 'colorette'
 import { nowInMs } from '@mockdog/core'
-import { ifVerbose } from '../utils'
-import { Hooks } from '../Hooks'
+import { ifVerbose } from '../utils.js'
+import { Hooks } from '../Hooks.js'
 
 export function onProxyResponse(event: Hooks['onProxyResponse']): void {
   const headers = Object.entries(event.response.headers)

@@ -1,6 +1,6 @@
-import { BodyType } from '../BodyType'
-import { Cookie } from './Cookie'
-import { CookieToClear } from './Cookie'
+import { BodyType } from '../BodyType.js'
+import { Cookie } from './Cookie.js'
+import { CookieToClear } from './Cookie.js'
 
 export class ResponseFixture {
   constructor(

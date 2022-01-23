@@ -5,10 +5,10 @@ import Yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs'
 import { Mode } from '@mockdog/core'
-import { Argv } from '../config'
-import { run } from './run'
-import { printErrorAndExit } from './utils'
-import { Groups } from './groups'
+import { Argv } from '../config/index.js'
+import { run } from './run.js'
+import { printErrorAndExit } from './utils.js'
+import { Groups } from './groups.js'
 
 // noinspection TypeScriptValidateJSTypes
 export default Yargs(hideBin(process.argv))

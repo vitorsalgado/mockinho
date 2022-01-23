@@ -8,11 +8,11 @@ import { Options } from 'http-proxy-middleware'
 import { Configuration } from '@mockdog/core'
 import { Mode } from '@mockdog/core'
 import { Level } from '@mockdog/core'
-import { RecordOptions } from '../mock/record'
-import { FieldParser } from '../mock/providers/default/FieldParser'
-import { MiddlewareRoute } from './MiddlewareRoute'
-import { Argv } from './providers'
-import { InitialOptions } from './providers'
+import { RecordOptions } from '../mock/record/index.js'
+import { FieldParser } from '../mock/providers/default/FieldParser.js'
+import { MiddlewareRoute } from './MiddlewareRoute.js'
+import { Argv } from './providers/index.js'
+import { InitialOptions } from './providers/index.js'
 
 export interface HttpConfiguration extends Configuration {
   mode: Mode
