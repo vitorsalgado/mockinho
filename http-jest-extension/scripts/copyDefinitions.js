@@ -1,7 +1,5 @@
-'use strict'
-
-const FsExt = require('fs-extra')
-const Path = require('path')
+import FsExt from 'fs-extra'
+import Path from 'path'
 
 const root = process.cwd()
 

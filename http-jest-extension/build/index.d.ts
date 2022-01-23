@@ -1,10 +1,10 @@
 import { MockDogHttp } from '@mockdog/http'
-import { MockDogHttpEnvironment } from './MockDogHttpEnvironment'
+import { MockDogHttpEnvironment } from './MockDogHttpEnvironment.js'
 
 export { MockDogHttpEnvironment as default }
 
 declare global {
-  const mockhttp: MockDogHttp;
+  const mockhttp: MockDogHttp
 }
 
 export = MockDogHttpEnvironment;

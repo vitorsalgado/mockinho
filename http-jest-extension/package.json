@@ -2,6 +2,7 @@
   "name": "@mockdog/http-jest-extension",
   "version": "0.0.0",
   "description": "MockDog Jest Extension",
+  "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -9,8 +10,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json && node scripts/copyDefinitions.js",
-    "test": "jest --detectOpenHandles"
+    "build": "rm -rf dist && tsc --build --force tsconfig.build.json && node scripts/copyDefinitions.js"
   },
   "license": "MIT",
   "directories": {
