@@ -7,7 +7,7 @@ describe('cli cmd', function () {
     process.exit = jest.fn()
     process.argv.push('-h')
 
-    const module = await import('..')
+    const module = await import('../index.js')
     const cli = (await module.default) as MockDogHttp
 
     expect(cli).toBeDefined()

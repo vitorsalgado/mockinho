@@ -1,7 +1,7 @@
 import Supertest from 'supertest'
-import { del, head, opts, patch, put } from '..'
-import { mockHttp } from '..'
-import { request } from '..'
+import { del, head, opts, patch, put } from '../index.js'
+import { mockHttp } from '../index.js'
+import { request } from '../index.js'
 import { urlPath } from '../matchers'
 import { get, ok, post } from '../mock'
 

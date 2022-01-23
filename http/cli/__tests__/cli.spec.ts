@@ -21,7 +21,7 @@ describe('cli', function () {
   })
 
   it('should import cli without errors', async function () {
-    const imported = await import('..')
+    const imported = await import('../index.js')
     const cli = (await imported.default) as MockDogHttp
 
     await cli.finalize()

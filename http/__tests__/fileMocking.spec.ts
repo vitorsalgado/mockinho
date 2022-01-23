@@ -1,13 +1,13 @@
 import Path from 'path'
 import Supertest from 'supertest'
 import { v4 } from 'uuid'
-import { opts } from '..'
-import { mockHttp } from '..'
+import { opts } from '../config'
+import { mockHttp } from '../mockHttp'
 
 describe('HTTP - File Mocking', function () {
   describe('Default Path', function () {
     const $ = mockHttp(
-      opts().dynamicHttpPort().enableFileMocks().rootDir(Path.join(__dirname, '../..'))
+      opts().dynamicHttpPort().enableFileMocks().rootDir(Path.join(__dirname, '../'))
     )
 
     beforeAll(() => $.start())

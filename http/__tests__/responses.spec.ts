@@ -1,11 +1,11 @@
 import Path from 'path'
 import Supertest from 'supertest'
 import { contains } from '@mockdog/core-matchers'
-import { opts, get, urlPath, Headers, MediaTypes, ok } from '..'
-import { created } from '..'
-import { badRequest } from '..'
-import { StatusCodes } from '..'
-import { mockHttp } from '..'
+import { get, Headers, MediaTypes, ok, opts, urlPath } from '../index.js'
+import { created } from '../index.js'
+import { badRequest } from '../index.js'
+import { StatusCodes } from '../index.js'
+import { mockHttp } from '../index.js'
 import { multipleResponses } from '../mock/entry/multipleResponses'
 
 describe('Responses', function () {

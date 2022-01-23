@@ -1,14 +1,14 @@
 import Path from 'path'
 import Supertest from 'supertest'
-import { equalsTo, get, opts, post, urlPath } from '..'
-import { ok } from '../mock'
-import mockHttp from '../mockHttp'
-import { MediaTypes } from '../MediaTypes'
+import { equalsTo, get, opts, post, urlPath } from '../index.js'
+import { ok } from '../mock/index.js'
+import mockHttp from '../mockHttp.js'
+import { MediaTypes } from '../MediaTypes.js'
 import { Headers } from '../Headers'
 
 describe('HTTP - Working With File Body Mocks', function () {
   describe('Default Path', function () {
-    const $ = mockHttp(opts().dynamicHttpPort().trace().rootDir(Path.join(__dirname, '../../')))
+    const $ = mockHttp(opts().dynamicHttpPort().trace().rootDir(Path.join(__dirname, '../')))
 
     beforeAll(() => $.start())
     afterAll(() => $.finalize())

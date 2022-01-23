@@ -2,12 +2,12 @@ import Supertest from 'supertest'
 import { contains } from '@mockdog/core-matchers'
 import { anything } from '@mockdog/core-matchers'
 import { equalsTo } from '@mockdog/core-matchers'
-import { opts, get, urlPath, Headers, MediaTypes } from '..'
-import { okJSON } from '..'
-import { response } from '..'
-import { mockHttp } from '..'
+import { opts, get, urlPath, Headers, MediaTypes } from '../index.js'
+import { okJSON } from '../index.js'
+import { response } from '../index.js'
+import { mockHttp } from '../index.js'
 import { configureProxy } from '../configureProxy'
-import { HttpContext } from '..'
+import { HttpContext } from '../index.js'
 
 describe('Proxied Responses', function () {
   const $ = mockHttp(opts().dynamicHttpPort().trace())

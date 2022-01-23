@@ -1,13 +1,13 @@
 import Supertest from 'supertest'
 import { equalsTo } from '@mockdog/core-matchers'
-import { opts } from '..'
-import { post } from '..'
-import { urlPath } from '..'
-import { MediaTypes } from '..'
-import { jsonPath } from '..'
-import { ok } from '..'
-import { Headers } from '..'
-import { mockHttp } from '..'
+import { opts } from '../index.js'
+import { post } from '../index.js'
+import { urlPath } from '../index.js'
+import { MediaTypes } from '../index.js'
+import { jsonPath } from '../index.js'
+import { ok } from '../index.js'
+import { Headers } from '../index.js'
+import { mockHttp } from '../index.js'
 
 describe('Events', function () {
   const $ = mockHttp(opts().dynamicHttpPort().formUrlEncodedOptions({ limit: 80 }))

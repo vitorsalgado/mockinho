@@ -1,11 +1,11 @@
 import Supertest from 'supertest'
 import { equalsTo } from '@mockdog/core-matchers'
 import { jsonPath } from '@mockdog/core-matchers'
-import { opts } from '..'
-import { post } from '..'
-import { urlPath } from '..'
-import { ok } from '..'
-import { mockHttp } from '..'
+import { opts } from '../index.js'
+import { post } from '../index.js'
+import { urlPath } from '../index.js'
+import { ok } from '../index.js'
+import { mockHttp } from '../index.js'
 
 describe('Cookies', function () {
   const $ = mockHttp(opts().dynamicHttpPort().cookieOptions('super-secret'))

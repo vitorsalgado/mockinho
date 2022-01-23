@@ -1,12 +1,12 @@
 import Supertest from 'supertest'
 import { equalsTo } from '@mockdog/core-matchers'
 import { jsonPath } from '@mockdog/core-matchers'
-import { opts, get, urlPath, Headers, MediaTypes } from '..'
-import { okJSON } from '..'
-import { mockHttp } from '..'
-import { badRequestJSON } from '..'
-import { StatusCodes } from '..'
-import { post } from '..'
+import { opts, get, urlPath, Headers, MediaTypes } from '../index.js'
+import { okJSON } from '../index.js'
+import { mockHttp } from '../index.js'
+import { badRequestJSON } from '../index.js'
+import { StatusCodes } from '../index.js'
+import { post } from '../index.js'
 
 describe('Forward Proxy', function () {
   const target = mockHttp(opts().dynamicHttpPort().trace())

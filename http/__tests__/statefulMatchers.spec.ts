@@ -1,13 +1,13 @@
 import Supertest from 'supertest'
 import { repeatTimes } from '@mockdog/core-matchers'
-import { opts } from '..'
-import { get } from '..'
-import { urlPath } from '..'
-import { okJSON } from '..'
-import { Headers } from '..'
-import { MediaTypes } from '..'
-import { ok } from '..'
-import { mockHttp } from '..'
+import { opts } from '../index.js'
+import { get } from '../index.js'
+import { urlPath } from '../index.js'
+import { okJSON } from '../index.js'
+import { Headers } from '../index.js'
+import { MediaTypes } from '../index.js'
+import { ok } from '../index.js'
+import { mockHttp } from '../index.js'
 
 describe('Stateful Matchers', function () {
   const $ = mockHttp(opts().dynamicHttpPort().trace())
