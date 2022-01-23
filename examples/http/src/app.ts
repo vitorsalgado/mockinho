@@ -1,23 +1,21 @@
 import fastify from 'fastify'
 import { FastifyServerOptions } from 'fastify'
 import { FastifyInstance } from 'fastify'
-import { ContentType } from 'drizzle-http'
+import { ContentType, newAPI, noop } from 'drizzle-http'
 import { Accept } from 'drizzle-http'
 import { Query } from 'drizzle-http'
 import { GET } from 'drizzle-http'
-import { theTypes } from 'drizzle-http'
 import { MediaTypes } from 'drizzle-http'
-import { initDrizzleHttp } from 'drizzle-http'
 import { UndiciCallFactory } from 'drizzle-http'
 
-@ContentType(MediaTypes.APPLICATION_JSON_UTF8)
-@Accept(MediaTypes.APPLICATION_JSON_UTF8)
+@ContentType(MediaTypes.APPLICATION_JSON)
+@Accept(MediaTypes.APPLICATION_JSON)
 class Api {
   @GET('/deputados')
   deputies(
     @Query('siglaPartido') party: string | null = null
   ): Promise<{ dados: [{ id: string; nome: string }] }> {
-    return theTypes(Promise, null, party)
+    return noop(party)
   }
 }
 
@@ -26,9 +24,9 @@ interface Config {
 }
 
 export function buildFastify(opts: FastifyServerOptions, config: Config): FastifyInstance {
-  const api: Api = initDrizzleHttp()
+  const api: Api = newAPI()
     .baseUrl(config.api)
-    .callFactory(UndiciCallFactory.DEFAULT)
+    .callFactory(new UndiciCallFactory())
     .build()
     .create(Api)
 

@@ -19,7 +19,7 @@ export function ClientStreamingMockFinderHandler(
 ): (methodContext: RpcCallContext) => ClientStreamingHandler {
   return function (callContext: RpcCallContext): ClientStreamingHandler {
     return function (call: ServerReadableStream<unknown, unknown>, callback: UnaryCallback): void {
-      (call as unknown as UnaryExtendedCall).context = callContext
+      ;(call as unknown as UnaryExtendedCall).context = callContext
 
       let result: FindMockResult<RpcMock> | undefined
 

@@ -41,7 +41,7 @@ export function ServerStreamingMockFinderHandler(
           }
 
           const replier = () => {
-            (response as any).stream.pipe(call)
+            ;(response as any).stream.pipe(call)
           }
 
           if (response.delay) {

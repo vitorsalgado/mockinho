@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 import 'dotenv/config'
-import { buildFastify } from './app'
+import { buildFastify } from './app.js'
 
 const server = buildFastify(
   { logger: { level: 'info', prettyPrint: true } },

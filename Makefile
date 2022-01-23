@@ -13,3 +13,11 @@ http-run-docker: ## Run Mock HTTP docker container on port 3000
 
 http-clean: ## Remove Mock HTTP docker container
 	@docker rm -f mockhttp
+
+## General
+
+fmt: # Format code
+	@yarn format
+
+lint: # Run static analysis
+	@yarn lint
