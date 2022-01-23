@@ -1,5 +1,5 @@
-import { equalsTo } from '../equalsTo'
-import { jsonPath } from '../jsonPath'
+import { equalsTo } from '../equalsTo.js'
+import { jsonPath } from '../jsonPath.js'
 
 describe('Json Path', function () {
   it('should apply matcher on json field based on provided path', function () {

@@ -1,7 +1,7 @@
-import { equalsTo } from '../equalsTo'
-import { item } from '../item'
-import { jsonPath } from '../jsonPath'
-import { not } from '../not'
+import { equalsTo } from '../equalsTo.js'
+import { item } from '../item.js'
+import { jsonPath } from '../jsonPath.js'
+import { not } from '../not.js'
 
 describe('Matchers Composition', function () {
   it('should compose jsonPath with item to match against an array property', function () {

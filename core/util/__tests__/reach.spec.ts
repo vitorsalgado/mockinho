@@ -1,4 +1,4 @@
-import { reach } from '..'
+import { reach } from '../index.js'
 
 describe('reach', function () {
   const obj = {

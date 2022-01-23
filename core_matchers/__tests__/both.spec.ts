@@ -1,6 +1,6 @@
-import { equalsTo } from '..'
-import { contains } from '..'
-import { both } from '..'
+import { equalsTo } from '../index.js'
+import { contains } from '../index.js'
+import { both } from '../index.js'
 
 describe('both', function () {
   it('should return false when only left matcher evaluates to true', function () {

@@ -1,6 +1,6 @@
-import { everyItem } from '..'
-import { isPresent } from '..'
-import { equalsTo } from '..'
+import { everyItem } from '../index.js'
+import { isPresent } from '../index.js'
+import { equalsTo } from '../index.js'
 
 describe('everyItem', function () {
   it('should return true when items matches', function () {

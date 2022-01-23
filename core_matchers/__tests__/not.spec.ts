@@ -1,5 +1,5 @@
-import { equalsTo } from '../equalsTo'
-import { not } from '../not'
+import { equalsTo } from '../equalsTo.js'
+import { not } from '../not.js'
 
 describe('Not', function () {
   it('should negate another matcher', function () {

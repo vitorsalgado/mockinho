@@ -1,4 +1,4 @@
-import { repeatTimes } from '../repeatTimes'
+import { repeatTimes } from '../repeatTimes.js'
 
 describe('repeatTimes', function () {
   it('should return false when hit times is greater than the limit', function () {

@@ -1,4 +1,4 @@
-import { empty } from '..'
+import { empty } from '../index.js'
 
 describe('empty', function () {
   it('should return true when array 0', function () {

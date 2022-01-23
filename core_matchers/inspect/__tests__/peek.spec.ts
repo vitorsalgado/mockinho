@@ -1,5 +1,5 @@
-import { peek } from '../peek'
-import { equalsTo } from '../../equalsTo'
+import { peek } from '../peek.js'
+import { equalsTo } from '../../equalsTo.js'
 
 describe('peek', function () {
   it('should execute function with provided value', function () {

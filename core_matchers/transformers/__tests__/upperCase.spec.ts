@@ -1,5 +1,5 @@
-import { equalsTo } from '../../equalsTo'
-import { toUpperCase } from '../toUpperCase'
+import { equalsTo } from '../../equalsTo.js'
+import { toUpperCase } from '../toUpperCase.js'
 
 describe('UpperCase', function () {
   it('should lowercase value', function () {

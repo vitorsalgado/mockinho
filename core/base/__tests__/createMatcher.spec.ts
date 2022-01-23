@@ -1,4 +1,4 @@
-import { createMatcher } from '..'
+import { createMatcher } from '../index.js'
 
 describe('createMatcher', function () {
   describe('when create matcher function with createMatcher', function () {

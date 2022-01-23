@@ -1,4 +1,4 @@
-import { startsWith } from '../startsWith'
+import { startsWith } from '../startsWith.js'
 
 describe('Starts With', function () {
   it('should return true when it starts with the expected value', function () {

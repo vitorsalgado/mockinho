@@ -1,4 +1,4 @@
-import { anyItem } from '../anyItem'
+import { anyItem } from '../anyItem.js'
 
 describe('anyItem', function () {
   it('should return true when any provided item matches with incoming value', function () {

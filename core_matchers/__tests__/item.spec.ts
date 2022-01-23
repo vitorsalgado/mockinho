@@ -1,5 +1,5 @@
-import { equalsTo } from '../equalsTo'
-import { item } from '../item'
+import { equalsTo } from '../equalsTo.js'
+import { item } from '../item.js'
 
 describe('Item', function () {
   it('should apply a matcher only to the provided index of an array', function () {

@@ -1,4 +1,4 @@
-import { hasLength } from '../hasLength'
+import { hasLength } from '../hasLength.js'
 
 describe('hasLength', function () {
   it('should return true when array length is equal to the provided value', function () {

@@ -1,4 +1,4 @@
-import { isPresent } from '../isPresent'
+import { isPresent } from '../isPresent.js'
 
 describe('Is Present', function () {
   it('should return true when value is present whatever the value is', function () {

@@ -1,5 +1,5 @@
-import { equalsTo } from '../equalsTo'
-import { is } from '../is'
+import { equalsTo } from '../equalsTo.js'
+import { is } from '../is.js'
 
 describe('is', function () {
   it('should decorate another matcher retaining its original behaviour', function () {

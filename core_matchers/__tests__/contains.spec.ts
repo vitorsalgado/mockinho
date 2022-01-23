@@ -1,4 +1,4 @@
-import { contains } from '../contains'
+import { contains } from '../contains.js'
 
 describe('contains', function () {
   it('should return true when expectation is contained in the value', function () {

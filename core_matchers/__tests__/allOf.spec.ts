@@ -1,6 +1,6 @@
-import { allOf } from '../allOf'
-import { contains } from '../contains'
-import { equalsTo } from '../equalsTo'
+import { allOf } from '../allOf.js'
+import { contains } from '../contains.js'
+import { equalsTo } from '../equalsTo.js'
 
 describe('AllOf', function () {
   it('should return true if anu of the provided matchers returns true too', function () {

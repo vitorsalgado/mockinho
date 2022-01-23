@@ -1,6 +1,6 @@
-import { fromNullable } from '..'
-import { Optional } from '..'
-import { empty } from '..'
+import { fromNullable } from '../index.js'
+import { Optional } from '../index.js'
+import { empty } from '../index.js'
 
 describe('Optional', function () {
   it('should throw error when using .of() with null value', function () {

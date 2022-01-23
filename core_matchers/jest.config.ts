@@ -5,18 +5,7 @@ import Base from '../jest-base.config'
 
 const config: JestConfig.InitialOptions = {
   ...Base,
-
-  displayName: 'core-matchers',
-  extensionsToTreatAsEsm: ['.ts'],
-  globals: {
-    'ts-jest': {
-      tsconfig: '../tsconfig.test.json',
-      useESM: true
-    }
-  },
-  moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1'
-  }
+  displayName: 'core-matchers'
 }
 
 export default config

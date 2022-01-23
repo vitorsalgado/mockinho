@@ -1,5 +1,5 @@
-import { peekNotMatched } from '../peekNotMatched'
-import { equalsTo } from '../../equalsTo'
+import { peekNotMatched } from '../peekNotMatched.js'
+import { equalsTo } from '../../equalsTo.js'
 
 describe('peekNotMatched', function () {
   describe('when matcher evaluates to false', function () {

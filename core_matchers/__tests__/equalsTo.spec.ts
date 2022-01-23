@@ -1,4 +1,4 @@
-import { equalsTo } from '../equalsTo'
+import { equalsTo } from '../equalsTo.js'
 
 describe('EqualsTo', function () {
   describe('String', function () {

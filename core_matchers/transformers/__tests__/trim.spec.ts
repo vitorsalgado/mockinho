@@ -1,5 +1,5 @@
-import { trim } from '../trim'
-import { equalsTo } from '../../equalsTo'
+import { trim } from '../trim.js'
+import { equalsTo } from '../../equalsTo.js'
 
 describe('Trim', function () {
   it('should trim string value', function () {

@@ -1,4 +1,4 @@
-import { hasKey } from '../hasKey'
+import { hasKey } from '../hasKey.js'
 
 describe('hasKey', function () {
   it('should return true when object key is present', function () {

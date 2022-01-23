@@ -1,4 +1,4 @@
-import { matches } from '../matches'
+import { matches } from '../matches.js'
 
 describe('matches', function () {
   it('should test value based on provided regex pattern', function () {

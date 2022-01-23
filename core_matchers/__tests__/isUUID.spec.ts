@@ -1,4 +1,4 @@
-import { isUUID } from '../isUUID'
+import { isUUID } from '../isUUID.js'
 
 describe('isUUID', function () {
   const v1UUID = '478a6e30-6cf3-11ec-8a13-23d3bb133a53'

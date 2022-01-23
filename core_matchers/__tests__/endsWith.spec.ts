@@ -1,4 +1,4 @@
-import { endsWith } from '../endsWith'
+import { endsWith } from '../endsWith.js'
 
 describe('Ends With', function () {
   it('should return true when it ends with the expected value', function () {
