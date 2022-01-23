@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 
-import 'dotenv/config'
 import NodeEnvironment from 'jest-environment-node'
 import { red } from 'colorette'
 import { initialOptionsReader } from '@mockdog/http'
