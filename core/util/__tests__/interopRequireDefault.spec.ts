@@ -1,4 +1,4 @@
-import { interopRequireDefault } from '../interopRequireDefault'
+import { interopRequireDefault } from '../../interoperability/interopRequireDefault'
 
 describe('interopRequireDefault', function () {
   describe('when parameter is undefined', function () {

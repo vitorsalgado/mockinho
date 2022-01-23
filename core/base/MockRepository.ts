@@ -1,6 +1,6 @@
-import { Optional } from '../util'
-import { Mock } from './Mock'
-import { MockSource } from './MockSource'
+import { Optional } from '../util/index.js'
+import { Mock } from './Mock.js'
+import { MockSource } from './MockSource.js'
 
 export interface MockRepository<M extends Mock> {
   save(mock: M): M

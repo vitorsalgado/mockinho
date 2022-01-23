@@ -1,4 +1,4 @@
-import { Logger } from './Logger'
+import { Logger } from './Logger.js'
 
 export class LoggerUtil implements Logger {
   public static INSTANCE: LoggerUtil = new LoggerUtil()

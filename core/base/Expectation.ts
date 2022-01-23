@@ -1,4 +1,4 @@
-import { Matcher } from './Matcher'
+import { Matcher } from './Matcher.js'
 
 export interface Expectation<Value, ValueContext> {
   valueGetter: (ctx: ValueContext) => Value

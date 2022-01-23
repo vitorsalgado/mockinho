@@ -1,5 +1,5 @@
 import Pino from 'pino'
-import { Logger } from './Logger'
+import { Logger } from './Logger.js'
 
 export class PinoLogger implements Logger {
   private readonly pino: Pino.Logger

@@ -1,8 +1,8 @@
 import Ajv from 'ajv'
 import Yaml from 'js-yaml'
-import { JsonType } from '../types'
-import { ParseResult } from './ParseResult'
-import { extractExtension } from './util/extractExtension'
+import { JsonType } from '../types/index.js'
+import { ParseResult } from './ParseResult.js'
+import { extractExtension } from './util/extractExtension.js'
 
 export function createParser<T>(file: string, schema: JsonType): (data: string) => ParseResult<T> {
   const ajv = new Ajv()

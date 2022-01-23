@@ -1,4 +1,4 @@
-import { Plugin } from './Plugin'
+import { Plugin } from './Plugin.js'
 
 export interface PluginRegistration<OPTIONS = unknown, APP = unknown> {
   plugin: Plugin<OPTIONS, APP>

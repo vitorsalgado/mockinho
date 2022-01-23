@@ -4,8 +4,8 @@ import { inspect } from 'util'
 import { bold } from 'colorette'
 import { redBright } from 'colorette'
 import { gray } from 'colorette'
-import { Mock } from './Mock'
-import { Expectation } from './Expectation'
+import { Mock } from './Mock.js'
+import { Expectation } from './Expectation.js'
 
 export function inspectedMatcher<M extends Mock>(
   expectation: Expectation<unknown, unknown>,

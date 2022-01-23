@@ -1,6 +1,6 @@
-import { Optional } from '../util'
-import { Scenario } from './Scenario'
-import { ScenarioRepository } from './ScenarioRepository'
+import { Optional } from '../util/index.js'
+import { Scenario } from './Scenario.js'
+import { ScenarioRepository } from './ScenarioRepository.js'
 
 export class ScenarioInMemoryRepository implements ScenarioRepository {
   constructor(private readonly scenarios = new Map<string, Scenario>()) {}
@@ -20,9 +20,10 @@ export class ScenarioInMemoryRepository implements ScenarioRepository {
 
   createNewIfNeeded(name: string): Scenario {
     const normalizedName = name.toLowerCase()
+    const entry = this.scenarios.get(normalizedName)
 
-    if (this.scenarios.has(normalizedName)) {
-      return this.scenarios.get(normalizedName)!
+    if (entry) {
+      return entry
     }
 
     return this.save(Scenario.newScenario(normalizedName))

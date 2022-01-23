@@ -7,10 +7,15 @@ const config: JestConfig.InitialOptions = {
   ...Base,
 
   displayName: 'core',
+  extensionsToTreatAsEsm: ['.ts'],
   globals: {
     'ts-jest': {
-      tsconfig: '../tsconfig.test.json'
+      tsconfig: '../tsconfig.test.json',
+      useESM: true
     }
+  },
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1'
   }
 }
 

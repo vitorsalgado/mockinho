@@ -1,6 +1,6 @@
-import { MatcherContextHolder } from './MatcherContextHolder'
-import { Mock } from './Mock'
-import { Configuration } from './Configuration'
+import { MatcherContextHolder } from './MatcherContextHolder.js'
+import { Mock } from './Mock.js'
+import { Configuration } from './Configuration.js'
 
 export interface ExpectationWithContext<
   Value,

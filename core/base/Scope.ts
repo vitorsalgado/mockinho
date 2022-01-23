@@ -1,7 +1,7 @@
 import { yellowBright, yellow, bold } from 'colorette'
-import { Mock } from './Mock'
-import { ScopePendingError } from './ScopePendingError'
-import { MockRepository } from '.'
+import { Mock } from './Mock.js'
+import { ScopePendingError } from './ScopePendingError.js'
+import { MockRepository } from './MockRepository.js'
 
 export class Scope<MOCK extends Mock> {
   constructor(

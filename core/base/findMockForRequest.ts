@@ -1,11 +1,11 @@
-import { Context } from './Context'
-import { FindMockResult } from './FindMockResult'
-import { MockRepository } from './MockRepository'
-import { Mock } from './Mock'
-import { inspectedMatcher } from './inspectedMatcher'
-import { Matcher } from './Matcher'
-import { modeIsAtLeast } from './modeIsAtLeast'
-import { Configuration } from './Configuration'
+import { Context } from './Context.js'
+import { FindMockResult } from './FindMockResult.js'
+import { MockRepository } from './MockRepository.js'
+import { Mock } from './Mock.js'
+import { inspectedMatcher } from './inspectedMatcher.js'
+import { Matcher } from './Matcher.js'
+import { modeIsAtLeast } from './modeIsAtLeast.js'
+import { Configuration } from './Configuration.js'
 
 export function findMockForRequest<REQUEST, MOCK extends Mock, CONFIG extends Configuration>(
   request: REQUEST,

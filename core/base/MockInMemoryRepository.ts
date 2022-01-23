@@ -1,7 +1,7 @@
-import { Optional } from '../util'
-import { Mock } from './Mock'
-import { MockRepository } from './MockRepository'
-import { MockSource } from './MockSource'
+import { Optional } from '../util/index.js'
+import { Mock } from './Mock.js'
+import { MockRepository } from './MockRepository.js'
+import { MockSource } from './MockSource.js'
 
 export abstract class MockInMemoryRepository<M extends Mock> implements MockRepository<M> {
   protected constructor(protected readonly mocks: Map<string, M> = new Map<string, M>()) {}

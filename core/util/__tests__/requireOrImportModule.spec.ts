@@ -1,5 +1,5 @@
 import Path from 'path'
-import { requireOrImportModule } from '../requireOrImportModule'
+import { requireOrImportModule } from '../../interoperability/requireOrImportModule'
 
 describe('requireOrImportModule', function () {
   it('should load typescript file', async function () {

@@ -1,7 +1,7 @@
 import Fs from 'fs'
-import { JsonType } from '../types'
-import { createParser } from './createParser'
-import { ParseResult } from './ParseResult'
+import { JsonType } from '../types/JsonType.js'
+import { createParser } from './createParser.js'
+import { ParseResult } from './ParseResult.js'
 
 export async function loadSingleMockFile<T>(
   file: string,

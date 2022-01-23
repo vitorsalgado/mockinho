@@ -1,1 +1,1 @@
-export * from './base64'
+export * from './base64.js'

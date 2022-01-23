@@ -1,7 +1,7 @@
-import { Level } from '../log'
-import { MockProviderFactory } from './MockProviderFactory'
-import { Plugin } from './Plugin'
-import { Mode } from './Mode'
+import { Level } from '../log/index.js'
+import { MockProviderFactory } from './MockProviderFactory.js'
+import { Plugin } from './Plugin.js'
+import { Mode } from './Mode.js'
 
 export interface Configuration {
   logLevel: Level

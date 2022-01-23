@@ -4,13 +4,14 @@
   "description": "MockDog Core Modules",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json",
+    "test": "jest --detectOpenHandles",
+    "lint": "eslint --fix --ext .ts ."
+  },
   "exports": {
     ".": "./dist/index.js",
     "./package.json": "./package.json"
-  },
-  "scripts": {
-    "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json",
-    "test": "jest --detectOpenHandles"
   },
   "directories": {
     "dist": "dist"

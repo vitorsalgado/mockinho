@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 import type { Service } from 'ts-node'
-import { interopRequireDefault } from './interopRequireDefault'
+import { interopRequireDefault } from './interopRequireDefault.js'
 
 export async function requireOrImportModule<T>(file: string): Promise<T> {
   const isTs = file.endsWith('.ts')
@@ -42,10 +42,11 @@ const loadTypeScriptConfigFile = async <T>(file: string): Promise<T> => {
         module: 'CommonJS'
       }
     })
-  } catch (e: any) {
-    if (e.code === 'MODULE_NOT_FOUND') {
+  } catch (e) {
+    const error = e as { message: string; code: string }
+    if (error.code === 'MODULE_NOT_FOUND') {
       throw new Error(
-        `'ts-node' is required when configuration is a TypeScript file. Make sure it is installed.\nError: ${e.message}`
+        `'ts-node' is required when configuration is a TypeScript file. Make sure it is installed.\nError: ${error.message}`
       )
     }
 

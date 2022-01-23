@@ -1,5 +1,5 @@
-import { Optional } from '../util'
-import { Mock } from './Mock'
+import { Optional } from '../util/index.js'
+import { Mock } from './Mock.js'
 
 export class FindMockResult<MOCK extends Mock> {
   constructor(

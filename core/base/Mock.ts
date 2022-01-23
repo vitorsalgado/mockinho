@@ -1,8 +1,8 @@
 import { v4 as UUIdV4 } from 'uuid'
-import { Expectation } from './Expectation'
-import { MockSource } from './MockSource'
-import { ExpectationWithContext } from './ExpectationWithContext'
-import { Configuration } from './Configuration'
+import { Expectation } from './Expectation.js'
+import { MockSource } from './MockSource.js'
+import { ExpectationWithContext } from './ExpectationWithContext.js'
+import { Configuration } from './Configuration.js'
 
 export class Mock {
   constructor(

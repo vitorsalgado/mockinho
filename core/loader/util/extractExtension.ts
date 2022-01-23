@@ -1,1 +1,1 @@
-export const extractExtension = (filename: string): string => filename.split('.').pop()!
+export const extractExtension = (filename: string): string => filename.split('.')?.pop() || ''

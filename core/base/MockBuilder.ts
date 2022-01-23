@@ -1,13 +1,13 @@
-import { Matcher } from './Matcher'
-import { Expectation } from './Expectation'
-import { Scenario } from './Scenario'
-import { ExpectationWithContext } from './ExpectationWithContext'
-import { scenarioMatcher } from './scenarioMatcher'
-import { Mock } from './Mock'
+import { Matcher } from './Matcher.js'
+import { Expectation } from './Expectation.js'
+import { Scenario } from './Scenario.js'
+import { ExpectationWithContext } from './ExpectationWithContext.js'
+import { scenarioMatcher } from './scenarioMatcher.js'
+import { Mock } from './Mock.js'
 
 export abstract class MockBuilder<MOCK extends Mock> {
-  protected _id: string = ''
-  protected _name: string = ''
+  protected _id: string = '.js'
+  protected _name: string = '.js'
   protected _priority: number = 0
   protected readonly _statefulExpectations: Array<ExpectationWithContext<unknown, unknown, MOCK>> =
     []
@@ -34,7 +34,7 @@ export abstract class MockBuilder<MOCK extends Mock> {
   scenario(
     name: string,
     requiredState: string = Scenario.STATE_STARTED,
-    newState: string = ''
+    newState: string = '.js'
   ): this {
     this._statefulExpectations.push({
       valueGetter: () => undefined,

@@ -1,4 +1,4 @@
-import { JsonArray } from './JsonArray'
-import { Json } from './Json'
+import { JsonArray } from './JsonArray.js'
+import { Json } from './Json.js'
 
 export type JsonType = Json | JsonArray

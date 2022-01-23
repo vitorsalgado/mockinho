@@ -1,7 +1,7 @@
-import { MockRepository } from './MockRepository'
-import { Mock } from './Mock'
-import { ScenarioRepository } from './ScenarioRepository'
-import { Configuration } from './Configuration'
+import { MockRepository } from './MockRepository.js'
+import { Mock } from './Mock.js'
+import { ScenarioRepository } from './ScenarioRepository.js'
+import { Configuration } from './Configuration.js'
 
 export interface Context<
   MOCK extends Mock,

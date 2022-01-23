@@ -2,13 +2,13 @@
 
 import * as Fs from 'fs'
 import { red, bold } from 'colorette'
-import { JsonType } from '../types'
-import { listFilenames } from '../io'
-import { noNullElements } from '../checks'
-import { notBlank } from '../checks'
-import { notEmpty } from '../checks'
-import { loadSingleMockFile } from './loadSingleMockFile'
-import { LoadMockError } from './LoadMockError'
+import { JsonType } from '../types/index.js'
+import { listFilenames } from '../io/index.js'
+import { noNullElements } from '../preconditions/index.js'
+import { notBlank } from '../preconditions/index.js'
+import { notEmpty } from '../preconditions/index.js'
+import { loadSingleMockFile } from './loadSingleMockFile.js'
+import { LoadMockError } from './LoadMockError.js'
 
 export async function loadMockFiles<T>(
   mockRoot: string,

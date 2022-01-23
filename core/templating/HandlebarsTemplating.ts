@@ -1,7 +1,7 @@
 import { compile } from 'handlebars'
-import { Templating } from './Templating'
-import { Helper } from './Helper'
-import { TemplateParseDelegate } from './TemplateParseDelegate'
+import { Templating } from './Templating.js'
+import { Helper } from './Helper.js'
+import { TemplateParseDelegate } from './TemplateParseDelegate.js'
 
 export class HandlebarsTemplating<M, H extends Helper = Helper> implements Templating<M, H> {
   compile(input: string): TemplateParseDelegate<M, H> {

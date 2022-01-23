@@ -1,4 +1,4 @@
-import { MockDogError } from '../base'
+import { MockDogError } from '../base/index.js'
 
 export class LoadMockError extends MockDogError {
   constructor(message: string, public readonly filename: string) {
