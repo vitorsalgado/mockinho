@@ -1,6 +1,7 @@
 export * from './base/index.js'
 export * from './preconditions/index.js'
 export * from './encoding/index.js'
+export * from './interoperability/index.js'
 export * from './io/index.js'
 export * from './loader/index.js'
 export * from './log/index.js'

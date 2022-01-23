@@ -1,4 +1,4 @@
-export function not(
+export function isTrue(
   condition: boolean,
   message: string = 'Argument does not meet required condition.'
 ): void {

@@ -6,8 +6,8 @@ import { scenarioMatcher } from './scenarioMatcher.js'
 import { Mock } from './Mock.js'
 
 export abstract class MockBuilder<MOCK extends Mock> {
-  protected _id: string = '.js'
-  protected _name: string = '.js'
+  protected _id: string = ''
+  protected _name: string = ''
   protected _priority: number = 0
   protected readonly _statefulExpectations: Array<ExpectationWithContext<unknown, unknown, MOCK>> =
     []
@@ -34,7 +34,7 @@ export abstract class MockBuilder<MOCK extends Mock> {
   scenario(
     name: string,
     requiredState: string = Scenario.STATE_STARTED,
-    newState: string = '.js'
+    newState: string = ''
   ): this {
     this._statefulExpectations.push({
       valueGetter: () => undefined,

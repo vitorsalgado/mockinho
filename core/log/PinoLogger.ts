@@ -4,7 +4,7 @@ import { Logger } from './Logger.js'
 export class PinoLogger implements Logger {
   private readonly pino: Pino.Logger
 
-  constructor(level: Pino.Level) {
+  constructor(level: string) {
     this.pino = Pino({
       prettyPrint: {
         levelFirst: true,
