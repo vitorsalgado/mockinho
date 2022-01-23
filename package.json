@@ -25,7 +25,7 @@
     "core",
     "core_matchers",
     "http",
-    "http-jest-extension",
+    "http_jest",
     "grpc",
     "examples/*"
   ],

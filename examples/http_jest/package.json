@@ -1,5 +1,5 @@
 {
-  "name": "@mockdog/example-jest-environment",
+  "name": "@mockdog/example-http-jest",
   "version": "1.0.0",
   "description": "",
   "main": "./dist/index.js",
