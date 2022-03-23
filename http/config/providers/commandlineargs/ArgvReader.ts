@@ -8,7 +8,7 @@ import { Level } from '@mockdog/core'
 import { HttpConfigurationBuilder } from '../../HttpConfigurationBuilder.js'
 import { isDef } from '../../../cli/utils.js'
 import { keyValue } from '../../../cli/utils.js'
-import { rec } from '../../../mock/record/index.js'
+import { rec } from '../../../record/index.js'
 import { importPlugins } from '../importPlugins.js'
 import { Argv } from './Argv.js'
 

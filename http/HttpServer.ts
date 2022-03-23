@@ -12,7 +12,7 @@ import { LoggerUtil } from '@mockdog/core'
 import { MockServer } from '@mockdog/core'
 import { HttpContext } from './HttpContext.js'
 import { mockFinderMiddleware } from './mockFinderMiddleware.js'
-import { decorateRequestMiddleware } from './decorateRequestMiddleware.js'
+import { enhanceRequestMiddleware } from './enhanceRequestMiddleware.js'
 import { HttpRequest } from './HttpRequest.js'
 import { configureProxy } from './configureProxy.js'
 import { HttpConfiguration } from './config/index.js'
@@ -90,7 +90,7 @@ export class HttpServer implements MockServer<HttpServerInfo> {
       CookieParse(this.configuration.cookieSecrets, this.configuration.cookieOptions) as Router
     )
     this.expressApp.use(Multer(this.configuration.multiPartOptions).any() as Router)
-    this.expressApp.use(decorateRequestMiddleware as Router)
+    this.expressApp.use(enhanceRequestMiddleware as Router)
     this.expressApp.use(logReqAndResMiddleware(this.context))
   }
 

@@ -4,7 +4,7 @@ import { NextFunction } from 'express'
 import { v4 as UUId } from 'uuid'
 import { nowInMs } from '@mockdog/core'
 
-export function decorateRequestMiddleware(
+export function enhanceRequestMiddleware(
   request: Request & { [key: string]: unknown },
   response: Response,
   next: NextFunction
