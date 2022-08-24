@@ -3,10 +3,12 @@
   "npmClient": "npm",
   "packages": [
     "core",
-    "core_matchers",
+    "matchers",
     "http",
     "http_jest",
     "grpc",
+    "x",
+
     "examples/*"
   ],
   "ignoreChanges": ["**/__fixtures__/**", "**/__tests__/**", "**/*.md", "./build", "./docs"],

@@ -1,0 +1,35 @@
+{
+  "name": "@mockdog/matchers",
+  "version": "0.0.0",
+  "description": "MockDog Core Matchers",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --project tsconfig.build.json",
+    "test": "jest --detectOpenHandles",
+    "lint": "eslint --fix --ext .ts ."
+  },
+  "directories": {
+    "dist": "dist"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "Vitor Hugo Salgado <vsalgadopb@gmail.com>",
+  "homepage": "https://github.com/vitorsalgado/mockdog/tree/master/matchers#readme",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitorsalgado/mockdog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vitorsalgado/mockdog/issues"
+  }
+}

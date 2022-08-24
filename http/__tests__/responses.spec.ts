@@ -1,6 +1,6 @@
 import Path from 'path'
 import Supertest from 'supertest'
-import { contains } from '@mockdog/core-matchers'
+import { contains } from '@mockdog/matchers'
 import { get, Headers, MediaTypes, ok, opts, urlPath } from '../index.js'
 import { created } from '../index.js'
 import { badRequest } from '../index.js'

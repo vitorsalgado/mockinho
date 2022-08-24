@@ -1,4 +1,4 @@
-import { contains } from '@mockdog/core-matchers'
+import { contains } from '@mockdog/matchers'
 import { fileMimeType } from '../fileMimeType'
 
 describe('fileMimeType', function () {

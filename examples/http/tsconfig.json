@@ -35,6 +35,6 @@
   "include": ["src"],
   "references": [
     { "path": "../../core", "prepend": false },
-    { "path": "../../core_matchers", "prepend": false }
+    { "path": "../../matchers", "prepend": false }
   ]
 }

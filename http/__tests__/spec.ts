@@ -1,6 +1,6 @@
 import * as Path from 'path'
 import Supertest from 'supertest'
-import { contains, equalsTo, jsonPath } from '@mockdog/core-matchers'
+import { contains, equalsTo, jsonPath } from '@mockdog/matchers'
 import { fromFile } from '@mockdog/core'
 import { get } from '../mock/entry/get.js'
 import { mockHttp } from '../index.js'

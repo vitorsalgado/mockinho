@@ -1,5 +1,5 @@
 import { Matcher } from '@mockdog/core'
-import { equalsTo } from '@mockdog/core-matchers'
+import { equalsTo } from '@mockdog/matchers'
 import { HttpRequest } from '../HttpRequest.js'
 
 export const contentType = (expectation: Matcher<string> | string): Matcher<HttpRequest> => {

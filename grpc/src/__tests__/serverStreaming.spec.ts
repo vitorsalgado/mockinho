@@ -1,7 +1,7 @@
 import { Readable } from 'stream'
 import * as grpc from '@grpc/grpc-js'
 import { ChannelCredentials } from '@grpc/grpc-js'
-import { equalsTo } from '@mockdog/core-matchers'
+import { equalsTo } from '@mockdog/matchers'
 import { options } from '../config/mod'
 import { mockRpc } from '../mockRpc'
 import { serverStreaming } from '../mock/mod'

@@ -1,4 +1,4 @@
-export * from '@mockdog/core-matchers'
+export * from '@mockdog/matchers'
 
 export * from './config/mod.js'
 export * from './mock/mod.js'

@@ -36,6 +36,6 @@
     "@grpc/grpc-js": "^1.5.3",
     "@grpc/proto-loader": "^0.6.9",
     "@mockdog/core": "^0.0.0",
-    "@mockdog/core-matchers": "^0.0.0"
+    "@mockdog/matchers": "^0.0.0"
   }
 }

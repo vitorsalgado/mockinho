@@ -1,4 +1,4 @@
-import { equalsTo } from '@mockdog/core-matchers'
+import { equalsTo } from '@mockdog/matchers'
 import { HttpRequest } from '../../HttpRequest'
 import { bearerToken } from '../bearerToken'
 

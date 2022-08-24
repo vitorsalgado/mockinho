@@ -1,4 +1,4 @@
-import { equalsTo } from '@mockdog/core-matchers'
+import { equalsTo } from '@mockdog/matchers'
 import { contentType } from '../../matchers'
 import { HttpMockBuilder, ok } from '../../mock'
 import { onRequestNotMatched } from '../builtin/onRequestNotMatched'

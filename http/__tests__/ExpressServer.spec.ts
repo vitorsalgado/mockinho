@@ -1,5 +1,5 @@
 import Supertest from 'supertest'
-import { contains } from '@mockdog/core-matchers'
+import { contains } from '@mockdog/matchers'
 import { ScenarioInMemoryRepository } from '@mockdog/core'
 import { HttpContext } from '../HttpContext'
 import { opts, post, HttpConfigurationBuilder, HttpServer } from '../index.js'

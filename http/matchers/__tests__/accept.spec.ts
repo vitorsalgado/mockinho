@@ -1,4 +1,4 @@
-import { contains, equalsTo } from '@mockdog/core-matchers'
+import { contains, equalsTo } from '@mockdog/matchers'
 import { HttpRequest } from '../../HttpRequest'
 import { accept } from '../accept'
 

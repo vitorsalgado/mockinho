@@ -1,7 +1,7 @@
 import { URL } from 'url'
 import { Matcher } from '@mockdog/core'
 import { createMatcher } from '@mockdog/core'
-import { equalsTo } from '@mockdog/core-matchers'
+import { equalsTo } from '@mockdog/matchers'
 
 export const urlPath = (
   path: string,

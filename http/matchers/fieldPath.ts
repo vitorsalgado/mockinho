@@ -1,5 +1,5 @@
 import { Matcher } from '@mockdog/core'
-import { jsonPath } from '@mockdog/core-matchers'
+import { jsonPath } from '@mockdog/matchers'
 
 export const fieldPath = <T>(path: string, matcher: Matcher<T>): Matcher<unknown> =>
   function filePath(value): boolean {
