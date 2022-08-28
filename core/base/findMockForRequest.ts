@@ -9,7 +9,7 @@ import { Configuration } from './Configuration.js'
 
 export function findMockForRequest<REQUEST, MOCK extends Mock, CONFIG extends Configuration>(
   request: REQUEST,
-  context: Context<MOCK, CONFIG, MockRepository<MOCK>>
+  context: Context<MOCK, CONFIG, MockRepository<MOCK>>,
 ): FindMockResult<MOCK> {
   const mocks = context.mockRepository.fetchSorted()
   const weights = new Map<string, number>()
@@ -21,8 +21,8 @@ export function findMockForRequest<REQUEST, MOCK extends Mock, CONFIG extends Co
       ...mock.statefulExpectations<MOCK, CONFIG>().map(expectation => ({
         valueGetter: expectation.valueGetter,
         matcher: expectation.matcherContext(context, mock) as Matcher<unknown>,
-        weight: 0
-      }))
+        weight: 0,
+      })),
     )
 
     if (

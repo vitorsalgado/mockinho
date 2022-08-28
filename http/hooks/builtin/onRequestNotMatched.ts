@@ -7,8 +7,8 @@ import { Hooks } from '../Hooks.js'
 export function onRequestNotMatched(event: Hooks['onRequestNotMatched']): void {
   console.warn(
     `${yellowBright(bold('REQUEST NOT MATCHED'))} ${new Date().toISOString()} ${yellow(
-      `<--- ${event.method} ${event.path}`
-    )}`
+      `<--- ${event.method} ${event.path}`,
+    )}`,
   )
 
   if (!event.verbose) {
@@ -29,7 +29,7 @@ export function onRequestNotMatched(event: Hooks['onRequestNotMatched']): void {
       `Id: ${mock.id}\n` +
       (mock.name ? `Name: ${mock.name}\n` : '') +
       (mock.sourceDescription ? `File: ${bold(mock.sourceDescription)}` : '') +
-      `${tryGetUrlAndMethod(mock)}\n`
+      `${tryGetUrlAndMethod(mock)}\n`,
   )
 }
 

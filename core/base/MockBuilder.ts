@@ -34,11 +34,11 @@ export abstract class MockBuilder<MOCK extends Mock> {
   scenario(
     name: string,
     requiredState: string = Scenario.STATE_STARTED,
-    newState: string = ''
+    newState: string = '',
   ): this {
     this._statefulExpectations.push({
       valueGetter: () => undefined,
-      matcherContext: scenarioMatcher(name, requiredState, newState)
+      matcherContext: scenarioMatcher(name, requiredState, newState),
     })
 
     return this
@@ -49,12 +49,12 @@ export abstract class MockBuilder<MOCK extends Mock> {
   protected spec<T, V>(
     valueGetter: (request: V) => T,
     matcher: Matcher<T>,
-    weight: number = 0
+    weight: number = 0,
   ): Expectation<unknown, unknown> {
     return {
       matcher,
       valueGetter,
-      weight
+      weight,
     } as Expectation<unknown, unknown>
   }
 }

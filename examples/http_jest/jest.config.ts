@@ -8,10 +8,10 @@ const config: JestConfig.InitialOptions = {
   displayName: 'example-http-jest',
   globals: {
     'ts-jest': {
-      tsconfig: '../../tsconfig.test.json'
-    }
+      tsconfig: '../../tsconfig.test.json',
+    },
   },
-  testEnvironment: './node_modules/@mockdog/http-jest/dist/index.js'
+  testEnvironment: './node_modules/@mockdog/http-jest/dist/index.js',
 }
 
 export default config

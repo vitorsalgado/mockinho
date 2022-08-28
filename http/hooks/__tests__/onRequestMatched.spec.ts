@@ -23,13 +23,13 @@ describe('onRequestMatched', function () {
         { test: true },
         [],
         [],
-        10
+        10,
       ),
       mock: {
         id: '',
         name: '',
-        sourceDescription: ''
-      }
+        sourceDescription: '',
+      },
     })
 
     expect(console.log).toHaveBeenCalled()
@@ -48,13 +48,13 @@ describe('onRequestMatched', function () {
         undefined,
         [],
         [],
-        10
+        10,
       ),
       mock: {
         id: '0c349f0f-10c7-49c4-beb2-62da0eda2fb5',
         name: 'stub-test',
-        sourceDescription: '__fixtures__/nice-file.json'
-      }
+        sourceDescription: '__fixtures__/nice-file.json',
+      },
     })
 
     expect(console.log).toHaveBeenCalled()
@@ -73,13 +73,13 @@ describe('onRequestMatched', function () {
         Buffer.from('nice txt'),
         [],
         [],
-        10
+        10,
       ),
       mock: {
         id: '',
         name: 'stub-test',
-        sourceDescription: '__fixtures__/nice-file.json'
-      }
+        sourceDescription: '__fixtures__/nice-file.json',
+      },
     })
 
     expect(console.log).toHaveBeenCalled()
@@ -104,13 +104,13 @@ describe('onRequestMatched', function () {
         Readable.from(txt(), { objectMode: false }),
         [],
         [],
-        10
+        10,
       ),
       mock: {
         id: '0c349f0f-10c7-49c4-beb2-62da0eda2fb5',
         name: '',
-        sourceDescription: '__fixtures__/nice-file.json'
-      }
+        sourceDescription: '__fixtures__/nice-file.json',
+      },
     })
 
     expect(console.log).toHaveBeenCalled()

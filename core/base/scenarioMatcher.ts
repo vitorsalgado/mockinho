@@ -7,7 +7,7 @@ import { Configuration } from './Configuration.js'
 export function scenarioMatcher<MOCK extends Mock, CONFIG extends Configuration>(
   name: string,
   requiredState: string = Scenario.STATE_STARTED,
-  newState: string = '.js'
+  newState: string = '.js',
 ): MatcherContextHolder<MOCK, CONFIG> {
   return function (context): Matcher {
     if (requiredState === Scenario.STATE_STARTED) {

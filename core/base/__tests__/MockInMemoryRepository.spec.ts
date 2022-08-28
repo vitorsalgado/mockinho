@@ -21,7 +21,7 @@ describe('MockInMemoryRepository', function () {
       [],
       0,
       new Map<string, unknown>(),
-      new Map<string, unknown>()
+      new Map<string, unknown>(),
     )
     const mock2 = new Mock(
       'test-id-2',
@@ -33,7 +33,7 @@ describe('MockInMemoryRepository', function () {
       [],
       0,
       new Map<string, unknown>(),
-      new Map<string, unknown>()
+      new Map<string, unknown>(),
     )
     const mock3 = new Mock(
       'test-id-3',
@@ -45,7 +45,7 @@ describe('MockInMemoryRepository', function () {
       [],
       0,
       new Map<string, unknown>(),
-      new Map<string, unknown>()
+      new Map<string, unknown>(),
     )
     const mock4 = new Mock(
       'test-id-4',
@@ -57,7 +57,7 @@ describe('MockInMemoryRepository', function () {
       [],
       0,
       new Map<string, unknown>(),
-      new Map<string, unknown>()
+      new Map<string, unknown>(),
     )
     const mock5 = new Mock(
       'test-id-5',
@@ -69,7 +69,7 @@ describe('MockInMemoryRepository', function () {
       [],
       0,
       new Map<string, unknown>(),
-      new Map<string, unknown>()
+      new Map<string, unknown>(),
     )
     const mock6 = new Mock(
       'test-id-6',
@@ -81,7 +81,7 @@ describe('MockInMemoryRepository', function () {
       [],
       0,
       new Map<string, unknown>(),
-      new Map<string, unknown>()
+      new Map<string, unknown>(),
     )
     const mock7 = new Mock(
       'test-id-7',
@@ -93,7 +93,7 @@ describe('MockInMemoryRepository', function () {
       [],
       0,
       new Map<string, unknown>(),
-      new Map<string, unknown>()
+      new Map<string, unknown>(),
     )
 
     repo.save(mock3)

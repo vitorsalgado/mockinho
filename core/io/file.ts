@@ -13,7 +13,7 @@ import { resolve } from 'path'
 export const listFilenames = (
   rootDir: string,
   filter: (file: string) => boolean,
-  acc: string[] = []
+  acc: string[] = [],
 ): string[] =>
   readdirSync(rootDir)
     .map(directory => resolve(rootDir, directory))

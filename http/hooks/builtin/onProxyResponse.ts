@@ -11,7 +11,7 @@ export function onProxyResponse(event: Hooks['onProxyResponse']): void {
 
   console.log(
     `${greenBright(bold('PROXY RESPONSE'))} ${new Date().toISOString()} ${green(
-      `<--- ${event.method} ${event.path}`
+      `<--- ${event.method} ${event.path}`,
     )}` +
       '\n' +
       `${event.method} ${event.url}\n` +
@@ -27,7 +27,7 @@ export function onProxyResponse(event: Hooks['onProxyResponse']): void {
               ? `${green('Headers:')}\n` +
                 headers.map(([key, value]) => `${key}: ${value}`).join('\n')
               : ''
-          }\n`
-      )
+          }\n`,
+      ),
   )
 }

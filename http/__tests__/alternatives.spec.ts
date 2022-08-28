@@ -34,14 +34,14 @@ describe('Builder Alternatives', function () {
               {
                 valueGetter: extractQuery('term') as (ctx: unknown) => unknown,
                 matcher: equalsTo('test') as Matcher<unknown>,
-                weight: 0
-              }
+                weight: 0,
+              },
             ],
             [],
             ok().build(),
             new Map(),
-            new Map()
-          )
+            new Map(),
+          ),
       )
 
       return Supertest($.listener()).post('/test?term=test').expect(200)
@@ -62,13 +62,13 @@ describe('Builder Alternatives', function () {
                   'content-type': MediaTypes.APPLICATION_JSON,
                   'x-id': mock.id,
                   'x-verbose': String(modeIsAtLeast(context.configuration, 'verbose')),
-                  'x-method': request.method
+                  'x-method': request.method,
                 },
-                request.body
-              )
-            )
+                request.body,
+              ),
+            ),
           )
-          .id('test-id')
+          .id('test-id'),
       )
 
       return Supertest($.listener())

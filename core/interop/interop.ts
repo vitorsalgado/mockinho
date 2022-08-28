@@ -20,7 +20,7 @@ export async function requireOrImportModule<T>(file: string): Promise<T> {
 
         if (!imported.default) {
           throw new Error(
-            `Your version of Node does not support dynamic import - please enable it or use a .cjs file extension for file ${path}`
+            `Your version of Node does not support dynamic import - please enable it or use a .cjs file extension for file ${path}`,
           )
         }
 
@@ -38,14 +38,14 @@ async function loadTypeScriptConfigFile<T>(file: string): Promise<T> {
   try {
     registerer = require('ts-node').register({
       compilerOptions: {
-        module: 'CommonJS'
-      }
+        module: 'CommonJS',
+      },
     })
   } catch (e) {
     const error = e as { message: string; code: string }
     if (error.code === 'MODULE_NOT_FOUND') {
       throw new Error(
-        `'ts-node' is required when configuration is a TypeScript file. Make sure it is installed.\nError: ${error.message}`
+        `'ts-node' is required when configuration is a TypeScript file. Make sure it is installed.\nError: ${error.message}`,
       )
     }
 

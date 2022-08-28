@@ -33,7 +33,7 @@ describe('Events', function () {
       post(urlPath('/test'))
         .header('content-type', equalsTo(MediaTypes.APPLICATION_FORM_URL_ENCODED))
         .requestBody(jsonPath('name', equalsTo('the name')))
-        .reply(ok())
+        .reply(ok()),
     )
 
     await Supertest($.listener())

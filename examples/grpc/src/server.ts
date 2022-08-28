@@ -8,8 +8,8 @@ const server = buildFastify(
   {
     grpcAddress: process.env.API
       ? (process.env.API as string)
-      : 'https://dadosabertos.camara.leg.br/api/v2'
-  }
+      : 'https://dadosabertos.camara.leg.br/api/v2',
+  },
 )
 
 server.listen(process.env.PORT ? parseInt(process.env.PORT) : 0, (err, address) => {

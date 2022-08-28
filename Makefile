@@ -1,23 +1,30 @@
 SHELL := /bin/bash
 
+.ONESHELL:
 .DEFAULT_GOAL := help
 .PHONY: help
-help:
+
+# allow user specific optional overrides
+-include Makefile.overrides
+
+export
+
+help: ## show help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-http-build-docker: ## Build Mock HTTP docker image
+http-build-docker: ## build mock http docker image
 	@docker build -t mockhttp -f ./http/Dockerfile .
 
-http-run-docker: ## Run Mock HTTP docker container on port 3000
+http-run-docker: ## run mock http docker container on port 3000
 	@docker run -it -p 3000:8080 mockhttp --port 3000
 
-http-clean: ## Remove Mock HTTP docker container
+http-clean: ## remove mock http docker container
 	@docker rm -f mockhttp
 
-## General
+fmt: ## format code
+	@npm run fmt
+	@npm run lint:fix
 
-fmt: # Format code
-	@yarn format
-
-lint: # Run static analysis
-	@yarn lint
+lint: ## run static analysis
+	@npm run fmt:check
+	@npm run lint

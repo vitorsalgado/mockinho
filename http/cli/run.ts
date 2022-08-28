@@ -19,7 +19,7 @@ export async function run(options: Argv): Promise<MockDogHttp> {
   const configurationProviders = [
     initialOptionsReader(options.rootDir, options.config),
     envReader(process.env),
-    argvReader(options)
+    argvReader(options),
   ]
 
   for (const provider of configurationProviders) {
@@ -39,7 +39,7 @@ export async function run(options: Argv): Promise<MockDogHttp> {
   process.on('SIGINT', () => mockhttp.close())
 
   process.on('unhandledRejection', reason =>
-    console.error(red(`Unhandled Rejection. Reason: ${reason}`))
+    console.error(red(`Unhandled Rejection. Reason: ${reason}`)),
   )
   process.on('uncaughtException', error => {
     console.error(red(`Found an unexpected error. Reason: ${error.message}`))

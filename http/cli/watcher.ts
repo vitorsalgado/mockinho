@@ -7,7 +7,7 @@ export function watcher(
   path: string,
   options: WatchOptions,
   onAdd: (path: string, stats: Stats | undefined) => void,
-  onChange: (path: string, stats: Stats | undefined) => void
+  onChange: (path: string, stats: Stats | undefined) => void,
 ): FSWatcher {
   return Chokidar.watch(path, options)
     .on('add', onAdd)

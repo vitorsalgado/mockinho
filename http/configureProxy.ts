@@ -18,7 +18,7 @@ import { Headers } from './Headers.js'
 export function configureProxy(
   context: HttpContext,
   expressApp: Express,
-  serverInstances: Array<NodeHttpServer | NodeHttpsServer>
+  serverInstances: Array<NodeHttpServer | NodeHttpsServer>,
 ): void {
   if (!context.configuration.proxyOptions.target) {
     throw new Error('Proxy target must not be empty or undefined.')
@@ -58,7 +58,7 @@ export function configureProxy(
 
         res.writeHead(500, { 'content-type': MediaTypes.TEXT_PLAIN })
         res.end('Proxy Error: ' + error.message)
-      })
+      }),
   }
 
   if (context.configuration.recordEnabled) {
@@ -68,7 +68,7 @@ export function configureProxy(
       server.on('close', () =>
         dispatcher
           .terminate()
-          .finally(() => LoggerUtil.instance().debug('Recorder Dispatcher Terminated'))
+          .finally(() => LoggerUtil.instance().debug('Recorder Dispatcher Terminated')),
       )
     }
 
@@ -86,13 +86,13 @@ export function configureProxy(
           method: request.method,
           headers: request.headers,
           query: request.query,
-          body: request.body
+          body: request.body,
         },
         response: {
           status: res.statusCode,
           headers: res.getHeaders() as Record<string, string>,
-          body: responseBuffer
-        }
+          body: responseBuffer,
+        },
       })
 
       onProxyResponse(context, request, res)
@@ -107,7 +107,7 @@ export function configureProxy(
 function onProxyResponse(
   context: HttpContext,
   request: HttpRequest,
-  response: ServerResponse
+  response: ServerResponse,
 ): void {
   context.emit('onProxyResponse', {
     verbose: modeIsAtLeast(context.configuration, 'verbose'),
@@ -117,7 +117,7 @@ function onProxyResponse(
     path: request.path,
     response: {
       status: response.statusCode,
-      headers: response.getHeaders() as Record<string, string>
-    }
+      headers: response.getHeaders() as Record<string, string>,
+    },
   })
 }

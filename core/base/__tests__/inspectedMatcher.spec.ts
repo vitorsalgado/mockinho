@@ -10,7 +10,7 @@ describe('inspectedMatcher', function () {
   const expectation = {
     matcher: equalsTo('test') as Matcher<unknown>,
     weight: 1,
-    valueGetter: () => 'dev'
+    valueGetter: () => 'dev',
   }
 
   const mock = new Mock('id', 'test', 1, 'code', '', [expectation], [], 0, new Map(), new Map())
@@ -42,7 +42,7 @@ describe('inspectedMatcher', function () {
       [],
       0,
       new Map(),
-      new Map()
+      new Map(),
     )
 
     jest.spyOn(console, 'log').mockImplementation()

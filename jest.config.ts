@@ -9,15 +9,16 @@ const config: JestConfig.InitialOptions = {
   globals: {
     'ts-jest': {
       tsconfig: './tsconfig.test.json',
-      useESM: true
-    }
+      useESM: true,
+    },
   },
   collectCoverageFrom: [
     '**/**/*.ts',
     '!**/**/*.config.ts',
     '!**/__fixtures__/**',
-    '!**/__tests__/**'
-  ]
+    '!**/__tests__/**',
+    '!**/_tests/**',
+  ],
 }
 
 export default config

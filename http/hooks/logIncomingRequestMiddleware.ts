@@ -13,7 +13,7 @@ export function logIncomingRequestMiddleware(context: HttpContext) {
       url: req.url,
       path: req.path,
       body: req.body,
-      headers: req.headers as Record<string, string>
+      headers: req.headers as Record<string, string>,
     })
 
     next()

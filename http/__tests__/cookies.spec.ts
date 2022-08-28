@@ -21,7 +21,7 @@ describe('Cookies', function () {
       $.mock(
         post(urlPath('/test'))
           .cookie(cookieSignedName, equalsTo('test'))
-          .reply(ok().body('done').cookie('cookie-test-res', 'test-res'))
+          .reply(ok().body('done').cookie('cookie-test-res', 'test-res')),
       )
 
       return Supertest($.listener())
@@ -35,7 +35,7 @@ describe('Cookies', function () {
   describe('when a regular cookie is sent', function () {
     it('should apply matchers on cookie value', function () {
       $.mock(
-        post(urlPath('/test')).cookie(cookieSignedName, equalsTo('test')).reply(ok().body('done'))
+        post(urlPath('/test')).cookie(cookieSignedName, equalsTo('test')).reply(ok().body('done')),
       )
 
       return Supertest($.listener())
@@ -51,7 +51,7 @@ describe('Cookies', function () {
       $.mock(
         post(urlPath('/test'))
           .cookieJson(cookieSignedName, jsonPath('data.hello', equalsTo('world')))
-          .reply(ok().body('done'))
+          .reply(ok().body('done')),
       )
 
       return Supertest($.listener())
@@ -72,8 +72,8 @@ describe('Cookies', function () {
             .cookie(cookieSignedName, 'test', { signed: true })
             .cookieJson('cookie-json', { data: { hello: 'world' } })
             .clearCookie('cookie-del-1', { path: '/' })
-            .clearCookies({ key: 'cookie-del-2' }, { key: 'cookie-del-3' })
-        )
+            .clearCookies({ key: 'cookie-del-2' }, { key: 'cookie-del-3' }),
+        ),
       )
 
       return Supertest($.listener())

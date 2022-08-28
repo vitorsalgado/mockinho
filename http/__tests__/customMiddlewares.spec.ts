@@ -24,7 +24,7 @@ describe('Custom Middlewares', function () {
   }
 
   const $ = mockHttp(
-    opts().dynamicHttpPort().trace().use(customMiddleware).use('/hey', customMiddlewareForRoute)
+    opts().dynamicHttpPort().trace().use(customMiddleware).use('/hey', customMiddlewareForRoute),
   )
 
   beforeAll(() => $.start())
@@ -36,7 +36,7 @@ describe('Custom Middlewares', function () {
       $.mock(
         get(urlPath('/test'))
           .expect((request: HttpRequest) => request.hello === 'world' && !request.good)
-          .reply(ok())
+          .reply(ok()),
       )
 
       return Supertest($.listener())
@@ -51,13 +51,13 @@ describe('Custom Middlewares', function () {
       $.mock(
         get(urlPath('/test'))
           .expect((request: HttpRequest) => request.hello === 'world' && !request.good)
-          .reply(ok())
+          .reply(ok()),
       )
 
       $.mock(
         get(urlPath('/hey'))
           .expect((request: HttpRequest) => request.hello === 'world' && request.good === 'morning')
-          .reply(created())
+          .reply(created()),
       )
 
       await Supertest($.listener())

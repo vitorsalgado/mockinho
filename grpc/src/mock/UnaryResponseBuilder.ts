@@ -25,7 +25,7 @@ export class UnaryResponseBuilder extends ResponseBuilder<UnaryExtendedCall, Una
         data: this._data,
         metadata: this._metadata,
         flags: this._flags,
-        error: this._error
+        error: this._error,
       }
     }
   }

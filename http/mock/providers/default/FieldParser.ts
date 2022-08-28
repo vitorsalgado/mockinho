@@ -11,13 +11,13 @@ export interface FieldParser {
     mock: MockFile,
     key: string,
     values: any,
-    root: any
+    root: any,
   ): Matcher<T> | undefined
 
   parse(
     configurations: HttpConfiguration,
     filename: string,
     mock: MockFile,
-    mockBuilder: HttpMockBuilder
+    mockBuilder: HttpMockBuilder,
   ): void
 }

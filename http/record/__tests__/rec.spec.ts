@@ -30,12 +30,14 @@ describe('Record', function () {
         opts()
           .dynamicHttpPort()
           .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`)
-          .record({ destination: recordDir })
+          .record({ destination: recordDir }),
       )
 
       try {
         target.mock(
-          get(urlPath('/test')).reply(okJSON({ hello: 'world' }).header('x-proxy-reply', 'success'))
+          get(urlPath('/test')).reply(
+            okJSON({ hello: 'world' }).header('x-proxy-reply', 'success'),
+          ),
         )
 
         await $.start()
@@ -54,7 +56,7 @@ describe('Record', function () {
         const mocks = listFilenames(recordDir, file => file.includes('.mock.json'))
         const bodies = listFilenames(
           recordDir,
-          file => file.includes('.json') && !file.includes('.mock.')
+          file => file.includes('.json') && !file.includes('.mock.'),
         )
 
         expect(mocks).toHaveLength(1)

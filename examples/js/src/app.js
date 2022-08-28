@@ -15,11 +15,11 @@ module.exports = function buildFastify(opts, config) {
       method: 'get',
       responseType: 'json',
       headers: {
-        'content-type': MediaTypes.APPLICATION_JSON
-      }
+        'content-type': MediaTypes.APPLICATION_JSON,
+      },
     })
       .then(result => reply.status(200).send(result.data.dados))
-      .catch(error => reply.status(500).send({ message: error.message }))
+      .catch(error => reply.status(500).send({ message: error.message })),
   )
 
   return app

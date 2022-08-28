@@ -8,7 +8,7 @@ describe('Templating File Mock', function () {
     opts()
       .dynamicHttpPort()
       .enableFileMocks()
-      .mockDirectory(Path.join(__dirname, '__fixtures__', 'templating'))
+      .mockDirectory(Path.join(__dirname, '__fixtures__', 'templating')),
   )
 
   beforeAll(() => $.start())

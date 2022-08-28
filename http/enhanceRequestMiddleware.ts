@@ -7,7 +7,7 @@ import { nowInMs } from '@mockdog/core'
 export function enhanceRequestMiddleware(
   request: Request & { [key: string]: unknown },
   response: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void {
   request.id = UUId()
   request.href = `${request.protocol}://${request.hostname}${request.url}`

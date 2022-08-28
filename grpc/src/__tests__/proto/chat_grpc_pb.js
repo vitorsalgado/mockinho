@@ -25,8 +25,8 @@ const ChatServiceService = (exports.ChatServiceService = {
     requestSerialize: serialize_chat_ChatMessage,
     requestDeserialize: deserialize_chat_ChatMessage,
     responseSerialize: serialize_chat_ChatMessage,
-    responseDeserialize: deserialize_chat_ChatMessage
-  }
+    responseDeserialize: deserialize_chat_ChatMessage,
+  },
 })
 
 exports.ChatServiceClient = grpc.makeGenericClientConstructor(ChatServiceService)

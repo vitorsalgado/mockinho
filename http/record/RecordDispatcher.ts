@@ -25,8 +25,8 @@ export class RecordDispatcher {
         ...this.configuration.recordOptions,
         extension: this.configuration.mockFilesExtension,
         captureResponseHeaders: this.configuration.recordOptions?.captureResponseHeaders,
-        captureRequestHeaders: this.configuration.recordOptions?.captureRequestHeaders
-      } as RecordOptions & { extension: string }
+        captureRequestHeaders: this.configuration.recordOptions?.captureRequestHeaders,
+      } as RecordOptions & { extension: string },
     })
 
     try {

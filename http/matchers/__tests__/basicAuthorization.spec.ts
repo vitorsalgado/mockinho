@@ -11,8 +11,8 @@ describe('Basic Authorization', function () {
 
     const req: HttpRequest = {
       headers: {
-        authorization: `BAsiC ${encoded}`
-      }
+        authorization: `BAsiC ${encoded}`,
+      },
     } as any
 
     expect(basicAuthorization(username, password)(req)).toBeTruthy()
@@ -25,8 +25,8 @@ describe('Basic Authorization', function () {
 
     const req: HttpRequest = {
       headers: {
-        authorization: `BAsiC ${encodeBase64(`${username}:${password}`)}`
-      }
+        authorization: `BAsiC ${encodeBase64(`${username}:${password}`)}`,
+      },
     } as any
 
     const matcher = basicAuthorization(username)
@@ -36,7 +36,7 @@ describe('Basic Authorization', function () {
 
   it('should return false when there is no authorization header', function () {
     const req: HttpRequest = {
-      headers: {}
+      headers: {},
     } as any
 
     expect(basicAuthorization('test')(req)).toBeFalsy()
@@ -48,8 +48,8 @@ describe('Basic Authorization', function () {
 
     const req: HttpRequest = {
       headers: {
-        authorization: `${encodeBase64(`${username}:${password}`)}`
-      }
+        authorization: `${encodeBase64(`${username}:${password}`)}`,
+      },
     } as any
 
     expect(basicAuthorization(username)(req)).toBeFalsy()
@@ -61,8 +61,8 @@ describe('Basic Authorization', function () {
 
     const req: HttpRequest = {
       headers: {
-        authorization: `Test ${encodeBase64(`${username}:${password}`)}`
-      }
+        authorization: `Test ${encodeBase64(`${username}:${password}`)}`,
+      },
     } as any
 
     expect(basicAuthorization(username)(req)).toBeFalsy()

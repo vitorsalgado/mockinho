@@ -17,8 +17,8 @@ describe('onProxyResponse', function () {
       method: 'PATCH',
       response: {
         status: 200,
-        headers: { 'content-type': 'application/json' }
-      }
+        headers: { 'content-type': 'application/json' },
+      },
     })
 
     expect(console.log).toHaveBeenCalled()
@@ -33,8 +33,8 @@ describe('onProxyResponse', function () {
       method: 'PATCH',
       response: {
         status: 200,
-        headers: {}
-      }
+        headers: {},
+      },
     })
 
     expect(console.log).toHaveBeenCalled()
@@ -49,8 +49,8 @@ describe('onProxyResponse', function () {
       method: 'PATCH',
       response: {
         status: 200,
-        headers: {}
-      }
+        headers: {},
+      },
     })
 
     expect(console.log).toHaveBeenCalled()

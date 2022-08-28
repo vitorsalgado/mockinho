@@ -4,5 +4,5 @@ export const Modes: Record<string, number> = {
   silent: 10,
   info: 20,
   verbose: 30,
-  trace: 40
+  trace: 40,
 }

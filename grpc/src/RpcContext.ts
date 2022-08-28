@@ -8,6 +8,6 @@ export class RpcContext implements Context<RpcMock, RpcConfiguration, RpcMockRep
   constructor(
     public readonly configuration: RpcConfiguration,
     public readonly mockRepository: RpcMockRepository,
-    public readonly scenarioRepository: ScenarioRepository
+    public readonly scenarioRepository: ScenarioRepository,
   ) {}
 }

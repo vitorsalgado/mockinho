@@ -50,7 +50,7 @@ describe('Client Streaming', function () {
 
       const client = new CitiesService.CitiesServiceClient(
         $.serverInfo().address,
-        ChannelCredentials.createInsecure()
+        ChannelCredentials.createInsecure(),
       )
 
       const writable = client.sendCities(function (err, _response) {

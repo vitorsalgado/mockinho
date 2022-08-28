@@ -30,7 +30,7 @@ describe('Http Mock Builder', function () {
               return mock.properties.get(prop) !== 3
             }
           })
-          .reply(ok())
+          .reply(ok()),
       )
 
       await Supertest($.listener()).get('/test').expect(200)

@@ -6,7 +6,7 @@ export interface ExpectationWithContext<
   Value,
   ValueContext,
   MOCK extends Mock = Mock,
-  CONFIG extends Configuration = Configuration
+  CONFIG extends Configuration = Configuration,
 > {
   valueGetter: (ctx: ValueContext) => Value
   matcherContext: MatcherContextHolder<MOCK, CONFIG>

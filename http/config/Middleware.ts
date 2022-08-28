@@ -5,5 +5,5 @@ import { HttpRequest } from '../HttpRequest.js'
 export type Middleware = (
   req: HttpRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => void | Promise<void>

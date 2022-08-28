@@ -1,3 +1,3 @@
 export default {
-  toUpper: (value: string): string => value.toUpperCase()
+  toUpper: (value: string): string => value.toUpperCase(),
 }

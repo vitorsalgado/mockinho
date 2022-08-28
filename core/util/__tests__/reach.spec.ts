@@ -7,7 +7,7 @@ describe('reach', function () {
     age: 33,
     job: null,
     scholarship: undefined,
-    tags: ['dev', 'travel', 'books']
+    tags: ['dev', 'travel', 'books'],
   }
 
   it('should return object key specified by path string', function () {
@@ -22,7 +22,7 @@ describe('reach', function () {
     expect(reach(city, obj)).toEqual('Santiago')
     expect(reach(country, obj)).toEqual({
       name: 'Chile',
-      continent: { name: 'South America' }
+      continent: { name: 'South America' },
     })
     expect(reach(continentName, obj)).toEqual('South America')
   })

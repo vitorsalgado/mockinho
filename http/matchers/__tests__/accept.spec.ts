@@ -11,9 +11,9 @@ describe('Accept', function () {
       method: 'PATCH',
       headers: {
         'content-type': 'application/json',
-        accept: 'json'
+        accept: 'json',
       },
-      body: null
+      body: null,
     } as any
 
     const correct = accept(contains('json'))(req)

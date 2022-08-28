@@ -24,10 +24,10 @@ describe('HTTP - Form Url Encoded', function () {
             jsonPath('age', equalsTo('32')),
             jsonPath('job', hasLength(2)),
             jsonPath('job', item(0, contains('tea'))),
-            jsonPath('job', item(1, equalsTo('developer')))
-          )
+            jsonPath('job', item(1, equalsTo('developer'))),
+          ),
         )
-        .reply(ok().body('done'))
+        .reply(ok().body('done')),
     )
 
     return Supertest($.listener())
@@ -42,14 +42,14 @@ describe('HTTP - Form Url Encoded', function () {
     $.mock(
       post(urlPath('/test'))
         .header('content-type', equalsTo(MediaTypes.APPLICATION_FORM_URL_ENCODED))
-        .reply(ok().body('done'))
+        .reply(ok().body('done')),
     )
 
     return Supertest($.listener())
       .post('/test?q=term')
       .set(Headers.ContentType, MediaTypes.APPLICATION_FORM_URL_ENCODED)
       .send(
-        'name=the+name&description=some+description&age=32&job=teacher&job=developer&other=super-failure-test'
+        'name=the+name&description=some+description&age=32&job=teacher&job=developer&other=super-failure-test',
       )
       .expect(413)
   })

@@ -5,7 +5,7 @@ const config: InitialOptions = {
   mode: 'info',
 
   http: {
-    port: 0
+    port: 0,
   },
 
   timeout: 3_600_000,
@@ -14,7 +14,7 @@ const config: InitialOptions = {
   mockFilesExtension: 'mock',
 
   record: {
-    enabled: false
+    enabled: false,
   },
 
   proxy: {
@@ -23,12 +23,12 @@ const config: InitialOptions = {
     options: {
       headers: {
         'x-test': 'abc',
-        'x-ctx': 'test'
-      }
-    }
+        'x-ctx': 'test',
+      },
+    },
   },
 
-  plugins: ['./__fixtures__/plugin-ts.ts']
+  plugins: ['./__fixtures__/plugin-ts.ts'],
 }
 
 export default config

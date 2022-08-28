@@ -47,7 +47,7 @@ const CitiesServiceService = (exports.CitiesServiceService = {
     requestSerialize: serialize_cities_CityRequest,
     requestDeserialize: deserialize_cities_CityRequest,
     responseSerialize: serialize_cities_City,
-    responseDeserialize: deserialize_cities_City
+    responseDeserialize: deserialize_cities_City,
   },
   listCities: {
     path: '/cities.CitiesService/ListCities',
@@ -58,7 +58,7 @@ const CitiesServiceService = (exports.CitiesServiceService = {
     requestSerialize: serialize_cities_CityRequest,
     requestDeserialize: deserialize_cities_CityRequest,
     responseSerialize: serialize_cities_City,
-    responseDeserialize: deserialize_cities_City
+    responseDeserialize: deserialize_cities_City,
   },
   sendCities: {
     path: '/cities.CitiesService/SendCities',
@@ -69,8 +69,8 @@ const CitiesServiceService = (exports.CitiesServiceService = {
     requestSerialize: serialize_cities_City,
     requestDeserialize: deserialize_cities_City,
     responseSerialize: serialize_cities_CitySummary,
-    responseDeserialize: deserialize_cities_CitySummary
-  }
+    responseDeserialize: deserialize_cities_CitySummary,
+  },
 })
 
 exports.CitiesServiceClient = grpc.makeGenericClientConstructor(CitiesServiceService)

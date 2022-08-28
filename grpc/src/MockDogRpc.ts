@@ -20,7 +20,7 @@ export class MockDogRpc extends MockApp<
     const context = new RpcContext(
       configurations,
       new RpcMockRepository(),
-      new ScenarioInMemoryRepository()
+      new ScenarioInMemoryRepository(),
     )
     const server = new RpcServer(context)
 

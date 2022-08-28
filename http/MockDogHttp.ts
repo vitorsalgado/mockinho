@@ -32,7 +32,7 @@ export class MockDogHttp extends MockApp<
     const context = new HttpContext(
       configurations,
       new HttpMockRepository(),
-      new ScenarioInMemoryRepository()
+      new ScenarioInMemoryRepository(),
     )
     const httpServer = new HttpServer(context)
 

@@ -22,11 +22,11 @@ export function envReader(env: Record<string, unknown>) {
       if (env.MOCK_RECORD_DESTINATION) recSpec.destination(env.MOCK_RECORD_DESTINATION as string)
       if (env.MOCK_RECORD_CAPTURE_REQUEST_HEADERS)
         recSpec.captureRequestHeaders(
-          (env.MOCK_RECORD_CAPTURE_REQUEST_HEADERS as string).split(',') as Array<string>
+          (env.MOCK_RECORD_CAPTURE_REQUEST_HEADERS as string).split(',') as Array<string>,
         )
       if (env.MOCK_RECORD_CAPTURE_RESPONSE_HEADERS)
         recSpec.captureResponseHeaders(
-          (env.MOCK_RECORD_CAPTURE_RESPONSE_HEADERS as string).split(',') as Array<string>
+          (env.MOCK_RECORD_CAPTURE_RESPONSE_HEADERS as string).split(',') as Array<string>,
         )
 
       builder.record(recSpec)

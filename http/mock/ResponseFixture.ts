@@ -11,7 +11,7 @@ export class ResponseFixture {
     public readonly cookiesToClear: Array<CookieToClear> = [],
     public readonly delay: number = 0,
     public readonly proxyTo: string = '',
-    public readonly proxyHeaders: Record<string, string> = {}
+    public readonly proxyHeaders: Record<string, string> = {},
   ) {}
 
   hasDelay = (): boolean => this.delay > 0

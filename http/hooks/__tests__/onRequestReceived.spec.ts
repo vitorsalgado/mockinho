@@ -16,7 +16,7 @@ describe('onRequestReceived', function () {
       url: 'http://localhost:3000/test',
       path: '/test',
       headers: { 'content-type': MediaTypes.APPLICATION_JSON },
-      body: Buffer.from('data')
+      body: Buffer.from('data'),
     })
 
     expect(console.log).toHaveBeenCalled()
@@ -29,7 +29,7 @@ describe('onRequestReceived', function () {
       url: 'http://localhost:3000/test',
       path: '/test',
       headers: {},
-      body: 'data'
+      body: 'data',
     })
 
     expect(console.log).toHaveBeenCalled()
@@ -42,7 +42,7 @@ describe('onRequestReceived', function () {
       url: 'http://localhost:3000/test',
       path: '/test',
       headers: { 'content-type': MediaTypes.APPLICATION_JSON },
-      body: { hello: 'world' }
+      body: { hello: 'world' },
     })
 
     expect(console.log).toHaveBeenCalled()
@@ -55,7 +55,7 @@ describe('onRequestReceived', function () {
       url: 'http://localhost:3000/test',
       path: '/test',
       headers: { 'content-type': MediaTypes.APPLICATION_JSON },
-      body: {}
+      body: {},
     })
 
     expect(console.log).toHaveBeenCalled()
@@ -74,7 +74,7 @@ describe('onRequestReceived', function () {
       url: 'http://localhost:3000/test',
       path: '/test',
       headers: { 'content-type': MediaTypes.APPLICATION_JSON },
-      body: Readable.from(txt(), { objectMode: false })
+      body: Readable.from(txt(), { objectMode: false }),
     })
 
     expect(console.log).toHaveBeenCalled()

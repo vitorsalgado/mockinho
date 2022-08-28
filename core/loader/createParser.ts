@@ -17,7 +17,7 @@ export function createParser<T>(file: string, schema: JsonType): (data: string) 
       if (isValid) {
         return {
           mocks: Array.isArray(mock) ? mock : [mock],
-          file
+          file,
         }
       }
 
@@ -28,7 +28,7 @@ export function createParser<T>(file: string, schema: JsonType): (data: string) 
       return {
         file,
         error: error.message,
-        mocks: []
+        mocks: [],
       }
     }
   }

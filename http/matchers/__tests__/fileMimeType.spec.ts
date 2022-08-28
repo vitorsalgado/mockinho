@@ -9,7 +9,7 @@ describe('fileMimeType', function () {
 
   it('should return true when file mime type matches', function () {
     expect(
-      fileMimeType(contains('image/new-format-):'))({ mimetype: 'image/new-format-):' } as any)
+      fileMimeType(contains('image/new-format-):'))({ mimetype: 'image/new-format-):' } as any),
     ).toBeTruthy()
     expect(fileMimeType(contains('image/jpeg'))({ mimetype: 'image/gif' } as any)).toBeFalsy()
   })

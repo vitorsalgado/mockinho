@@ -7,8 +7,8 @@ describe('Bearer Token', function () {
     const token = 'mdaskdm0192onldakfm'
     const req: HttpRequest = {
       headers: {
-        authorization: `bEaRer ${token}`
-      }
+        authorization: `bEaRer ${token}`,
+      },
     } as any
 
     const res = bearerToken(equalsTo(token))(req)
@@ -22,8 +22,8 @@ describe('Bearer Token', function () {
     const token = 'mdaskdm0192onldakfm'
     const req: HttpRequest = {
       headers: {
-        authorization: `bEaRer ${token}`
-      }
+        authorization: `bEaRer ${token}`,
+      },
     } as any
 
     const res = bearerToken(token)(req)
@@ -35,8 +35,8 @@ describe('Bearer Token', function () {
     const token = 'mdaskdm0192onldakfm'
     const req: HttpRequest = {
       headers: {
-        authorization: `bEaRer ${token}`
-      }
+        authorization: `bEaRer ${token}`,
+      },
     } as any
 
     expect(bearerToken(equalsTo(token))(req)).toBeTruthy()
@@ -44,7 +44,7 @@ describe('Bearer Token', function () {
 
   it('should return false when there is no authorization header', function () {
     const req: HttpRequest = {
-      headers: {}
+      headers: {},
     } as any
 
     const matcher = bearerToken('test')
@@ -57,8 +57,8 @@ describe('Bearer Token', function () {
 
     const req: HttpRequest = {
       headers: {
-        authorization: token
-      }
+        authorization: token,
+      },
     } as any
 
     expect(bearerToken(token)(req)).toBeFalsy()
@@ -70,8 +70,8 @@ describe('Bearer Token', function () {
 
     const req: HttpRequest = {
       headers: {
-        authorization: `Beaver ${token}`
-      }
+        authorization: `Beaver ${token}`,
+      },
     } as any
 
     expect(bearerToken(token)(req)).toBeFalsy()

@@ -24,7 +24,7 @@ describe('findMockForRequest', function () {
     logLevel: 'info',
     mode: 'verbose',
     mockProviderFactories: [],
-    plugins: []
+    plugins: [],
   }
 
   describe('when theres is a match', function () {
@@ -33,7 +33,7 @@ describe('findMockForRequest', function () {
     const ctx = {
       configuration: testConfig,
       scenarioRepository: new ScenarioInMemoryRepository(),
-      mockRepository: repo
+      mockRepository: repo,
     } as Context<Mock, TestConfig, TestRepo>
 
     const mock1 = new Mock(
@@ -46,7 +46,7 @@ describe('findMockForRequest', function () {
       [],
       0,
       new Map<string, unknown>(),
-      new Map<string, unknown>()
+      new Map<string, unknown>(),
     )
     const mock2 = new Mock(
       'test-id-2',
@@ -58,7 +58,7 @@ describe('findMockForRequest', function () {
       [],
       0,
       new Map<string, unknown>(),
-      new Map<string, unknown>()
+      new Map<string, unknown>(),
     )
 
     repo.save(mock1)
@@ -81,7 +81,7 @@ describe('findMockForRequest', function () {
     const ctx = {
       configuration: testConfig,
       scenarioRepository: new ScenarioInMemoryRepository(),
-      mockRepository: repo
+      mockRepository: repo,
     } as Context<Mock, TestConfig, TestRepo>
 
     const mock1 = new Mock(
@@ -94,7 +94,7 @@ describe('findMockForRequest', function () {
       [],
       0,
       new Map<string, unknown>(),
-      new Map<string, unknown>()
+      new Map<string, unknown>(),
     )
 
     const equalsWithMeta = createMatcher(equalsTo('no-test'), 'no-test')
@@ -107,12 +107,12 @@ describe('findMockForRequest', function () {
       'desc',
       [
         { valueGetter: () => 'test', matcher: equalsTo('test') as Matcher<unknown>, weight: 2 },
-        { valueGetter: () => 'test', matcher: equalsWithMeta as Matcher<unknown>, weight: 0 }
+        { valueGetter: () => 'test', matcher: equalsWithMeta as Matcher<unknown>, weight: 0 },
       ],
       [],
       0,
       new Map<string, unknown>(),
-      new Map<string, unknown>()
+      new Map<string, unknown>(),
     )
 
     repo.save(mock1)
@@ -135,7 +135,7 @@ describe('findMockForRequest', function () {
     const ctx = {
       configuration: { mode: 'trace', logLevel: 'info', plugins: [], mockProviderFactories: [] },
       scenarioRepository: new ScenarioInMemoryRepository(),
-      mockRepository: repo
+      mockRepository: repo,
     } as Context<Mock, TestConfig, TestRepo>
 
     const mock1 = new Mock(
@@ -152,12 +152,12 @@ describe('findMockForRequest', function () {
             Mock,
             Configuration,
             unknown
-          >
-        }
+          >,
+        },
       ],
       0,
       new Map<string, unknown>(),
-      new Map<string, unknown>()
+      new Map<string, unknown>(),
     )
     const mock2 = new Mock(
       'test-id-2',
@@ -169,7 +169,7 @@ describe('findMockForRequest', function () {
       [],
       0,
       new Map<string, unknown>(),
-      new Map<string, unknown>()
+      new Map<string, unknown>(),
     )
 
     repo.save(mock1)

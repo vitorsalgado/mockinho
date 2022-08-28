@@ -17,7 +17,7 @@ export abstract class MockApp<
   SERVER_INFO,
   SERVER extends MockServer<SERVER_INFO>,
   CONFIG extends Configuration,
-  CONTEXT extends Context<MOCK, CONFIG, MockRepository<MOCK>>
+  CONTEXT extends Context<MOCK, CONFIG, MockRepository<MOCK>>,
 > {
   protected readonly _context: CONTEXT
   protected readonly _mockServer: SERVER
@@ -37,8 +37,8 @@ export abstract class MockApp<
     this._plugins.push(...this._configuration.plugins.map(plugin => ({ plugin })))
     this._mockProviders.push(
       ...this._configuration.mockProviderFactories.map(
-        provider => provider(this) as MockProvider<MockBuilder<MOCK>>
-      )
+        provider => provider(this) as MockProvider<MockBuilder<MOCK>>,
+      ),
     )
 
     this.setup()
@@ -68,7 +68,7 @@ export abstract class MockApp<
     }
 
     return Promise.all([this.applyMocksFromProviders(), this._mockServer.start()]).then(
-      ([_, info]) => info
+      ([_, info]) => info,
     )
   }
 
@@ -80,7 +80,7 @@ export abstract class MockApp<
   register<Options>(plugin: Plugin<Options, this>, opts?: Options): void {
     this._plugins.push({
       plugin: plugin as Plugin,
-      opts
+      opts,
     })
   }
 
@@ -121,7 +121,7 @@ export abstract class MockApp<
 
   protected applyMocksFromProviders(): Promise<void> {
     return Promise.all(this._mockProviders.map(provider => provider())).then(mocks =>
-      mocks.flatMap(x => x).forEach(mock => this.mock(mock))
+      mocks.flatMap(x => x).forEach(mock => this.mock(mock)),
     )
   }
 

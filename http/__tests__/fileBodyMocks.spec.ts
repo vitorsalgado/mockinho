@@ -25,8 +25,10 @@ describe('HTTP - Working With File Body Mocks', function () {
         get(urlPath('/test'))
           .header(Headers.Accept, equalsTo(MediaTypes.APPLICATION_JSON))
           .reply(
-            ok().bodyFile('body-stub.json').header(Headers.ContentType, MediaTypes.APPLICATION_JSON)
-          )
+            ok()
+              .bodyFile('body-stub.json')
+              .header(Headers.ContentType, MediaTypes.APPLICATION_JSON),
+          ),
       )
 
       return Supertest($.listener())
@@ -55,8 +57,10 @@ describe('HTTP - Working With File Body Mocks', function () {
         get(urlPath('/test'))
           .header(Headers.Accept, equalsTo(MediaTypes.APPLICATION_JSON))
           .reply(
-            ok().bodyFile('body-stub.json').header(Headers.ContentType, MediaTypes.APPLICATION_JSON)
-          )
+            ok()
+              .bodyFile('body-stub.json')
+              .header(Headers.ContentType, MediaTypes.APPLICATION_JSON),
+          ),
       )
 
       return Supertest($.listener())

@@ -14,7 +14,7 @@ describe('Responses', function () {
       .dynamicHttpPort()
       .trace()
       .enableFileMocks()
-      .mockDirectory(Path.join(__dirname, '__fixtures__'))
+      .mockDirectory(Path.join(__dirname, '__fixtures__')),
   )
 
   beforeAll(() => $.start())
@@ -26,7 +26,7 @@ describe('Responses', function () {
       $.mock(
         get(urlPath('/test'))
           .header('content-type', contains('json'))
-          .reply(ok().bodyWith(request => ({ data: `Request method was: ${request.method}` })))
+          .reply(ok().bodyWith(request => ({ data: `Request method was: ${request.method}` }))),
       )
 
       return Supertest($.listener())
@@ -41,8 +41,8 @@ describe('Responses', function () {
     it('should use response based on request number', async function () {
       $.mock(
         get(urlPath('/test')).reply(
-          multipleResponses().type('sequential').add(ok(), created(), badRequest())
-        )
+          multipleResponses().type('sequential').add(ok(), created(), badRequest()),
+        ),
       )
 
       await Supertest($.listener()).get('/test').expect(StatusCodes.OK)

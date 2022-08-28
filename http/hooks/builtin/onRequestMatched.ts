@@ -11,7 +11,7 @@ export function onRequestMatched(event: Hooks['onRequestMatched']): void {
   // eslint-disable-next-line no-console
   console.log(
     `${greenBright(bold('REQUEST MATCHED'))} ${new Date().toISOString()} ${green(
-      `<--- ${event.method} ${event.path}`
+      `<--- ${event.method} ${event.path}`,
     )}` +
       '\n' +
       `${event.method} ${event.url}\n` +
@@ -46,7 +46,7 @@ export function onRequestMatched(event: Hooks['onRequestMatched']): void {
                   ? `${italic(gray('(stream response body omitted)'))}`
                   : JSON.stringify(event.responseDefinition.body))
               : ''
-          }\n`
-      )
+          }\n`,
+      ),
   )
 }

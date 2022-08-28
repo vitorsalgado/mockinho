@@ -6,7 +6,7 @@ import { MockRepository } from './MockRepository.js'
 export class Scope<MOCK extends Mock> {
   constructor(
     private readonly mockRepository: MockRepository<MOCK>,
-    private readonly mocks: Array<string>
+    private readonly mocks: Array<string>,
   ) {}
 
   isDone(): boolean {

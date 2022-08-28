@@ -7,7 +7,7 @@ import { mockHttp } from '../mockHttp'
 describe('HTTP - File Mocking', function () {
   describe('Default Path', function () {
     const $ = mockHttp(
-      opts().dynamicHttpPort().enableFileMocks().rootDir(Path.join(__dirname, '../'))
+      opts().dynamicHttpPort().enableFileMocks().rootDir(Path.join(__dirname, '../')),
     )
 
     beforeAll(() => $.start())
@@ -23,12 +23,12 @@ describe('HTTP - File Mocking', function () {
           data: {
             message: 'coding',
             list: ['mobile', 'nodejs', 'app', 'test', 'lib'],
-            age: 33
+            age: 33,
           },
           notifications: [
             { context: { mobile: { content: 'bad comment' } } },
-            { context: { mobile: { content: 'nice comment' } } }
-          ]
+            { context: { mobile: { content: 'nice comment' } } },
+          ],
         })
         .expect(200)
         .expect(res => expect(res.body).toEqual({ context: 'default-fixture-path' }))
@@ -44,14 +44,14 @@ describe('HTTP - File Mocking', function () {
         .send({
           data: {
             message: ' test ',
-            age: 33
-          }
+            age: 33,
+          },
         })
         .expect(res =>
           expect(res.body).toEqual([
             { name: 'tester', status: 'ok' },
-            { name: 'dev', status: 'nok' }
-          ])
+            { name: 'dev', status: 'nok' },
+          ]),
         )
     })
   })

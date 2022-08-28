@@ -15,7 +15,7 @@ export class Mock {
     private readonly _statefulExpectations: Array<ExpectationWithContext<unknown, unknown>>,
     public hits: number,
     public readonly meta: Map<string, unknown>,
-    public readonly properties: Map<string, unknown>
+    public readonly properties: Map<string, unknown>,
   ) {
     if (!this.id) {
       this.id = UUIdV4()

@@ -35,9 +35,9 @@ describe('HTTP Example', function () {
         .reply(
           okJSON({ dados: [{ id: 'test-id', nome: 'test-name' }] }).header(
             Headers.ContentType,
-            MediaTypes.APPLICATION_JSON
-          )
-        )
+            MediaTypes.APPLICATION_JSON,
+          ),
+        ),
     )
 
     await supertest(fastify.server)

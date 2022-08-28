@@ -24,7 +24,7 @@ export class RpcServer implements MockServer<RpcServerInfo> {
     this.server = new grpc.Server(this.configuration.channelOptions)
     this.information = {
       port: 0,
-      address: this.configuration.address
+      address: this.configuration.address,
     }
   }
 
@@ -33,7 +33,7 @@ export class RpcServer implements MockServer<RpcServerInfo> {
 
     for (const [, entries] of Object.entries(grpcObject)) {
       for (const [, definition] of Object.entries(entries).filter(
-        ([, value]) => typeof value === 'function'
+        ([, value]) => typeof value === 'function',
       )) {
         const methods: UntypedServiceImplementation = {}
 
@@ -65,7 +65,7 @@ export class RpcServer implements MockServer<RpcServerInfo> {
           methods[method] = mockFinder({
             service: definition.name,
             serviceMethod: method,
-            path: operation.path
+            path: operation.path,
           })
         }
 
@@ -88,12 +88,12 @@ export class RpcServer implements MockServer<RpcServerInfo> {
           this.information.port = port
           this.information.address = `${this.configuration.address.substr(
             0,
-            this.configuration.address.indexOf(':')
+            this.configuration.address.indexOf(':'),
           )}:${port}`
 
           return resolve(this.information)
-        }
-      )
+        },
+      ),
     )
   }
 
@@ -120,7 +120,7 @@ export class RpcServer implements MockServer<RpcServerInfo> {
 
     if (configuration.protoFilesDirectories) {
       configuration.protoFilesDirectories.forEach(dir =>
-        protos.push(...listFilenames(dir, file => file.includes('.proto')))
+        protos.push(...listFilenames(dir, file => file.includes('.proto'))),
       )
     }
 

@@ -22,7 +22,7 @@ export function configureWatcher(config: HttpConfiguration, mockhttp: MockDogHtt
       interval: 1000,
       ignoreInitial: true,
       usePolling: false,
-      atomic: false
+      atomic: false,
     },
 
     async path => {
@@ -80,7 +80,7 @@ export function configureWatcher(config: HttpConfiguration, mockhttp: MockDogHtt
         console.error(red('Error updating mocks. Reason: ' + ex))
         console.error(ex)
       }
-    }
+    },
   )
 
   mockhttp.on('onClose', () => fsWatcher.close())

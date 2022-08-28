@@ -13,7 +13,7 @@ import { RpcMock } from './RpcMock.js'
 import { UnaryResponse } from './UnaryResponse.js'
 
 export function UnaryMockFinderHandler(
-  context: RpcContext
+  context: RpcContext,
 ): (methodContext: RpcCallContext) => UnaryHandler {
   return function (callContext: RpcCallContext): UnaryHandler {
     return function (call: UnaryCall, callback: UnaryCallback): void {
@@ -21,7 +21,7 @@ export function UnaryMockFinderHandler(
 
       const result = findMockForRequest<UnaryExtendedCall, RpcMock, RpcConfiguration>(
         extendedCall,
-        context
+        context,
       )
 
       if (result.hasMatch()) {
@@ -48,7 +48,7 @@ export function UnaryMockFinderHandler(
       callback({
         code: grpc.status.UNIMPLEMENTED,
         message: 'Request was not matched.',
-        details: noMatchErrorMessage(result)
+        details: noMatchErrorMessage(result),
       })
     }
   }

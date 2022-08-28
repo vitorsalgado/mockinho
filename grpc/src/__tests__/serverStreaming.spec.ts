@@ -54,7 +54,7 @@ describe('Server Streaming', function () {
         serverStreamingCall()
           .method('listCities')
           .meta('test-key', equalsTo(['test-value']))
-          .reply(serverStreaming().stream(Readable.from(cities())))
+          .reply(serverStreaming().stream(Readable.from(cities()))),
       )
 
       const meta = new grpc.Metadata()
@@ -65,7 +65,7 @@ describe('Server Streaming', function () {
 
       const client = new CitiesService.CitiesServiceClient(
         $.serverInfo().address,
-        ChannelCredentials.createInsecure()
+        ChannelCredentials.createInsecure(),
       )
 
       const readable = client.listCities(request, meta)

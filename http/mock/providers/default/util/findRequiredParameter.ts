@@ -4,7 +4,7 @@ export function findRequiredParameter<T>(
   parameter: string,
   values: [string, unknown][],
   filename: string,
-  errorMessage: string
+  errorMessage: string,
 ): T {
   const entry = values.find(([k]) => k === parameter)
 

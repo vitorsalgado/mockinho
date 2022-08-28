@@ -23,7 +23,7 @@ export class RpcMockBuilder<REQUEST, RESPONSE extends Response> extends MockBuil
 
   constructor(
     private readonly _source: MockSource = 'code',
-    private readonly _sourceDescription: string = ''
+    private readonly _sourceDescription: string = '',
   ) {
     super()
   }
@@ -36,7 +36,7 @@ export class RpcMockBuilder<REQUEST, RESPONSE extends Response> extends MockBuil
     notBlank(service)
 
     this._expectations.push(
-      this.spec((call: UnaryExtendedCall) => call.context.service, contains(service), 5)
+      this.spec((call: UnaryExtendedCall) => call.context.service, contains(service), 5),
     )
 
     return this
@@ -46,7 +46,7 @@ export class RpcMockBuilder<REQUEST, RESPONSE extends Response> extends MockBuil
     notBlank(method)
 
     this._expectations.push(
-      this.spec((call: UnaryExtendedCall) => call.context.serviceMethod, contains(method), 5)
+      this.spec((call: UnaryExtendedCall) => call.context.serviceMethod, contains(method), 5),
     )
 
     return this
@@ -57,7 +57,7 @@ export class RpcMockBuilder<REQUEST, RESPONSE extends Response> extends MockBuil
     notNull(matcher)
 
     this._expectations.push(
-      this.spec((call: UnaryExtendedCall) => call.metadata.get(key), matcher, 0.5)
+      this.spec((call: UnaryExtendedCall) => call.metadata.get(key), matcher, 0.5),
     )
 
     return this
@@ -72,14 +72,14 @@ export class RpcMockBuilder<REQUEST, RESPONSE extends Response> extends MockBuil
     }
 
     this._expectations.push(
-      this.spec((call: UnaryExtendedCall) => call.request, allOf(...matchers), 5)
+      this.spec((call: UnaryExtendedCall) => call.request, allOf(...matchers), 5),
     )
 
     return this
   }
 
   reply(
-    response: ResponseBuilder<REQUEST, RESPONSE> | ResponseBuilderDelegate<REQUEST, RESPONSE>
+    response: ResponseBuilder<REQUEST, RESPONSE> | ResponseBuilderDelegate<REQUEST, RESPONSE>,
   ): RpcMockBuilder<REQUEST, RESPONSE> {
     this._responseBuilder = response instanceof ResponseBuilder ? response.build() : response
     return this
@@ -96,7 +96,7 @@ export class RpcMockBuilder<REQUEST, RESPONSE extends Response> extends MockBuil
       this._statefulExpectations as Array<ExpectationWithContext<unknown, unknown>>,
       this._responseBuilder as ResponseBuilderDelegate<unknown, RESPONSE>,
       this._meta,
-      new Map<string, unknown>()
+      new Map<string, unknown>(),
     )
   }
 }

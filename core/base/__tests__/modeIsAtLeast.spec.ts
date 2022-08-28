@@ -7,7 +7,7 @@ describe('modeIsAtLeast', function () {
       mode: 'verbose',
       logLevel: 'info',
       plugins: [],
-      mockProviderFactories: []
+      mockProviderFactories: [],
     }
 
     expect(modeIsAtLeast(config, 'verbose')).toBeTruthy()

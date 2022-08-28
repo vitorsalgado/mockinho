@@ -41,7 +41,7 @@ describe('Unary', function () {
         unaryCall()
           .method('getCity')
           .meta('test-key', equalsTo(['test-value']))
-          .reply(unary().data(city.toObject()))
+          .reply(unary().data(city.toObject())),
       )
 
       const meta = new grpc.Metadata()
@@ -52,7 +52,7 @@ describe('Unary', function () {
 
       const client = new CitiesService.CitiesServiceClient(
         $.serverInfo().address,
-        ChannelCredentials.createInsecure()
+        ChannelCredentials.createInsecure(),
       )
 
       client.getCity(request, meta, function (err, response) {

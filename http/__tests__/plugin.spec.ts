@@ -23,7 +23,7 @@ describe('plugins', function () {
   it('should register sync plugin', async function () {
     const plugin: Plugin<TestOptions, MockDogHttp> = (instance, opts) => {
       instance.mock(
-        get('/plugin').reply(okJSON({ name: opts?.name, description: opts?.description }))
+        get('/plugin').reply(okJSON({ name: opts?.name, description: opts?.description })),
       )
     }
 
@@ -45,7 +45,9 @@ describe('plugins', function () {
       new Promise(resolve => {
         setTimeout(() => {
           instance.mock(
-            get('/plugin-async').reply(okJSON({ name: opts?.name, description: opts?.description }))
+            get('/plugin-async').reply(
+              okJSON({ name: opts?.name, description: opts?.description }),
+            ),
           )
           resolve()
         }, 500)
@@ -67,7 +69,7 @@ describe('plugins', function () {
   it('should register multiple plugins', async function () {
     const syncPlugin: Plugin<TestOptions, MockDogHttp> = (instance, opts) => {
       instance.mock(
-        get('/plugin').reply(okJSON({ name: opts?.name, description: opts?.description }))
+        get('/plugin').reply(okJSON({ name: opts?.name, description: opts?.description })),
       )
     }
 
@@ -75,7 +77,9 @@ describe('plugins', function () {
       new Promise(resolve => {
         setTimeout(() => {
           instance.mock(
-            get('/plugin-async').reply(okJSON({ name: opts?.name, description: opts?.description }))
+            get('/plugin-async').reply(
+              okJSON({ name: opts?.name, description: opts?.description }),
+            ),
           )
           resolve()
         }, 500)

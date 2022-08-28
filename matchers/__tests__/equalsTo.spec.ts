@@ -61,15 +61,15 @@ describe('EqualsTo', function () {
         active: true,
         list: [
           { job: 'None', title: 'Something' },
-          { job: 'Developer', title: 'Nice Developer', date: '2020-05-05' }
+          { job: 'Developer', title: 'Nice Developer', date: '2020-05-05' },
         ],
         StrangeKey: {
           sub1: {
             sub2: {
-              hello: 'world'
-            }
-          }
-        }
+              hello: 'world',
+            },
+          },
+        },
       }
 
       const other = {
@@ -78,15 +78,15 @@ describe('EqualsTo', function () {
         active: true,
         list: [
           { job: 'None', title: 'Something' },
-          { job: 'Developer', title: 'Nice Developer', date: '2020-05-05' }
+          { job: 'Developer', title: 'Nice Developer', date: '2020-05-05' },
         ],
         StrangeKey: {
           sub1: {
             sub2: {
-              hello: 'world'
-            }
-          }
-        }
+              hello: 'world',
+            },
+          },
+        },
       }
 
       const invalidTypes = {
@@ -95,15 +95,15 @@ describe('EqualsTo', function () {
         active: true,
         list: [
           { job: 'None', title: 'Something' },
-          { job: 'Developer', title: 'Nice Developer', date: '2020-05-05' }
+          { job: 'Developer', title: 'Nice Developer', date: '2020-05-05' },
         ],
         StrangeKey: {
           sub1: {
             sub2: {
-              hello: 'world'
-            }
-          }
-        }
+              hello: 'world',
+            },
+          },
+        },
       }
 
       const missingFields = {
@@ -114,10 +114,10 @@ describe('EqualsTo', function () {
         StrangeKey: {
           sub1: {
             sub2: {
-              hello: 'world'
-            }
-          }
-        }
+              hello: 'world',
+            },
+          },
+        },
       }
 
       const unordered = {
@@ -127,14 +127,14 @@ describe('EqualsTo', function () {
         StrangeKey: {
           sub1: {
             sub2: {
-              hello: 'world'
-            }
-          }
+              hello: 'world',
+            },
+          },
         },
         list: [
           { job: 'None', title: 'Something' },
-          { job: 'Developer', title: 'Nice Developer', date: '2020-05-05' }
-        ]
+          { job: 'Developer', title: 'Nice Developer', date: '2020-05-05' },
+        ],
       }
 
       expect(equalsTo(obj)(other, noop())).toBeTruthy()
@@ -147,22 +147,22 @@ describe('EqualsTo', function () {
       const obj = {
         list: [
           { job: 'None', title: 'Something' },
-          { job: 'Developer', title: 'Nice Developer', date: '2020-05-05' }
-        ]
+          { job: 'Developer', title: 'Nice Developer', date: '2020-05-05' },
+        ],
       }
 
       const ordered = {
         list: [
           { title: 'Something', job: 'None' },
-          { job: 'Developer', date: '2020-05-05', title: 'Nice Developer' }
-        ]
+          { job: 'Developer', date: '2020-05-05', title: 'Nice Developer' },
+        ],
       }
 
       const unordered = {
         list: [
           { job: 'Developer', title: 'Nice Developer', date: '2020-05-05' },
-          { job: 'None', title: 'Something' }
-        ]
+          { job: 'None', title: 'Something' },
+        ],
       }
 
       expect(equalsTo(obj)(ordered, noop())).toBeTruthy()

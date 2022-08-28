@@ -65,7 +65,7 @@ export class RpcConfigurationBuilder {
         ? this._serverCredentials
         : Defaults.serverCredentials,
       plugins: [],
-      mockProviderFactories: []
+      mockProviderFactories: [],
     }
   }
 }

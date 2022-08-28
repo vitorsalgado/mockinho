@@ -7,6 +7,6 @@ export class ClientStreamingArgs implements Args<ServerReadableStream<unknown, u
     public readonly serviceMethod: string,
     public readonly path: string,
     public readonly call: ServerReadableStream<unknown, unknown>,
-    public readonly data: unknown
+    public readonly data: unknown,
   ) {}
 }

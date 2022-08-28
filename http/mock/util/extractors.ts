@@ -27,7 +27,7 @@ export const extractQuery =
     request.query[key]
 
 export const extractQueries = (
-  request: HttpRequest
+  request: HttpRequest,
 ): Record<string, string | string[] | undefined> => request.query
 
 export const extractNothing = (): undefined => undefined

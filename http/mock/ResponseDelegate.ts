@@ -6,5 +6,5 @@ import { ResponseFixture } from './ResponseFixture.js'
 export type ResponseDelegate = (
   context: HttpContext,
   request: HttpRequest,
-  mock: HttpMock
+  mock: HttpMock,
 ) => Promise<ResponseFixture>

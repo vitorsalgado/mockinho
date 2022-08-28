@@ -4,7 +4,7 @@ import { MatcherConstants } from '../MatcherConstants.js'
 export function findRequiredMatcherEntry(
   values: [string, unknown][],
   filename: string,
-  errorMessage: string
+  errorMessage: string,
 ): [string, unknown] {
   const entry = values.find(([key]) => MatcherConstants.includes(key))
 

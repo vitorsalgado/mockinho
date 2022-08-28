@@ -22,10 +22,10 @@ export function logReqAndResMiddleware(context: HttpContext) {
           params: req.params,
           headers: req.headers,
           isMultipart: req.isMultipart,
-          files: req.files
+          files: req.files,
         },
-        response: { status: response.statusCode, headers: response.getHeaders() }
-      })
+        response: { status: response.statusCode, headers: response.getHeaders() },
+      }),
     )
 
     next()

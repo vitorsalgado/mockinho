@@ -18,7 +18,7 @@ export class RpcMock extends Mock {
     statefulExpectations: Array<ExpectationWithContext<unknown, unknown>>,
     responseBuilder: ResponseBuilderDelegate<unknown, Response>,
     meta: Map<string, unknown>,
-    properties: Map<string, unknown>
+    properties: Map<string, unknown>,
   ) {
     super(
       id,
@@ -30,7 +30,7 @@ export class RpcMock extends Mock {
       statefulExpectations,
       0,
       meta,
-      properties
+      properties,
     )
 
     this._responseBuilder = responseBuilder

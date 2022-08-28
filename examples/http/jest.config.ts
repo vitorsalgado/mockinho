@@ -8,9 +8,9 @@ const config: JestConfig.InitialOptions = {
   displayName: 'example-http',
   globals: {
     'ts-jest': {
-      tsconfig: '../../tsconfig.test.json'
-    }
-  }
+      tsconfig: '../../tsconfig.test.json',
+    },
+  },
 }
 
 export default config

@@ -5,5 +5,5 @@ export const Groups = {
   record: 'Record:',
   proxy: 'Proxy:',
   internal: 'Internal:',
-  server: 'Server:'
+  server: 'Server:',
 }

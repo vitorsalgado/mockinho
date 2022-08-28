@@ -4,6 +4,6 @@ export class RpcCallArgs<C, T = unknown> {
     public readonly serviceMethod: string,
     public readonly path: string,
     public readonly call: C,
-    public readonly data: T
+    public readonly data: T,
   ) {}
 }

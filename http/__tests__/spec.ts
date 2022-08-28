@@ -26,7 +26,7 @@ describe('MockDog HTTP', function () {
       $.mock(
         get(urlPath('/test'))
           .header('content-type', contains('json'))
-          .reply(okJSON({ data: expected }))
+          .reply(okJSON({ data: expected })),
       )
 
       return Supertest($.listener())
@@ -59,7 +59,7 @@ describe('MockDog HTTP', function () {
         post(urlPath('/test'))
           .header('content-type', contains('json'))
           .requestBody(jsonPath('user.name', equalsTo('tester')))
-          .reply(ok().body('done').header(Headers.ContentType, MediaTypes.TEXT_PLAIN))
+          .reply(ok().body('done').header(Headers.ContentType, MediaTypes.TEXT_PLAIN)),
       )
 
       return Supertest($.listener())
@@ -75,8 +75,8 @@ describe('MockDog HTTP', function () {
         post(urlPath('/test')).reply(
           ok()
             .body(fromFile(fixture('simple.json')))
-            .header(Headers.ContentType, MediaTypes.APPLICATION_JSON)
-        )
+            .header(Headers.ContentType, MediaTypes.APPLICATION_JSON),
+        ),
       )
 
       return Supertest($.listener())
@@ -94,7 +94,7 @@ describe('MockDog HTTP', function () {
           .scenario('Test', 'started', 'phase 2')
           .header(Headers.ContentType, contains('json'))
           .requestBody(jsonPath('message', equalsTo('hey')))
-          .reply(okJSON({ data: 'started' }))
+          .reply(okJSON({ data: 'started' })),
       )
 
       $.mock(
@@ -103,7 +103,7 @@ describe('MockDog HTTP', function () {
           .scenario('Test', 'phase 2', 'phase 3')
           .header(Headers.ContentType, contains('json'))
           .requestBody(jsonPath('message', equalsTo('hey')))
-          .reply(okJSON({ data: 'phase 2' }))
+          .reply(okJSON({ data: 'phase 2' })),
       )
 
       await Supertest($.listener())

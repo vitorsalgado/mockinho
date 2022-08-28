@@ -10,7 +10,7 @@ export function onRequestReceived(event: Hooks['onRequestStart']): void {
   // eslint-disable-next-line no-console
   console.log(
     `${blueBright(bold('REQUEST RECEIVED'))} ${new Date().toISOString()} ${blueBright(
-      `---> ${event.method} ${event.path}`
+      `---> ${event.method} ${event.path}`,
     )}` +
       '\n' +
       bold(`${event.method} ${event.url}\n`) +
@@ -32,7 +32,7 @@ export function onRequestReceived(event: Hooks['onRequestStart']): void {
             )
               ? `\n${blue('Body:')}\n` + JSON.stringify(event.body)
               : ''
-          }\n`
-      )
+          }\n`,
+      ),
   )
 }

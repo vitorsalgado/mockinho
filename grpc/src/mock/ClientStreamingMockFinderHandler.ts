@@ -15,7 +15,7 @@ import { RpcMock } from './RpcMock.js'
 import { UnaryResponse } from './UnaryResponse.js'
 
 export function ClientStreamingMockFinderHandler(
-  context: RpcContext
+  context: RpcContext,
 ): (methodContext: RpcCallContext) => ClientStreamingHandler {
   return function (callContext: RpcCallContext): ClientStreamingHandler {
     return function (call: ServerReadableStream<unknown, unknown>, callback: UnaryCallback): void {
@@ -33,7 +33,7 @@ export function ClientStreamingMockFinderHandler(
           callContext.serviceMethod,
           callContext.path,
           call,
-          data
+          data,
         )
 
         result = findMockForRequest<
@@ -54,7 +54,7 @@ export function ClientStreamingMockFinderHandler(
             .responseBuilder<ServerReadableStream<unknown, unknown>, UnaryResponse>()(
               context,
               call,
-              result.matched()
+              result.matched(),
             )
             .then(response => {
               const replier = () =>
@@ -75,7 +75,7 @@ export function ClientStreamingMockFinderHandler(
         callback({
           code: grpc.status.UNIMPLEMENTED,
           message: 'Request was not matched.',
-          details: noMatchErrorMessage(result)
+          details: noMatchErrorMessage(result),
         })
       })
     }

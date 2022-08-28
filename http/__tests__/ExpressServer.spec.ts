@@ -48,7 +48,7 @@ describe('Express Http Server', function () {
     $.mock(
       post(urlPath('/test'))
         .header('content-type', contains('json'))
-        .reply(okJSON({ data: expected }))
+        .reply(okJSON({ data: expected })),
     )
 
     return Supertest($.listener())
@@ -65,7 +65,7 @@ describe('Express Http Server', function () {
     $.mock(
       post(urlPath('/test'))
         .header('content-type', contains('json'))
-        .reply(okJSON({ data: expected }))
+        .reply(okJSON({ data: expected })),
     )
 
     return Supertest($.listener())

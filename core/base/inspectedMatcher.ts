@@ -9,7 +9,7 @@ import { Expectation } from './Expectation.js'
 
 export function inspectedMatcher<M extends Mock>(
   expectation: Expectation<unknown, unknown>,
-  mock: M
+  mock: M,
 ) {
   return function (value: unknown): boolean {
     const result = expectation.matcher(value)
@@ -20,8 +20,8 @@ export function inspectedMatcher<M extends Mock>(
         redBright(
           `Mock: ${
             mock.sourceDescription ? `${mock.sourceDescription}` : mock.name ? mock.name : mock.id
-          }`
-        )
+          }`,
+        ),
       )
     }
 

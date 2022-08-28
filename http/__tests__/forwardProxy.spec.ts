@@ -20,7 +20,7 @@ describe('Forward Proxy', function () {
       const $ = mockHttp(
         opts()
           .dynamicHttpPort()
-          .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`)
+          .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`),
       )
 
       try {
@@ -29,7 +29,7 @@ describe('Forward Proxy', function () {
             .header('proxy-header', equalsTo('100'))
             .header('x-test', equalsTo('true'))
             .header('x-dev', equalsTo('ts'))
-            .reply(okJSON({ hello: 'world' }).header('x-proxy-reply', 'success'))
+            .reply(okJSON({ hello: 'world' }).header('x-proxy-reply', 'success')),
         )
 
         await $.start()
@@ -54,14 +54,14 @@ describe('Forward Proxy', function () {
       const $ = mockHttp(
         opts()
           .dynamicHttpPort()
-          .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`)
+          .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`),
       )
 
       try {
         target.mock(
           get(urlPath('/test')).reply(
-            badRequestJSON({ message: 'boom!' }).header('x-proxy-reply', 'failure')
-          )
+            badRequestJSON({ message: 'boom!' }).header('x-proxy-reply', 'failure'),
+          ),
         )
 
         await $.start()
@@ -83,7 +83,7 @@ describe('Forward Proxy', function () {
       const $ = mockHttp(
         opts()
           .dynamicHttpPort()
-          .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`)
+          .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`),
       )
 
       try {
@@ -93,7 +93,7 @@ describe('Forward Proxy', function () {
             .header('x-test', equalsTo('true'))
             .header('x-dev', equalsTo('ts'))
             .requestBody(jsonPath('data', equalsTo('test')))
-            .reply(okJSON({ hello: 'world' }).header('x-proxy-reply', 'success'))
+            .reply(okJSON({ hello: 'world' }).header('x-proxy-reply', 'success')),
         )
 
         await $.start()
@@ -120,15 +120,15 @@ describe('Forward Proxy', function () {
         opts()
           .dynamicHttpPort()
           .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`, {
-            proxyTimeout: 100
-          })
+            proxyTimeout: 100,
+          }),
       )
 
       try {
         target.mock(
           post(urlPath('/test')).reply(
-            okJSON({ hello: 'world' }).header('x-proxy-reply', 'success')
-          )
+            okJSON({ hello: 'world' }).header('x-proxy-reply', 'success'),
+          ),
         )
 
         await $.start()

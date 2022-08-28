@@ -10,7 +10,7 @@ import { ServerStreamingResponse } from './ServerStreamingResponse.js'
 import { noMatchError } from './noMatchError.js'
 
 export function ServerStreamingMockFinderHandler(
-  context: RpcContext
+  context: RpcContext,
 ): (methodContext: RpcCallContext) => ServerStreamingHandler {
   return function (callContext: RpcCallContext): ServerStreamingHandler {
     return function (call: ServerStreamingCall): void {
@@ -19,7 +19,7 @@ export function ServerStreamingMockFinderHandler(
 
       const result = findMockForRequest<ServerStreamingExtendedCall, RpcMock, RpcConfiguration>(
         extendedCall,
-        context
+        context,
       )
 
       if (!result.hasMatch()) {
@@ -33,7 +33,7 @@ export function ServerStreamingMockFinderHandler(
         .responseBuilder<ServerStreamingResponse>()(
           context,
           extendedCall as unknown as ServerStreamingResponse,
-          mock
+          mock,
         )
         .then(async response => {
           if (response.metadata) {

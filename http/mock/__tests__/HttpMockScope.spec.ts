@@ -16,11 +16,11 @@ describe('HTTP Scope', function () {
   it('isDone() should return true when all mocks where called', async function () {
     const scope = $.mock(
       get(urlPath('/test')).reply(okJSON({ data: 'get ok' })),
-      post(urlPath('/test')).reply(okJSON({ data: 'post ok' }))
+      post(urlPath('/test')).reply(okJSON({ data: 'post ok' })),
     )
 
     const otherScope = $.mock(
-      get(urlPath('/some-other-mock')).reply(okJSON({ data: 'outside mock' }))
+      get(urlPath('/some-other-mock')).reply(okJSON({ data: 'outside mock' })),
     )
 
     expect(scope.isDone()).toBeFalsy()
@@ -54,7 +54,7 @@ describe('HTTP Scope', function () {
   it('should throw error when scope is not done and ensureIsDone() is called', async function () {
     const scope = $.mock(
       get(urlPath('/test')).reply(okJSON({ data: 'get ok' })),
-      post(urlPath('/test')).reply(okJSON({ data: 'post ok' }))
+      post(urlPath('/test')).reply(okJSON({ data: 'post ok' })),
     )
 
     await Supertest($.listener())
@@ -68,7 +68,7 @@ describe('HTTP Scope', function () {
   it('should print pending mocks', async function () {
     const scope = $.mock(
       get(urlPath('/test')).reply(okJSON({ data: 'get ok' })),
-      post(urlPath('/test')).reply(okJSON({ data: 'post ok' }))
+      post(urlPath('/test')).reply(okJSON({ data: 'post ok' })),
     )
 
     expect(() => scope.printPendingMocks()).not.toThrowError()
@@ -77,7 +77,7 @@ describe('HTTP Scope', function () {
   it('should not print pending mocks when scope is done', async function () {
     const scope = $.mock(
       get(urlPath('/test')).reply(okJSON({ data: 'get ok' })),
-      post(urlPath('/test')).reply(okJSON({ data: 'post ok' }))
+      post(urlPath('/test')).reply(okJSON({ data: 'post ok' })),
     )
 
     scope.abortPendingMocks()
@@ -88,7 +88,7 @@ describe('HTTP Scope', function () {
   it('should abort pending mocks when abortPendingMocks() is called', async function () {
     const scope = $.mock(
       get(urlPath('/test')).reply(okJSON({ data: 'get ok' })),
-      post(urlPath('/test')).reply(okJSON({ data: 'post ok' }))
+      post(urlPath('/test')).reply(okJSON({ data: 'post ok' })),
     )
 
     await Supertest($.listener())
@@ -110,7 +110,7 @@ describe('HTTP Scope', function () {
   it('should remove all mocks when calling .clean()', async function () {
     const scope = $.mock(
       get(urlPath('/test')).reply(okJSON({ data: 'get ok' })),
-      post(urlPath('/test')).reply(okJSON({ data: 'post ok' }))
+      post(urlPath('/test')).reply(okJSON({ data: 'post ok' })),
     )
 
     await Supertest($.listener())

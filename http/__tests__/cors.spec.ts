@@ -20,7 +20,7 @@ describe('CORS', function () {
       del(urlPath('/test')).reply(ok()),
       patch(urlPath('/test')).reply(ok()),
       head(urlPath('/test')).reply(ok()),
-      request(urlPath('/test')).method('OPTIONS').reply(ok())
+      request(urlPath('/test')).method('OPTIONS').reply(ok()),
     )
 
     await Supertest($.listener()).get('/test').expect(200)

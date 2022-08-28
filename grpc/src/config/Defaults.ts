@@ -7,7 +7,7 @@ export const Defaults = {
     longs: String,
     enums: String,
     defaults: true,
-    oneofs: true
+    oneofs: true,
   },
-  serverCredentials: ServerCredentials.createInsecure()
+  serverCredentials: ServerCredentials.createInsecure(),
 }

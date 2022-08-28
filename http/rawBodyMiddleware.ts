@@ -5,7 +5,7 @@ import { NextFunction } from 'express'
 export function rawBodyMiddleware(
   request: Request & { [key: string]: unknown },
   response: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void {
   const raw: Buffer[] = []
 

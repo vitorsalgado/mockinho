@@ -14,7 +14,7 @@ export async function loadMockFiles<T>(
   mockRoot: string,
   extensions: Array<string>,
   schema: JsonType,
-  throwOnErrors: boolean = true
+  throwOnErrors: boolean = true,
 ): Promise<Array<{ mockFile: Array<T>; filename: string }>> {
   notBlank(mockRoot)
   notEmpty(extensions)
@@ -25,14 +25,16 @@ export async function loadMockFiles<T>(
   }
 
   const parseResults = await Promise.all(
-    listFilenames(mockRoot, isMockFile(extensions)).map(file => loadSingleMockFile<T>(file, schema))
+    listFilenames(mockRoot, isMockFile(extensions)).map(file =>
+      loadSingleMockFile<T>(file, schema),
+    ),
   )
 
   const errors = parseResults.filter(x => x.error)
 
   if (errors.length > 0) {
     console.error(
-      `${red(`${bold('Some mock files contain errors! Check below for more details.')}`)}`
+      `${red(`${bold('Some mock files contain errors! Check below for more details.')}`)}`,
     )
 
     errors.forEach(error => {
@@ -49,7 +51,7 @@ export async function loadMockFiles<T>(
     .filter(x => !x.error)
     .map(x => ({
       filename: x.file,
-      mockFile: x.mocks as Array<T>
+      mockFile: x.mocks as Array<T>,
     }))
 }
 

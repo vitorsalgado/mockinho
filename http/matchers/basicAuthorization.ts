@@ -4,7 +4,7 @@ import { HttpRequest } from '../HttpRequest.js'
 
 export const basicAuthorization = (
   username: string | Matcher<string>,
-  password: string = ''
+  password: string = '',
 ): Matcher<HttpRequest> =>
   function basicAuthorization(request): boolean {
     const auth = request.headers.authorization
@@ -23,7 +23,7 @@ export const basicAuthorization = (
         if (typeof username === 'string') {
           if (!password) {
             throw new ReferenceError(
-              'Parameter [password] is required when providing both username and password.'
+              'Parameter [password] is required when providing both username and password.',
             )
           }
 

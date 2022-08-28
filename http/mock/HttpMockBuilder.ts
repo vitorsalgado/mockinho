@@ -47,7 +47,7 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
 
   constructor(
     private readonly _source: MockSource = 'code',
-    private readonly _sourceDescription: string = ''
+    private readonly _sourceDescription: string = '',
   ) {
     super()
   }
@@ -146,8 +146,8 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
       this.spec(
         extractHeader(Headers.Authorization),
         equalsTo(encodeBase64(`Basic ${username}:${password}`)),
-        0.5
-      )
+        0.5,
+      ),
     )
 
     return this
@@ -262,7 +262,7 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
       this._expectations.push(this.spec(extractRequest, matchers[0] as Matcher<unknown>, 1))
     } else {
       this._expectations.push(
-        this.spec(extractRequest, allOf(...(matchers as Array<Matcher<unknown>>)), 1)
+        this.spec(extractRequest, allOf(...(matchers as Array<Matcher<unknown>>)), 1),
       )
     }
 
@@ -280,9 +280,9 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
         matcher =>
           ({
             valueGetter: (request: HttpRequest) => request,
-            matcherContext: matcher
-          } as unknown as ExpectationWithContext<unknown, unknown, HttpMock, Configuration>)
-      )
+            matcherContext: matcher,
+          } as unknown as ExpectationWithContext<unknown, unknown, HttpMock, Configuration>),
+      ),
     )
 
     return this
@@ -314,7 +314,7 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
       this._statefulExpectations,
       this._responseBuilder,
       this._meta,
-      new Map<string, unknown>()
+      new Map<string, unknown>(),
     )
   }
 

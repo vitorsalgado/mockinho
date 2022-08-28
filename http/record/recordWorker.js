@@ -59,9 +59,9 @@ parentPort.on('message', async data => {
       method: request.method,
       headers: requestHeaders,
       query,
-      body: requestBody
+      body: requestBody,
     },
-    { algorithm: 'sha1' }
+    { algorithm: 'sha1' },
   ).substr(0, 8)
 
   const mockFile = `${name}-${mockHash}.${extension}.json`
@@ -80,16 +80,16 @@ parentPort.on('message', async data => {
       body:
         !(requestBody instanceof Buffer) && !(requestBody instanceof Stream)
           ? {
-              equalsTo: requestBody
+              equalsTo: requestBody,
             }
-          : undefined
+          : undefined,
     },
 
     response: {
       status: response.status,
       headers: responseHeaders,
-      bodyFile: hasResponseBody ? mockBodyFile : undefined
-    }
+      bodyFile: hasResponseBody ? mockBodyFile : undefined,
+    },
   }
 
   let exists
@@ -104,7 +104,7 @@ parentPort.on('message', async data => {
   if (!exists) {
     Promise.all([
       writeFile(mockPath, Buffer.from(JSON.stringify(mock, null, 2))),
-      hasResponseBody ? writeFile(mockBodyPath, response.body) : Promise.resolve()
+      hasResponseBody ? writeFile(mockBodyPath, response.body) : Promise.resolve(),
     ])
       .then(() => parentPort.postMessage({ mock: mockFile, mockBody: mockBodyFile }))
       .catch(err => parentPort.postMessage(err))

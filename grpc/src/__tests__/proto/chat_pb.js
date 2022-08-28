@@ -68,7 +68,7 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
     var f,
       obj = {
         message: jspb.Message.getFieldWithDefault(msg, 1, ''),
-        action: jspb.Message.getFieldWithDefault(msg, 2, '')
+        action: jspb.Message.getFieldWithDefault(msg, 2, ''),
       }
 
     if (includeInstance) {

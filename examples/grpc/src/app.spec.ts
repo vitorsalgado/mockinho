@@ -35,9 +35,9 @@ describe('gRPC Example', function () {
           new UnaryResponseBuilder().data({
             name: 'sao paulo',
             country: 'brasil',
-            location: { latitude: 20, longitude: 10 }
-          })
-        )
+            location: { latitude: 20, longitude: 10 },
+          }),
+        ),
     )
 
     return supertest(fastify.server)

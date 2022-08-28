@@ -8,7 +8,7 @@ module.exports = {
   mode: 'silent',
 
   http: {
-    port: 0
+    port: 0,
   },
 
   timeout: 3_600_000,
@@ -17,12 +17,12 @@ module.exports = {
   mockFilesExtension: 'test-js',
 
   record: {
-    enabled: false
+    enabled: false,
   },
 
   proxy: {
-    enabled: false
+    enabled: false,
   },
 
-  plugins: ['./__fixtures__/plugin-js.js']
+  plugins: ['./__fixtures__/plugin-js.js'],
 }

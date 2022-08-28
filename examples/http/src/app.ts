@@ -13,7 +13,7 @@ import { UndiciCallFactory } from 'drizzle-http'
 class Api {
   @GET('/deputados')
   deputies(
-    @Query('siglaPartido') party: string | null = null
+    @Query('siglaPartido') party: string | null = null,
   ): Promise<{ dados: [{ id: string; nome: string }] }> {
     return noop(party)
   }
@@ -36,7 +36,7 @@ export function buildFastify(opts: FastifyServerOptions, config: Config): Fastif
     api
       .deputies((request.query as { party: string }).party)
       .then(result => reply.status(200).send(result.dados))
-      .catch((error: Error) => reply.status(500).send({ message: error.message }))
+      .catch((error: Error) => reply.status(500).send({ message: error.message })),
   )
 
   return app

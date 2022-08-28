@@ -12,7 +12,7 @@ export class HttpContext
   constructor(
     public readonly configuration: HttpConfiguration,
     public readonly mockRepository: HttpMockRepository,
-    public readonly scenarioRepository: ScenarioRepository
+    public readonly scenarioRepository: ScenarioRepository,
   ) {
     super()
   }

@@ -13,7 +13,7 @@ const Files = [
   '.mockhttprc.js',
   '.mockhttprc.ts',
   '.mockhttprc.json',
-  '.mockhttprc'
+  '.mockhttprc',
 ]
 
 export function initialOptionsReader(rootDir?: string, configFile?: string) {

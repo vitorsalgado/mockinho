@@ -18,7 +18,7 @@ export class HttpMock extends Mock {
     >,
     public readonly responseBuilder: ResponseDelegate,
     meta: Map<string, unknown>,
-    properties: Map<string, unknown>
+    properties: Map<string, unknown>,
   ) {
     super(
       id,
@@ -30,7 +30,7 @@ export class HttpMock extends Mock {
       statefulExpectations as Array<ExpectationWithContext<unknown, unknown>>,
       0,
       meta,
-      properties
+      properties,
     )
   }
 

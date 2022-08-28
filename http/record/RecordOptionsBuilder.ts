@@ -25,7 +25,7 @@ export class RecordOptionsBuilder {
     return {
       destination: this._destination,
       captureRequestHeaders: this._captureRequestHeaders,
-      captureResponseHeaders: this._captureResponseHeaders
+      captureResponseHeaders: this._captureResponseHeaders,
     }
   }
 }

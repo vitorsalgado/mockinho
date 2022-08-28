@@ -24,7 +24,7 @@ describe('Stateful Matchers', function () {
         $.mock(
           get(urlPath('/test'))
             .expect(repeatTimes(2))
-            .reply(okJSON({ data: expected }))
+            .reply(okJSON({ data: expected })),
         )
 
         return Supertest($.listener())
@@ -65,7 +65,7 @@ describe('Stateful Matchers', function () {
         $.mock(
           get(urlPath('/test'))
             .repeatTimes(2)
-            .reply(okJSON({ data: expected }))
+            .reply(okJSON({ data: expected })),
         )
 
         return Supertest($.listener())

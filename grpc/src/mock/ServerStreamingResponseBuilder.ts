@@ -33,7 +33,7 @@ export class ServerStreamingResponseBuilder extends ResponseBuilder<
   build(): ResponseBuilderDelegate<ServerStreamingExtendedCall, ServerStreamingResponse> {
     return async (_context, _request, _mock) => {
       return {
-        stream: this._data
+        stream: this._data,
       }
     }
   }

@@ -16,9 +16,9 @@ export default {
           properties: {
             name: { type: 'string' },
             requiredState: { type: 'string' },
-            newState: { type: 'string' }
+            newState: { type: 'string' },
           },
-          required: ['name']
+          required: ['name'],
         },
 
         request: {
@@ -38,19 +38,19 @@ export default {
                   type: 'object',
                   patternProperties: {
                     '.': {
-                      anyOf: [{ type: 'string' }, { type: 'object' }, { type: 'array' }]
-                    }
-                  }
-                }
-              ]
+                      anyOf: [{ type: 'string' }, { type: 'object' }, { type: 'array' }],
+                    },
+                  },
+                },
+              ],
             },
             headers: {
               type: 'object',
               patternProperties: {
                 '.': {
-                  anyOf: [{ type: 'string' }, { type: 'object' }, { type: 'array' }]
-                }
-              }
+                  anyOf: [{ type: 'string' }, { type: 'object' }, { type: 'array' }],
+                },
+              },
             },
             body: {
               anyOf: [
@@ -59,29 +59,29 @@ export default {
                   type: 'object',
                   patternProperties: {
                     '.': {
-                      anyOf: [{ type: 'string' }, { type: 'object' }, { type: 'array' }]
-                    }
-                  }
-                }
-              ]
-            }
+                      anyOf: [{ type: 'string' }, { type: 'object' }, { type: 'array' }],
+                    },
+                  },
+                },
+              ],
+            },
           },
-          required: []
+          required: [],
         },
 
         response: {
           anyOf: [
             { $ref: '#/definitions/response' },
-            { type: 'array', items: { $ref: '#/definitions/response' } }
-          ]
+            { type: 'array', items: { $ref: '#/definitions/response' } },
+          ],
         },
 
         responseType: { type: 'string' },
 
-        returnErrorOnNoResponse: { type: 'boolean' }
+        returnErrorOnNoResponse: { type: 'boolean' },
       },
       required: ['request', 'response'],
-      additionalProperties: true
+      additionalProperties: true,
     },
 
     response: {
@@ -89,11 +89,11 @@ export default {
       properties: {
         status: { type: 'number' },
         body: {
-          anyOf: [{ type: 'string' }, { type: 'object' }, { type: 'array' }]
+          anyOf: [{ type: 'string' }, { type: 'object' }, { type: 'array' }],
         },
         bodyFile: { type: 'string' },
         bodyTemplate: {
-          anyOf: [{ type: 'string' }, { type: 'object' }, { type: 'array' }]
+          anyOf: [{ type: 'string' }, { type: 'object' }, { type: 'array' }],
         },
         bodyTemplateFile: { type: 'string' },
         modelFile: { type: 'string' },
@@ -101,13 +101,13 @@ export default {
         headerTemplates: {
           type: 'object',
           patternProperties: {
-            '.*': { type: 'string' }
-          }
+            '.*': { type: 'string' },
+          },
         },
         helpers: { type: 'string' },
-        latency: { type: 'number' }
+        latency: { type: 'number' },
       },
-      required: ['status']
-    }
-  }
+      required: ['status'],
+    },
+  },
 }

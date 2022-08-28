@@ -5,7 +5,7 @@ import Base from '../jest-base.config'
 
 const config: JestConfig.InitialOptions = {
   ...Base,
-  displayName: 'core'
+  displayName: 'core',
 }
 
 export default config

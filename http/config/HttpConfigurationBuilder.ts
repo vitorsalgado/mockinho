@@ -307,7 +307,7 @@ export class HttpConfigurationBuilder {
     if (!this._mocksDirectory) {
       this._mocksDirectory = Path.join(
         this._rootDir,
-        `${HttpConfigurationBuilder.MOCK_DEFAULT_FIXTURES_DIR}`
+        `${HttpConfigurationBuilder.MOCK_DEFAULT_FIXTURES_DIR}`,
       )
     }
 
@@ -328,7 +328,7 @@ export class HttpConfigurationBuilder {
         this._recordOptions = {
           destination: this._mocksDirectory,
           captureRequestHeaders: Defaults.recordOptions.captureRequestHeaders,
-          captureResponseHeaders: Defaults.recordOptions.captureResponseHeaders
+          captureResponseHeaders: Defaults.recordOptions.captureResponseHeaders,
         }
       } else {
         this._recordOptions.destination =
@@ -385,7 +385,7 @@ export class HttpConfigurationBuilder {
       plugins: this._plugins,
       props: this._props,
       argv: this._argv,
-      file: this._file
+      file: this._file,
     }
   }
 }

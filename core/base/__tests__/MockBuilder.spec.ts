@@ -11,7 +11,7 @@ describe('MockBuilder', function () {
       return {
         id: this._id,
         name: this._name,
-        priority: this._priority
+        priority: this._priority,
       }
     }
 

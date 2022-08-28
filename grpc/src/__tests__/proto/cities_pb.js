@@ -134,7 +134,7 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
     var f,
       obj = {
         latitude: jspb.Message.getFieldWithDefault(msg, 1, 0),
-        longitude: jspb.Message.getFieldWithDefault(msg, 2, 0)
+        longitude: jspb.Message.getFieldWithDefault(msg, 2, 0),
       }
 
     if (includeInstance) {
@@ -275,7 +275,7 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
   proto.cities.CityRequest.toObject = function (includeInstance, msg) {
     var f,
       obj = {
-        name: jspb.Message.getFieldWithDefault(msg, 1, '')
+        name: jspb.Message.getFieldWithDefault(msg, 1, ''),
       }
 
     if (includeInstance) {
@@ -394,7 +394,7 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
       obj = {
         name: jspb.Message.getFieldWithDefault(msg, 1, ''),
         country: jspb.Message.getFieldWithDefault(msg, 2, ''),
-        location: (f = msg.getLocation()) && proto.cities.Point.toObject(includeInstance, f)
+        location: (f = msg.getLocation()) && proto.cities.Point.toObject(includeInstance, f),
       }
 
     if (includeInstance) {
@@ -578,7 +578,7 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
   proto.cities.CitySummary.toObject = function (includeInstance, msg) {
     var f,
       obj = {
-        total: jspb.Message.getFieldWithDefault(msg, 1, 0)
+        total: jspb.Message.getFieldWithDefault(msg, 1, 0),
       }
 
     if (includeInstance) {

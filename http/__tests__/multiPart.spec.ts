@@ -21,11 +21,11 @@ describe('Form MultiPart', function () {
         .files(files => files.some(x => x.mimetype.includes('png')))
         .files(
           files => files.some(x => x.fieldname.includes('image')),
-          files => files.length === 2
+          files => files.length === 2,
         )
         .requestFields(fieldPath('field-test-1', contains('test-value')))
         .requestFields(jsonPath('field-test-2', equalsTo('field-test-value-2')))
-        .reply(ok())
+        .reply(ok()),
     )
 
     await Supertest($.listener())

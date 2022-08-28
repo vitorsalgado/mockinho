@@ -16,8 +16,8 @@
     "lint": "eslint --ext .ts,.js .",
     "lint:fix": "npm run lint -- --fix",
     "lint:ci": "npm run lint && npm run format:ci",
-    "format": "prettier 'core/**' 'matchers/**' 'http/**' 'grpc/**' 'examples/**' --write --ignore-unknown",
-    "format:ci": "npm run format -- --check",
+    "fmt": "prettier 'core/**' 'matchers/**' 'http/**' 'grpc/**' 'examples/**' --write --ignore-unknown",
+    "fmt:ci": "npm run format -- --check",
     "clean": "lerna clean && npm run clean:build",
     "clean:build": "lerna exec -- rm -rf dist && lerna exec -- rm -rf tsconfig.tsbuildinfo && lerna exec -- rm -rf tsconfig.build.tsbuildinfo"
   },

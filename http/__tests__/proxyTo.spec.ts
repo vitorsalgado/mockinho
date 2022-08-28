@@ -27,7 +27,7 @@ describe('Proxied Responses', function () {
           .header('proxy-header', equalsTo('100'))
           .header('x-test', equalsTo('true'))
           .header('x-dev', equalsTo('ts'))
-          .reply(okJSON({ hello: 'world' }))
+          .reply(okJSON({ hello: 'world' })),
       )
 
       $.mock(
@@ -38,8 +38,8 @@ describe('Proxied Responses', function () {
             response()
               .header('test', 'ok')
               .proxyHeader('proxy-header', '100')
-              .proxyHeaders({ 'x-test': 'true', 'x-dev': 'ts' })
-          )
+              .proxyHeaders({ 'x-test': 'true', 'x-dev': 'ts' }),
+          ),
       )
 
       return Supertest($.listener())
@@ -58,9 +58,9 @@ describe('Proxied Responses', function () {
       const ctx = {
         configuration: {
           proxyOptions: {
-            target: undefined
-          }
-        }
+            target: undefined,
+          },
+        },
       }
       expect(() => configureProxy(ctx as HttpContext, null as any, null as any))
     })

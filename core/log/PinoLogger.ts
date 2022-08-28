@@ -11,9 +11,9 @@ export class PinoLogger implements Logger {
         colorize: true,
         messageFormat: '{msg}',
         translateTime: true,
-        ignore: 'hostname,pid'
+        ignore: 'hostname,pid',
       },
-      level: level
+      level: level,
     })
   }
 

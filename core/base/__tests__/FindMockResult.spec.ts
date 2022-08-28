@@ -12,7 +12,7 @@ describe('FindMockResult', function () {
     [],
     0,
     new Map<string, unknown>(),
-    new Map<string, unknown>()
+    new Map<string, unknown>(),
   )
 
   describe('when init a no matched', function () {

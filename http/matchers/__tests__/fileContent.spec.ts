@@ -12,13 +12,13 @@ describe('fileContent', function () {
 
   it('should return true when file content matches', function () {
     expect(
-      fileContent(equalsTo('Hello World'))({ buffer: Buffer.from('Hello World') } as any)
+      fileContent(equalsTo('Hello World'))({ buffer: Buffer.from('Hello World') } as any),
     ).toBeTruthy()
 
     expect(fileContent('Hello World')({ buffer: Buffer.from('Hello World') } as any)).toBeTruthy()
 
     expect(
-      fileContent(equalsTo('Good Bye'))({ buffer: Buffer.from('Good Morning') } as any)
+      fileContent(equalsTo('Good Bye'))({ buffer: Buffer.from('Good Morning') } as any),
     ).toBeFalsy()
   })
 })

@@ -13,7 +13,7 @@ describe('Mock', function () {
       [],
       0,
       new Map<string, unknown>(),
-      new Map<string, unknown>()
+      new Map<string, unknown>(),
     )
 
     expect(validate(mock.id)).toBeTruthy()
@@ -38,7 +38,7 @@ describe('Mock', function () {
       [],
       0,
       new Map<string, unknown>(),
-      new Map<string, unknown>()
+      new Map<string, unknown>(),
     )
 
     expect(mock.id).toEqual('test-id')
@@ -55,7 +55,7 @@ describe('Mock', function () {
       [],
       0,
       new Map<string, unknown>(),
-      new Map<string, unknown>()
+      new Map<string, unknown>(),
     )
 
     expect(mock.hits).toEqual(0)

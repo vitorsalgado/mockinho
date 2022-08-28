@@ -9,7 +9,7 @@ describe('onRequestNotMatched', function () {
       verbose: false,
       method: 'GET',
       url: 'http://localhost:8080',
-      path: '/'
+      path: '/',
     })
   })
 
@@ -21,7 +21,7 @@ describe('onRequestNotMatched', function () {
       method: 'PATCH',
       url: 'http://localhost:8080/test',
       path: '/test',
-      closestMatch: mock
+      closestMatch: mock,
     })
   })
 
@@ -38,7 +38,7 @@ describe('onRequestNotMatched', function () {
       method: 'PATCH',
       url: 'http://localhost:8080',
       path: '/',
-      closestMatch: mock
+      closestMatch: mock,
     })
   })
 
@@ -57,7 +57,7 @@ describe('onRequestNotMatched', function () {
       method: 'PATCH',
       url: 'http://localhost:8080/test',
       path: '/test',
-      closestMatch: mock
+      closestMatch: mock,
     })
   })
 
@@ -76,7 +76,7 @@ describe('onRequestNotMatched', function () {
       method: 'PATCH',
       url: 'http://localhost:8080',
       path: '/',
-      closestMatch: mock
+      closestMatch: mock,
     })
   })
 })

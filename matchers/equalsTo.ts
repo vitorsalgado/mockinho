@@ -4,7 +4,7 @@ import { Matcher } from './base.js'
 export const equalsTo = <T>(
   expected: T,
   ignoreCase: boolean = false,
-  locale: string | string[] | undefined = undefined
+  locale: string | string[] | undefined = undefined,
 ): Matcher<T> =>
   function equalsTo(value: T): boolean {
     try {

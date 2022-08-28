@@ -11,9 +11,9 @@ describe('Content Type', function () {
       url: '',
       method: 'PATCH',
       headers: {
-        'content-type': header
+        'content-type': header,
       },
-      body: null
+      body: null,
     } as any
 
     expect(contentType(equalsTo(header))(req)).toBeTruthy()

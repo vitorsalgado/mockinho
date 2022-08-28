@@ -19,7 +19,7 @@ describe('scenarioStatefulMatcher', function () {
     logLevel: 'info',
     mode: 'verbose',
     mockProviderFactories: [],
-    plugins: []
+    plugins: [],
   }
 
   describe('started state', function () {
@@ -28,7 +28,7 @@ describe('scenarioStatefulMatcher', function () {
       const ctx = {
         configuration: testConfig,
         scenarioRepository: new ScenarioInMemoryRepository(),
-        mockRepository: new TestRepo()
+        mockRepository: new TestRepo(),
       } as Context<Mock, TestConfig, TestRepo>
 
       const mock = new Mock(
@@ -41,7 +41,7 @@ describe('scenarioStatefulMatcher', function () {
         [{ valueGetter: () => undefined, matcherContext: scenario }],
         0,
         new Map<string, unknown>(),
-        new Map<string, unknown>()
+        new Map<string, unknown>(),
       )
 
       const matcher = scenario(ctx, mock)
@@ -55,7 +55,7 @@ describe('scenarioStatefulMatcher', function () {
     const ctx = {
       configuration: testConfig,
       scenarioRepository: new ScenarioInMemoryRepository(),
-      mockRepository: new TestRepo()
+      mockRepository: new TestRepo(),
     } as Context<Mock, TestConfig, TestRepo>
 
     const mock = new Mock(
@@ -68,7 +68,7 @@ describe('scenarioStatefulMatcher', function () {
       [{ valueGetter: () => undefined, matcherContext: scenario }],
       0,
       new Map<string, unknown>(),
-      new Map<string, unknown>()
+      new Map<string, unknown>(),
     )
 
     const matcher = scenario(ctx, mock)
@@ -83,7 +83,7 @@ describe('scenarioStatefulMatcher', function () {
     const ctx = {
       configuration: testConfig,
       scenarioRepository: scenarioRepository,
-      mockRepository: new TestRepo()
+      mockRepository: new TestRepo(),
     } as Context<Mock, TestConfig, TestRepo>
 
     const mock = new Mock(
@@ -96,7 +96,7 @@ describe('scenarioStatefulMatcher', function () {
       [{ valueGetter: () => undefined, matcherContext: started }],
       0,
       new Map<string, unknown>(),
-      new Map<string, unknown>()
+      new Map<string, unknown>(),
     )
 
     const matcher = started(ctx, mock)
@@ -117,7 +117,7 @@ describe('scenarioStatefulMatcher', function () {
     const ctx = {
       configuration: testConfig,
       scenarioRepository: scenarioRepository,
-      mockRepository: new TestRepo()
+      mockRepository: new TestRepo(),
     } as Context<Mock, TestConfig, TestRepo>
 
     const mock = new Mock(
@@ -130,7 +130,7 @@ describe('scenarioStatefulMatcher', function () {
       [{ valueGetter: () => undefined, matcherContext: theMatcher }],
       0,
       new Map<string, unknown>(),
-      new Map<string, unknown>()
+      new Map<string, unknown>(),
     )
 
     const matcher = theMatcher(ctx, mock)

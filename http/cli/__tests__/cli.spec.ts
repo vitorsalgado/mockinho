@@ -162,7 +162,7 @@ describe('cli', function () {
 
         expect(config.recordEnabled).toBeTruthy()
         expect(config.recordOptions?.destination).toEqual(
-          Path.join(__dirname, Defaults.fixturesDir)
+          Path.join(__dirname, Defaults.fixturesDir),
         )
       } finally {
         await mockhttp.finalize()
@@ -203,7 +203,7 @@ describe('cli', function () {
         cors: false,
         cookieSecrets: [],
         proxy: undefined,
-        plugin: ['./__fixtures__/plugin-js.js', './__fixtures__/plugin-ts.ts']
+        plugin: ['./__fixtures__/plugin-js.js', './__fixtures__/plugin-ts.ts'],
       }
       const mockhttp = await run(argv)
       const config = mockhttp.configuration()
@@ -262,7 +262,7 @@ describe('cli', function () {
         cookieSecrets: ['secret1', 'secret2'],
         proxy: 'https://test.com',
         proxyHeaders: ['x-test=abc', 'x-ctx=test'],
-        watch: true
+        watch: true,
       }
       const mockhttp = await run(argv)
       const config = mockhttp.configuration()
@@ -303,7 +303,7 @@ describe('cli', function () {
         httpsPort: 0,
         rootDir: __dirname,
         mockDir: 'data',
-        mockExtension: 'test'
+        mockExtension: 'test',
       }
       const mockhttp = await run(argv)
       const config = mockhttp.configuration()
@@ -332,7 +332,7 @@ describe('cli', function () {
         httpsPort: 0,
         rootDir: __dirname,
         mockDir: 'data',
-        mockExtension: 'test'
+        mockExtension: 'test',
       }
       const mockhttp = await run(argv)
       const config = mockhttp.configuration()

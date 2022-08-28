@@ -44,7 +44,7 @@ const ABSOLUTE_URL_REGEX = /^[a-zA-Z][a-zA-Z\d+\-.]*?:/
 export async function buildMockFromFile(
   configuration: HttpConfiguration,
   mock: MockFile,
-  filename: string
+  filename: string,
 ): Promise<HttpMockBuilder> {
   notNull(configuration)
   notNull(mock)
@@ -89,8 +89,8 @@ export async function buildMockFromFile(
             matcherKey,
             value[matcherKey],
             value,
-            configuration.mockFieldParsers
-          )
+            configuration.mockFieldParsers,
+          ),
         )
       }
     }
@@ -110,8 +110,8 @@ export async function buildMockFromFile(
             matcherKey,
             value[matcherKey],
             value,
-            configuration.mockFieldParsers
-          )
+            configuration.mockFieldParsers,
+          ),
         )
       }
     }
@@ -130,8 +130,8 @@ export async function buildMockFromFile(
             matcherKey,
             mock.request.body[matcherKey],
             mock.request.body,
-            configuration.mockFieldParsers
-          )
+            configuration.mockFieldParsers,
+          ),
         )
       }
     }
@@ -155,8 +155,8 @@ export async function buildMockFromFile(
             matcherKey,
             value[matcherKey],
             value,
-            configuration.mockFieldParsers
-          )
+            configuration.mockFieldParsers,
+          ),
         )
       }
     }
@@ -254,7 +254,7 @@ function discoverMatcherByValue(
   mock: MockFile,
   value: string,
   parsers: Array<FieldParser>,
-  def = equalsTo
+  def = equalsTo,
 ): Matcher<unknown> {
   if (value === 'isPresent') {
     return isPresent()
@@ -281,7 +281,7 @@ function discoverMatcherByKey(
   key: string,
   values: any,
   root: any,
-  parsers: Array<FieldParser>
+  parsers: Array<FieldParser>,
 ): Matcher<any> {
   const valueIsText = typeof values === 'string'
   const valueEntries = Object.entries(values)
@@ -338,18 +338,18 @@ function discoverMatcherByKey(
       'path',
       valueEntries,
       filename,
-      '"jsonPath" needs a json key path.'
+      '"jsonPath" needs a json key path.',
     )
     const matcherEntry = findRequiredMatcherEntry(
       valueEntries,
       filename,
-      '"jsonPath" requires a matcher to apply on the json key. Eg.: "jsonPath": { path: "data.message", equalsTo: "test" }'
+      '"jsonPath" requires a matcher to apply on the json key. Eg.: "jsonPath": { path: "data.message", equalsTo: "test" }',
     )
     const [k, v] = matcherEntry
 
     return jsonPath(
       path as string,
-      discoverMatcherByKey(filename, mock, k, v, matcherEntry, parsers)
+      discoverMatcherByKey(filename, mock, k, v, matcherEntry, parsers),
     )
   } else if (key === 'anyOf') {
     const anyOfMatchers: Array<Matcher<unknown>> = []
@@ -381,12 +381,12 @@ function discoverMatcherByKey(
       'index',
       valueEntries,
       filename,
-      '"items" needs "index" parameter.'
+      '"items" needs "index" parameter.',
     )
     const matcherEntry = findRequiredMatcherEntry(
       valueEntries,
       filename,
-      '"item" requires a matcher. Eg.: "item": { index: 1, equalsTo: "test" }'
+      '"item" requires a matcher. Eg.: "item": { index: 1, equalsTo: "test" }',
     )
     const [k, v] = matcherEntry
 
@@ -400,7 +400,7 @@ function discoverMatcherByKey(
     const matcherEntry = findRequiredMatcherEntry(
       valueEntries,
       filename,
-      '"lowerCase" requires a matcher. Eg.: "lowerCase": { equalsTo: "test" }'
+      '"lowerCase" requires a matcher. Eg.: "lowerCase": { equalsTo: "test" }',
     )
     const [k, v] = matcherEntry
 
@@ -410,7 +410,7 @@ function discoverMatcherByKey(
     const matcherEntry = findRequiredMatcherEntry(
       valueEntries,
       filename,
-      '"upperCase" requires a matcher. Eg.: "upperCase": { equalsTo: "test" }'
+      '"upperCase" requires a matcher. Eg.: "upperCase": { equalsTo: "test" }',
     )
     const [k, v] = matcherEntry
 
@@ -419,7 +419,7 @@ function discoverMatcherByKey(
     const matcherEntry = findRequiredMatcherEntry(
       valueEntries,
       filename,
-      '"trim" requires a matcher. Eg.: "trim": { equalsTo: "test" }'
+      '"trim" requires a matcher. Eg.: "trim": { equalsTo: "test" }',
     )
     const [k, v] = matcherEntry
 
@@ -442,7 +442,7 @@ function discoverMatcherByKey(
     // Throw Error
     throw new LoadMockError(
       `No matcher found for: ${key} -- ${values} in ${root}. File: ${filename}`,
-      filename
+      filename,
     )
   }
 }

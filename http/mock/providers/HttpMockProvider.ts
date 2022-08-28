@@ -7,5 +7,5 @@ export type HttpMockProvider = MockProvider<HttpMockBuilder>
 
 export type HttpMockProviderFactory = (
   configurations: HttpConfiguration,
-  server: HttpServer
+  server: HttpServer,
 ) => HttpMockProvider

@@ -152,10 +152,10 @@ describe('Configurations Builder', function () {
 
       expect(cfg.recordOptions?.destination).toEqual(cfg.mockDirectory)
       expect(cfg.recordOptions?.captureRequestHeaders).toEqual(
-        Defaults.recordOptions.captureRequestHeaders
+        Defaults.recordOptions.captureRequestHeaders,
       )
       expect(cfg.recordOptions?.captureResponseHeaders).toEqual(
-        Defaults.recordOptions.captureResponseHeaders
+        Defaults.recordOptions.captureResponseHeaders,
       )
     })
 
@@ -166,7 +166,7 @@ describe('Configurations Builder', function () {
           destination: 'nowhere',
           captureResponseHeaders: [],
           captureRequestHeaders: [],
-          filters: []
+          filters: [],
         } as RecordOptions)
         .build()
 
@@ -174,7 +174,7 @@ describe('Configurations Builder', function () {
         destination: 'nowhere',
         captureResponseHeaders: [],
         captureRequestHeaders: [],
-        filters: []
+        filters: [],
       })
     })
   })

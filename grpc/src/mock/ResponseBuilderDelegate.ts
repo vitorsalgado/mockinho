@@ -5,5 +5,5 @@ import { Response } from './Response.js'
 export type ResponseBuilderDelegate<REQUEST, RESPONSE extends Response> = (
   context: RpcContext,
   request: REQUEST,
-  mock: RpcMock
+  mock: RpcMock,
 ) => Promise<RESPONSE>

@@ -10,7 +10,7 @@ describe('loadMockFiles', function () {
       Path.join(__dirname, '__fixtures__/qtd'),
       ['.json', '.yaml', '.yml'],
       TestSchema,
-      false
+      false,
     )
 
     expect(mocks).toHaveLength(6)
@@ -21,7 +21,7 @@ describe('loadMockFiles', function () {
       Path.join(__dirname, '__fixtures__/qtd'),
       ['.yaml', '.yml'],
       TestSchema,
-      false
+      false,
     )
 
     expect(mocks).toHaveLength(1)
@@ -31,7 +31,7 @@ describe('loadMockFiles', function () {
     const mocks = await loadMockFiles(
       Path.join(__dirname, '__fixtures__/nonexistent'),
       ['.json', '.yaml', '.yml'],
-      TestSchema
+      TestSchema,
     )
 
     expect(mocks).toHaveLength(0)
@@ -41,7 +41,7 @@ describe('loadMockFiles', function () {
     const mocks = await loadMockFiles(
       Path.join(__dirname, '__fixtures__/empty'),
       ['.json', '.yaml', '.yml'],
-      TestSchema
+      TestSchema,
     )
 
     expect(mocks).toHaveLength(0)
@@ -53,7 +53,7 @@ describe('loadMockFiles', function () {
         await loadMockFiles(
           Path.join(__dirname, '__fixtures__/qtd'),
           ['.json', '.yaml', '.yml'],
-          TestSchema
+          TestSchema,
         )
       } catch (ex) {
         expect(ex).toBeDefined()
@@ -68,7 +68,7 @@ describe('loadMockFiles', function () {
         await loadMockFiles(
           Path.join(__dirname, '__fixtures__/qtd'),
           ['.json', '.yaml', '.md'],
-          TestSchema
+          TestSchema,
         )
       } catch (ex) {
         expect(ex).toBeDefined()

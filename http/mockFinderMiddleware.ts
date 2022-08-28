@@ -14,7 +14,7 @@ import { Headers } from './Headers.js'
 import { BodyType } from './BodyType.js'
 
 export function mockFinderMiddleware(
-  context: HttpContext
+  context: HttpContext,
 ): (request: HttpRequest, reply: Response, next: NextFunction) => Promise<void> {
   const configurations = context.configuration
   const isVerbose = modeIsAtLeast(configurations, 'verbose')
@@ -33,8 +33,8 @@ export function mockFinderMiddleware(
         proxy.once('error', err => next(err))
         proxy.once('proxyReq', proxyReq =>
           Object.entries(response.proxyHeaders).forEach(([name, value]) =>
-            proxyReq.setHeader(name, value)
-          )
+            proxyReq.setHeader(name, value),
+          ),
         )
         proxy.once('proxyRes', proxyRes => {
           for (const [name, value] of Object.entries(response.headers)) {
@@ -73,7 +73,7 @@ export function mockFinderMiddleware(
       const replier = () => {
         response.cookiesToClear.forEach(cookie => res.clearCookie(cookie.key, cookie.options))
         response.cookies.forEach(cookie =>
-          res.cookie(cookie.key, cookie.value, cookie.options ?? {})
+          res.cookie(cookie.key, cookie.value, cookie.options ?? {}),
         )
 
         res.set(response.headers).status(response.status).send(body)
@@ -109,7 +109,7 @@ export function mockFinderMiddleware(
             .map(x => [{ id: x.id, name: x.name, filename: x.sourceDescription }])
             .orValue([])
             .map(item => `\nName: ${item.name}\nId: ${item.id}\nFile: ${item.filename}`)
-            .join('')
+            .join(''),
       )
   }
 }
@@ -120,14 +120,14 @@ function onRequestNotMatched(
   verbose: boolean,
   context: HttpContext,
   req: HttpRequest,
-  result: FindMockResult<HttpMock>
+  result: FindMockResult<HttpMock>,
 ) {
   context.emit('onRequestNotMatched', {
     verbose,
     url: req.url,
     path: req.path,
     method: req.method,
-    closestMatch: result.closestMatch().orNothing() as HttpMock
+    closestMatch: result.closestMatch().orNothing() as HttpMock,
   })
 }
 
@@ -136,7 +136,7 @@ function onRequestMatched(
   context: HttpContext,
   req: HttpRequest,
   response: ResponseFixture,
-  matched: HttpMock
+  matched: HttpMock,
 ) {
   context.emit('onRequestMatched', {
     verbose,
@@ -145,7 +145,7 @@ function onRequestMatched(
     path: req.path,
     method: req.method,
     responseDefinition: response,
-    mock: matched
+    mock: matched,
   })
 }
 

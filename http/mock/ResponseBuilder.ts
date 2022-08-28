@@ -236,14 +236,14 @@ export class ResponseBuilder {
   build(): ResponseDelegate {
     if (this._bodyCtrl > 1) {
       throw new Error(
-        'Found more than one body strategy setup. Choose between: .body(), .bodyJSON(), .bodyFile(), .bodyWith() or .bodyTemplate()'
+        'Found more than one body strategy setup. Choose between: .body(), .bodyJSON(), .bodyFile(), .bodyWith() or .bodyTemplate()',
       )
     }
 
     return async (
       context: HttpContext,
       request: HttpRequest,
-      _mock: HttpMock
+      _mock: HttpMock,
     ): Promise<ResponseFixture> => {
       notNull(context)
       notNull(this._status)
@@ -266,13 +266,13 @@ export class ResponseBuilder {
       } else if (this._bodyTemplate) {
         this._body = await this._bodyTemplate(
           { request, model: this._model, env: process.env },
-          { ...this._templateHelpers }
+          { ...this._templateHelpers },
         )
       } else if (this._bodyTemplatePath) {
         const file = this._bodyFileRelativeToFixtures
           ? await ResponseBuilder.makeValidPath(
               context.configuration.mockDirectory,
-              this._bodyTemplatePath
+              this._bodyTemplatePath,
             )
           : this._bodyTemplatePath
 
@@ -281,7 +281,7 @@ export class ResponseBuilder {
 
         this._body = await this._templating.compile(content)(
           { request, model: this._model, env: process.env },
-          { ...this._templateHelpers }
+          { ...this._templateHelpers },
         )
       }
 
@@ -292,10 +292,10 @@ export class ResponseBuilder {
             {
               request,
               model: this._model,
-              env: process.env
+              env: process.env,
             },
-            { ...this._templateHelpers }
-          )
+            { ...this._templateHelpers },
+          ),
         )
       }
 
@@ -307,7 +307,7 @@ export class ResponseBuilder {
         this._cookiesToClear,
         this._delay,
         this._proxyFrom,
-        this._proxyHeaders
+        this._proxyHeaders,
       )
     }
   }

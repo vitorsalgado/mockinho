@@ -3,7 +3,7 @@ import { Matcher } from '@mockdog/core'
 import { equalsTo } from '@mockdog/matchers'
 
 export const fileEncoding = (
-  matcher: Matcher<string> | string
+  matcher: Matcher<string> | string,
 ): Matcher<Express.Multer.File | undefined> => {
   const actualMatcher = typeof matcher === 'string' ? equalsTo(matcher) : matcher
 

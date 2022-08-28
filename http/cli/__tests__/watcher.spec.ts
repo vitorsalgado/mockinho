@@ -14,18 +14,18 @@ describe.skip('watcher', function () {
 
       request: {
         method: 'GET',
-        url: '/test/watcher'
+        url: '/test/watcher',
       },
 
       response: {
         status: 200,
         body: {
-          hello: 'world'
+          hello: 'world',
         },
         headers: {
-          'Content-Type': 'application/json'
-        }
-      }
+          'Content-Type': 'application/json',
+        },
+      },
     }
 
     it('should include it on mock repository', async function () {
@@ -40,7 +40,7 @@ describe.skip('watcher', function () {
         noHttps: true,
         rootDir: tmp,
         mockDir: mocks,
-        watch: true
+        watch: true,
       }
       const mockhttp = await run(argv)
 

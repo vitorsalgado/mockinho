@@ -4,7 +4,7 @@ import { requireOrImportModule } from '../../interoperability/requireOrImportMod
 describe('requireOrImportModule', function () {
   it('should load typescript file', async function () {
     const fn = await requireOrImportModule<() => string>(
-      Path.join(__dirname, '__fixtures__', 'ts-to-load.ts')
+      Path.join(__dirname, '__fixtures__', 'ts-to-load.ts'),
     )
 
     expect(fn()).toEqual('hey')
@@ -12,7 +12,7 @@ describe('requireOrImportModule', function () {
 
   it('should load javascript file', async function () {
     const fn = await requireOrImportModule<() => string>(
-      Path.join(__dirname, '__fixtures__', 'js-to-load.js')
+      Path.join(__dirname, '__fixtures__', 'js-to-load.js'),
     )
 
     expect(fn()).toEqual('hey')

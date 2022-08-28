@@ -8,14 +8,14 @@ import { PackageDefinition } from '@grpc/proto-loader'
 
 const paths = [
   Path.join(process.cwd(), 'protos', 'chat.proto'),
-  Path.join(process.cwd(), 'protos', 'cities.proto')
+  Path.join(process.cwd(), 'protos', 'cities.proto'),
 ]
 const packageDefinition = ProtoLoader.loadSync(paths, {
   keepCase: true,
   longs: String,
   enums: String,
   defaults: true,
-  oneofs: true
+  oneofs: true,
 })
 const services = grpc.loadPackageDefinition(packageDefinition) as any
 
@@ -34,7 +34,7 @@ export function getPackageDefinition(): PackageDefinition {
 export function buildFastify(opts: FastifyServerOptions, config: Config): FastifyInstance {
   const client = new services.cities.CitiesService(
     config.grpcAddress,
-    grpc.credentials.createInsecure()
+    grpc.credentials.createInsecure(),
   )
   const app = fastify(opts)
 
@@ -48,7 +48,7 @@ export function buildFastify(opts: FastifyServerOptions, config: Config): Fastif
         }
 
         reply.send(value).status(200)
-      }
+      },
     )
   })
 

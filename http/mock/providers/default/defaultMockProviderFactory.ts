@@ -17,9 +17,9 @@ export function defaultMockProviderFactory(configurations: HttpConfiguration): H
       [
         `.${configurations.mockFilesExtension}.json`,
         `.${configurations.mockFilesExtension}.yml`,
-        `.${configurations.mockFilesExtension}.yaml`
+        `.${configurations.mockFilesExtension}.yaml`,
       ],
-      MockFileSchema
+      MockFileSchema,
     )
 
     const mocks: Array<HttpMockBuilder> = []

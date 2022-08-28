@@ -5,5 +5,5 @@ export const Headers = {
   Location: 'location',
   WwwAuthenticate: 'www-authenticate',
   Authorization: 'authorization',
-  Allow: 'allow'
+  Allow: 'allow',
 }

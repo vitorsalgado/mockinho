@@ -6,7 +6,7 @@ import { Configuration } from './Configuration.js'
 export interface Context<
   MOCK extends Mock,
   CONFIG extends Configuration,
-  MOCK_REPO extends MockRepository<MOCK>
+  MOCK_REPO extends MockRepository<MOCK>,
 > {
   configuration: CONFIG
 

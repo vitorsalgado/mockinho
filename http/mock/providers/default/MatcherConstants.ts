@@ -41,5 +41,5 @@ export const MatcherConstants = [
   // --
   'fileContent',
   'fileEncoding',
-  'fileMimeType'
+  'fileMimeType',
 ]

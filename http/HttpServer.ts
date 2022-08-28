@@ -55,15 +55,15 @@ export class HttpServer implements MockServer<HttpServerInfo> {
         enabled: this.configuration.useHttp,
         port: 0,
         host: this.configuration.httpHost,
-        baseUrl: ''
+        baseUrl: '',
       },
 
       https: {
         enabled: this.configuration.useHttps,
         port: 0,
         host: this.configuration.httpsHost,
-        baseUrl: ''
-      }
+        baseUrl: '',
+      },
     }
 
     this.additionalMiddlewares.push(...this.configuration.middlewares)
@@ -87,7 +87,7 @@ export class HttpServer implements MockServer<HttpServerInfo> {
 
     this.expressApp.use(logIncomingRequestMiddleware(this.context))
     this.expressApp.use(
-      CookieParse(this.configuration.cookieSecrets, this.configuration.cookieOptions) as Router
+      CookieParse(this.configuration.cookieSecrets, this.configuration.cookieOptions) as Router,
     )
     this.expressApp.use(Multer(this.configuration.multiPartOptions).any() as Router)
     this.expressApp.use(enhanceRequestMiddleware as Router)
@@ -96,13 +96,13 @@ export class HttpServer implements MockServer<HttpServerInfo> {
 
   async start(): Promise<HttpServerInfo> {
     this.additionalMiddlewares.forEach(middleware =>
-      this.expressApp.use(middleware.route, middleware.middleware as Router)
+      this.expressApp.use(middleware.route, middleware.middleware as Router),
     )
 
     const mockFinder = mockFinderMiddleware(this.context)
 
     this.expressApp.all('*', (req, res, next) =>
-      mockFinder(req as HttpRequest, res, next).catch(err => next(err))
+      mockFinder(req as HttpRequest, res, next).catch(err => next(err)),
     )
 
     if (this.configuration.corsEnabled) {
@@ -123,12 +123,12 @@ export class HttpServer implements MockServer<HttpServerInfo> {
           return res.status(error.statusCode ? (error.statusCode as number) : 500).send({
             message: error.message,
             code: ErrorCodes.ERR_UNKNOWN_REASON,
-            stack: error.stack
+            stack: error.stack,
           })
         }
 
         return next()
-      }
+      },
     )
 
     const { httpPort, httpHost, httpDynamicPort, httpsPort, httpsHost, httpsDynamicPort } =
@@ -138,7 +138,7 @@ export class HttpServer implements MockServer<HttpServerInfo> {
       const { port } = await new Promise<AddressInfo>(resolve => {
         if (this.httpServer)
           this.httpServer.listen(httpDynamicPort ? 0 : httpPort, httpHost, () =>
-            resolve(this.httpServer?.address() as AddressInfo)
+            resolve(this.httpServer?.address() as AddressInfo),
           )
       })
 
@@ -147,7 +147,7 @@ export class HttpServer implements MockServer<HttpServerInfo> {
       this.information.http.baseUrl = `http://${this.configuration.httpHost}:${port}`
 
       this.httpServer.on('error', (err: Error & Record<string, unknown>) =>
-        this.context.emit('onError', err)
+        this.context.emit('onError', err),
       )
     }
 
@@ -164,7 +164,7 @@ export class HttpServer implements MockServer<HttpServerInfo> {
       this.information.https.baseUrl = `http://${this.configuration.httpsHost}:${port}`
 
       this.httpsServer.on('error', (err: Error & Record<string, unknown>) =>
-        this.context.emit('onError', err)
+        this.context.emit('onError', err),
       )
     }
 
@@ -207,7 +207,7 @@ export class HttpServer implements MockServer<HttpServerInfo> {
       listeners.push(
         new Promise<void>(resolve => {
           if (this.httpsServer) this.httpsServer.close(() => resolve())
-        })
+        }),
       )
     }
 

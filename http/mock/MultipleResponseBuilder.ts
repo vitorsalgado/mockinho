@@ -33,11 +33,11 @@ export class MultipleResponseBuilder extends ResponseBuilder {
     return async (
       context: HttpContext,
       request: HttpRequest,
-      mock: HttpMock
+      mock: HttpMock,
     ): Promise<ResponseFixture> => {
       if (this._responses.length === 0) {
         throw new Error(
-          'You need to set at least one response when using multiple response builder'
+          'You need to set at least one response when using multiple response builder',
         )
       }
 
@@ -62,7 +62,7 @@ export class MultipleResponseBuilder extends ResponseBuilder {
             .status(500)
             .header(Headers.ContentType, MediaTypes.TEXT_PLAIN)
             .body(
-              `Unable to obtain a response. Request Number: ${mock.hits} - Responses: ${this._responses.length}`
+              `Unable to obtain a response. Request Number: ${mock.hits} - Responses: ${this._responses.length}`,
             )
             .build()(context, request, mock)
         } else {
