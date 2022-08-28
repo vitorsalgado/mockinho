@@ -7,8 +7,10 @@ export const repeatTimes = (max: number): Matcher => {
 
   let hits = 0
 
-  return function repeatTimes(): boolean {
-    hits++
+  return function repeatTimes(_, ctx): boolean {
+    ctx.onRequestDidMatch(() => {
+      hits++
+    })
 
     return hits <= max
   }

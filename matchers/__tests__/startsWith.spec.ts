@@ -1,3 +1,4 @@
+import { noop } from '../_test.js'
 import { startsWith } from '../startsWith.js'
 
 describe('Starts With', function () {
@@ -5,7 +6,7 @@ describe('Starts With', function () {
     const expected = 'testing'
     const value = 'testing new added matcher'
 
-    const result = startsWith(expected)(value)
+    const result = startsWith(expected)(value, noop())
 
     expect(result).toBeTruthy()
   })
@@ -14,7 +15,7 @@ describe('Starts With', function () {
     const expected = 'new added'
     const value = 'testing new added matcher'
 
-    const result = startsWith(expected)(value)
+    const result = startsWith(expected)(value, noop())
 
     expect(result).toBeFalsy()
   })

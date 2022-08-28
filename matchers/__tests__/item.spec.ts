@@ -1,3 +1,4 @@
+import { noop } from '../_test.js'
 import { equalsTo } from '../equalsTo.js'
 import { item } from '../item.js'
 
@@ -6,7 +7,7 @@ describe('Item', function () {
     const arr = ['apple', 'orange', 'banana']
     const index = 1
 
-    const result = item(index, equalsTo('orange'))(arr)
+    const result = item(index, equalsTo('orange'))(arr, noop())
 
     expect(result).toBeTruthy()
   })

@@ -1,3 +1,4 @@
+import { noop } from '../_test.js'
 import { matches } from '../matches.js'
 
 describe('matches', function () {
@@ -6,7 +7,7 @@ describe('matches', function () {
     const matcher = matches(regex)
     const value = 'test'
 
-    expect(matcher(value)).toBeTruthy()
-    expect(matcher('wrong value')).toBeFalsy()
+    expect(matcher(value, noop())).toBeTruthy()
+    expect(matcher('wrong value', noop())).toBeFalsy()
   })
 })

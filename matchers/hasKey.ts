@@ -3,6 +3,6 @@ import { jsonPath } from './jsonPath.js'
 import { isPresent } from './isPresent.js'
 
 export const hasKey = (path: string): Matcher<unknown> =>
-  function hasKey(value): boolean {
-    return jsonPath(path, isPresent())(value)
+  function hasKey(value, ctx): boolean {
+    return jsonPath(path, isPresent())(value, ctx)
   }

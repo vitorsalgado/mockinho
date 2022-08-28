@@ -5,8 +5,8 @@ export const equalsTo = <T>(
   expected: T,
   ignoreCase: boolean = false,
   locale: string | string[] | undefined = undefined
-): Matcher<unknown> =>
-  function equalsTo(value): boolean {
+): Matcher<T> =>
+  function equalsTo(value: T): boolean {
     try {
       if (typeof expected === 'string' && typeof value === 'string') {
         if (ignoreCase) {

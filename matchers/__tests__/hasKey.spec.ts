@@ -1,3 +1,4 @@
+import { noop } from '../_test.js'
 import { hasKey } from '../hasKey.js'
 
 describe('hasKey', function () {
@@ -6,7 +7,7 @@ describe('hasKey', function () {
 
     const matcher = hasKey('test.inner')
 
-    expect(matcher(obj)).toBeTruthy()
-    expect(matcher({ none: 'fail' })).toBeFalsy()
+    expect(matcher(obj, noop())).toBeTruthy()
+    expect(matcher({ none: 'fail' }, noop())).toBeFalsy()
   })
 })

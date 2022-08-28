@@ -1,3 +1,4 @@
+import { noop } from '../_test.js'
 import { equalsTo } from '../equalsTo.js'
 import { jsonPath } from '../jsonPath.js'
 
@@ -10,8 +11,8 @@ describe('Json Path', function () {
 
     const matcher = jsonPath(path, equalsTo(expected))
 
-    expect(matcher(obj)).toBeTruthy()
-    expect(matcher(otherObj)).toBeFalsy()
+    expect(matcher(obj, noop())).toBeTruthy()
+    expect(matcher(otherObj, noop())).toBeFalsy()
   })
 
   it('should accept path with $.', function () {
@@ -22,8 +23,8 @@ describe('Json Path', function () {
 
     const matcher = jsonPath(path, equalsTo(expected))
 
-    expect(matcher(obj)).toBeTruthy()
-    expect(matcher(otherObj)).toBeFalsy()
+    expect(matcher(obj, noop())).toBeTruthy()
+    expect(matcher(otherObj, noop())).toBeFalsy()
   })
 
   it('should return false when value is not an object', function () {
