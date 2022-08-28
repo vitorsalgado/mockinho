@@ -1,4 +1,3 @@
-import { noop } from '../_test.js'
 import { peekNotMatched } from '../peekNotMatched.js'
 import { equalsTo } from '../equalsTo.js'
 
@@ -7,7 +6,7 @@ describe('peekNotMatched', function () {
     it('should execute action', function () {
       const action = jest.fn()
       const matcher = equalsTo('test')
-      const result = peekNotMatched(matcher, action)('dev', noop())
+      const result = peekNotMatched(matcher, action)('dev')
 
       expect(result).toBeFalsy()
       expect(action).toHaveBeenCalledWith('dev')
@@ -18,7 +17,7 @@ describe('peekNotMatched', function () {
     it('should not execute action', function () {
       const action = jest.fn()
       const matcher = equalsTo('test')
-      const result = peekNotMatched(matcher, action)('test', noop())
+      const result = peekNotMatched(matcher, action)('test')
 
       expect(result).toBeTruthy()
       expect(action).not.toHaveBeenCalled()

@@ -1,4 +1,3 @@
-import { noop } from '../_test.js'
 import { isUUID } from '../isUUID.js'
 
 describe('isUUID', function () {
@@ -6,15 +5,15 @@ describe('isUUID', function () {
   const v4UUID = '7534e034-fc4f-4d71-ab48-f644f234f035'
 
   it('should return true for a valid UUID', function () {
-    expect(isUUID()(v1UUID, noop())).toBeTruthy()
-    expect(isUUID()(v4UUID, noop())).toBeTruthy()
-    expect(isUUID()('7f428f62-16af-4fe8-b3ac-b3e87bc02d71', noop())).toBeTruthy()
-    expect(isUUID()('560bd5e4-ee8f-11eb-9a03-0242ac130003', noop())).toBeTruthy()
+    expect(isUUID()(v1UUID)).toBeTruthy()
+    expect(isUUID()(v4UUID)).toBeTruthy()
+    expect(isUUID()('7f428f62-16af-4fe8-b3ac-b3e87bc02d71')).toBeTruthy()
+    expect(isUUID()('560bd5e4-ee8f-11eb-9a03-0242ac130003')).toBeTruthy()
   })
 
   it('should return false for invalid uuids', function () {
-    expect(isUUID()('random text', noop())).toBeFalsy()
-    expect(isUUID()('dnjsakndsaidojalndkasnd0iq2u09pedjasnkfna', noop())).toBeFalsy()
-    expect(isUUID()('5559990', noop())).toBeFalsy()
+    expect(isUUID()('random text')).toBeFalsy()
+    expect(isUUID()('dnjsakndsaidojalndkasnd0iq2u09pedjasnkfna')).toBeFalsy()
+    expect(isUUID()('5559990')).toBeFalsy()
   })
 })

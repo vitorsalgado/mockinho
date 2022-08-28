@@ -1,4 +1,3 @@
-import { noop } from '../_test.js'
 import { anyItem } from '../anyItem.js'
 
 describe('anyItem', function () {
@@ -8,7 +7,7 @@ describe('anyItem', function () {
 
     const matcher = anyItem(...items)
 
-    expect(matcher(item, noop())).toBeTruthy()
-    expect(matcher('go', noop())).toBeFalsy()
+    expect(matcher(item)).toBeTruthy()
+    expect(matcher('go')).toBeFalsy()
   })
 })

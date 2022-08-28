@@ -1,4 +1,3 @@
-import { noop } from '../_test.js'
 import { hasLength } from '../hasLength.js'
 
 describe('hasLength', function () {
@@ -6,7 +5,7 @@ describe('hasLength', function () {
     const len = 2
     const arr = ['js', 'ts']
 
-    const result = hasLength(len)(arr, noop())
+    const result = hasLength(len)(arr)
 
     expect(result).toBeTruthy()
   })
@@ -15,7 +14,7 @@ describe('hasLength', function () {
     const len = 10
     const str = 'unit-tests'
 
-    const result = hasLength(len)(str, noop())
+    const result = hasLength(len)(str)
 
     expect(result).toBeTruthy()
   })
@@ -27,8 +26,8 @@ describe('hasLength', function () {
     const arr = ['js', 'ts']
     const arrLen = 1
 
-    const strRes = hasLength(strLen)(str, noop())
-    const arrRes = hasLength(arrLen)(arr, noop())
+    const strRes = hasLength(strLen)(str)
+    const arrRes = hasLength(arrLen)(arr)
 
     expect(strRes).toBeFalsy()
     expect(arrRes).toBeFalsy()

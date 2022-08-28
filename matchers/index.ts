@@ -1,3 +1,7 @@
+// Base
+// ---
+export * from './base.js'
+
 // Matchers
 // ---
 export * from './allOf.js'
@@ -15,7 +19,6 @@ export * from './equalsTo.js'
 export * from './everyItem.js'
 export * from './hasKey.js'
 export * from './hasLength.js'
-export * from './repeatTimes.js'
 export * from './is.js'
 export * from './isPresent.js'
 export * from './isUUID.js'
@@ -23,15 +26,9 @@ export * from './item.js'
 export * from './jsonPath.js'
 export * from './matches.js'
 export * from './not.js'
-export * from './startsWith.js'
-
-// Transformers
-// ---
-export * from './trim.js'
-export * from './toLowerCase.js'
-export * from './toUpperCase.js'
-
-// Debug
-// ---
 export * from './peek.js'
 export * from './peekNotMatched.js'
+export * from './startsWith.js'
+export * from './toLowerCase.js'
+export * from './toUpperCase.js'
+export * from './trim.js'

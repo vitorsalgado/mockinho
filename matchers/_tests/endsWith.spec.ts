@@ -1,4 +1,3 @@
-import { noop } from '../_test.js'
 import { endsWith } from '../endsWith.js'
 
 describe('Ends With', function () {
@@ -6,7 +5,7 @@ describe('Ends With', function () {
     const expected = 'matcher'
     const value = 'testing new added matcher'
 
-    const result = endsWith(expected)(value, noop())
+    const result = endsWith(expected)(value)
 
     expect(result).toBeTruthy()
   })
@@ -15,7 +14,7 @@ describe('Ends With', function () {
     const expected = 'testing'
     const value = 'testing new added matcher'
 
-    const result = endsWith(expected)(value, noop())
+    const result = endsWith(expected)(value)
 
     expect(result).toBeFalsy()
   })

@@ -1,4 +1,3 @@
-import { noop } from '../_test.js'
 import { isPresent } from '../isPresent.js'
 
 describe('Is Present', function () {
@@ -8,12 +7,12 @@ describe('Is Present', function () {
     const b = false
     const arr = ['hey']
 
-    const strR = isPresent()(str, noop())
-    const numR = isPresent()(num, noop())
-    const bR = isPresent()(b, noop())
-    const arrR = isPresent()(arr, noop())
-    const emptyStr = isPresent()('', noop())
-    const emptyArr = isPresent()([], noop())
+    const strR = isPresent()(str)
+    const numR = isPresent()(num)
+    const bR = isPresent()(b)
+    const arrR = isPresent()(arr)
+    const emptyStr = isPresent()('')
+    const emptyArr = isPresent()([])
 
     expect(strR).toBeTruthy()
     expect(numR).toBeTruthy()
@@ -24,7 +23,7 @@ describe('Is Present', function () {
   })
 
   it('should return false when value is null or undefined', function () {
-    expect(isPresent()(null, noop())).toBeFalsy()
-    expect(isPresent()(undefined, noop())).toBeFalsy()
+    expect(isPresent()(null)).toBeFalsy()
+    expect(isPresent()(undefined)).toBeFalsy()
   })
 })

@@ -1,11 +1,10 @@
-import { noop } from '../_test.js'
 import { allOf } from '../allOf.js'
 import { contains } from '../contains.js'
 import { equalsTo } from '../equalsTo.js'
 
 describe('AllOf', function () {
   it('should return true if anu of the provided matchers returns true too', function () {
-    expect(allOf(equalsTo('test'), contains('abc'))('abc', noop())).toBeFalsy()
-    expect(allOf(equalsTo('test'), contains('test'))('test', noop())).toBeTruthy()
+    expect(allOf(equalsTo('test'), contains('abc'))('abc')).toBeFalsy()
+    expect(allOf(equalsTo('test'), contains('test'))('test')).toBeTruthy()
   })
 })
