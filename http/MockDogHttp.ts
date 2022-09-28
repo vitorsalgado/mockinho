@@ -1,6 +1,6 @@
 import { Express } from 'express'
 import { notBlank } from '@mockdog/core'
-import { ScenarioInMemoryRepository } from '@mockdog/core'
+import { ScenarioRepository } from '@mockdog/core'
 import { PinoLogger } from '@mockdog/core'
 import { LoggerUtil } from '@mockdog/core'
 import { modeIsAtLeast } from '@mockdog/core'
@@ -32,7 +32,7 @@ export class MockDogHttp extends MockApp<
     const context = new HttpContext(
       configurations,
       new HttpMockRepository(),
-      new ScenarioInMemoryRepository(),
+      new ScenarioRepository(),
     )
     const httpServer = new HttpServer(context)
 

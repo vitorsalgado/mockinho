@@ -1,8 +1,0 @@
-dist/
-scripts/
-
-*.d.ts
-
-examples/js
-
-*_pb.*

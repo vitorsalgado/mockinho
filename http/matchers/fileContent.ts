@@ -1,6 +1,6 @@
 import { Express } from 'express'
+import { equalsTo } from 'matchers'
 import { Matcher } from '@mockdog/core'
-import { equalsTo } from '@mockdog/matchers'
 
 export const fileContent = (
   matcher: Matcher<string> | string,

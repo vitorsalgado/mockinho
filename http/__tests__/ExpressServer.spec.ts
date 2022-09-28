@@ -1,6 +1,6 @@
 import Supertest from 'supertest'
-import { contains } from '@mockdog/matchers'
-import { ScenarioInMemoryRepository } from '@mockdog/core'
+import { contains } from 'matchers'
+import { ScenarioRepository } from '@mockdog/core'
 import { HttpContext } from '../HttpContext'
 import { opts, post, HttpConfigurationBuilder, HttpServer } from '../index.js'
 import { HttpMockRepository } from '../index.js'
@@ -26,7 +26,7 @@ describe('Express Http Server', function () {
     .enableCors({ maxAge: 10 })
     .build()
 
-  const ctx = new HttpContext(cfg, new HttpMockRepository(), new ScenarioInMemoryRepository())
+  const ctx = new HttpContext(cfg, new HttpMockRepository(), new ScenarioRepository())
   const httpServer = new HttpServer(ctx)
 
   beforeAll(() => $.start())

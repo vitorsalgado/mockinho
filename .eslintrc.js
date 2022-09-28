@@ -5,7 +5,7 @@ module.exports = {
   extends: ['plugin:@typescript-eslint/recommended'],
   env: {
     jest: true,
-    node: true
+    node: true,
   },
   rules: {
     'tsdoc/syntax': 'error',
@@ -22,13 +22,13 @@ module.exports = {
     'import/extensions': [
       'error',
       'ignorePackages',
-      { js: 'always', jsx: 'never', ts: 'never', tsx: 'never' }
+      { js: 'always', jsx: 'never', ts: 'never', tsx: 'never' },
     ],
     'import/order': [
       'error',
       {
-        groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object']
-      }
+        groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object'],
+      },
     ],
     'import/no-named-as-default': ['off'],
     'import/no-duplicates': ['off'],
@@ -36,19 +36,19 @@ module.exports = {
     'import/no-useless-path-segments': [
       'error',
       {
-        noUselessIndex: false
-      }
+        noUselessIndex: false,
+      },
     ],
     'import/no-self-import': ['error'],
     'import/export': ['error'],
-    'import/no-deprecated': ['error']
+    'import/no-deprecated': ['error'],
   },
   settings: {
     'import/extensions': ['.js', '.ts'],
     'import/parsers': {
-      '@typescript-eslint/parser': ['.ts']
+      '@typescript-eslint/parser': ['.ts'],
     },
-    'import/internal-regex': '^@mockdog/'
+    'import/internal-regex': '^@mockdog/',
   },
   overrides: [
     {
@@ -57,8 +57,10 @@ module.exports = {
         'import/extensions': ['off'],
         '@typescript-eslint/no-useless-constructor': ['off'],
         '@typescript-eslint/no-empty-function': ['off'],
-        '@typescript-eslint/no-unused-vars': ['off']
-      }
-    }
-  ]
+        '@typescript-eslint/no-unused-vars': ['off'],
+      },
+    },
+  ],
+
+  ignorePatterns: ['dist/', '/dist/', 'scripts/', '*.d.ts', 'examples/js', '*_pb.*'],
 }

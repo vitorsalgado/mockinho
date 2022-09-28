@@ -1,13 +1,12 @@
 import Ajv from 'ajv'
 import Yaml from 'js-yaml'
-import { JsonType } from '../types/index.js'
+import { JsonType } from '@mockdog/x/types'
 import { ParseResult } from './ParseResult.js'
-import { extractExtension } from './util/extractExtension.js'
 
 export function createParser<T>(file: string, schema: JsonType): (data: string) => ParseResult<T> {
   const ajv = new Ajv()
   const validate = ajv.compile(schema)
-  const parser = chooseParser(extractExtension(file))
+  const parser = chooseParser(file.split('.')?.pop() || '')
 
   return function (data: string): ParseResult<T> {
     try {

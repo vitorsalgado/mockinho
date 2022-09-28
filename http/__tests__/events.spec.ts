@@ -1,5 +1,5 @@
 import Supertest from 'supertest'
-import { equalsTo } from '@mockdog/matchers'
+import { equalsTo } from 'matchers'
 import { opts } from '../index.js'
 import { post } from '../index.js'
 import { urlPath } from '../index.js'

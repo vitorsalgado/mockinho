@@ -6,16 +6,9 @@ const config: JestConfig.InitialOptions = {
   resetModules: true,
   restoreMocks: true,
   testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
-  transform: { '^.+\\.tsx?$': 'ts-jest' },
-  extensionsToTreatAsEsm: ['.ts'],
-  globals: {
-    'ts-jest': {
-      tsconfig: '../tsconfig.test.json',
-      useESM: true
-    }
-  },
+  transform: { '^.+\\.tsx?$': ['ts-jest', { tsconfig: '../tsconfig.test.json' }] },
   moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1'
+    '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   coveragePathIgnorePatterns: [
     '<rootDir>/dist/',
@@ -23,15 +16,15 @@ const config: JestConfig.InitialOptions = {
     '<rootDir>/scripts',
     '/dist/',
     '<rootDir>/tools',
-    '<rootDir>/examples'
+    '<rootDir>/examples',
   ],
   testPathIgnorePatterns: [
     '<rootDir>/dist/',
     '/node_modules/',
     '<rootDir>/scripts',
     '<rootDir>/tools',
-    '<rootDir>/examples'
-  ]
+    '<rootDir>/examples',
+  ],
 }
 
 export default config

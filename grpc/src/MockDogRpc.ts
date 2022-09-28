@@ -1,4 +1,4 @@
-import { ScenarioInMemoryRepository } from '@mockdog/core'
+import { ScenarioRepository } from '@mockdog/core'
 import { MockApp } from '@mockdog/core'
 import { RpcServer } from './RpcServer.js'
 import { RpcContext } from './RpcContext.js'
@@ -20,7 +20,7 @@ export class MockDogRpc extends MockApp<
     const context = new RpcContext(
       configurations,
       new RpcMockRepository(),
-      new ScenarioInMemoryRepository(),
+      new ScenarioRepository(),
     )
     const server = new RpcServer(context)
 

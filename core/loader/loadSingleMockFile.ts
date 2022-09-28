@@ -1,5 +1,5 @@
 import Fs from 'fs'
-import { JsonType } from '../types/JsonType.js'
+import { JsonType } from '@mockdog/x/types/json.js'
 import { createParser } from './createParser.js'
 import { ParseResult } from './ParseResult.js'
 

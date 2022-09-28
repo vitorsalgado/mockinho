@@ -1,8 +1,8 @@
 import { fail } from 'assert'
 import Path from 'path'
-import { loadMockFiles } from '../loadMockFiles'
-import { loadSingleMockFile } from '../loadSingleMockFile'
-import TestSchema from './__fixtures__/TestSchema'
+import { loadMockFiles } from '../loadMockFiles.js'
+import { loadSingleMockFile } from '../loadSingleMockFile.js'
+import TestSchema from './__fixtures__/TestSchema.js'
 
 describe('loadMockFiles', function () {
   it('should load all valid mocks in a directory and its subdirectories excluding invalid ones when throwOnError is false', async function () {

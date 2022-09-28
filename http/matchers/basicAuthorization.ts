@@ -1,5 +1,5 @@
+import { equalsTo } from 'matchers'
 import { encodeBase64, Matcher } from '@mockdog/core'
-import { equalsTo } from '@mockdog/matchers'
 import { HttpRequest } from '../HttpRequest.js'
 
 export const basicAuthorization = (

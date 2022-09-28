@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "CommonJS",
+    "module": "NodeNext",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
@@ -23,7 +23,7 @@
     "strict": true,
     "noFallthroughCasesInSwitch": true,
     "emitDecoratorMetadata": false,
-    "experimentalDecorators": true,
+    "experimentalDecorators": false,
     "composite": true,
     "skipLibCheck": true,
     "noEmitHelpers": false,

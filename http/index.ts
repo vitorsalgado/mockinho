@@ -1,4 +1,4 @@
-export * from '@mockdog/matchers'
+export * from 'matchers'
 
 export * from './BodyType.js'
 export * from './config/index.js'

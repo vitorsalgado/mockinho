@@ -1,4 +1,4 @@
-import { equalsTo } from '@mockdog/matchers'
+import { equalsTo } from 'matchers'
 import { fileContent } from '../fileContent'
 
 describe('fileContent', function () {

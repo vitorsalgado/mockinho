@@ -1,4 +1,4 @@
-import { notBlank } from '../mod.js'
+import { notBlank } from '../index.js'
 
 describe('notBlank', function () {
   it('should not throw error when string is not blank', function () {

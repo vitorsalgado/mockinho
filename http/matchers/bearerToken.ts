@@ -1,5 +1,5 @@
+import { equalsTo } from 'matchers'
 import { Matcher } from '@mockdog/core'
-import { equalsTo } from '@mockdog/matchers'
 import { HttpRequest } from '../HttpRequest.js'
 
 export const bearerToken = (expectation: Matcher<string> | string): Matcher<HttpRequest> =>

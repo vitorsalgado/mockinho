@@ -1,5 +1,5 @@
 import Supertest from 'supertest'
-import { repeatTimes } from '@mockdog/matchers'
+import { repeatTimes } from 'matchers'
 import { opts } from '../index.js'
 import { get } from '../index.js'
 import { urlPath } from '../index.js'

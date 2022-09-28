@@ -13,13 +13,13 @@
   "license": "MIT",
   "dependencies": {
     "@mockdog/http": "^0.0.0",
-    "dotenv": "^14.2.0",
+    "dotenv": "^16.0.2",
     "drizzle-http": "^3.1.0",
-    "fastify": "^3.27.0",
-    "pino": "^7.6.4",
-    "pino-pretty": "^7.5.0"
+    "fastify": "^4.6.0",
+    "pino": "^8.6.0",
+    "pino-pretty": "^9.1.0"
   },
   "devDependencies": {
-    "ts-node": "^10.4.0"
+    "ts-node": "^10.9.1"
   }
 }

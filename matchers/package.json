@@ -2,7 +2,7 @@
   "name": "@mockdog/matchers",
   "version": "0.0.0",
   "description": "MockDog Core Matchers",
-  "main": "./dist/index.js",
+  "main": "dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js",
@@ -11,7 +11,7 @@
   "scripts": {
     "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --project tsconfig.build.json",
     "test": "jest --detectOpenHandles",
-    "lint": "eslint --fix --ext .ts ."
+    "lint": "eslint --fix --ext .ts "
   },
   "directories": {
     "dist": "dist"

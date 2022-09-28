@@ -7,7 +7,7 @@ import { JsonType } from '@mockdog/core'
 import { notEmpty } from '@mockdog/core'
 import { TemplateParseDelegate } from '@mockdog/core'
 import { Helper } from '@mockdog/core'
-import { Templating } from '@mockdog/core'
+import { Template } from '@mockdog/core'
 import { HandlebarsTemplating } from '@mockdog/core'
 import { isTrue } from '@mockdog/core'
 import { HttpRequest } from '../HttpRequest.js'
@@ -35,7 +35,7 @@ export class ResponseBuilder {
   protected _bodyTemplate?: TemplateParseDelegate<TemplateModel>
   protected _bodyTemplatePath?: string
   protected _templateHelpers?: Helper
-  protected _templating: Templating<TemplateModel> = new HandlebarsTemplating<TemplateModel>()
+  protected _templating: Template<TemplateModel> = new HandlebarsTemplating<TemplateModel>()
 
   protected _bodyCtrl: number = 0
   protected _headers: Record<string, string> = {}

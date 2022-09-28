@@ -1,5 +1,5 @@
+import { anything } from 'matchers'
 import { Matcher } from '@mockdog/core'
-import { anything } from '@mockdog/matchers'
 import { HttpMockBuilder } from '../HttpMockBuilder.js'
 
 export const anyMethod = (urlMatcher: Matcher<string> | string): HttpMockBuilder =>

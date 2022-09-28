@@ -1,6 +1,6 @@
 import * as grpc from '@grpc/grpc-js'
 import { ChannelCredentials } from '@grpc/grpc-js'
-import { equalsTo } from '@mockdog/matchers'
+import { equalsTo } from 'matchers'
 import { options } from '../config/mod'
 import { mockRpc } from '../mockRpc'
 import { unary } from '../mock/mod'

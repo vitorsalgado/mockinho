@@ -9,7 +9,6 @@ const config: JestConfig.InitialOptions = {
   globals: {
     'ts-jest': {
       tsconfig: './tsconfig.test.json',
-      useESM: true,
     },
   },
   collectCoverageFrom: [

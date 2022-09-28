@@ -8,8 +8,7 @@
     "http_jest",
     "grpc",
     "x",
-
-    "examples/*"
+    "contrib/*"
   ],
   "ignoreChanges": ["**/__fixtures__/**", "**/__tests__/**", "**/*.md", "./build", "./docs"],
   "command": {

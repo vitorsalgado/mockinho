@@ -12,10 +12,10 @@
   "license": "MIT",
   "dependencies": {
     "@mockdog/http": "^0.0.0",
-    "axios": "^0.25.0",
-    "dotenv": "^14.2.0",
-    "fastify": "^3.27.0",
-    "pino": "^7.6.4",
-    "pino-pretty": "^7.5.0"
+    "axios": "^0.27.2",
+    "dotenv": "^16.0.2",
+    "fastify": "^4.6.0",
+    "pino": "^8.6.0",
+    "pino-pretty": "^9.1.0"
   }
 }

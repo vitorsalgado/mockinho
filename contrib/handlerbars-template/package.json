@@ -1,0 +1,39 @@
+{
+  "name": "@mockdog/handlebars-template",
+  "version": "0.0.0",
+  "description": "Handlebars Template Implementation",
+  "main": "./dist/mod.js",
+  "types": "./dist/mod.d.ts",
+  "exports": {
+    ".": "./dist/mod.js",
+    "./package.json": "./package.json",
+    "./cond": "./dist/cond/mod.js"
+  },
+  "scripts": {
+    "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --project tsconfig.build.json",
+    "test": "jest --detectOpenHandles",
+    "lint": "eslint --fix --ext .ts ."
+  },
+  "directories": {
+    "dist": "dist"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "Vitor Hugo Salgado <vsalgadopb@gmail.com>",
+  "homepage": "https://github.com/vitorsalgado/mockdog/tree/master/x#readme",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitorsalgado/mockdog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vitorsalgado/mockdog/issues"
+  },
+  "dependencies": {
+    "@mockdog/core": "^0.0.0"
+  }
+}

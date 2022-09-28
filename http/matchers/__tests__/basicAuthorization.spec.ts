@@ -1,5 +1,5 @@
+import { equalsTo } from 'matchers'
 import { encodeBase64 } from '@mockdog/core'
-import { equalsTo } from '@mockdog/matchers'
 import { HttpRequest } from '../../HttpRequest'
 import { basicAuthorization } from '../basicAuthorization'
 

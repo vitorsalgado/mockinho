@@ -1,5 +1,5 @@
 import Supertest from 'supertest'
-import { equalsTo } from '@mockdog/matchers'
+import { equalsTo } from 'matchers'
 import { Matcher } from '@mockdog/core'
 import { modeIsAtLeast } from '@mockdog/core'
 import { mockHttp } from '../index.js'
