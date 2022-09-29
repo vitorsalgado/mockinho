@@ -1,9 +1,9 @@
-import { Matcher } from './base.js'
+import { Matcher } from './base/index.js'
 
-export function peek<T>(matcher: Matcher<T>, action: (value: T) => void): Matcher<T> {
-  return function peek(value): boolean {
-    action(value)
+export const peek =
+  <T>(matcher: Matcher<T>, action: (value: T) => void): Matcher<T> =>
+  received => {
+    action(received)
 
-    return matcher(value)
+    return matcher(received)
   }
-}

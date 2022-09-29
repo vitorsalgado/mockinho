@@ -2,12 +2,9 @@ import { anyItem } from '../anyItem.js'
 
 describe('anyItem', function () {
   it('should return true when any provided item matches with incoming value', function () {
-    const items = ['dev', 'js', 'ts']
-    const item = 'js'
+    const matcher = anyItem(...['dev', 'js', 'ts'])
 
-    const matcher = anyItem(...items)
-
-    expect(matcher(item)).toBeTruthy()
-    expect(matcher('go')).toBeFalsy()
+    expect(matcher('js').pass).toBeTruthy()
+    expect(matcher('go').pass).toBeFalsy()
   })
 })

@@ -6,7 +6,7 @@ describe('peek', function () {
     const action = jest.fn()
     const result = peek(equalsTo('test'), action)('test')
 
-    expect(result).toBeTruthy()
+    expect(result.pass).toBeTruthy()
     expect(action).toHaveBeenCalledWith('test')
   })
 })

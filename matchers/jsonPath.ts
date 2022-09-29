@@ -1,15 +1,27 @@
-import { Matcher } from './base.js'
-import { reach } from './internal/objects/reach.js'
+import { Matcher } from './base/index.js'
+import { indent, matcherHint } from './internal/fmt.js'
+import { reach } from './internal/reach.js'
+import { res } from './internal/res.js'
 
-export const jsonPath = <T>(path: string, matcher: Matcher<T>): Matcher<unknown> =>
-  function jsonPath(value): boolean {
-    if (typeof value !== 'object') {
-      return false
+export const jsonPath =
+  <T>(path: string, matcher: Matcher<T>): Matcher<unknown> =>
+  received => {
+    const matcherName = 'jsonPath'
+
+    if (typeof received !== 'object') {
+      return res(matcherName, () => 'jsonPath only accepts value of type object', false)
     }
 
     if (path.startsWith('$.')) {
       path = path.substring(2, path.length)
     }
 
-    return matcher(reach(path, value))
+    const result = matcher(reach(path, received))
+
+    return res(
+      matcherName,
+      () =>
+        matcherHint(matcherName, path) + '\n' + `Field path: ${path}\n` + indent(result.message()),
+      result.pass,
+    )
   }

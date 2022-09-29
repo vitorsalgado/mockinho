@@ -7,7 +7,7 @@ describe('hasLength', function () {
 
     const result = hasLength(len)(arr)
 
-    expect(result).toBeTruthy()
+    expect(result.pass).toBeTruthy()
   })
 
   it('should return true when string length is equal to the provided value', function () {
@@ -16,7 +16,7 @@ describe('hasLength', function () {
 
     const result = hasLength(len)(str)
 
-    expect(result).toBeTruthy()
+    expect(result.pass).toBeTruthy()
   })
 
   it('should return false when length is different than the provided value', function () {
@@ -29,7 +29,7 @@ describe('hasLength', function () {
     const strRes = hasLength(strLen)(str)
     const arrRes = hasLength(arrLen)(arr)
 
-    expect(strRes).toBeFalsy()
-    expect(arrRes).toBeFalsy()
+    expect(strRes.pass).toBeFalsy()
+    expect(arrRes.pass).toBeFalsy()
   })
 })

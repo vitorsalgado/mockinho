@@ -1,6 +1,12 @@
-import { Matcher } from './base.js'
+import { red } from 'colorette'
+import { Matcher } from './base/index.js'
+import { matcherHint } from './internal/fmt.js'
+import { res } from './internal/res.js'
 
-export const empty = <T>(): Matcher<Array<T> | string> =>
-  function empty(value): boolean {
-    return value.length === 0
-  }
+export const empty = (): Matcher<{ length: number }> => received => {
+  return res(
+    'empty',
+    () => matcherHint('empty') + `Length: ${red(String(received.length))}`,
+    received.length === 0,
+  )
+}

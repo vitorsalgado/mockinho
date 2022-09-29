@@ -1,6 +1,6 @@
 // Base
 // ---
-export * from './base.js'
+export * from './base/index.js'
 
 // Matchers
 // ---
@@ -19,12 +19,11 @@ export * from './equalsTo.js'
 export * from './everyItem.js'
 export * from './hasKey.js'
 export * from './hasLength.js'
-export * from './is.js'
 export * from './isPresent.js'
 export * from './isUUID.js'
 export * from './item.js'
 export * from './jsonPath.js'
-export * from './matches.js'
+export * from './regex.js'
 export * from './not.js'
 export * from './peek.js'
 export * from './peekNotMatched.js'

@@ -1,24 +1,33 @@
-import assert from 'assert'
-import { Matcher } from './base.js'
+import assert from 'node:assert'
+import { diff } from 'jest-diff'
+import { Matcher } from './base/index.js'
+import { matcherHint } from './internal/fmt.js'
+import { res } from './internal/res.js'
 
-export const equalsTo = <T>(
-  expected: T,
-  ignoreCase: boolean = false,
-  locale: string | string[] | undefined = undefined,
-): Matcher<T> =>
-  function equalsTo(value: T): boolean {
-    try {
-      if (typeof expected === 'string' && typeof value === 'string') {
-        if (ignoreCase) {
-          return expected.localeCompare(value, locale, { sensitivity: 'accent' }) === 0
-        }
+export const equalsTo =
+  <T>(
+    expected: T,
+    ignoreCase: boolean = false,
+    locale: string | string[] | undefined = undefined,
+  ): Matcher<T> =>
+  received => {
+    const matcherName = 'equalTo'
+    let pass: boolean
 
-        return expected === value
+    if (typeof expected === 'string' && typeof received === 'string') {
+      if (ignoreCase) {
+        pass = expected.localeCompare(received, locale, { sensitivity: 'accent' }) === 0
+      } else {
+        pass = expected === received
       }
+    } else {
+      try {
+        assert.deepStrictEqual(received, expected)
+        pass = true
+      } catch {
+        pass = false
+      }
+    }
 
-      assert.deepStrictEqual(value, expected)
-      return true
-    } catch {}
-
-    return false
+    return res(matcherName, () => matcherHint(matcherName) + '\n' + diff(expected, received), pass)
   }

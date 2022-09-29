@@ -8,6 +8,6 @@ describe('Item', function () {
 
     const result = item(index, equalsTo('orange'))(arr)
 
-    expect(result).toBeTruthy()
+    expect(result.pass).toBeTruthy()
   })
 })

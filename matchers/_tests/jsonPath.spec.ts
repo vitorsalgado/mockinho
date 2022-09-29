@@ -10,8 +10,8 @@ describe('Json Path', function () {
 
     const matcher = jsonPath(path, equalsTo(expected))
 
-    expect(matcher(obj)).toBeTruthy()
-    expect(matcher(otherObj)).toBeFalsy()
+    expect(matcher(obj).pass).toBeTruthy()
+    expect(matcher(otherObj).pass).toBeFalsy()
   })
 
   it('should accept path with $.', function () {
@@ -22,8 +22,8 @@ describe('Json Path', function () {
 
     const matcher = jsonPath(path, equalsTo(expected))
 
-    expect(matcher(obj)).toBeTruthy()
-    expect(matcher(otherObj)).toBeFalsy()
+    expect(matcher(obj).pass).toBeTruthy()
+    expect(matcher(otherObj).pass).toBeFalsy()
   })
 
   it('should return false when value is not an object', function () {
@@ -31,6 +31,6 @@ describe('Json Path', function () {
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    expect(jsonPath('test.message', equalsTo('hello'))(value)).toBeFalsy()
+    expect(jsonPath('test.message', equalsTo('hello'))(value).pass).toBeFalsy()
   })
 })

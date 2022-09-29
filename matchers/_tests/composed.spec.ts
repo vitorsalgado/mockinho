@@ -4,6 +4,6 @@ import { trim } from '../trim.js'
 
 describe('Composed Transformers', function () {
   it('should compose multiple transformers', function () {
-    expect(trim(toLowerCase(equalsTo('test')))('  TEST  ')).toBeTruthy()
+    expect(trim(toLowerCase(equalsTo('test')))('  TEST  ').pass).toBeTruthy()
   })
 })

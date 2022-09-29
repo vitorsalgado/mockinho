@@ -7,7 +7,7 @@ describe('Starts With', function () {
 
     const result = startsWith(expected)(value)
 
-    expect(result).toBeTruthy()
+    expect(result.pass).toBeTruthy()
   })
 
   it('should return false when it does not start with the expected value', function () {
@@ -16,6 +16,6 @@ describe('Starts With', function () {
 
     const result = startsWith(expected)(value)
 
-    expect(result).toBeFalsy()
+    expect(result.pass).toBeFalsy()
   })
 })

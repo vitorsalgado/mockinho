@@ -8,7 +8,7 @@ describe('peekNotMatched', function () {
       const matcher = equalsTo('test')
       const result = peekNotMatched(matcher, action)('dev')
 
-      expect(result).toBeFalsy()
+      expect(result.pass).toBeFalsy()
       expect(action).toHaveBeenCalledWith('dev')
     })
   })
@@ -19,7 +19,7 @@ describe('peekNotMatched', function () {
       const matcher = equalsTo('test')
       const result = peekNotMatched(matcher, action)('test')
 
-      expect(result).toBeTruthy()
+      expect(result.pass).toBeTruthy()
       expect(action).not.toHaveBeenCalled()
     })
   })

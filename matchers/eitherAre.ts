@@ -1,4 +1,4 @@
-import { Matcher } from './base.js'
+import { Matcher } from './base/index.js'
 import { either } from './either.js'
 
 export const eitherAre = <T>(first: Matcher<T>): { or(second: Matcher<T>): Matcher<T> } => ({

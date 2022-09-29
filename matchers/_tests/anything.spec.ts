@@ -2,8 +2,8 @@ import { anything } from '../anything.js'
 
 describe('Anything', function () {
   it('should return true always', function () {
-    const result = anything()()
+    const result = anything()('')
 
-    expect(result).toEqual(true)
+    expect(result.pass).toEqual(true)
   })
 })

@@ -1,13 +1,13 @@
-import { Matcher } from './base.js'
+import { Matcher } from './base/index.js'
 
-export function peekNotMatched<T>(matcher: Matcher<T>, action: (value: T) => void): Matcher<T> {
-  return function peekNotMatched(value): boolean {
-    const result = matcher(value)
+export const peekNotMatched =
+  <T>(matcher: Matcher<T>, action: (value: T) => void): Matcher<T> =>
+  received => {
+    const result = matcher(received)
 
-    if (!result) {
-      action(value)
+    if (!result.pass) {
+      action(received)
     }
 
     return result
   }
-}

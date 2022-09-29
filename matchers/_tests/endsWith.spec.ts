@@ -7,7 +7,7 @@ describe('Ends With', function () {
 
     const result = endsWith(expected)(value)
 
-    expect(result).toBeTruthy()
+    expect(result.pass).toBeTruthy()
   })
 
   it('should return false when it does not end with the expected value', function () {
@@ -16,6 +16,6 @@ describe('Ends With', function () {
 
     const result = endsWith(expected)(value)
 
-    expect(result).toBeFalsy()
+    expect(result.pass).toBeFalsy()
   })
 })

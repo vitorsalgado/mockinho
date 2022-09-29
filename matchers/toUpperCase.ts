@@ -1,4 +1,4 @@
-import { Matcher } from './base.js'
+import { Matcher } from './base/index.js'
 
 export function toUpperCase(
   matcher: Matcher<string>,

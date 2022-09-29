@@ -6,7 +6,7 @@ describe('hasKey', function () {
 
     const matcher = hasKey('test.inner')
 
-    expect(matcher(obj)).toBeTruthy()
-    expect(matcher({ none: 'fail' })).toBeFalsy()
+    expect(matcher(obj).pass).toBeTruthy()
+    expect(matcher({ none: 'fail' }).pass).toBeFalsy()
   })
 })

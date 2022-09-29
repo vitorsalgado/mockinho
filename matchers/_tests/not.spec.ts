@@ -6,7 +6,7 @@ describe('Not', function () {
     const expected = 'value'
     const result = not(equalsTo(expected))(expected)
 
-    expect(result).toBeFalsy()
-    expect(not(equalsTo(expected))('test')).toBeTruthy()
+    expect(result.pass).toBeFalsy()
+    expect(not(equalsTo(expected))('test').pass).toBeTruthy()
   })
 })

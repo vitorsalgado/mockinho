@@ -13,7 +13,7 @@ describe('Matchers Composition', function () {
     const result = matcher(obj)
     const neg = not(matcher)(obj)
 
-    expect(result).toBeTruthy()
-    expect(neg).toBeFalsy()
+    expect(result.pass).toBeTruthy()
+    expect(neg.pass).toBeFalsy()
   })
 })

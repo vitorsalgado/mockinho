@@ -8,7 +8,7 @@ describe('everyItem', function () {
 
     const result = everyItem(isPresent())(arr)
 
-    expect(result).toBeTruthy()
+    expect(result.pass).toBeTruthy()
   })
 
   it('should return false when any item does not match', function () {
@@ -16,7 +16,7 @@ describe('everyItem', function () {
 
     const result = everyItem(equalsTo('avocado'))(arr)
 
-    expect(result).toBeFalsy()
+    expect(result.pass).toBeFalsy()
   })
 
   it('should return false when some items matches', function () {
@@ -24,6 +24,6 @@ describe('everyItem', function () {
 
     const result = everyItem(equalsTo('apple'))(arr)
 
-    expect(result).toBeFalsy()
+    expect(result.pass).toBeFalsy()
   })
 })
