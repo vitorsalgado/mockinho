@@ -1,6 +1,6 @@
 import Path from 'path'
+import crypto from 'crypto'
 import Supertest from 'supertest'
-import { v4 } from 'uuid'
 import { opts } from '../config'
 import { mockHttp } from '../mockHttp'
 
@@ -18,7 +18,7 @@ describe('HTTP - File Mocking', function () {
         .post('/test/100/another-route?q=orange&filter=code&sort=ASC')
         .set('content-type', 'application/json')
         .set('Accept', 'application/json')
-        .set('x-Correlation-ID', v4())
+        .set('x-Correlation-ID', crypto.randomUUID())
         .send({
           data: {
             message: 'coding',

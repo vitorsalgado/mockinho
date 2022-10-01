@@ -1,5 +1,5 @@
 export interface MockServer<I = unknown> {
-  initialSetup(): void
+  setup(): void
 
   start(): Promise<I>
 

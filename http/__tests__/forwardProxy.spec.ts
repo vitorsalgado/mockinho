@@ -1,6 +1,6 @@
 import Supertest from 'supertest'
-import { equalsTo } from 'matchers'
-import { jsonPath } from 'matchers'
+import { equalsTo } from '@mockdog/matchers'
+import { jsonPath } from '@mockdog/matchers'
 import { opts, get, urlPath, Headers, MediaTypes } from '../index.js'
 import { okJSON } from '../index.js'
 import { mockHttp } from '../index.js'

@@ -1,10 +1,7 @@
 import { Optional } from '@mockdog/x'
-import { Configuration } from './configuration.js'
-import { Context } from './context.js'
 import { Mock } from './mock.js'
-import { MockRepository } from './mockrepository.js'
 
-export class FindMockResult<MOCK extends Mock> {
+export class FindMockResult<MOCK> {
   constructor(
     private readonly _hasMatch: boolean,
     private readonly _matchedMock?: MOCK,
@@ -15,11 +12,10 @@ export class FindMockResult<MOCK extends Mock> {
     }
   }
 
-  static noMatch = <S extends Mock>(closestMatch?: S): FindMockResult<S> =>
+  static noMatch = <S>(closestMatch?: S): FindMockResult<S> =>
     new FindMockResult(false, undefined, closestMatch)
 
-  static match = <M extends Mock>(matchedMock: M): FindMockResult<M> =>
-    new FindMockResult(true, matchedMock)
+  static match = <M>(matchedMock: M): FindMockResult<M> => new FindMockResult(true, matchedMock)
 
   hasMatch(): boolean {
     return this._hasMatch
@@ -35,55 +31,34 @@ export class FindMockResult<MOCK extends Mock> {
     return this._matchedMock
   }
 
-  closestMatch(): Optional<Mock> {
+  closestMatch(): Optional<MOCK> {
     return Optional.ofNullable(this._closesMatch)
   }
 }
 
-export function findMockForRequest<REQUEST, MOCK extends Mock, CONFIG extends Configuration>(
+export function findMockForRequest<REQUEST, MOCK extends Mock<REQUEST>>(
   request: REQUEST,
-  context: Context<MOCK, CONFIG, MockRepository<MOCK>>,
+  mocks: MOCK[],
 ): FindMockResult<MOCK> {
-  const mocks = context.mockRepository.fetchSorted()
-  const weights = new Map<string, number>()
+  let id = ''
+  let highestScore = 0
 
   for (const mock of mocks) {
-    let weight = 0
+    const result = mock.matches(request)
 
-    if (mock.matches(request)) {
-      mock.hit()
-      context.mockRepository.save(mock)
-
+    if (result.ok) {
       return FindMockResult.match(mock)
     }
 
-    if (
-      mock.matchers.every(expectation => {
-        const hasMatch = expectation.matcher(expectation.selector(request))
-
-        if (hasMatch) {
-          weight += expectation.score
-          weights.set(mock.id, weight)
-        }
-
-        return hasMatch
-      })
-    ) {
-      return FindMockResult.match(mock)
+    if (highestScore < result.score) {
+      highestScore = result.score
+      id = mock.id
     }
   }
 
-  if (weights.size === 0) {
+  if (id === '') {
     return FindMockResult.noMatch()
   }
 
-  const key = Array.from(weights)
-    .sort((a, b) => b[1] - a[1])
-    .shift()?.[0]
-
-  if (!key) {
-    return FindMockResult.noMatch()
-  }
-
-  return FindMockResult.noMatch(context.mockRepository.fetchById(key).get())
+  return FindMockResult.noMatch(mocks.find(x => x.id === id))
 }

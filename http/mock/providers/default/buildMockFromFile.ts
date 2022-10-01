@@ -1,30 +1,30 @@
 import Path from 'path'
 import * as Fs from 'fs'
-import { isPresent } from 'matchers'
-import { matches } from 'matchers'
-import { equalsTo } from 'matchers'
-import { anything } from 'matchers'
-import { item } from 'matchers'
-import { contains } from 'matchers'
-import { anyOf } from 'matchers'
-import { jsonPath } from 'matchers'
-import { isUUID } from 'matchers'
-import { allOf } from 'matchers'
-import { not } from 'matchers'
-import { toUpperCase } from 'matchers'
-import { toLowerCase } from 'matchers'
-import { endsWith } from 'matchers'
-import { repeatTimes } from 'matchers'
-import { hasLength } from 'matchers'
-import { startsWith } from 'matchers'
-import { trim } from 'matchers'
-import { everyItem } from 'matchers'
-import { empty } from 'matchers'
+import { isPresent } from '@mockdog/matchers'
+import { regex } from '@mockdog/matchers'
+import { equalsTo } from '@mockdog/matchers'
+import { anything } from '@mockdog/matchers'
+import { item } from '@mockdog/matchers'
+import { contains } from '@mockdog/matchers'
+import { anyOf } from '@mockdog/matchers'
+import { jsonPath } from '@mockdog/matchers'
+import { isUUID } from '@mockdog/matchers'
+import { allOf } from '@mockdog/matchers'
+import { not } from '@mockdog/matchers'
+import { toUpperCase } from '@mockdog/matchers'
+import { toLowerCase } from '@mockdog/matchers'
+import { endsWith } from '@mockdog/matchers'
+import { repeatTimes } from '@mockdog/matchers'
+import { hasLength } from '@mockdog/matchers'
+import { startsWith } from '@mockdog/matchers'
+import { trim } from '@mockdog/matchers'
+import { everyItem } from '@mockdog/matchers'
+import { empty } from '@mockdog/matchers'
 import { LoadMockError } from '@mockdog/core'
 import { Helper } from '@mockdog/core'
-import { requireOrImportModule } from '@mockdog/core'
-import { Matcher } from '@mockdog/core'
-import { notBlank, notNull } from '@mockdog/core'
+import { importModule } from '@mockdog/x'
+import { Matcher } from '@mockdog/matchers'
+import { notBlank, notNull } from '@mockdog/x'
 import { HttpConfiguration } from '../../../config/index.js'
 import { urlPath, urlPathMatching } from '../../../matchers/index.js'
 import { HttpMockBuilder, response } from '../../index.js'
@@ -68,7 +68,7 @@ export async function buildMockFromFile(
   } else if (mock.request.urlPath) {
     builder.url(urlPath(mock.request.urlPath))
   } else if (mock.request.urlPattern) {
-    builder.url(matches(mock.request.urlPattern))
+    builder.url(regex(mock.request.urlPattern))
   } else if (mock.request.urlPathPattern) {
     builder.url(urlPathMatching(mock.request.urlPathPattern))
   } else if (mock.request.urlExact) {
@@ -242,7 +242,7 @@ async function buildResponse(mock: MockFileResponse, filename: string): Promise<
       ? mock.helpers
       : Path.resolve(Path.dirname(filename), mock.helpers)
 
-    const helpers = await requireOrImportModule(file)
+    const helpers = await importModule(file)
 
     res.helpers(helpers as Helper)
   }
@@ -302,7 +302,7 @@ function discoverMatcherByKey(
   } else if (key === 'equalsIgnoringCase' || key === 'equalsToIgnoringCase') {
     return equalsTo(values, true, mock.locale)
   } else if (key === 'matches' || key === 'regex') {
-    return matches(values)
+    return regex(values)
   } else if (key === 'endsWith') {
     return endsWith(values)
   } else if (key === 'startsWith') {

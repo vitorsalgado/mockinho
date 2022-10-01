@@ -6,11 +6,7 @@ const config: JestConfig.InitialOptions = {
   ...Base,
 
   projects: ['<rootDir>'],
-  globals: {
-    'ts-jest': {
-      tsconfig: './tsconfig.test.json',
-    },
-  },
+  transform: { '^.+\\.tsx?$': ['ts-jest', { tsconfig: '../tsconfig.test.json' }] },
   collectCoverageFrom: [
     '**/**/*.ts',
     '!**/**/*.config.ts',

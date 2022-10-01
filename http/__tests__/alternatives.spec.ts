@@ -1,6 +1,6 @@
 import Supertest from 'supertest'
-import { equalsTo } from 'matchers'
-import { Matcher } from '@mockdog/core'
+import { equalsTo } from '@mockdog/matchers'
+import { Matcher } from '@mockdog/matchers'
 import { modeIsAtLeast } from '@mockdog/core'
 import { mockHttp } from '../index.js'
 import { opts } from '../index.js'
@@ -32,15 +32,13 @@ describe('Builder Alternatives', function () {
             '',
             [
               {
-                valueGetter: extractQuery('term') as (ctx: unknown) => unknown,
+                target: '',
+                selector: extractQuery('term') as (ctx: unknown) => unknown,
                 matcher: equalsTo('test') as Matcher<unknown>,
-                weight: 0,
+                score: 0,
               },
             ],
-            [],
             ok().build(),
-            new Map(),
-            new Map(),
           ),
       )
 

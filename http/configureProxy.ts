@@ -7,7 +7,7 @@ import { Options } from 'http-proxy-middleware'
 import { responseInterceptor } from 'http-proxy-middleware'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import { Express } from 'express'
-import { LoggerUtil } from '@mockdog/core'
+import { log } from '@mockdog/core'
 import { modeIsAtLeast } from '@mockdog/core'
 import { RecordDispatcher } from './record/index.js'
 import { HttpRequest } from './HttpRequest.js'
@@ -66,9 +66,7 @@ export function configureProxy(
 
     for (const server of serverInstances) {
       server.on('close', () =>
-        dispatcher
-          .terminate()
-          .finally(() => LoggerUtil.instance().debug('Recorder Dispatcher Terminated')),
+        dispatcher.terminate().finally(() => log.debug('Recorder Dispatcher Terminated')),
       )
     }
 

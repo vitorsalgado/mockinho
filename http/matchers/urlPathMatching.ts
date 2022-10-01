@@ -1,8 +1,7 @@
 import { URL } from 'url'
-import { matches } from 'matchers'
-import { Matcher } from '@mockdog/core'
+import { regex, Matcher } from '@mockdog/matchers'
 
-export const urlPathMatching = (pattern: RegExp): Matcher<string> =>
-  function urlPathMapping(value): boolean {
-    return matches(pattern)(new URL(value).pathname)
-  }
+export const urlPathMatching =
+  (pattern: RegExp): Matcher<string> =>
+  value =>
+    regex(pattern)(new URL(value).pathname)

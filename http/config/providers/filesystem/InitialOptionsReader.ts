@@ -1,6 +1,6 @@
 import Fs from 'fs'
 import Path from 'path'
-import { requireOrImportModule } from '@mockdog/core'
+import { importModule } from '@mockdog/x'
 import { HttpConfigurationBuilder } from '../../HttpConfigurationBuilder.js'
 import { importPlugins } from '../importPlugins.js'
 import { InitialOptions } from './InitialOptions.js'
@@ -29,13 +29,13 @@ export function initialOptionsReader(rootDir?: string, configFile?: string) {
         throw new ReferenceError(`Configuration file ${path} not found.`)
       }
 
-      config = await requireOrImportModule(path)
+      config = await importModule(path)
     } else {
       for (const file of Files) {
         const path = Path.isAbsolute(file) ? file : Path.join(rootDir, file)
 
         if (Fs.existsSync(path)) {
-          config = await requireOrImportModule(path)
+          config = await importModule(path)
           break
         }
       }

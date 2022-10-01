@@ -1,4 +1,4 @@
-import { contains, equalsTo } from 'matchers'
+import { contains, equalsTo } from '@mockdog/matchers'
 import { HttpRequest } from '../../HttpRequest'
 import { accept } from '../accept'
 
@@ -19,7 +19,7 @@ describe('Accept', function () {
     const correct = accept(contains('json'))(req)
     const wrong = accept(equalsTo('xml'))(req)
 
-    expect(correct).toBeTruthy()
-    expect(wrong).toBeFalsy()
+    expect(correct.pass).toBeTruthy()
+    expect(wrong.pass).toBeFalsy()
   })
 })

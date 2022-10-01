@@ -17,7 +17,7 @@
         "docs",
         "*.md"
       ],
-      "message": "chore(release): publish %s"
+      "message": "%s"
     }
   }
 }

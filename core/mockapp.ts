@@ -38,7 +38,7 @@ export abstract class MockApp<
     )
 
     this.setup()
-    this._mockServer.initialSetup()
+    this._mockServer.setup()
   }
 
   protected abstract setup(): void

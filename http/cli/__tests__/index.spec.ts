@@ -1,4 +1,4 @@
-import { MockDogHttp } from '../../MockDogHttp'
+import { MockDogHttp } from '../../MockDogHttp.js'
 
 describe('cli cmd', function () {
   it('should execute without errors', async function () {

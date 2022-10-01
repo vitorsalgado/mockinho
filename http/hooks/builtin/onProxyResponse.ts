@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 import { green, greenBright, bold } from 'colorette'
-import { nowInMs } from '@mockdog/core'
+import { nowInMs } from '@mockdog/x'
 import { ifVerbose } from '../utils.js'
 import { Hooks } from '../Hooks.js'
 

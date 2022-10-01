@@ -1,6 +1,7 @@
 import { Express } from 'express'
-import { equalsTo } from 'matchers'
-import { Matcher } from '@mockdog/core'
+import { equalsTo } from '@mockdog/matchers'
+import { matcherHint, res } from '@mockdog/matchers/internal'
+import { Matcher } from '@mockdog/matchers'
 
 export const fileContent = (
   matcher: Matcher<string> | string,
@@ -9,9 +10,9 @@ export const fileContent = (
 ): Matcher<Express.Multer.File | undefined> => {
   const actualMatcher = typeof matcher === 'string' ? equalsTo(matcher) : matcher
 
-  return function fileContent(file): boolean {
+  return file => {
     if (!file || !file.buffer) {
-      return false
+      return res('fileContent', () => matcherHint('fileContent'), false)
     }
 
     return actualMatcher(file.buffer.toString(encoding))

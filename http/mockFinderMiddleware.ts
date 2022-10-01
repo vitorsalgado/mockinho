@@ -8,7 +8,6 @@ import { modeIsAtLeast } from '@mockdog/core'
 import { HttpContext } from './HttpContext.js'
 import { HttpRequest } from './HttpRequest.js'
 import { ResponseFixture, HttpMock } from './mock/index.js'
-import { HttpConfiguration } from './config/index.js'
 import { MediaTypes } from './MediaTypes.js'
 import { Headers } from './Headers.js'
 import { BodyType } from './BodyType.js'
@@ -23,7 +22,8 @@ export function mockFinderMiddleware(
   return async function (req: HttpRequest, res: Response, next: NextFunction): Promise<void> {
     proxy.removeAllListeners()
 
-    const result = findMockForRequest<HttpRequest, HttpMock, HttpConfiguration>(req, context)
+    const mocks = context.mockRepository.fetchSorted()
+    const result = findMockForRequest<HttpRequest, HttpMock>(req, mocks)
 
     if (result.hasMatch()) {
       const matched = result.matched()
@@ -86,6 +86,8 @@ export function mockFinderMiddleware(
 
       onRequestMatched(isVerbose, context, req, response, matched)
       replier()
+
+      matched.hit()
 
       return
     }

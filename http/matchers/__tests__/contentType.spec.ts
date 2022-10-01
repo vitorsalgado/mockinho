@@ -1,4 +1,4 @@
-import { equalsTo } from 'matchers'
+import { equalsTo } from '@mockdog/matchers'
 import { HttpRequest } from '../../HttpRequest'
 import { contentType } from '../contentType'
 
@@ -16,7 +16,7 @@ describe('Content Type', function () {
       body: null,
     } as any
 
-    expect(contentType(equalsTo(header))(req)).toBeTruthy()
-    expect(contentType(header)(req)).toBeTruthy()
+    expect(contentType(equalsTo(header))(req).pass).toBeTruthy()
+    expect(contentType(header)(req).pass).toBeTruthy()
   })
 })

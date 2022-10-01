@@ -1,48 +1,33 @@
-import { Express } from 'express'
-import { allOf, equalsTo, repeatTimes } from 'matchers'
-import { anyItem } from 'matchers'
-import { anything } from 'matchers'
-import { isStr } from '@mockdog/core'
-import { encodeBase64 } from '@mockdog/core'
-import { Matcher } from '@mockdog/core'
-import { notNull } from '@mockdog/core'
-import { noNullElements } from '@mockdog/core'
-import { notBlank } from '@mockdog/core'
-import { notEmpty } from '@mockdog/core'
-import { MockSource } from '@mockdog/core'
-import { MockBuilder } from '@mockdog/core'
-import { Expectation } from '@mockdog/core'
-import { MatcherContextHolder } from '@mockdog/core'
-import { ExpectationWithContext } from '@mockdog/core'
-import { Configuration } from '@mockdog/core'
-import { HttpRequest } from '../HttpRequest.js'
-import { bearerToken, urlPath } from '../matchers/index.js'
-import { Headers } from '../Headers.js'
+import { MatcherSpecification, MockBuilder, MockSource } from '@mockdog/core'
+import { allOf, anyItem, equalsTo, repeatTimes, wrap, Matcher, Predicate } from '@mockdog/matchers'
+import { base64, JsonType, noNullElements, notBlank, notEmpty, notNull } from '@mockdog/x'
 import { BodyType } from '../BodyType.js'
+import { bearerToken, urlPath } from '../matchers/index.js'
 import { Methods } from '../Methods.js'
 import { Schemes } from '../Schemes.js'
-import { HttpConfiguration } from '../config/index.js'
+import { Headers } from '../Headers.js'
 import { HttpMock } from './HttpMock.js'
 import { ResponseBuilder } from './ResponseBuilder.js'
-import { extractCookieAsJson } from './util/extractors.js'
-import { extractCookie } from './util/extractors.js'
-import { extractFileByFieldName } from './util/extractors.js'
-import { extractMultiPartFiles } from './util/extractors.js'
-import { extractNothing } from './util/extractors.js'
-import { extractQueries } from './util/extractors.js'
-import { extractQuery } from './util/extractors.js'
-import { extractHeaders } from './util/extractors.js'
-import { extractHeader } from './util/extractors.js'
-import { extractBody } from './util/extractors.js'
-import { extractUrl } from './util/extractors.js'
-import { extractMethod } from './util/extractors.js'
-import { extractScheme } from './util/extractors.js'
-import { extractRequest } from './util/extractors.js'
 import { ResponseDelegate } from './ResponseDelegate.js'
+import {
+  extractBody,
+  extractCookie,
+  extractCookieAsJson,
+  extractFileByFieldName,
+  extractHeader,
+  extractHeaders,
+  extractMethod,
+  extractMultiPartFiles,
+  extractNothing,
+  extractQueries,
+  extractQuery,
+  extractRequest,
+  extractScheme,
+  extractUrl,
+} from './util/extractors.js'
 
 export class HttpMockBuilder extends MockBuilder<HttpMock> {
-  private readonly _expectations: Array<Expectation<unknown, unknown>> = []
-  private readonly _meta: Map<string, unknown> = new Map<string, unknown>()
+  private readonly _expectations: Array<MatcherSpecification<unknown, unknown>> = []
   private _responseBuilder!: ResponseDelegate
 
   constructor(
@@ -57,50 +42,26 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
   url(matcher: Matcher<string> | string): this {
     notNull(matcher)
 
-    const meta = 'URL'
-
     if (typeof matcher === 'string') {
       notBlank(matcher)
-
-      this._meta.set(meta, matcher)
-      this._expectations.push(this.spec(extractUrl, urlPath(matcher), 10))
+      this._expectations.push(this.spec('url', extractUrl, urlPath(matcher), 10))
     } else {
-      this._expectations.push(this.spec(extractUrl, matcher, 10))
+      this._expectations.push(this.spec('url', extractUrl, matcher, 10))
     }
 
     return this
   }
 
-  method(matcher: Matcher<Methods> | Methods | Array<Methods>): this {
-    notNull(matcher)
+  method(...method: Methods[]): this {
+    notNull(method)
 
-    const meta = 'Method'
-
-    if (typeof matcher === 'string') {
-      notBlank(matcher)
-
-      this._meta.set(meta, matcher)
-
-      if (matcher.trim() === '*') {
-        this._expectations.push(this.spec(extractMethod, anything(), 0))
-      } else {
-        this._expectations.push(this.spec(extractMethod, equalsTo(matcher), 3))
-      }
-    } else if (Array.isArray(matcher)) {
-      notEmpty(matcher)
-      noNullElements(matcher)
-
-      this._meta.set(meta, matcher.join(','))
-      this._expectations.push(this.spec(extractMethod, anyItem(matcher), 3))
-    } else {
-      this._expectations.push(this.spec(extractMethod, matcher, 3))
-    }
+    this._expectations.push(this.spec('method', extractMethod, anyItem(...method), 3))
 
     return this
   }
 
   scheme(scheme: Schemes): this {
-    this._expectations.push(this.spec(extractScheme, equalsTo(scheme), 1))
+    this._expectations.push(this.spec('scheme', extractScheme, equalsTo(scheme), 1))
 
     return this
   }
@@ -109,10 +70,12 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
     notBlank(key)
     notNull(matcher)
 
-    if (isStr(matcher)) {
-      this._expectations.push(this.spec(extractHeader(key.toLowerCase()), equalsTo(matcher), 0.5))
+    if (typeof matcher === 'string') {
+      this._expectations.push(
+        this.spec('header', extractHeader(key.toLowerCase()), equalsTo(matcher), 0.5),
+      )
     } else {
-      this._expectations.push(this.spec(extractHeader(key.toLowerCase()), matcher, 0.5))
+      this._expectations.push(this.spec('header', extractHeader(key.toLowerCase()), matcher, 0.5))
     }
 
     return this
@@ -121,7 +84,7 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
   headers(matcher: Matcher<Record<string, string>>): this {
     notNull(matcher)
 
-    this._expectations.push(this.spec(extractHeaders, matcher, 3))
+    this._expectations.push(this.spec('header', extractHeaders, matcher, 3))
 
     return this
   }
@@ -130,9 +93,11 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
     notNull(matcher)
 
     if (typeof matcher === 'string') {
-      this._expectations.push(this.spec(extractHeader(Headers.ContentType), equalsTo(matcher), 0.5))
+      this._expectations.push(
+        this.spec('header', extractHeader(Headers.ContentType), equalsTo(matcher), 0.5),
+      )
     } else {
-      this._expectations.push(this.spec(extractHeader(Headers.ContentType), matcher, 0.5))
+      this._expectations.push(this.spec('header', extractHeader(Headers.ContentType), matcher, 0.5))
     }
 
     return this
@@ -144,8 +109,9 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
 
     this._expectations.push(
       this.spec(
+        'basic auth',
         extractHeader(Headers.Authorization),
-        equalsTo(encodeBase64(`Basic ${username}:${password}`)),
+        equalsTo(base64.encode(`Basic ${username}:${password}`)),
         0.5,
       ),
     )
@@ -156,19 +122,19 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
   bearerToken(token: string): this {
     notNull(token)
 
-    this._expectations.push(this.spec(extractRequest, bearerToken(token), 0.5))
+    this._expectations.push(this.spec('bearer token', extractRequest, bearerToken(token), 0.5))
 
     return this
   }
 
-  query(key: string, matcher: Matcher<string | string[] | undefined> | string): this {
+  query(key: string, matcher: Matcher<string[]> | Matcher<string> | string | string[]): this {
     notBlank(key)
     notNull(matcher)
 
     if (typeof matcher === 'string') {
-      this._expectations.push(this.spec(extractQuery(key), equalsTo(matcher), 0.5))
+      this._expectations.push(this.spec('query', extractQuery(key) as any, equalsTo(matcher), 0.5))
     } else {
-      this._expectations.push(this.spec(extractQuery(key), matcher, 0.5))
+      this._expectations.push(this.spec('query', extractQuery(key) as any, matcher as any, 0.5))
     }
 
     return this
@@ -177,7 +143,7 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
   querystring(matcher: Matcher<Record<string, string | string[] | undefined>>): this {
     notNull(matcher)
 
-    this._expectations.push(this.spec(extractQueries, matcher, 3))
+    this._expectations.push(this.spec('query', extractQueries, matcher, 3))
 
     return this
   }
@@ -187,10 +153,10 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
     noNullElements(matchers)
 
     if (matchers.length === 0) {
-      this._expectations.push(this.spec(extractBody, matchers[0], 5))
+      this._expectations.push(this.spec('body', extractBody, matchers[0], 5))
     }
 
-    this._expectations.push(this.spec(extractBody, allOf(...matchers), 5))
+    this._expectations.push(this.spec('body', extractBody, allOf(...matchers), 5))
 
     return this
   }
@@ -199,15 +165,19 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
     return this.requestBody(...matchers)
   }
 
-  files(...matchers: Array<Matcher<Array<Express.Multer.File>>>): this {
+  files(
+    ...matchers: Array<Matcher<Array<Express.Multer.File>> | Predicate<Array<Express.Multer.File>>>
+  ): this {
     notEmpty(matchers)
     noNullElements(matchers)
 
     if (matchers.length === 0) {
-      this._expectations.push(this.spec(extractMultiPartFiles, matchers[0], 3))
+      this._expectations.push(this.spec('file', extractMultiPartFiles, wrap(matchers[0]), 3))
     }
 
-    this._expectations.push(this.spec(extractMultiPartFiles, allOf(...matchers), 5))
+    this._expectations.push(
+      this.spec('file', extractMultiPartFiles, allOf(...matchers.map(x => wrap(x))), 5),
+    )
 
     return this
   }
@@ -218,29 +188,35 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
     noNullElements(matchers)
 
     if (matchers.length === 0) {
-      this._expectations.push(this.spec(extractFileByFieldName(fieldName), matchers[0], 3))
+      this._expectations.push(this.spec('file', extractFileByFieldName(fieldName), matchers[0], 3))
     }
 
-    this._expectations.push(this.spec(extractFileByFieldName(fieldName), allOf(...matchers), 5))
+    this._expectations.push(
+      this.spec('file', extractFileByFieldName(fieldName), allOf(...matchers), 5),
+    )
 
     return this
   }
 
   cookie(key: string, matcher: Matcher<string> | string): this {
     if (typeof matcher === 'string') {
-      this._expectations.push(this.spec(extractCookie(key), equalsTo(matcher), 0.5))
+      this._expectations.push(
+        this.spec('cookie', extractCookie(key) as any, equalsTo(matcher), 0.5),
+      )
     } else {
-      this._expectations.push(this.spec(extractCookie(key) as any, matcher, 0.5))
+      this._expectations.push(this.spec('cookie', extractCookie(key) as any, matcher, 0.5))
     }
 
     return this
   }
 
-  cookieJson(key: string, matcher: Matcher<Record<string, unknown>> | string): this {
+  cookieJson(key: string, matcher: Matcher<JsonType> | string): this {
     if (typeof matcher === 'string') {
-      this._expectations.push(this.spec(extractCookieAsJson(key), equalsTo(matcher), 0.5))
+      this._expectations.push(
+        this.spec('cookie', extractCookieAsJson(key) as any, equalsTo(matcher), 0.5),
+      )
     } else {
-      this._expectations.push(this.spec(extractCookieAsJson(key) as any, matcher, 0.5))
+      this._expectations.push(this.spec('cookie', extractCookieAsJson(key) as any, matcher, 0.5))
     }
 
     return this
@@ -249,41 +225,22 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
   repeatTimes(times: number): this {
     notNull(times)
 
-    this._expectations.push(this.spec(extractNothing, repeatTimes(times), 0))
+    this._expectations.push(this.spec('request', extractNothing, repeatTimes(times), 0))
 
     return this
   }
 
-  expect(...matchers: Array<Matcher<HttpRequest> | Matcher<unknown> | Matcher>): this {
+  expect(...matchers: Array<Predicate | Matcher>): this {
     notEmpty(matchers)
     noNullElements(matchers)
 
     if (matchers.length === 1) {
-      this._expectations.push(this.spec(extractRequest, matchers[0] as Matcher<unknown>, 1))
+      this._expectations.push(this.spec('request', extractRequest, wrap(matchers[0]), 1))
     } else {
       this._expectations.push(
-        this.spec(extractRequest, allOf(...(matchers as Array<Matcher<unknown>>)), 1),
+        this.spec('request', extractRequest, allOf(...matchers.map(x => wrap(x))), 1),
       )
     }
-
-    return this
-  }
-
-  expectWithContext(
-    ...matchers: Array<MatcherContextHolder<HttpMock, HttpConfiguration, HttpRequest>>
-  ): this {
-    notEmpty(matchers)
-    noNullElements(matchers)
-
-    this._statefulExpectations.push(
-      ...matchers.map(
-        matcher =>
-          ({
-            valueGetter: (request: HttpRequest) => request,
-            matcherContext: matcher,
-          } as unknown as ExpectationWithContext<unknown, unknown, HttpMock, Configuration>),
-      ),
-    )
 
     return this
   }
@@ -311,10 +268,7 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
       this._source,
       this._sourceDescription,
       this._expectations,
-      this._statefulExpectations,
       this._responseBuilder,
-      this._meta,
-      new Map<string, unknown>(),
     )
   }
 
@@ -322,5 +276,19 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
     notEmpty(this._expectations, 'Mocks needs to have at least one Matcher.')
     noNullElements(this._expectations, 'Matchers list must not contain null or undefined elements.')
     notNull(this._responseBuilder, 'Response definition is required. Call .reply() to create one.')
+  }
+
+  protected spec<T, V>(
+    target: string,
+    selector: (request: V) => T,
+    matcher: Matcher<T> | Predicate<V>,
+    score: number = 0,
+  ): MatcherSpecification<unknown, unknown> {
+    return {
+      target,
+      matcher,
+      selector,
+      score,
+    } as MatcherSpecification<unknown, unknown>
   }
 }

@@ -23,7 +23,7 @@ export const extractHeaders = (request: HttpRequest): Record<string, string> => 
 
 export const extractQuery =
   (key: string) =>
-  (request: HttpRequest): string | string[] | undefined =>
+  (request: HttpRequest): string | string[] =>
     request.query[key]
 
 export const extractQueries = (

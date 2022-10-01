@@ -1,8 +1,6 @@
 import { Express } from 'express'
-import { notBlank } from '@mockdog/core'
+import { notBlank } from '@mockdog/x'
 import { ScenarioRepository } from '@mockdog/core'
-import { PinoLogger } from '@mockdog/core'
-import { LoggerUtil } from '@mockdog/core'
 import { modeIsAtLeast } from '@mockdog/core'
 import { MockApp } from '@mockdog/core'
 import { HttpConfigurationBuilder } from './config/index.js'
@@ -40,7 +38,8 @@ export class MockDogHttp extends MockApp<
   }
 
   setup(): void {
-    LoggerUtil.instance().subscribe(new PinoLogger(this._configuration.logLevel))
+    // FIXME: new logger
+    // LoggerUtil.instance().subscribe(new PinoLogger(this._configuration.logLevel))
 
     if (modeIsAtLeast(this._configuration, 'info')) {
       this.on('onRequestStart', onRequestReceived)

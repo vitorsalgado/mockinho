@@ -1,13 +1,13 @@
-import { equalsTo } from 'matchers'
-import { encodeBase64 } from '@mockdog/core'
+import { equalsTo } from '@mockdog/matchers'
+import { base64 } from '@mockdog/x'
 import { HttpRequest } from '../../HttpRequest'
-import { basicAuthorization } from '../basicAuthorization'
+import { basicAuth } from '../basicAuth.js'
 
 describe('Basic Authorization', function () {
   it('should accept raw username and password but match with base 64 converted values', function () {
     const username = 'a-nice-dev'
     const password = 'super-secret-pwd'
-    const encoded = encodeBase64(`${username}:${password}`)
+    const encoded = base64.encode(`${username}:${password}`)
 
     const req: HttpRequest = {
       headers: {
@@ -15,8 +15,8 @@ describe('Basic Authorization', function () {
       },
     } as any
 
-    expect(basicAuthorization(username, password)(req)).toBeTruthy()
-    expect(basicAuthorization(equalsTo(encoded))(req)).toBeTruthy()
+    expect(basicAuth(username, password)(req).pass).toBeTruthy()
+    expect(basicAuth(equalsTo(encoded))(req).pass).toBeTruthy()
   })
 
   it('should throw error when username is provided but password no', function () {
@@ -25,11 +25,11 @@ describe('Basic Authorization', function () {
 
     const req: HttpRequest = {
       headers: {
-        authorization: `BAsiC ${encodeBase64(`${username}:${password}`)}`,
+        authorization: `BAsiC ${base64.encode(`${username}:${password}`)}`,
       },
     } as any
 
-    const matcher = basicAuthorization(username)
+    const matcher = basicAuth(username)
 
     expect(() => matcher(req)).toThrow()
   })
@@ -39,7 +39,7 @@ describe('Basic Authorization', function () {
       headers: {},
     } as any
 
-    expect(basicAuthorization('test')(req)).toBeFalsy()
+    expect(basicAuth('test')(req).pass).toBeFalsy()
   })
 
   it('should return false when authorization header does not contain the Basic schema', function () {
@@ -48,11 +48,11 @@ describe('Basic Authorization', function () {
 
     const req: HttpRequest = {
       headers: {
-        authorization: `${encodeBase64(`${username}:${password}`)}`,
+        authorization: `${base64.encode(`${username}:${password}`)}`,
       },
     } as any
 
-    expect(basicAuthorization(username)(req)).toBeFalsy()
+    expect(basicAuth(username)(req).pass).toBeFalsy()
   })
 
   it('should return false when authorization header contains an invalid schema', function () {
@@ -61,10 +61,10 @@ describe('Basic Authorization', function () {
 
     const req: HttpRequest = {
       headers: {
-        authorization: `Test ${encodeBase64(`${username}:${password}`)}`,
+        authorization: `Test ${base64.encode(`${username}:${password}`)}`,
       },
     } as any
 
-    expect(basicAuthorization(username)(req)).toBeFalsy()
+    expect(basicAuth(username)(req).pass).toBeFalsy()
   })
 })

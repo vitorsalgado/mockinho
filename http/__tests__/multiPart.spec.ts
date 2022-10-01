@@ -1,6 +1,6 @@
 import Path from 'path'
 import Supertest from 'supertest'
-import { equalsTo, contains, jsonPath } from 'matchers'
+import { equalsTo, contains, jsonPath } from '@mockdog/matchers'
 import { opts, post, urlPath } from '../index.js'
 import { mockHttp } from '../mockHttp.js'
 import { ok } from '../mock/index.js'

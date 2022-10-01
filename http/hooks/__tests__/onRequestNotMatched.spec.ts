@@ -1,7 +1,7 @@
-import { equalsTo } from 'matchers'
-import { contentType } from '../../matchers'
-import { HttpMockBuilder, ok } from '../../mock'
-import { onRequestNotMatched } from '../builtin/onRequestNotMatched'
+import { equalsTo } from '@mockdog/matchers'
+import { contentType } from '../../matchers/index.js'
+import { HttpMockBuilder, ok } from '../../mock/index.js'
+import { onRequestNotMatched } from '../builtin/onRequestNotMatched.js'
 
 describe('onRequestNotMatched', function () {
   it('should log without a closest match', function () {
@@ -67,7 +67,7 @@ describe('onRequestNotMatched', function () {
       .name('nice name')
       .expect(contentType('something'))
       .url(equalsTo('http://localhost:8080'))
-      .method(equalsTo('GET'))
+      .method('GET')
       .reply(ok())
       .build()
 

@@ -1,15 +1,15 @@
+import crypto from 'crypto'
 import { Request } from 'express'
 import { Response } from 'express'
 import { NextFunction } from 'express'
-import { v4 as UUId } from 'uuid'
-import { nowInMs } from '@mockdog/core'
+import { nowInMs } from '@mockdog/x'
 
 export function enhanceRequestMiddleware(
   request: Request & { [key: string]: unknown },
   response: Response,
   next: NextFunction,
 ): void {
-  request.id = UUId()
+  request.id = crypto.randomUUID()
   request.href = `${request.protocol}://${request.hostname}${request.url}`
   request.isMultiPart = request.headers['content-type']?.includes('multipart')
   request.start = nowInMs()

@@ -1,4 +1,4 @@
-import { Matcher } from '@mockdog/core'
+import { Matcher } from '@mockdog/matchers'
 import { HttpConfiguration } from '../../../config/index.js'
 import { HttpMockBuilder } from '../../HttpMockBuilder.js'
 import { MockFile } from './MockFile.js'

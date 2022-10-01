@@ -7,6 +7,6 @@ describe('URL Path Matching', function () {
 
     const result = urlPathMatching(pattern)(href)
 
-    expect(result).toBeTruthy()
+    expect(result.pass).toBeTruthy()
   })
 })

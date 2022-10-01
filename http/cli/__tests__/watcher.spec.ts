@@ -2,8 +2,8 @@ import Path from 'path'
 import * as Fs from 'fs'
 import Os from 'os'
 import Supertest from 'supertest'
-import { sleep } from '@mockdog/core'
-import { Argv } from '../../config/providers/commandlineargs/Argv'
+import { sleep } from '@mockdog/x'
+import { Argv } from '../../config/index.js'
 import { run } from '../run'
 
 describe.skip('watcher', function () {

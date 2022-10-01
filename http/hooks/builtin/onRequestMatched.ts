@@ -1,6 +1,6 @@
 import { Stream } from 'stream'
 import { green, greenBright, gray, bold, italic } from 'colorette'
-import { nowInMs } from '@mockdog/core'
+import { nowInMs } from '@mockdog/x'
 import { ifVerbose } from '../utils.js'
 import { Hooks } from '../Hooks.js'
 

@@ -1,4 +1,4 @@
-import { equalsTo } from 'matchers'
+import { equalsTo } from '@mockdog/matchers'
 import { fieldPath } from '../fieldPath'
 
 describe('Field Path', function () {
@@ -10,8 +10,8 @@ describe('Field Path', function () {
 
     const matcher = fieldPath(path, equalsTo(expected))
 
-    expect(matcher(obj)).toBeTruthy()
-    expect(matcher(otherObj)).toBeFalsy()
+    expect(matcher(obj).pass).toBeTruthy()
+    expect(matcher(otherObj).pass).toBeFalsy()
   })
 
   it('should accept path with $.', function () {
@@ -22,8 +22,8 @@ describe('Field Path', function () {
 
     const matcher = fieldPath(path, equalsTo(expected))
 
-    expect(matcher(obj)).toBeTruthy()
-    expect(matcher(otherObj)).toBeFalsy()
+    expect(matcher(obj).pass).toBeTruthy()
+    expect(matcher(otherObj).pass).toBeFalsy()
   })
 
   it('should return false when value is not an object', function () {
@@ -31,6 +31,6 @@ describe('Field Path', function () {
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    expect(fieldPath('test.message', equalsTo('hello'))(value)).toBeFalsy()
+    expect(fieldPath('test.message', equalsTo('hello'))(value).pass).toBeFalsy()
   })
 })

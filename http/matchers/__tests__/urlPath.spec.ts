@@ -7,8 +7,8 @@ describe('URL Path', function () {
 
     const matcher = urlPath(path)
 
-    expect(matcher(href)).toBeTruthy()
-    expect(matcher('http://example.com.br/test/another-route?q=fruits#page')).toBeFalsy()
+    expect(matcher(href).pass).toBeTruthy()
+    expect(matcher('http://example.com.br/test/another-route?q=fruits#page').pass).toBeFalsy()
   })
 
   it('should be case sensitive by default', function () {
@@ -17,7 +17,7 @@ describe('URL Path', function () {
 
     const result = urlPath(path)(href)
 
-    expect(result).toBeFalsy()
+    expect(result.pass).toBeFalsy()
   })
 
   it('should ignore case when parameter ignoreCase is true', function () {
@@ -26,6 +26,6 @@ describe('URL Path', function () {
 
     const result = urlPath(path, true)(href)
 
-    expect(result).toBeTruthy()
+    expect(result.pass).toBeTruthy()
   })
 })

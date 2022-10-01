@@ -1,13 +1,16 @@
-import { equalsTo } from 'matchers'
-import { Matcher } from '@mockdog/core'
+import { equalsTo } from '@mockdog/matchers'
+import { Matcher } from '@mockdog/matchers'
+import { matcherHint, res } from '@mockdog/matchers/internal'
 import { HttpRequest } from '../HttpRequest.js'
 
-export const bearerToken = (expectation: Matcher<string> | string): Matcher<HttpRequest> =>
-  function bearerToken(request): boolean {
+export const bearerToken =
+  (matchers: Matcher<string> | string): Matcher<HttpRequest> =>
+  request => {
+    const matcherName = 'bearerToken'
     const auth = request.headers.authorization
 
     if (!auth) {
-      return false
+      return res(matcherName, () => matcherHint(matcherName), false)
     }
 
     const parts = auth.split(' ')
@@ -17,13 +20,13 @@ export const bearerToken = (expectation: Matcher<string> | string): Matcher<Http
       const value = parts[1]
 
       if (/^Bearer$/i.test(scheme)) {
-        if (typeof expectation === 'string') {
-          return equalsTo(expectation)(value)
+        if (typeof matchers === 'string') {
+          return equalsTo(matchers)(value)
         }
 
-        return expectation(value)
+        return matchers(value)
       }
     }
 
-    return false
+    return res(matcherName, () => matcherHint(matcherName), false)
   }

@@ -1,8 +1,6 @@
-import { Expectation } from '@mockdog/core'
+import { MatcherSpecification } from '@mockdog/core'
 import { Mock } from '@mockdog/core'
 import { MockSource } from '@mockdog/core'
-import { ExpectationWithContext } from '@mockdog/core'
-import { HttpConfiguration } from '../config/index.js'
 import { ResponseDelegate } from './ResponseDelegate.js'
 
 export class HttpMock extends Mock {
@@ -12,26 +10,10 @@ export class HttpMock extends Mock {
     priority: number,
     source: MockSource,
     sourceDescription: string,
-    expectations: Array<Expectation<unknown, unknown>>,
-    statefulExpectations: Array<
-      ExpectationWithContext<unknown, unknown, HttpMock, HttpConfiguration>
-    >,
+    matcherSpecifications: Array<MatcherSpecification<unknown, unknown>>,
     public readonly responseBuilder: ResponseDelegate,
-    meta: Map<string, unknown>,
-    properties: Map<string, unknown>,
   ) {
-    super(
-      id,
-      name,
-      priority,
-      source,
-      sourceDescription,
-      expectations,
-      statefulExpectations as Array<ExpectationWithContext<unknown, unknown>>,
-      0,
-      meta,
-      properties,
-    )
+    super(id, name, priority, true, source, sourceDescription, matcherSpecifications, [], 0)
   }
 
   toString(): string {

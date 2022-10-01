@@ -38,6 +38,7 @@
     "ajv": "^8.11.0",
     "colorette": "^2.0.19",
     "handlebars": "^4.7.7",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "pretty-format": "^29.0.3"
   }
 }

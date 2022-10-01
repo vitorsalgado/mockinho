@@ -2,14 +2,8 @@ import Path from 'path'
 import * as Fs from 'fs'
 import * as Util from 'util'
 import { CookieOptions } from 'express'
-import { notBlank, notNull } from '@mockdog/core'
-import { JsonType } from '@mockdog/core'
-import { notEmpty } from '@mockdog/core'
-import { TemplateParseDelegate } from '@mockdog/core'
-import { Helper } from '@mockdog/core'
-import { Template } from '@mockdog/core'
-import { HandlebarsTemplating } from '@mockdog/core'
-import { isTrue } from '@mockdog/core'
+import { isTrue, JsonType, notBlank, notEmpty, notNull } from '@mockdog/x'
+import { Helper, Template, TemplateDelegate } from '@mockdog/core'
 import { HttpRequest } from '../HttpRequest.js'
 import { HttpContext } from '../HttpContext.js'
 import { MediaTypes } from '../MediaTypes.js'
@@ -32,14 +26,16 @@ export class ResponseBuilder {
   protected _bodyFile: string = ''
   protected _bodyFunction?: (request: HttpRequest) => BodyType
   protected _bodyFileRelativeToFixtures: boolean = true
-  protected _bodyTemplate?: TemplateParseDelegate<TemplateModel>
+  protected _bodyTemplate?: TemplateDelegate<TemplateModel>
   protected _bodyTemplatePath?: string
   protected _templateHelpers?: Helper
-  protected _templating: Template<TemplateModel> = new HandlebarsTemplating<TemplateModel>()
+
+  // FIXME: load default modules
+  protected _templating!: Template<TemplateModel>
 
   protected _bodyCtrl: number = 0
   protected _headers: Record<string, string> = {}
-  protected _headersWithTemplateValue: Record<string, TemplateParseDelegate<TemplateModel>> = {}
+  protected _headersWithTemplateValue: Record<string, TemplateDelegate<TemplateModel>> = {}
 
   protected _cookies: Array<Cookie> = []
   protected _cookiesToClear: Array<CookieToClear> = []

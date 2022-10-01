@@ -2,8 +2,8 @@ import Supertest from 'supertest'
 import { del, head, opts, patch, put } from '../index.js'
 import { mockHttp } from '../index.js'
 import { request } from '../index.js'
-import { urlPath } from '../matchers'
-import { get, ok, post } from '../mock'
+import { urlPath } from '../matchers/index.js'
+import { get, ok, post } from '../mock/index.js'
 
 describe('CORS', function () {
   const $ = mockHttp(opts().dynamicHttpPort().enableCors({ methods: '*' }))

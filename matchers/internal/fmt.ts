@@ -1,8 +1,8 @@
-import pf from 'pretty-format'
+import prettyFormat from 'pretty-format'
 import { bold, green, red } from 'colorette'
 
 export function stringify(v: unknown): string {
-  return pf(v, { min: true })
+  return prettyFormat(v, { min: true })
 }
 
 export function matcherHint(name: string, param: string = ''): string {

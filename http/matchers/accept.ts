@@ -1,7 +1,7 @@
-import { Matcher } from '@mockdog/core'
+import { Matcher } from '@mockdog/matchers'
 import { HttpRequest } from '../HttpRequest.js'
 
-export const accept = (matcher: Matcher<string>): Matcher<HttpRequest> =>
-  function accept(request): boolean {
-    return matcher(request.headers.accept)
-  }
+export const accept =
+  (matcher: Matcher<string>): Matcher<HttpRequest> =>
+  received =>
+    matcher(received.headers.accept)

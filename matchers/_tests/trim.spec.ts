@@ -1,4 +1,4 @@
-import { trim } from '../trim.js'
+import { trim } from '../text.js'
 import { equalsTo } from '../equalsTo.js'
 
 describe('Trim', function () {

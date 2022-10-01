@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 
 import { Readable } from 'stream'
-import { nowInMs } from '@mockdog/core'
-import { ResponseFixture } from '../../mock'
-import { onRequestMatched } from '../builtin/onRequestMatched'
+import { nowInMs } from '@mockdog/x'
+import { ResponseFixture } from '../../mock/index.js'
+import { onRequestMatched } from '../builtin/onRequestMatched.js'
 
 describe('onRequestMatched', function () {
   beforeEach(() => {

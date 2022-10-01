@@ -1,4 +1,4 @@
-import { peek } from '../peek.js'
+import { peek } from '../debug.js'
 import { equalsTo } from '../equalsTo.js'
 
 describe('peek', function () {

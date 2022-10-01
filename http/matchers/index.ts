@@ -1,5 +1,5 @@
 export * from './accept.js'
-export * from './basicAuthorization.js'
+export * from './basicAuth.js'
 export * from './bearerToken.js'
 export * from './contentType.js'
 export * from './fieldPath.js'

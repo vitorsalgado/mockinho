@@ -1,4 +1,4 @@
-import { equalsTo } from 'matchers'
+import { equalsTo } from '@mockdog/matchers'
 import { HttpRequest } from '../../HttpRequest'
 import { bearerToken } from '../bearerToken'
 
@@ -14,8 +14,8 @@ describe('Bearer Token', function () {
     const res = bearerToken(equalsTo(token))(req)
     const wrong = bearerToken(equalsTo('some-other-token'))(req)
 
-    expect(res).toBeTruthy()
-    expect(wrong).toBeFalsy()
+    expect(res.pass).toBeTruthy()
+    expect(wrong.pass).toBeFalsy()
   })
 
   it('should use equalsTo when expectation is a string', function () {
@@ -28,7 +28,7 @@ describe('Bearer Token', function () {
 
     const res = bearerToken(token)(req)
 
-    expect(res).toBeTruthy()
+    expect(res.pass).toBeTruthy()
   })
 
   it('should apply matcher', function () {
@@ -39,7 +39,7 @@ describe('Bearer Token', function () {
       },
     } as any
 
-    expect(bearerToken(equalsTo(token))(req)).toBeTruthy()
+    expect(bearerToken(equalsTo(token))(req).pass).toBeTruthy()
   })
 
   it('should return false when there is no authorization header', function () {
@@ -49,7 +49,7 @@ describe('Bearer Token', function () {
 
     const matcher = bearerToken('test')
 
-    expect(matcher(req)).toBeFalsy()
+    expect(matcher(req).pass).toBeFalsy()
   })
 
   it('should return false when authorization header does not contain the Bearer schema', function () {
@@ -61,8 +61,8 @@ describe('Bearer Token', function () {
       },
     } as any
 
-    expect(bearerToken(token)(req)).toBeFalsy()
-    expect(bearerToken(equalsTo(token))(req)).toBeFalsy()
+    expect(bearerToken(token)(req).pass).toBeFalsy()
+    expect(bearerToken(equalsTo(token))(req).pass).toBeFalsy()
   })
 
   it('should return false when authorization header contains an invalid schema', function () {
@@ -74,7 +74,7 @@ describe('Bearer Token', function () {
       },
     } as any
 
-    expect(bearerToken(token)(req)).toBeFalsy()
-    expect(bearerToken(equalsTo(token))(req)).toBeFalsy()
+    expect(bearerToken(token)(req).pass).toBeFalsy()
+    expect(bearerToken(equalsTo(token))(req).pass).toBeFalsy()
   })
 })

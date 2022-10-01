@@ -28,7 +28,7 @@ export class RpcServer implements MockServer<RpcServerInfo> {
     }
   }
 
-  initialSetup(): void {
+  setup(): void {
     const grpcObject = RpcServer.loadPackageDefinition(this.configuration)
 
     for (const [, entries] of Object.entries(grpcObject)) {

@@ -1,4 +1,4 @@
-import { peekNotMatched } from '../peekNotMatched.js'
+import { peekNotMatched } from '../debug.js'
 import { equalsTo } from '../equalsTo.js'
 
 describe('peekNotMatched', function () {

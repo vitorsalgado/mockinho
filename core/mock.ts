@@ -1,13 +1,14 @@
 import crypto from 'crypto'
-import { Matcher } from 'matchers'
-import { stringify } from './internal/stringify.js'
+import { Matcher, Result } from '@mockdog/matchers'
+
+export type MockSource = 'code' | 'file'
 
 export interface PostActionArgs<R> {
   request: R
 }
 
 export interface PostAction<R> {
-  run(args: PostActionArgs<R>): Promise<void>
+  run(args: PostActionArgs<R>): Promise<void> | void
 }
 
 export interface MatcherSpecification<VALUE, VALUE_CONTEXT> {
@@ -16,8 +17,6 @@ export interface MatcherSpecification<VALUE, VALUE_CONTEXT> {
   matcher: Matcher<VALUE>
   score: number
 }
-
-export type MockSource = 'code' | 'file'
 
 export interface Mismatch {
   name: string
@@ -28,6 +27,7 @@ export interface Mismatch {
 export interface MatchResult {
   score: number
   ok: boolean
+  results: Result[]
   mismatches: Mismatch[]
 }
 
@@ -65,19 +65,22 @@ export class Mock<TRequest = unknown> {
   }
 
   matches(request: TRequest): MatchResult {
-    const result: MatchResult = { score: 0, ok: true, mismatches: [] }
+    const result: MatchResult = { score: 0, ok: true, mismatches: [], results: [] }
 
     for (const m of this.matchers) {
       const value = m.selector(request)
+      const r = m.matcher(value)
 
-      if (m.matcher(value)) {
+      result.results.push(r)
+
+      if (r.pass) {
         result.score += m.score
       } else {
         result.ok = false
         result.mismatches.push({
-          name: m.matcher.name, // will be the function name
+          name: r.name,
           target: m.target,
-          desc: `${m.target} value ${stringify(value)} didn't match.`,
+          desc: r.message(),
         })
       }
     }

@@ -1,5 +1,5 @@
 import Supertest from 'supertest'
-import { hasLength } from 'matchers'
+import { hasLength } from '@mockdog/matchers'
 import { allOf, contains, equalsTo, item, jsonPath, opts, post, urlPath } from '../index.js'
 import { mockHttp } from '../index.js'
 import { ok } from '../mock'

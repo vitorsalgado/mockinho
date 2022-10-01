@@ -1,5 +1,3 @@
-import { Matcher } from 'matchers'
-import { MatcherSpecification } from './mock.js'
 import { Scenario } from './scenario.js'
 import { Mock } from './mock.js'
 
@@ -10,7 +8,6 @@ export abstract class MockBuilder<MOCK extends Mock> {
   protected _scenario: string = ''
   protected _scenarioNewState: string = ''
   protected _scenarioRequiredState: string = ''
-  protected readonly _expectations: Array<MatcherSpecification<unknown, unknown>> = []
 
   id(id: string): this {
     this._id = id
@@ -60,18 +57,4 @@ export abstract class MockBuilder<MOCK extends Mock> {
   }
 
   abstract build(): MOCK
-
-  protected spec<T, V>(
-    target: string,
-    valueSelector: (request: V) => T,
-    matcher: Matcher<V>,
-    weight: number = 0,
-  ): MatcherSpecification<unknown, unknown> {
-    return {
-      target,
-      matcher,
-      selector: valueSelector,
-      score: weight,
-    } as MatcherSpecification<unknown, unknown>
-  }
 }

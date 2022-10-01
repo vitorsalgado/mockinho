@@ -1,7 +1,7 @@
 import { Response } from 'express'
 import { NextFunction } from 'express'
 import { Request } from 'express'
-import { nowInMs } from '@mockdog/core'
+import { nowInMs } from '@mockdog/x'
 import { HttpContext } from '../HttpContext.js'
 import { HttpRequest } from '../HttpRequest.js'
 

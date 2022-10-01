@@ -1,4 +1,4 @@
-import { JsonType } from '@mockdog/core'
+import { JsonType } from '@mockdog/x'
 import { Methods } from '../Methods.js'
 import { BodyType } from '../BodyType.js'
 

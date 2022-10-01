@@ -1,10 +1,10 @@
-import { Result } from '../base/index.js'
+import { OnMockServed, Result } from '../base/index.js'
 
 export function res(
   name: string,
   message: () => string,
   pass: boolean,
-  onMockServed?: () => void,
+  onMockServed?: OnMockServed,
 ): Result {
   return { name, pass, message, onMockServed }
 }

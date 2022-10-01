@@ -11,97 +11,13 @@ describe('MockInMemoryRepository', function () {
   const repo = new TestRepo()
 
   it('ensure repository workflow', function () {
-    const mock1 = new Mock(
-      'test-id-1',
-      'test',
-      1,
-      true,
-      'code',
-      'desc',
-      [],
-      [],
-      0,
-      new Map<string, unknown>(),
-      new Map<string, unknown>(),
-    )
-    const mock2 = new Mock(
-      'test-id-2',
-      'test',
-      2,
-      true,
-      'code',
-      'desc',
-      [],
-      [],
-      0,
-      new Map<string, unknown>(),
-      new Map<string, unknown>(),
-    )
-    const mock3 = new Mock(
-      'test-id-3',
-      'test',
-      3,
-      true,
-      'code',
-      'desc',
-      [],
-      [],
-      0,
-      new Map<string, unknown>(),
-      new Map<string, unknown>(),
-    )
-    const mock4 = new Mock(
-      'test-id-4',
-      'test',
-      4,
-      true,
-      'file',
-      'desc',
-      [],
-      [],
-      0,
-      new Map<string, unknown>(),
-      new Map<string, unknown>(),
-    )
-    const mock5 = new Mock(
-      'test-id-5',
-      'test',
-      5,
-      true,
-      'file',
-      'desc',
-      [],
-      [],
-      0,
-      new Map<string, unknown>(),
-      new Map<string, unknown>(),
-    )
-    const mock6 = new Mock(
-      'test-id-6',
-      'test',
-      6,
-      true,
-      'code',
-      'desc',
-      [],
-      [],
-      0,
-      new Map<string, unknown>(),
-      new Map<string, unknown>(),
-    )
-    const mock7 = new Mock(
-      'test-id-7',
-      'test',
-      7,
-      true,
-      'code',
-      'desc',
-      [],
-      [],
-      0,
-      new Map<string, unknown>(),
-      new Map<string, unknown>(),
-    )
+    const mock1 = new Mock('test-id-1', 'test', 1, true, 'code', 'desc')
+    const mock2 = new Mock('test-id-2', 'test', 2, true, 'code', 'desc')
+    const mock3 = new Mock('test-id-3', 'test', 3, true, 'code', 'desc')
+    const mock4 = new Mock('test-id-4', 'test', 4, true, 'file', 'desc')
+    const mock5 = new Mock('test-id-5', 'test', 5, true, 'file', 'desc')
+    const mock6 = new Mock('test-id-6', 'test', 6, true, 'code', 'desc')
+    const mock7 = new Mock('test-id-7', 'test', 7, true, 'code', 'desc', [], [], 0)
 
     repo.save(mock3)
     repo.save(mock5)

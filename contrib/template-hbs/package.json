@@ -1,5 +1,5 @@
 {
-  "name": "@mockdog/handlebars-template",
+  "name": "@mockdog/template-hbs",
   "version": "0.0.0",
   "description": "Handlebars Template Implementation",
   "main": "./dist/mod.js",

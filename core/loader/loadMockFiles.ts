@@ -2,11 +2,11 @@
 
 import * as Fs from 'fs'
 import { red, bold } from 'colorette'
-import { noNullElements } from '@mockdog/x/cond'
-import { notBlank } from '@mockdog/x/cond'
-import { notEmpty } from '@mockdog/x/cond'
-import { JsonType } from '@mockdog/x/types'
-import { listFilenames } from '@mockdog/x/io'
+import { noNullElements } from '@mockdog/x'
+import { notBlank } from '@mockdog/x'
+import { notEmpty } from '@mockdog/x'
+import { JsonType } from '@mockdog/x'
+import { listFilenames } from '@mockdog/x'
 import { loadSingleMockFile } from './loadSingleMockFile.js'
 import { LoadMockError } from './LoadMockError.js'
 

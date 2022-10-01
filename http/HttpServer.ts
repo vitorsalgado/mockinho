@@ -8,7 +8,7 @@ import { Router } from 'express'
 import Multer from 'multer'
 import Cors from 'cors'
 import CookieParse from 'cookie-parser'
-import { LoggerUtil } from '@mockdog/core'
+import { log } from '@mockdog/core'
 import { MockServer } from '@mockdog/core'
 import { HttpContext } from './HttpContext.js'
 import { mockFinderMiddleware } from './mockFinderMiddleware.js'
@@ -69,7 +69,7 @@ export class HttpServer implements MockServer<HttpServerInfo> {
     this.additionalMiddlewares.push(...this.configuration.middlewares)
   }
 
-  initialSetup(): void {
+  setup(): void {
     for (const server of this.serverInstances) {
       server.on('connection', (socket: Socket) => {
         this.sockets.add(socket)
@@ -118,7 +118,7 @@ export class HttpServer implements MockServer<HttpServerInfo> {
         if (error) {
           this.context.emit('onError', error)
 
-          LoggerUtil.instance().error(error)
+          log.error(error)
 
           return res.status(error.statusCode ? (error.statusCode as number) : 500).send({
             message: error.message,

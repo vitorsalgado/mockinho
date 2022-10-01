@@ -45,7 +45,7 @@ export class MultipleResponseBuilder extends ResponseBuilder {
 
       switch (this._strategy) {
         case 'sequential':
-          builder = this._responses[mock.hits - 1]
+          builder = this._responses[mock.hits]
           break
 
         case 'random':

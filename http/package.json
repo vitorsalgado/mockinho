@@ -12,6 +12,7 @@
     "start": "nodemon --config .nodemon.config.json",
     "build": "rm -rf dist tsconfig.build.tsbuildinfo && tsc --build --force tsconfig.build.json",
     "test": "jest --detectOpenHandles",
+    "test:fail": "jest --detectOpenHandles --onlyFailures",
     "lint": "eslint --fix --ext .ts ."
   },
   "directories": {
@@ -36,6 +37,7 @@
   "dependencies": {
     "@mockdog/core": "^0.0.0",
     "@mockdog/matchers": "^0.0.0",
+    "@mockdog/x": "^0.0.0",
     "chokidar": "^3.5.3",
     "colorette": "^2.0.19",
     "cookie-parser": "^1.4.6",
