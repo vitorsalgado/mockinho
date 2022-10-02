@@ -1,6 +1,5 @@
 import { Request, Express } from 'express'
-import { Methods } from './Methods.js'
-import { BodyType } from './BodyType.js'
+import { BodyType, Methods } from './http.js'
 
 export interface HttpRequest extends Request {
   id: string

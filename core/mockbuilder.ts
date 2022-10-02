@@ -1,4 +1,4 @@
-import { Scenario } from './scenario.js'
+import { State } from './state.js'
 import { Mock } from './mock.js'
 
 export abstract class MockBuilder<MOCK extends Mock> {
@@ -6,7 +6,7 @@ export abstract class MockBuilder<MOCK extends Mock> {
   protected _name: string = ''
   protected _priority: number = 0
   protected _scenario: string = ''
-  protected _scenarioNewState: string = ''
+  protected _scenarioNewState: string = State.STATE_STARTED
   protected _scenarioRequiredState: string = ''
 
   id(id: string): this {
@@ -45,11 +45,7 @@ export abstract class MockBuilder<MOCK extends Mock> {
     return this
   }
 
-  scenario(
-    name: string,
-    requiredState: string = Scenario.STATE_STARTED,
-    newState: string = '',
-  ): this {
+  scenario(name: string, requiredState: string = State.STATE_STARTED, newState: string = ''): this {
     this._scenario = name
     this._scenarioRequiredState = requiredState
     this._scenarioNewState = newState

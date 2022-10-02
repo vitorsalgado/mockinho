@@ -1,14 +1,13 @@
 import * as Path from 'path'
 import Supertest from 'supertest'
-import { contains, equalsTo, jsonPath } from '@mockdog/matchers'
+import { contains, equalsTo, field } from '@mockdog/matchers'
 import { fromFile } from '@mockdog/x'
+import { Headers, MediaTypes } from '../http.js'
 import { get } from '../mock/index.js'
 import { mockHttp } from '../index.js'
 import { urlPath } from '../matchers/index.js'
 import { ok, okJSON, post } from '../mock/index.js'
 import { opts } from '../config/index.js'
-import { MediaTypes } from '../MediaTypes.js'
-import { Headers } from '../Headers.js'
 
 const fixture = (name: string) => Path.join(__dirname, `__fixtures__/__content__${name}`)
 
@@ -58,7 +57,7 @@ describe('MockDog HTTP', function () {
       $.mock(
         post(urlPath('/test'))
           .header('content-type', contains('json'))
-          .requestBody(jsonPath('user.name', equalsTo('tester')))
+          .requestBody(field('user.name', equalsTo('tester')))
           .reply(ok().body('done').header(Headers.ContentType, MediaTypes.TEXT_PLAIN)),
       )
 
@@ -93,7 +92,7 @@ describe('MockDog HTTP', function () {
           .name('Stub 1')
           .scenario('Test', 'started', 'phase 2')
           .header(Headers.ContentType, contains('json'))
-          .requestBody(jsonPath('message', equalsTo('hey')))
+          .requestBody(field('message', equalsTo('hey')))
           .reply(okJSON({ data: 'started' })),
       )
 
@@ -102,7 +101,7 @@ describe('MockDog HTTP', function () {
           .name('Stub 2')
           .scenario('Test', 'phase 2', 'phase 3')
           .header(Headers.ContentType, contains('json'))
-          .requestBody(jsonPath('message', equalsTo('hey')))
+          .requestBody(field('message', equalsTo('hey')))
           .reply(okJSON({ data: 'phase 2' })),
       )
 

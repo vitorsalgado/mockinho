@@ -1,4 +1,4 @@
-import { ScenarioRepository } from '@mockdog/core'
+import { StateRepository } from '@mockdog/core'
 import { HttpContext } from '../HttpContext'
 import { HttpConfigurationBuilder } from '../config'
 import { HttpMockRepository } from '../mock'
@@ -18,10 +18,10 @@ describe('HttpContext', function () {
       .multiPartOptions({ limits: { fieldNameSize: 10 } })
       .build()
 
-    const ctx = new HttpContext(cfg, new HttpMockRepository(), new ScenarioRepository())
+    const ctx = new HttpContext(cfg, new HttpMockRepository(), new StateRepository())
 
     expect(ctx.configuration).toEqual(cfg)
     expect(ctx.mockRepository).toBeInstanceOf(HttpMockRepository)
-    expect(ctx.scenarioRepository).toBeInstanceOf(ScenarioRepository)
+    expect(ctx.scenarioRepository).toBeInstanceOf(StateRepository)
   })
 })

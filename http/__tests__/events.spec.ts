@@ -4,7 +4,7 @@ import { opts } from '../index.js'
 import { post } from '../index.js'
 import { urlPath } from '../index.js'
 import { MediaTypes } from '../index.js'
-import { jsonPath } from '../index.js'
+import { field } from '../index.js'
 import { ok } from '../index.js'
 import { Headers } from '../index.js'
 import { mockHttp } from '../index.js'
@@ -32,7 +32,7 @@ describe('Events', function () {
     $.mock(
       post(urlPath('/test'))
         .header('content-type', equalsTo(MediaTypes.APPLICATION_FORM_URL_ENCODED))
-        .requestBody(jsonPath('name', equalsTo('the name')))
+        .requestBody(field('name', equalsTo('the name')))
         .reply(ok()),
     )
 

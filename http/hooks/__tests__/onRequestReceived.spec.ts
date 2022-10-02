@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 
 import { Readable } from 'stream'
+import { MediaTypes } from '../../http.js'
 import { onRequestReceived } from '../builtin/onRequestReceived'
-import { MediaTypes } from '../../MediaTypes'
 
 describe('onRequestReceived', function () {
   beforeEach(() => {

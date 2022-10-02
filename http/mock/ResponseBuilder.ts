@@ -3,13 +3,10 @@ import * as Fs from 'fs'
 import * as Util from 'util'
 import { CookieOptions } from 'express'
 import { isTrue, JsonType, notBlank, notEmpty, notNull } from '@mockdog/x'
-import { Helper, Template, TemplateDelegate } from '@mockdog/core'
+import { HandlebarsTemplating, Helper, Template, TemplateDelegate } from '@mockdog/core'
+import { BodyType, Headers, MediaTypes, StatusCodes } from '../http.js'
 import { HttpRequest } from '../HttpRequest.js'
 import { HttpContext } from '../HttpContext.js'
-import { MediaTypes } from '../MediaTypes.js'
-import { Headers } from '../Headers.js'
-import { StatusCodes } from '../StatusCodes.js'
-import { BodyType } from '../BodyType.js'
 import { ResponseFixture } from './ResponseFixture.js'
 import { Cookie } from './Cookie.js'
 import { CookieToClear } from './Cookie.js'
@@ -30,8 +27,7 @@ export class ResponseBuilder {
   protected _bodyTemplatePath?: string
   protected _templateHelpers?: Helper
 
-  // FIXME: load default modules
-  protected _templating!: Template<TemplateModel>
+  protected _templating: Template<TemplateModel> = new HandlebarsTemplating()
 
   protected _bodyCtrl: number = 0
   protected _headers: Record<string, string> = {}

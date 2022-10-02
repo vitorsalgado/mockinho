@@ -1,11 +1,14 @@
-import { MatcherSpecification, MockBuilder, MockSource } from '@mockdog/core'
+import {
+  MatcherSpecification,
+  MockBuilder,
+  MockSource,
+  stateMatcher,
+  StateRepository,
+} from '@mockdog/core'
 import { allOf, anyItem, equalsTo, repeatTimes, wrap, Matcher, Predicate } from '@mockdog/matchers'
 import { base64, JsonType, noNullElements, notBlank, notEmpty, notNull } from '@mockdog/x'
-import { BodyType } from '../BodyType.js'
+import { BodyType, Headers, Methods, Schemes } from '../http.js'
 import { bearerToken, urlPath } from '../matchers/index.js'
-import { Methods } from '../Methods.js'
-import { Schemes } from '../Schemes.js'
-import { Headers } from '../Headers.js'
 import { HttpMock } from './HttpMock.js'
 import { ResponseBuilder } from './ResponseBuilder.js'
 import { ResponseDelegate } from './ResponseDelegate.js'
@@ -25,6 +28,8 @@ import {
   extractScheme,
   extractUrl,
 } from './util/extractors.js'
+
+const _stateRepository = new StateRepository()
 
 export class HttpMockBuilder extends MockBuilder<HttpMock> {
   private readonly _expectations: Array<MatcherSpecification<unknown, unknown>> = []
@@ -260,6 +265,22 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
 
   build(): HttpMock {
     this.validate()
+
+    if (this._scenario) {
+      this._expectations.push(
+        this.spec(
+          'state',
+          extractNothing,
+          wrap(
+            stateMatcher(_stateRepository)(
+              this._scenario,
+              this._scenarioRequiredState,
+              this._scenarioNewState,
+            ),
+          ),
+        ),
+      )
+    }
 
     return new HttpMock(
       this._id,

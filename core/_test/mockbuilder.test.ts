@@ -1,5 +1,5 @@
-import { MockBuilder } from './mockbuilder.js'
-import { Mock } from './mock.js'
+import { MockBuilder } from '../mockbuilder.js'
+import { Mock } from '../mock.js'
 
 describe('MockBuilder', function () {
   class TestBuilder extends MockBuilder<Mock> {

@@ -1,6 +1,5 @@
 import { JsonType } from '@mockdog/x'
-import { Headers } from '../../Headers.js'
-import { StatusCodes } from '../../StatusCodes.js'
+import { Headers, StatusCodes } from '../../http.js'
 import { ResponseBuilder } from '../ResponseBuilder.js'
 import { response } from './response.js'
 

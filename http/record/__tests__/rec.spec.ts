@@ -5,12 +5,11 @@ import Supertest from 'supertest'
 import { listFilenames } from '@mockdog/x'
 import { sleep } from '@mockdog/x'
 import { opts } from '../../config/index.js'
+import { Headers, MediaTypes } from '../../http.js'
 import { okJSON } from '../../mock/index.js'
 import { get } from '../../mock/index.js'
 import mockHttp from '../../mockHttp.js'
 import { urlPath } from '../../matchers/index.js'
-import { MediaTypes } from '../../MediaTypes.js'
-import { Headers } from '../../Headers.js'
 
 describe('Record', function () {
   const target = mockHttp(opts().dynamicHttpPort().trace())

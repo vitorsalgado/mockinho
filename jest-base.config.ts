@@ -3,6 +3,7 @@ import type { Config as JestConfig } from '@jest/types'
 const config: JestConfig.InitialOptions = {
   verbose: true,
   collectCoverage: false,
+  testTimeout: 24000000,
   resetModules: true,
   restoreMocks: true,
   testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],

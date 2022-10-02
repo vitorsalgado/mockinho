@@ -11,13 +11,16 @@ export const repeatTimes = (max: number): Matcher => {
 
   let hits = 0
 
-  return () =>
-    res(
+  return _ => {
+    const pass = hits < max
+
+    return res(
       matcherName,
       () => matcherHint(matcherName, String(max)),
-      hits <= max,
+      pass,
       () => {
         hits++
       },
     )
+  }
 }

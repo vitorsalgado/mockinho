@@ -1,5 +1,5 @@
-import { Configuration } from './configuration.js'
-import { modeIsAtLeast } from './mode.js'
+import { Configuration } from '../config.js'
+import { modeIsAtLeast } from '../mode.js'
 
 describe('modeIsAtLeast', function () {
   it('should return true when mode at least the provided value', function () {

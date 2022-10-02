@@ -1,6 +1,6 @@
 import Supertest from 'supertest'
 import { equalsTo } from '@mockdog/matchers'
-import { jsonPath } from '@mockdog/matchers'
+import { field } from '@mockdog/matchers'
 import { opts, get, urlPath, Headers, MediaTypes } from '../index.js'
 import { okJSON } from '../index.js'
 import { mockHttp } from '../index.js'
@@ -92,7 +92,7 @@ describe('Forward Proxy', function () {
             .header('proxy-header', equalsTo('100'))
             .header('x-test', equalsTo('true'))
             .header('x-dev', equalsTo('ts'))
-            .requestBody(jsonPath('data', equalsTo('test')))
+            .requestBody(field('data', equalsTo('test')))
             .reply(okJSON({ hello: 'world' }).header('x-proxy-reply', 'success')),
         )
 

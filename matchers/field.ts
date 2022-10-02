@@ -3,10 +3,10 @@ import { indent, matcherHint } from './internal/fmt.js'
 import { reach } from './internal/reach.js'
 import { res } from './internal/res.js'
 
-export const jsonPath =
+export const field =
   <T>(path: string, matcher: Matcher<T>): Matcher<unknown> =>
   received => {
-    const matcherName = 'jsonPath'
+    const matcherName = 'field'
 
     if (typeof received !== 'object') {
       return res(matcherName, () => 'jsonPath only accepts value of type object', false)
@@ -16,7 +16,8 @@ export const jsonPath =
       path = path.substring(2, path.length)
     }
 
-    const result = matcher(reach(path, received))
+    const f = reach(path, received)
+    const result = matcher(f)
 
     return res(
       matcherName,

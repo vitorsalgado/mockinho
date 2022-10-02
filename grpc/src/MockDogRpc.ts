@@ -1,4 +1,4 @@
-import { ScenarioRepository } from '@mockdog/core'
+import { StateRepository } from '@mockdog/core'
 import { MockApp } from '@mockdog/core'
 import { RpcServer } from './RpcServer.js'
 import { RpcContext } from './RpcContext.js'
@@ -17,11 +17,7 @@ export class MockDogRpc extends MockApp<
 > {
   constructor(config: RpcConfigurationBuilder | RpcConfiguration) {
     const configurations = config instanceof RpcConfigurationBuilder ? config.build() : config
-    const context = new RpcContext(
-      configurations,
-      new RpcMockRepository(),
-      new ScenarioRepository(),
-    )
+    const context = new RpcContext(configurations, new RpcMockRepository(), new StateRepository())
     const server = new RpcServer(context)
 
     super(context, server)

@@ -1,5 +1,5 @@
 import { Context } from '@mockdog/core'
-import { ScenarioRepository } from '@mockdog/core'
+import { StateRepository } from '@mockdog/core'
 import { HttpConfiguration } from './config/index.js'
 import { HookListener } from './hooks/index.js'
 import { HttpMockRepository } from './mock/index.js'
@@ -12,7 +12,7 @@ export class HttpContext
   constructor(
     public readonly configuration: HttpConfiguration,
     public readonly mockRepository: HttpMockRepository,
-    public readonly scenarioRepository: ScenarioRepository,
+    public readonly scenarioRepository: StateRepository,
   ) {
     super()
   }

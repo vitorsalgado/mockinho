@@ -1,7 +1,6 @@
+import { Headers, MediaTypes } from '../http.js'
 import { HttpRequest } from '../HttpRequest.js'
 import { HttpContext } from '../HttpContext.js'
-import { MediaTypes } from '../MediaTypes.js'
-import { Headers } from '../Headers.js'
 import { ResponseBuilder } from './ResponseBuilder.js'
 import { ResponseFixture } from './ResponseFixture.js'
 import { HttpMock } from './HttpMock.js'

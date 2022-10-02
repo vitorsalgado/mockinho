@@ -31,13 +31,6 @@ export interface MatchResult {
   mismatches: Mismatch[]
 }
 
-export interface State {
-  scenario: string
-  state: string
-  requiredState: string
-  newState: string
-}
-
 export class Mock<TRequest = unknown> {
   constructor(
     public readonly id: string,
@@ -49,7 +42,6 @@ export class Mock<TRequest = unknown> {
     public readonly matchers: Array<MatcherSpecification<any, TRequest>> = [],
     public readonly postActions: Array<PostAction<TRequest>> = [],
     public hits: number = 0,
-    public readonly state: Partial<State> = {},
   ) {
     if (!this.id) {
       this.id = crypto.randomUUID()

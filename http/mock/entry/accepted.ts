@@ -1,4 +1,4 @@
-import { StatusCodes } from '../../StatusCodes.js'
+import { StatusCodes } from '../../http.js'
 import { ResponseBuilder } from '../ResponseBuilder.js'
 import { response } from './response.js'
 

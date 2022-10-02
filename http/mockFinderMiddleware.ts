@@ -5,12 +5,10 @@ import HttpProxy from 'http-proxy'
 import { findMockForRequest } from '@mockdog/core'
 import { FindMockResult } from '@mockdog/core'
 import { modeIsAtLeast } from '@mockdog/core'
+import { BodyType, Headers, MediaTypes } from './http.js'
 import { HttpContext } from './HttpContext.js'
 import { HttpRequest } from './HttpRequest.js'
 import { ResponseFixture, HttpMock } from './mock/index.js'
-import { MediaTypes } from './MediaTypes.js'
-import { Headers } from './Headers.js'
-import { BodyType } from './BodyType.js'
 
 export function mockFinderMiddleware(
   context: HttpContext,
@@ -79,12 +77,19 @@ export function mockFinderMiddleware(
         res.set(response.headers).status(response.status).send(body)
       }
 
+      for (const { onMockServed } of result.results()) {
+        if (onMockServed !== undefined) {
+          onMockServed()
+        }
+      }
+
+      onRequestMatched(isVerbose, context, req, response, matched)
+
       if (response.hasDelay()) {
         setTimeout(replier, response.delay)
         return
       }
 
-      onRequestMatched(isVerbose, context, req, response, matched)
       replier()
 
       matched.hit()

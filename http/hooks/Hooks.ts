@@ -1,6 +1,6 @@
+import { Methods } from '../http.js'
 import { HttpMock } from '../mock/index.js'
-import { HttpServerInfo } from '../HttpServerInfo.js'
-import { Methods } from '../Methods.js'
+import { HttpServerInfo } from '../srv.js'
 import { Transaction } from './Transaction.js'
 
 export interface Hooks {

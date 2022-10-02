@@ -1,6 +1,7 @@
 import Supertest from 'supertest'
 import { contains } from '@mockdog/matchers'
-import { ScenarioRepository } from '@mockdog/core'
+import { StateRepository } from '@mockdog/core'
+import { Headers, MediaTypes } from '../http.js'
 import { HttpContext } from '../HttpContext'
 import { opts, post, HttpConfigurationBuilder, HttpServer } from '../index.js'
 import { HttpMockRepository } from '../index.js'
@@ -8,8 +9,6 @@ import { HttpMockRepository } from '../index.js'
 import { urlPath } from '../matchers'
 import { okJSON } from '../mock'
 import mockHttp from '../mockHttp'
-import { MediaTypes } from '../MediaTypes'
-import { Headers } from '../Headers'
 
 describe('Express Http Server', function () {
   const $ = mockHttp(opts().dynamicHttpPort())
@@ -26,7 +25,7 @@ describe('Express Http Server', function () {
     .enableCors({ maxAge: 10 })
     .build()
 
-  const ctx = new HttpContext(cfg, new HttpMockRepository(), new ScenarioRepository())
+  const ctx = new HttpContext(cfg, new HttpMockRepository(), new StateRepository())
   const httpServer = new HttpServer(ctx)
 
   beforeAll(() => $.start())

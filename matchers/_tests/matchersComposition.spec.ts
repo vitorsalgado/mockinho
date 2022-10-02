@@ -1,6 +1,6 @@
 import { equalsTo } from '../equalsTo.js'
 import { item } from '../item.js'
-import { jsonPath } from '../jsonPath.js'
+import { field } from '../field.js'
 import { not } from '../not.js'
 
 describe('Matchers Composition', function () {
@@ -9,7 +9,7 @@ describe('Matchers Composition', function () {
     const path = 'test.inner.data'
     const expected = 'banana'
 
-    const matcher = jsonPath(path, item(2, equalsTo(expected)))
+    const matcher = field(path, item(2, equalsTo(expected)))
     const result = matcher(obj)
     const neg = not(matcher)(obj)
 

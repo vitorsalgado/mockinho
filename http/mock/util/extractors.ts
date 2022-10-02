@@ -1,8 +1,6 @@
 import { Express } from 'express'
+import { BodyType, Methods, Schemes } from '../../http.js'
 import { HttpRequest } from '../../HttpRequest.js'
-import { BodyType } from '../../BodyType.js'
-import { Methods } from '../../Methods.js'
-import { Schemes } from '../../Schemes.js'
 
 export const extractRequest = (request: HttpRequest): HttpRequest => request
 

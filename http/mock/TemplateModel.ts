@@ -1,6 +1,5 @@
 import { JsonType } from '@mockdog/x'
-import { Methods } from '../Methods.js'
-import { BodyType } from '../BodyType.js'
+import { BodyType, Methods } from '../http.js'
 
 export interface TemplateModel {
   readonly request: {

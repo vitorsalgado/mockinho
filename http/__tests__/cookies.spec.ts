@@ -1,6 +1,6 @@
 import Supertest from 'supertest'
 import { equalsTo } from '@mockdog/matchers'
-import { jsonPath } from '@mockdog/matchers'
+import { field } from '@mockdog/matchers'
 import { opts } from '../index.js'
 import { post } from '../index.js'
 import { urlPath } from '../index.js'
@@ -50,7 +50,7 @@ describe('Cookies', function () {
     it('should convert value to object before applying matchers when calling .cookieJson()', function () {
       $.mock(
         post(urlPath('/test'))
-          .cookieJson(cookieSignedName, jsonPath('data.hello', equalsTo('world')))
+          .cookieJson(cookieSignedName, field('data.hello', equalsTo('world')))
           .reply(ok().body('done')),
       )
 

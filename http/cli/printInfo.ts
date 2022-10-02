@@ -4,7 +4,7 @@ import { greenBright } from 'colorette'
 import { bold } from 'colorette'
 import { HttpConfiguration } from '../config/index.js'
 import { Argv } from '../config/index.js'
-import { HttpServerInfo } from '../HttpServerInfo.js'
+import { HttpServerInfo } from '../srv.js'
 import Banner from './banner.js'
 import { parseServerInfo } from './utils.js'
 

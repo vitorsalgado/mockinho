@@ -1,6 +1,6 @@
 import { Express } from 'express'
 import { notBlank } from '@mockdog/x'
-import { ScenarioRepository } from '@mockdog/core'
+import { StateRepository } from '@mockdog/core'
 import { modeIsAtLeast } from '@mockdog/core'
 import { MockApp } from '@mockdog/core'
 import { HttpConfigurationBuilder } from './config/index.js'
@@ -11,9 +11,8 @@ import { Hooks } from './hooks/index.js'
 import { HttpContext } from './HttpContext.js'
 import { HttpMockRepository } from './mock/index.js'
 import { HttpMock } from './mock/index.js'
-import { HttpServer } from './HttpServer.js'
+import { HttpServer, HttpServerInfo } from './srv.js'
 import { defaultMockProviderFactory } from './mock/providers/default/defaultMockProviderFactory.js'
-import { HttpServerInfo } from './HttpServerInfo.js'
 import { onProxyRequest } from './hooks/builtin/onProxyRequest.js'
 import { onProxyResponse } from './hooks/builtin/onProxyResponse.js'
 import { onRecord } from './hooks/builtin/onRecord.js'
@@ -27,11 +26,7 @@ export class MockDogHttp extends MockApp<
 > {
   constructor(config: HttpConfigurationBuilder | HttpConfiguration) {
     const configurations = config instanceof HttpConfigurationBuilder ? config.build() : config
-    const context = new HttpContext(
-      configurations,
-      new HttpMockRepository(),
-      new ScenarioRepository(),
-    )
+    const context = new HttpContext(configurations, new HttpMockRepository(), new StateRepository())
     const httpServer = new HttpServer(context)
 
     super(context, httpServer)

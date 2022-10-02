@@ -3,11 +3,10 @@ import * as Fs from 'fs'
 import { isPresent } from '@mockdog/matchers'
 import { regex } from '@mockdog/matchers'
 import { equalsTo } from '@mockdog/matchers'
-import { anything } from '@mockdog/matchers'
 import { item } from '@mockdog/matchers'
 import { contains } from '@mockdog/matchers'
 import { anyOf } from '@mockdog/matchers'
-import { jsonPath } from '@mockdog/matchers'
+import { field } from '@mockdog/matchers'
 import { isUUID } from '@mockdog/matchers'
 import { allOf } from '@mockdog/matchers'
 import { not } from '@mockdog/matchers'
@@ -141,7 +140,7 @@ export async function buildMockFromFile(
     for (const [key, value] of Object.entries(mock.request.files)) {
       if (typeof value !== 'object') {
         if (value === '*' || value === 'anything' || value === 'any') {
-          builder.file(key.toLowerCase(), anything())
+          // anything we simple dont add any matcher
         } else if (value === 'isPresent') {
           builder.file(key.toLowerCase(), isPresent())
         }
@@ -333,12 +332,12 @@ function discoverMatcherByKey(
     const [notK, notV] = Object.entries(values)[0]
 
     return not(discoverMatcherByKey(filename, mock, notK, notV, values, parsers))
-  } else if (key === 'jsonPath' || key === 'fieldPath') {
+  } else if (key === 'jsonPath' || key === 'fieldPath' || key === 'field') {
     const path = findRequiredParameter<string>(
       'path',
       valueEntries,
       filename,
-      '"jsonPath" needs a json key path.',
+      '"field" needs a json key path.',
     )
     const matcherEntry = findRequiredMatcherEntry(
       valueEntries,
@@ -347,10 +346,7 @@ function discoverMatcherByKey(
     )
     const [k, v] = matcherEntry
 
-    return jsonPath(
-      path as string,
-      discoverMatcherByKey(filename, mock, k, v, matcherEntry, parsers),
-    )
+    return field(path as string, discoverMatcherByKey(filename, mock, k, v, matcherEntry, parsers))
   } else if (key === 'anyOf') {
     const anyOfMatchers: Array<Matcher<unknown>> = []
 

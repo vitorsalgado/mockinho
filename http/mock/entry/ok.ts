@@ -1,6 +1,6 @@
 import { JsonType } from '@mockdog/x'
+import { StatusCodes } from '../../http.js'
 import { ResponseBuilder } from '../ResponseBuilder.js'
-import { StatusCodes } from '../../StatusCodes.js'
 
 export const ok = (): ResponseBuilder => ResponseBuilder.newBuilder().status(StatusCodes.OK)
 

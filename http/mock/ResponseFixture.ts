@@ -1,4 +1,4 @@
-import { BodyType } from '../BodyType.js'
+import { BodyType } from '../http.js'
 import { Cookie } from './Cookie.js'
 import { CookieToClear } from './Cookie.js'
 

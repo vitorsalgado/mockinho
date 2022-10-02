@@ -1,5 +1,5 @@
 import { MockProvider } from '@mockdog/core'
-import { HttpServer } from '../../HttpServer.js'
+import { HttpServer } from '../../srv.js'
 import { HttpMockBuilder } from '../HttpMockBuilder.js'
 import { HttpConfiguration } from '../../config/index.js'
 

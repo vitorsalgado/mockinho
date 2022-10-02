@@ -1,10 +1,9 @@
 import Supertest from 'supertest'
 import { hasLength } from '@mockdog/matchers'
-import { allOf, contains, equalsTo, item, jsonPath, opts, post, urlPath } from '../index.js'
+import { Headers, MediaTypes } from '../http.js'
+import { allOf, contains, equalsTo, item, field, opts, post, urlPath } from '../index.js'
 import { mockHttp } from '../index.js'
 import { ok } from '../mock'
-import { MediaTypes } from '../MediaTypes'
-import { Headers } from '../Headers'
 
 describe('HTTP - Form Url Encoded', function () {
   const $ = mockHttp(opts().dynamicHttpPort().formUrlEncodedOptions({ limit: 80 }))
@@ -19,12 +18,12 @@ describe('HTTP - Form Url Encoded', function () {
         .header('content-type', equalsTo(MediaTypes.APPLICATION_FORM_URL_ENCODED))
         .requestBody(
           allOf(
-            jsonPath('name', equalsTo('the name')),
-            jsonPath('description', equalsTo('some description')),
-            jsonPath('age', equalsTo('32')),
-            jsonPath('job', hasLength(2)),
-            jsonPath('job', item(0, contains('tea'))),
-            jsonPath('job', item(1, equalsTo('developer'))),
+            field('name', equalsTo('the name')),
+            field('description', equalsTo('some description')),
+            field('age', equalsTo('32')),
+            field('job', hasLength(2)),
+            field('job', item(0, contains('tea'))),
+            field('job', item(1, equalsTo('developer'))),
           ),
         )
         .reply(ok().body('done')),

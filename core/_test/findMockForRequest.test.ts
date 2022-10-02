@@ -1,11 +1,11 @@
 import { equalsTo } from '@mockdog/matchers'
-import { FindMockResult } from './findMockForRequest.js'
-import { findMockForRequest } from './findMockForRequest.js'
-import { Mock } from './mock.js'
-import { MockInMemoryRepository } from './mockrepository.js'
-import { ScenarioRepository } from './scenario.js'
-import { Context } from './context.js'
-import { Configuration } from './configuration.js'
+import { FindMockResult } from '../findMockForRequest.js'
+import { findMockForRequest } from '../findMockForRequest.js'
+import { Mock } from '../mock.js'
+import { MockInMemoryRepository } from '../mockrepository.js'
+import { StateRepository } from '../state.js'
+import { Context } from '../context.js'
+import { Configuration } from '../config.js'
 
 describe('findMockForRequest', function () {
   class TestRepo extends MockInMemoryRepository<Mock> {
@@ -28,7 +28,7 @@ describe('findMockForRequest', function () {
 
     const ctx = {
       configuration: testConfig,
-      scenarioRepository: new ScenarioRepository(),
+      scenarioRepository: new StateRepository(),
       mockRepository: repo,
     } as Context<Mock, TestConfig, TestRepo>
 
@@ -74,7 +74,7 @@ describe('findMockForRequest', function () {
 
     const ctx = {
       configuration: testConfig,
-      scenarioRepository: new ScenarioRepository(),
+      scenarioRepository: new StateRepository(),
       mockRepository: repo,
     } as Context<Mock, TestConfig, TestRepo>
 
@@ -124,7 +124,7 @@ describe('findMockForRequest', function () {
 
     const ctx = {
       configuration: { mode: 'trace', logLevel: 'info', plugins: [], mockProviderFactories: [] },
-      scenarioRepository: new ScenarioRepository(),
+      scenarioRepository: new StateRepository(),
       mockRepository: repo,
     } as Context<Mock, TestConfig, TestRepo>
 
@@ -176,7 +176,7 @@ describe('FindMockResult', function () {
   const mock = new Mock('', 'test', 1, true, 'code', 'desc', [], [], 0)
 
   describe('when init a no matched', function () {
-    const result = FindMockResult.noMatch(mock)
+    const result = FindMockResult.mismatch([], mock)
 
     it('should hold the closest matched mock when provided', function () {
       expect(result.closestMatch().isPresent()).toBeTruthy()
@@ -186,7 +186,7 @@ describe('FindMockResult', function () {
   })
 
   describe('when init a matched instance', function () {
-    const result = FindMockResult.match(mock)
+    const result = FindMockResult.match([], mock)
 
     it('should hold the matched mock', function () {
       expect(result.closestMatch().isPresent()).toBeFalsy()
@@ -194,9 +194,5 @@ describe('FindMockResult', function () {
       expect(() => result.matched()).not.toThrow()
       expect(() => result.matched()).toBeDefined()
     })
-  })
-
-  it('should throw error when attempting to init a matched result without the match mock', function () {
-    expect(() => FindMockResult.match(null as any)).toThrow()
   })
 })

@@ -1,11 +1,10 @@
 import Path from 'path'
 import Supertest from 'supertest'
-import { equalsTo, contains, jsonPath } from '@mockdog/matchers'
+import { equalsTo, contains, field } from '@mockdog/matchers'
 import { opts, post, urlPath } from '../index.js'
 import { mockHttp } from '../mockHttp.js'
 import { ok } from '../mock/index.js'
 import { fileContent } from '../matchers'
-import { fieldPath } from '../matchers'
 
 describe('Form MultiPart', function () {
   const $ = mockHttp(opts().dynamicHttpPort())
@@ -23,8 +22,8 @@ describe('Form MultiPart', function () {
           files => files.some(x => x.fieldname.includes('image')),
           files => files.length === 2,
         )
-        .requestFields(fieldPath('field-test-1', contains('test-value')))
-        .requestFields(jsonPath('field-test-2', equalsTo('field-test-value-2')))
+        .requestFields(field('field-test-1', contains('test-value')))
+        .requestFields(field('field-test-2', equalsTo('field-test-value-2')))
         .reply(ok()),
     )
 

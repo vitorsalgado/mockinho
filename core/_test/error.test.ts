@@ -1,4 +1,4 @@
-import { MockDogError } from './error.js'
+import { MockDogError } from '../error.js'
 
 describe('MockDogError', function () {
   it('should add lib prefix when none is provided', function () {

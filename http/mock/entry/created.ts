@@ -1,6 +1,6 @@
 import { JsonType } from '@mockdog/x'
+import { StatusCodes } from '../../http.js'
 import { ResponseBuilder } from '../ResponseBuilder.js'
-import { StatusCodes } from '../../StatusCodes.js'
 
 export const created = (location?: string): ResponseBuilder =>
   ResponseBuilder.newBuilder().headerLocation(location).status(StatusCodes.CREATED)

@@ -1,10 +1,9 @@
 import Path from 'path'
 import Supertest from 'supertest'
+import { Headers, MediaTypes } from '../http.js'
 import { equalsTo, get, opts, post, urlPath } from '../index.js'
 import { ok } from '../mock/index.js'
 import mockHttp from '../mockHttp.js'
-import { MediaTypes } from '../MediaTypes.js'
-import { Headers } from '../Headers'
 
 describe('HTTP - Working With File Body Mocks', function () {
   describe('Default Path', function () {

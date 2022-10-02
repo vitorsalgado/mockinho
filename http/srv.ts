@@ -1,28 +1,33 @@
 import { createServer as createHttpServer, Server as NodeHttpServer } from 'http'
-import { Server as NodeHttpsServer, createServer as createHttpsServer } from 'https'
-import { AddressInfo } from 'net'
-import { Socket } from 'net'
-import express, { Express, Request, Response } from 'express'
-import { NextFunction } from 'express'
-import { Router } from 'express'
-import Multer from 'multer'
-import Cors from 'cors'
+import { createServer as createHttpsServer, Server as NodeHttpsServer } from 'https'
+import { AddressInfo, Socket } from 'net'
 import CookieParse from 'cookie-parser'
-import { log } from '@mockdog/core'
-import { MockServer } from '@mockdog/core'
-import { HttpContext } from './HttpContext.js'
-import { mockFinderMiddleware } from './mockFinderMiddleware.js'
-import { enhanceRequestMiddleware } from './enhanceRequestMiddleware.js'
-import { HttpRequest } from './HttpRequest.js'
+import Cors from 'cors'
+import express, { Express, NextFunction, Request, Response, Router } from 'express'
+import Multer from 'multer'
+import { log, MockServer } from '@mockdog/core'
+import { HttpConfiguration, Middleware, MiddlewareRoute } from './config/index.js'
 import { configureProxy } from './configureProxy.js'
-import { HttpConfiguration } from './config/index.js'
-import { Middleware } from './config/index.js'
-import { MiddlewareRoute } from './config/index.js'
+import { enhanceRequestMiddleware } from './enhanceRequestMiddleware.js'
+import { ErrorCodes } from './ErrorCodes.js'
 import { logIncomingRequestMiddleware } from './hooks/logIncomingRequestMiddleware.js'
 import { logReqAndResMiddleware } from './hooks/logReqAndResMiddleware.js'
+import { HttpContext } from './HttpContext.js'
+import { HttpRequest } from './HttpRequest.js'
+import { mockFinderMiddleware } from './mockFinderMiddleware.js'
 import { rawBodyMiddleware } from './rawBodyMiddleware.js'
-import { ErrorCodes } from './ErrorCodes.js'
-import { HttpServerInfo } from './HttpServerInfo.js'
+
+interface ConnectionInfo {
+  enabled: boolean
+  port: number
+  host: string
+  baseUrl: string
+}
+
+export interface HttpServerInfo {
+  http: ConnectionInfo
+  https: ConnectionInfo
+}
 
 export class HttpServer implements MockServer<HttpServerInfo> {
   private readonly configuration: HttpConfiguration

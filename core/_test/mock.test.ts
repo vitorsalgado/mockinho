@@ -1,4 +1,4 @@
-import { Mock } from './mock.js'
+import { Mock } from '../mock.js'
 
 describe('Mock', function () {
   it('should init mock and set a uuid when none is provided', function () {

@@ -1,14 +1,14 @@
 import { equalsTo } from '../equalsTo.js'
-import { jsonPath } from '../jsonPath.js'
+import { field } from '../field.js'
 
-describe('Json Path', function () {
+describe('Field Path', function () {
   it('should apply matcher on json field based on provided path', function () {
     const obj = { test: { inner: { message: 'hello world' } } }
     const otherObj = { message: 'test' }
     const path = 'test.inner.message'
     const expected = 'hello world'
 
-    const matcher = jsonPath(path, equalsTo(expected))
+    const matcher = field(path, equalsTo(expected))
 
     expect(matcher(obj).pass).toBeTruthy()
     expect(matcher(otherObj).pass).toBeFalsy()
@@ -20,7 +20,7 @@ describe('Json Path', function () {
     const path = '$.test.inner.message'
     const expected = 'hello world'
 
-    const matcher = jsonPath(path, equalsTo(expected))
+    const matcher = field(path, equalsTo(expected))
 
     expect(matcher(obj).pass).toBeTruthy()
     expect(matcher(otherObj).pass).toBeFalsy()
@@ -31,6 +31,6 @@ describe('Json Path', function () {
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    expect(jsonPath('test.message', equalsTo('hello'))(value).pass).toBeFalsy()
+    expect(field('test.message', equalsTo('hello'))(value).pass).toBeFalsy()
   })
 })

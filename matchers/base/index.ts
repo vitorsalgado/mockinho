@@ -1,4 +1,4 @@
-export type OnMockServed = () => void | Promise<void>
+export type OnMockServed = () => void
 
 export type Result = {
   name: string

@@ -1,11 +1,10 @@
 import Path from 'path'
 import Supertest from 'supertest'
+import { Headers, MediaTypes } from '../../http.js'
 import { mockHttp } from '../../mockHttp'
 import { opts } from '../../config'
 import { get } from '../entry'
 import { ok } from '../entry'
-import { Headers } from '../../Headers'
-import { MediaTypes } from '../../MediaTypes'
 
 describe('Templating', function () {
   const $ = mockHttp(opts().dynamicHttpPort().enableFileMocks(false))

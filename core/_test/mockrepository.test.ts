@@ -1,5 +1,5 @@
-import { Mock } from './mock.js'
-import { MockInMemoryRepository } from './mockrepository.js'
+import { Mock } from '../mock.js'
+import { MockInMemoryRepository } from '../mockrepository.js'
 
 describe('MockInMemoryRepository', function () {
   class TestRepo extends MockInMemoryRepository<Mock> {

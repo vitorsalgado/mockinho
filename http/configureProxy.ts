@@ -9,11 +9,10 @@ import { createProxyMiddleware } from 'http-proxy-middleware'
 import { Express } from 'express'
 import { log } from '@mockdog/core'
 import { modeIsAtLeast } from '@mockdog/core'
+import { Headers, MediaTypes } from './http.js'
 import { RecordDispatcher } from './record/index.js'
 import { HttpRequest } from './HttpRequest.js'
 import { HttpContext } from './HttpContext.js'
-import { MediaTypes } from './MediaTypes.js'
-import { Headers } from './Headers.js'
 
 export function configureProxy(
   context: HttpContext,
