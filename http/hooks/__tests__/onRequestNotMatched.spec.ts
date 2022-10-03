@@ -1,9 +1,12 @@
+import { StateRepository } from '@mockdog/core'
 import { equalsTo } from '@mockdog/matchers'
 import { contentType } from '../../matchers/index.js'
-import { HttpMockBuilder, ok } from '../../mock/index.js'
+import { Deps, HttpMockBuilder, ok } from '../../mock/index.js'
 import { onRequestNotMatched } from '../builtin/onRequestNotMatched.js'
 
 describe('onRequestNotMatched', function () {
+  const deps: Deps = { stateRepository: new StateRepository() }
+
   it('should log without a closest match', function () {
     onRequestNotMatched({
       verbose: false,
@@ -14,7 +17,10 @@ describe('onRequestNotMatched', function () {
   })
 
   it('should log with mock without name and id', function () {
-    const mock = HttpMockBuilder.newBuilder().expect(contentType('something')).reply(ok()).build()
+    const mock = HttpMockBuilder.newBuilder()
+      .expect(contentType('something'))
+      .reply(ok())
+      .build(deps)
 
     onRequestNotMatched({
       verbose: true,
@@ -31,7 +37,7 @@ describe('onRequestNotMatched', function () {
       .name('nice name')
       .expect(contentType('something'))
       .reply(ok())
-      .build()
+      .build(deps)
 
     onRequestNotMatched({
       verbose: false,
@@ -50,7 +56,7 @@ describe('onRequestNotMatched', function () {
       .url('http://localhost:8080')
       .method('PATCH')
       .reply(ok())
-      .build()
+      .build(deps)
 
     onRequestNotMatched({
       verbose: true,
@@ -69,7 +75,7 @@ describe('onRequestNotMatched', function () {
       .url(equalsTo('http://localhost:8080'))
       .method('GET')
       .reply(ok())
-      .build()
+      .build(deps)
 
     onRequestNotMatched({
       verbose: false,

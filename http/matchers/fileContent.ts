@@ -5,7 +5,6 @@ import { Matcher } from '@mockdog/matchers'
 
 export const fileContent = (
   matcher: Matcher<string> | string,
-  // eslint-disable-next-line no-undef
   encoding: BufferEncoding = 'utf8',
 ): Matcher<Express.Multer.File | undefined> => {
   const actualMatcher = typeof matcher === 'string' ? equalsTo(matcher) : matcher

@@ -9,7 +9,7 @@ import { Middleware } from './config/index.js'
 import { onRequestMatched, onRequestNotMatched, onRequestReceived } from './hooks/index.js'
 import { Hooks } from './hooks/index.js'
 import { HttpContext } from './HttpContext.js'
-import { HttpMockRepository } from './mock/index.js'
+import { Deps, HttpMockRepository } from './mock/index.js'
 import { HttpMock } from './mock/index.js'
 import { HttpServer, HttpServerInfo } from './srv.js'
 import { defaultMockProviderFactory } from './mock/providers/default/defaultMockProviderFactory.js'
@@ -20,6 +20,7 @@ import { onRecord } from './hooks/builtin/onRecord.js'
 export class MockDogHttp extends MockApp<
   HttpMock,
   HttpServerInfo,
+  Deps,
   HttpServer,
   HttpConfiguration,
   HttpContext
@@ -46,6 +47,10 @@ export class MockDogHttp extends MockApp<
     }
 
     this._mockProviders.push(defaultMockProviderFactory(this._configuration))
+  }
+
+  protected deps(): Deps {
+    return { stateRepository: new StateRepository() }
   }
 
   async start(): Promise<HttpServerInfo> {

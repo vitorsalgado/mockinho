@@ -7,6 +7,7 @@ export const peek =
 
     return matcher(received)
   }
+
 export const peekNotMatched =
   <T>(matcher: Matcher<T>, action: (value: T) => void): Matcher<T> =>
   received => {

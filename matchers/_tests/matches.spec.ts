@@ -1,4 +1,4 @@
-import { regex } from '../regex.js'
+import { regex } from '../text.js'
 
 describe('matches', function () {
   it('should test value based on provided regex pattern', function () {

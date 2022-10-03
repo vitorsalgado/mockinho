@@ -13,6 +13,7 @@ import { Context } from './context.js'
 export abstract class MockApp<
   MOCK extends Mock,
   SERVER_INFO,
+  DEPS,
   SERVER extends MockServer<SERVER_INFO>,
   CONFIG extends Configuration,
   CONTEXT extends Context<MOCK, CONFIG, MockRepository<MOCK>>,
@@ -21,7 +22,7 @@ export abstract class MockApp<
   protected readonly _mockServer: SERVER
   protected readonly _configuration: CONFIG
   protected readonly _mockRepository: MockRepository<MOCK>
-  protected readonly _mockProviders: Array<MockProvider<MockBuilder<MOCK>>> = []
+  protected readonly _mockProviders: Array<MockProvider<MockBuilder<MOCK, DEPS>>> = []
   protected readonly _plugins: Array<PluginRegistration> = []
 
   protected constructor(context: CONTEXT, server: SERVER) {
@@ -33,7 +34,7 @@ export abstract class MockApp<
     this._plugins.push(...this._configuration.plugins.map(plugin => ({ plugin })))
     this._mockProviders.push(
       ...this._configuration.mockProviderFactories.map(
-        provider => provider(this) as MockProvider<MockBuilder<MOCK>>,
+        provider => provider(this) as MockProvider<MockBuilder<MOCK, DEPS>>,
       ),
     )
 
@@ -43,16 +44,20 @@ export abstract class MockApp<
 
   protected abstract setup(): void
 
-  mock(...mockBuilder: Array<MockBuilder<MOCK> | ((context: CONTEXT) => MOCK)>): Scope<MOCK> {
+  protected abstract deps(): DEPS
+
+  mock(...mockBuilder: Array<MockBuilder<MOCK, DEPS> | ((context: CONTEXT) => MOCK)>): Scope<MOCK> {
     const added = mockBuilder
-      .map(builder => (typeof builder === 'function' ? builder(this._context) : builder.build()))
+      .map(builder =>
+        typeof builder === 'function' ? builder(this._context) : builder.build(this.deps()),
+      )
       .map(mock => this._mockRepository.save(mock))
       .map(mock => mock.id)
 
     return new Scope(this._mockRepository, added)
   }
 
-  mockProvider(provider: MockProvider<MockBuilder<MOCK>>): void {
+  mockProvider(provider: MockProvider<MockBuilder<MOCK, DEPS>>): void {
     this._mockProviders.push(provider)
   }
 

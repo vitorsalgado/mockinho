@@ -2,6 +2,7 @@ import {
   MatcherSpecification,
   MockBuilder,
   MockSource,
+  State,
   stateMatcher,
   StateRepository,
 } from '@mockdog/core'
@@ -29,20 +30,42 @@ import {
   extractUrl,
 } from './util/extractors.js'
 
-const _stateRepository = new StateRepository()
+export interface Deps {
+  stateRepository: StateRepository
+}
 
-export class HttpMockBuilder extends MockBuilder<HttpMock> {
+export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
+  private _id: string = ''
+  private _name: string = ''
+  private _priority: number = 0
+  private _scenario: string = ''
+  private _scenarioNewState: string = State.STATE_STARTED
+  private _scenarioRequiredState: string = ''
   private readonly _expectations: Array<MatcherSpecification<unknown, unknown>> = []
   private _responseBuilder!: ResponseDelegate
 
   constructor(
     private readonly _source: MockSource = 'code',
     private readonly _sourceDescription: string = '',
-  ) {
-    super()
+  ) {}
+
+  static newBuilder = (source: MockSource = 'code', sourceDescription = ''): HttpMockBuilder =>
+    new HttpMockBuilder(source, sourceDescription)
+
+  id(id: string): this {
+    this._id = id
+    return this
   }
 
-  static newBuilder = (): HttpMockBuilder => new HttpMockBuilder()
+  name(name: string): this {
+    this._name = name
+    return this
+  }
+
+  priority(priority: number): this {
+    this._priority = priority
+    return this
+  }
 
   url(matcher: Matcher<string> | string): this {
     notNull(matcher)
@@ -250,6 +273,34 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
     return this
   }
 
+  newScenario(name: string, newState: string = ''): this {
+    this._scenario = name
+    this._scenarioRequiredState = newState
+    return this
+  }
+
+  scenarioIs(name: string): this {
+    this._scenario = name
+    return this
+  }
+
+  scenarioStateIs(requiredState: string): this {
+    this._scenarioRequiredState = requiredState
+    return this
+  }
+
+  scenarioWillBe(newState: string): this {
+    this._scenarioNewState = newState
+    return this
+  }
+
+  scenario(name: string, requiredState: string = State.STATE_STARTED, newState: string = ''): this {
+    this._scenario = name
+    this._scenarioRequiredState = requiredState
+    this._scenarioNewState = newState
+    return this
+  }
+
   proxyTo(target: string, response: ResponseBuilder): this {
     response.proxyFrom(target)
 
@@ -263,7 +314,13 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
     return this
   }
 
-  build(): HttpMock {
+  validate(): void {
+    notEmpty(this._expectations, 'Mocks needs to have at least one Matcher.')
+    noNullElements(this._expectations, 'Matchers list must not contain null or undefined elements.')
+    notNull(this._responseBuilder, 'Response definition is required. Call .reply() to create one.')
+  }
+
+  build(deps: Deps): HttpMock {
     this.validate()
 
     if (this._scenario) {
@@ -272,7 +329,7 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
           'state',
           extractNothing,
           wrap(
-            stateMatcher(_stateRepository)(
+            stateMatcher(deps.stateRepository)(
               this._scenario,
               this._scenarioRequiredState,
               this._scenarioNewState,
@@ -293,13 +350,7 @@ export class HttpMockBuilder extends MockBuilder<HttpMock> {
     )
   }
 
-  validate(): void {
-    notEmpty(this._expectations, 'Mocks needs to have at least one Matcher.')
-    noNullElements(this._expectations, 'Matchers list must not contain null or undefined elements.')
-    notNull(this._responseBuilder, 'Response definition is required. Call .reply() to create one.')
-  }
-
-  protected spec<T, V>(
+  private spec<T, V>(
     target: string,
     selector: (request: V) => T,
     matcher: Matcher<T> | Predicate<V>,
