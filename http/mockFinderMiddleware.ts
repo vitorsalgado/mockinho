@@ -87,10 +87,9 @@ export function mockFinderMiddleware(
 
       if (response.hasDelay()) {
         setTimeout(replier, response.delay)
-        return
+      } else {
+        replier()
       }
-
-      replier()
 
       matched.hit()
 

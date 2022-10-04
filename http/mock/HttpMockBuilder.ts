@@ -8,7 +8,7 @@ import {
 } from '@mockdog/core'
 import { allOf, anyItem, equalTo, repeatTimes, wrap, Matcher, Predicate } from '@mockdog/matchers'
 import { base64, JsonType, noNullElements, notBlank, notEmpty, notNull } from '@mockdog/x'
-import { Nullable } from '@mockdog/x/dist/types/nil.js'
+import { Nullable } from '@mockdog/x'
 import { BodyType, Headers, Methods, Schemes } from '../http.js'
 import { bearerToken, urlPath } from '../matchers/index.js'
 import { HttpRequest } from '../request.js'
