@@ -1,9 +1,9 @@
 import { Response } from 'express'
 import { NextFunction } from 'express'
-import { HttpRequest } from '../request.js'
+import { SrvRequest } from '../request.js'
 
 export type Middleware = (
-  req: HttpRequest,
+  req: SrvRequest,
   res: Response,
   next: NextFunction,
 ) => void | Promise<void>

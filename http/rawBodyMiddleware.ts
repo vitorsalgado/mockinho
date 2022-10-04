@@ -10,7 +10,9 @@ export function rawBodyMiddleware(
   const raw: Buffer[] = []
 
   request.on('data', chunk => raw.push(Buffer.from(chunk, 'binary')))
-  request.on('end', () => (request.rawBody = Buffer.concat(raw)))
+  request.on('end', () => {
+    request.rawBody = Buffer.concat(raw)
+  })
 
   next()
 }

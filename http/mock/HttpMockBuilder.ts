@@ -11,7 +11,7 @@ import { base64, JsonType, noNullElements, notBlank, notEmpty, notNull } from '@
 import { Nullable } from '@mockdog/x'
 import { BodyType, Headers, Methods, Schemes } from '../http.js'
 import { bearerToken, urlPath } from '../matchers/index.js'
-import { HttpRequest } from '../request.js'
+import { SrvRequest } from '../request.js'
 import { HttpMock } from './HttpMock.js'
 import { ResponseBuilder } from './ResponseBuilder.js'
 import { ResponseDelegate } from './ResponseDelegate.js'
@@ -355,7 +355,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
 
   private spec<T, M = T>(
     target: string,
-    selector: (request: HttpRequest) => T,
+    selector: (request: SrvRequest) => T,
     matcher: Matcher<M> | Predicate<M>,
     score: number = 0,
   ): MatcherSpecification<unknown, unknown> {

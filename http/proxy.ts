@@ -11,7 +11,7 @@ import { log } from '@mockdog/core'
 import { modeIsAtLeast } from '@mockdog/core'
 import { Headers, MediaTypes } from './http.js'
 import { RecordDispatcher } from './record/index.js'
-import { HttpRequest } from './request.js'
+import { SrvRequest } from './request.js'
 import { HttpContext } from './HttpContext.js'
 
 export function configureProxy(
@@ -32,7 +32,7 @@ export function configureProxy(
     timeout: opts.timeout ?? 30 * 1000,
     proxyTimeout: opts.proxyTimeout ?? 30 * 1000,
 
-    onProxyReq: function (proxyReq, request: HttpRequest) {
+    onProxyReq: function (proxyReq, request: SrvRequest) {
       const target = String(context.configuration.proxyOptions.target)
 
       context.emit('onProxyRequest', { target })
@@ -47,7 +47,7 @@ export function configureProxy(
     } as (proxyReq: ClientRequest, request: IncomingMessage) => void,
 
     onProxyRes: function (proxyRes, req, res) {
-      onProxyResponse(context, req as unknown as HttpRequest, res)
+      onProxyResponse(context, req as unknown as SrvRequest, res)
     },
 
     onError:
@@ -73,7 +73,7 @@ export function configureProxy(
 
     opts.selfHandleResponse = true
     opts.onProxyRes = responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
-      const request = req as HttpRequest
+      const request = req as SrvRequest
 
       dispatcher.record({
         request: {
@@ -103,7 +103,7 @@ export function configureProxy(
 
 function onProxyResponse(
   context: HttpContext,
-  request: HttpRequest,
+  request: SrvRequest,
   response: ServerResponse,
 ): void {
   context.emit('onProxyResponse', {

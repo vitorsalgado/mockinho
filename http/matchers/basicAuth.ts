@@ -2,10 +2,10 @@ import { equalTo } from '@mockdog/matchers'
 import { Matcher } from '@mockdog/matchers'
 import { matcherHint, res } from '@mockdog/matchers/internal'
 import { base64 } from '@mockdog/x'
-import { HttpRequest } from '../request.js'
+import { SrvRequest } from '../request.js'
 
 export const basicAuth =
-  (username: string | Matcher<string>, password: string = ''): Matcher<HttpRequest> =>
+  (username: string | Matcher<string>, password: string = ''): Matcher<SrvRequest> =>
   received => {
     const matcherName = 'basicAuth'
     const auth = received.headers.authorization

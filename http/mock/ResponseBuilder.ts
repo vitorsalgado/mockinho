@@ -5,7 +5,7 @@ import { CookieOptions } from 'express'
 import { isTrue, JsonType, notBlank, notEmpty, notNull } from '@mockdog/x'
 import { HandlebarsTemplating, Helper, Template, TemplateDelegate } from '@mockdog/core'
 import { BodyType, Headers, MediaTypes, StatusCodes } from '../http.js'
-import { HttpRequest } from '../request.js'
+import { SrvRequest } from '../request.js'
 import { HttpContext } from '../HttpContext.js'
 import { ResponseFixture } from './ResponseFixture.js'
 import { Cookie } from './Cookie.js'
@@ -21,7 +21,7 @@ export class ResponseBuilder {
   protected _status: number = StatusCodes.OK
   protected _body: BodyType = undefined
   protected _bodyFile: string = ''
-  protected _bodyFunction?: (request: HttpRequest) => BodyType
+  protected _bodyFunction?: (request: SrvRequest) => BodyType
   protected _bodyFileRelativeToFixtures: boolean = true
   protected _bodyTemplate?: TemplateDelegate<TemplateModel>
   protected _bodyTemplatePath?: string
@@ -140,7 +140,7 @@ export class ResponseBuilder {
     return this
   }
 
-  bodyWith(builder: (request: HttpRequest) => BodyType | Promise<BodyType>): this {
+  bodyWith(builder: (request: SrvRequest) => BodyType | Promise<BodyType>): this {
     this._bodyFunction = builder
     this._bodyCtrl++
 
@@ -234,7 +234,7 @@ export class ResponseBuilder {
 
     return async (
       context: HttpContext,
-      request: HttpRequest,
+      request: SrvRequest,
       _mock: HttpMock,
     ): Promise<ResponseFixture> => {
       notNull(context)

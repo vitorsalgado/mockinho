@@ -1,10 +1,10 @@
 import { equalTo } from '@mockdog/matchers'
 import { Matcher } from '@mockdog/matchers'
 import { matcherHint, res } from '@mockdog/matchers/internal'
-import { HttpRequest } from '../request.js'
+import { SrvRequest } from '../request.js'
 
 export const bearerToken =
-  (matchers: Matcher<string> | string): Matcher<HttpRequest> =>
+  (matchers: Matcher<string> | string): Matcher<SrvRequest> =>
   request => {
     const matcherName = 'bearerToken'
     const auth = request.headers.authorization

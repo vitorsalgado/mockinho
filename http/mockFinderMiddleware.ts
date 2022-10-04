@@ -1,47 +1,63 @@
+import http from 'node:http'
 import { Readable } from 'stream'
 import { NextFunction } from 'express'
 import { Response } from 'express'
-import HttpProxy from 'http-proxy'
 import { findMockForRequest } from '@mockdog/core'
 import { FindMockResult } from '@mockdog/core'
 import { modeIsAtLeast } from '@mockdog/core'
-import { BodyType, Headers, MediaTypes } from './http.js'
+import { BodyType, MediaTypes, Headers as H } from './http.js'
 import { HttpContext } from './HttpContext.js'
-import { HttpRequest } from './request.js'
+import { SrvRequest } from './request.js'
 import { ResponseFixture, HttpMock } from './mock/index.js'
 
-export function mockFinderMiddleware(
-  context: HttpContext,
-): (request: HttpRequest, reply: Response, next: NextFunction) => Promise<void> {
+export function mockFinderMiddleware(context: HttpContext) {
   const configurations = context.configuration
   const isVerbose = modeIsAtLeast(configurations, 'verbose')
-  const proxy = HttpProxy.createProxyServer()
 
-  return async function (req: HttpRequest, res: Response, next: NextFunction): Promise<void> {
-    proxy.removeAllListeners()
-
+  return async function (req: SrvRequest, res: Response, next: NextFunction): Promise<void> {
     const mocks = context.mockRepository.fetchSorted()
-    const result = findMockForRequest<HttpRequest, HttpMock>(req, mocks)
+    const result = findMockForRequest<SrvRequest, HttpMock>(req, mocks)
 
     if (result.hasMatch()) {
       const matched = result.matched()
       const response = await matched.responseBuilder(context, req, matched)
 
       if (response.proxyTo) {
-        proxy.once('error', err => next(err))
-        proxy.once('proxyReq', proxyReq =>
-          Object.entries(response.proxyHeaders).forEach(([name, value]) =>
-            proxyReq.setHeader(name, value),
-          ),
-        )
-        proxy.once('proxyRes', proxyRes => {
-          for (const [name, value] of Object.entries(response.headers)) {
-            proxyRes.headers[name] = value
+        const h = req.headers
+        const u = new URL(response.proxyTo)
+
+        Object.entries(response.proxyHeaders).forEach(([name, value]) => (h[name] = value))
+
+        const options: http.RequestOptions = {
+          port: u.port,
+          host: u.hostname,
+          path: req.url,
+          method: req.method,
+          headers: h,
+        }
+
+        const proxy = http.request(options, function (m) {
+          for (const [name, value] of Object.entries(m.headers)) {
+            res.header(name, value)
           }
-          proxyRes.on('end', () => proxy.removeAllListeners())
+
+          for (const [name, value] of Object.entries(response.headers)) {
+            res.header(name, value)
+          }
+
+          res.writeHead(response.status)
+
+          m.on('data', chunk => res.write(chunk))
+          m.on('close', () => res.end())
+          m.on('end', () => res.end())
         })
 
-        proxy.web(req, res, { target: response.proxyTo })
+        proxy.on('data', chunk => res.write(chunk))
+        proxy.on('close', () => res.end())
+        proxy.on('end', () => res.end())
+
+        proxy.write(req.rawBody)
+        proxy.end()
 
         return
       }
@@ -103,7 +119,7 @@ export function mockFinderMiddleware(
     }
 
     res
-      .set(Headers.ContentType, MediaTypes.TEXT_PLAIN)
+      .set(H.ContentType, MediaTypes.TEXT_PLAIN)
       .status(500)
       .send(
         `Request was not matched.${result
@@ -125,7 +141,7 @@ export function mockFinderMiddleware(
 function onRequestNotMatched(
   verbose: boolean,
   context: HttpContext,
-  req: HttpRequest,
+  req: SrvRequest,
   result: FindMockResult<HttpMock>,
 ) {
   context.emit('onRequestNotMatched', {
@@ -140,7 +156,7 @@ function onRequestNotMatched(
 function onRequestMatched(
   verbose: boolean,
   context: HttpContext,
-  req: HttpRequest,
+  req: SrvRequest,
   response: ResponseFixture,
   matched: HttpMock,
 ) {

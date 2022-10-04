@@ -1,10 +1,10 @@
 import { contains, equalTo } from '@mockdog/matchers'
-import { HttpRequest } from '../../request.js'
+import { SrvRequest } from '../../request.js'
 import { accept } from '../accept'
 
 describe('Accept', function () {
   it('should apply matcher to the header accept', function () {
-    const req: HttpRequest = {
+    const req: SrvRequest = {
       id: '',
       href: '',
       url: '',

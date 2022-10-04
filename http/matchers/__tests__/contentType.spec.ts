@@ -1,11 +1,11 @@
 import { equalTo } from '@mockdog/matchers'
-import { HttpRequest } from '../../request.js'
+import { SrvRequest } from '../../request.js'
 import { contentType } from '../contentType'
 
 describe('Content Type', function () {
   it('should apply matcher to the header content-type', function () {
     const header = 'application/json'
-    const req: HttpRequest = {
+    const req: SrvRequest = {
       id: '',
       href: '',
       url: '',

@@ -1,6 +1,6 @@
 import { equalTo } from '@mockdog/matchers'
 import { base64 } from '@mockdog/x'
-import { HttpRequest } from '../../request.js'
+import { SrvRequest } from '../../request.js'
 import { basicAuth } from '../basicAuth.js'
 
 describe('Basic Authorization', function () {
@@ -9,7 +9,7 @@ describe('Basic Authorization', function () {
     const password = 'super-secret-pwd'
     const encoded = base64.encode(`${username}:${password}`)
 
-    const req: HttpRequest = {
+    const req: SrvRequest = {
       headers: {
         authorization: `BAsiC ${encoded}`,
       },
@@ -23,7 +23,7 @@ describe('Basic Authorization', function () {
     const username = 'a-nice-dev'
     const password = 'super-secret-pwd'
 
-    const req: HttpRequest = {
+    const req: SrvRequest = {
       headers: {
         authorization: `BAsiC ${base64.encode(`${username}:${password}`)}`,
       },
@@ -35,7 +35,7 @@ describe('Basic Authorization', function () {
   })
 
   it('should return false when there is no authorization header', function () {
-    const req: HttpRequest = {
+    const req: SrvRequest = {
       headers: {},
     } as any
 
@@ -46,7 +46,7 @@ describe('Basic Authorization', function () {
     const username = 'a-nice-dev'
     const password = 'super-secret-pwd'
 
-    const req: HttpRequest = {
+    const req: SrvRequest = {
       headers: {
         authorization: `${base64.encode(`${username}:${password}`)}`,
       },
@@ -59,7 +59,7 @@ describe('Basic Authorization', function () {
     const username = 'a-nice-dev'
     const password = 'super-secret-pwd'
 
-    const req: HttpRequest = {
+    const req: SrvRequest = {
       headers: {
         authorization: `Test ${base64.encode(`${username}:${password}`)}`,
       },

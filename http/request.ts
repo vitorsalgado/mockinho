@@ -1,9 +1,8 @@
 import { Request, Express } from 'express'
-import * as core from 'express-serve-static-core'
 import { BodyType, Methods } from './http.js'
 
-export interface HttpRequest
-  extends Request<core.ParamsDictionary, any, BodyType, URLSearchParams> {
+export interface SrvRequest
+  extends Request<{ [key: string]: string }, any, BodyType, URLSearchParams> {
   id: string
   href: string
   url: string

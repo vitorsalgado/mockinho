@@ -1,5 +1,5 @@
 import { Headers, MediaTypes } from '../http.js'
-import { HttpRequest } from '../request.js'
+import { SrvRequest } from '../request.js'
 import { HttpContext } from '../HttpContext.js'
 import { ResponseBuilder } from './ResponseBuilder.js'
 import { ResponseFixture } from './ResponseFixture.js'
@@ -31,7 +31,7 @@ export class MultipleResponseBuilder extends ResponseBuilder {
   build(): ResponseDelegate {
     return async (
       context: HttpContext,
-      request: HttpRequest,
+      request: SrvRequest,
       mock: HttpMock,
     ): Promise<ResponseFixture> => {
       if (this._responses.length === 0) {

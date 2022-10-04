@@ -7,13 +7,13 @@ import express, { Express, NextFunction, Request, Response, Router } from 'expre
 import Multer from 'multer'
 import { log, MockServer } from '@mockdog/core'
 import { HttpConfiguration, Middleware, MiddlewareRoute } from './config/index.js'
-import { configureProxy } from './configureProxy.js'
+import { configureProxy } from './proxy.js'
 import { enhanceRequestMiddleware } from './enhanceRequestMiddleware.js'
 import { ErrorCodes } from './ErrorCodes.js'
 import { logIncomingRequestMiddleware } from './hooks/logIncomingRequestMiddleware.js'
 import { logReqAndResMiddleware } from './hooks/logReqAndResMiddleware.js'
 import { HttpContext } from './HttpContext.js'
-import { HttpRequest } from './request.js'
+import { SrvRequest } from './request.js'
 import { mockFinderMiddleware } from './mockFinderMiddleware.js'
 import { rawBodyMiddleware } from './rawBodyMiddleware.js'
 
@@ -89,7 +89,7 @@ export class HttpServer implements MockServer<HttpServerInfo> {
       return new URLSearchParams(query)
     })
 
-    this.expressApp.use(rawBodyMiddleware as Router)
+    this.expressApp.use(rawBodyMiddleware as unknown as Router)
     this.expressApp.use(express.json())
     this.expressApp.use(express.urlencoded(this.configuration.formUrlEncodedOptions))
     this.expressApp.use(express.text())
@@ -111,7 +111,7 @@ export class HttpServer implements MockServer<HttpServerInfo> {
     const mockFinder = mockFinderMiddleware(this.context)
 
     this.expressApp.all('*', (req, res, next) =>
-      mockFinder(req as unknown as HttpRequest, res, next).catch(err => next(err)),
+      mockFinder(req as unknown as SrvRequest, res, next).catch(err => next(err)),
     )
 
     if (this.configuration.corsEnabled) {

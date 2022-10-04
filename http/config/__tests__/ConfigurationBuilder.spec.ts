@@ -3,7 +3,7 @@ import { Response } from 'express'
 import { NextFunction } from 'express'
 import { Plugin } from '@mockdog/core'
 import { HttpConfigurationBuilder } from '../HttpConfigurationBuilder'
-import { HttpRequest } from '../../request.js'
+import { SrvRequest } from '../../request.js'
 import { Defaults } from '../Defaults'
 import { RecordOptions } from '../../record'
 import { defaultMockProviderFactory } from '../../mock/providers/default/defaultMockProviderFactory'
@@ -123,7 +123,7 @@ describe('Configurations Builder', function () {
   })
 
   describe('custom middlewares', function () {
-    function middleware(req: HttpRequest, res: Response, next: NextFunction) {
+    function middleware(req: SrvRequest, res: Response, next: NextFunction) {
       next()
     }
 
