@@ -1,5 +1,5 @@
-import { equalsTo } from '@mockdog/matchers'
-import { HttpRequest } from '../../HttpRequest'
+import { equalTo } from '@mockdog/matchers'
+import { HttpRequest } from '../../request.js'
 import { bearerToken } from '../bearerToken'
 
 describe('Bearer Token', function () {
@@ -11,14 +11,14 @@ describe('Bearer Token', function () {
       },
     } as any
 
-    const res = bearerToken(equalsTo(token))(req)
-    const wrong = bearerToken(equalsTo('some-other-token'))(req)
+    const res = bearerToken(equalTo(token))(req)
+    const wrong = bearerToken(equalTo('some-other-token'))(req)
 
     expect(res.pass).toBeTruthy()
     expect(wrong.pass).toBeFalsy()
   })
 
-  it('should use equalsTo when expectation is a string', function () {
+  it('should use equalTo when expectation is a string', function () {
     const token = 'mdaskdm0192onldakfm'
     const req: HttpRequest = {
       headers: {
@@ -39,7 +39,7 @@ describe('Bearer Token', function () {
       },
     } as any
 
-    expect(bearerToken(equalsTo(token))(req).pass).toBeTruthy()
+    expect(bearerToken(equalTo(token))(req).pass).toBeTruthy()
   })
 
   it('should return false when there is no authorization header', function () {
@@ -62,7 +62,7 @@ describe('Bearer Token', function () {
     } as any
 
     expect(bearerToken(token)(req).pass).toBeFalsy()
-    expect(bearerToken(equalsTo(token))(req).pass).toBeFalsy()
+    expect(bearerToken(equalTo(token))(req).pass).toBeFalsy()
   })
 
   it('should return false when authorization header contains an invalid schema', function () {
@@ -75,6 +75,6 @@ describe('Bearer Token', function () {
     } as any
 
     expect(bearerToken(token)(req).pass).toBeFalsy()
-    expect(bearerToken(equalsTo(token))(req).pass).toBeFalsy()
+    expect(bearerToken(equalTo(token))(req).pass).toBeFalsy()
   })
 })

@@ -1,5 +1,5 @@
 import { HttpContext } from '../HttpContext.js'
-import { HttpRequest } from '../HttpRequest.js'
+import { HttpRequest } from '../request.js'
 import { HttpMock } from './HttpMock.js'
 import { ResponseFixture } from './ResponseFixture.js'
 

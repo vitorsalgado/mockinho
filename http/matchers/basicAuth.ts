@@ -1,8 +1,8 @@
-import { equalsTo } from '@mockdog/matchers'
+import { equalTo } from '@mockdog/matchers'
 import { Matcher } from '@mockdog/matchers'
 import { matcherHint, res } from '@mockdog/matchers/internal'
 import { base64 } from '@mockdog/x'
-import { HttpRequest } from '../HttpRequest.js'
+import { HttpRequest } from '../request.js'
 
 export const basicAuth =
   (username: string | Matcher<string>, password: string = ''): Matcher<HttpRequest> =>
@@ -28,7 +28,7 @@ export const basicAuth =
             )
           }
 
-          return equalsTo(base64.encode(`${username}:${password}`))(value)
+          return equalTo(base64.encode(`${username}:${password}`))(value)
         }
 
         return username(value)

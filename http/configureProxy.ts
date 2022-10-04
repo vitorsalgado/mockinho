@@ -11,7 +11,7 @@ import { log } from '@mockdog/core'
 import { modeIsAtLeast } from '@mockdog/core'
 import { Headers, MediaTypes } from './http.js'
 import { RecordDispatcher } from './record/index.js'
-import { HttpRequest } from './HttpRequest.js'
+import { HttpRequest } from './request.js'
 import { HttpContext } from './HttpContext.js'
 
 export function configureProxy(
@@ -47,7 +47,7 @@ export function configureProxy(
     } as (proxyReq: ClientRequest, request: IncomingMessage) => void,
 
     onProxyRes: function (proxyRes, req, res) {
-      onProxyResponse(context, req as HttpRequest, res)
+      onProxyResponse(context, req as unknown as HttpRequest, res)
     },
 
     onError:

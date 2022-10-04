@@ -1,7 +1,7 @@
 import Supertest from 'supertest'
 import { contains } from '@mockdog/matchers'
 import { anything } from '@mockdog/matchers'
-import { equalsTo } from '@mockdog/matchers'
+import { equalTo } from '@mockdog/matchers'
 import { opts, get, urlPath, Headers, MediaTypes } from '../index.js'
 import { okJSON } from '../index.js'
 import { response } from '../index.js'
@@ -24,9 +24,9 @@ describe('Proxied Responses', function () {
     it('should send additional headers and return response from target with appending provided headers', function () {
       P.mock(
         get(anything())
-          .header('proxy-header', equalsTo('100'))
-          .header('x-test', equalsTo('true'))
-          .header('x-dev', equalsTo('ts'))
+          .header('proxy-header', equalTo('100'))
+          .header('x-test', equalTo('true'))
+          .header('x-dev', equalTo('ts'))
           .reply(okJSON({ hello: 'world' })),
       )
 

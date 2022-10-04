@@ -3,11 +3,11 @@ import { NextFunction } from 'express'
 import { Request } from 'express'
 import { nowInMs } from '@mockdog/x'
 import { HttpContext } from '../HttpContext.js'
-import { HttpRequest } from '../HttpRequest.js'
+import { HttpRequest } from '../request.js'
 
 export function logReqAndResMiddleware(context: HttpContext) {
   return function (request: Request, response: Response, next: NextFunction): void {
-    const req = request as HttpRequest
+    const req = request as unknown as HttpRequest
 
     response.on('close', () =>
       context.emit('onRequestEnd', {

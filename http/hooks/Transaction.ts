@@ -10,7 +10,7 @@ export interface Transaction {
     method: Methods
     href: string
     path: string
-    query: Record<string, string | Array<string>>
+    query: URLSearchParams
     params: Record<string, unknown>
     headers: Record<string, string>
     isMultipart: boolean

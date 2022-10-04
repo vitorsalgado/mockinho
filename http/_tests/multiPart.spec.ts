@@ -1,6 +1,6 @@
 import Path from 'path'
 import Supertest from 'supertest'
-import { equalsTo, contains, field } from '@mockdog/matchers'
+import { equalTo, contains, field } from '@mockdog/matchers'
 import { opts, post, urlPath } from '../index.js'
 import { mockHttp } from '../mockHttp.js'
 import { ok } from '../mock/index.js'
@@ -16,14 +16,14 @@ describe('Form MultiPart', function () {
   it('should process multipart requests', async function () {
     const scope = $.mock(
       post(urlPath('/test'))
-        .file('text', fileContent(equalsTo('Hello World\n')))
+        .file('text', fileContent(equalTo('Hello World\n')))
         .files(files => files.some(x => x.mimetype.includes('png')))
         .files(
           files => files.some(x => x.fieldname.includes('image')),
           files => files.length === 2,
         )
         .requestFields(field('field-test-1', contains('test-value')))
-        .requestFields(field('field-test-2', equalsTo('field-test-value-2')))
+        .requestFields(field('field-test-2', equalTo('field-test-value-2')))
         .reply(ok()),
     )
 

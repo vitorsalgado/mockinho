@@ -1,7 +1,7 @@
 import Supertest from 'supertest'
 import { hasLength } from '@mockdog/matchers'
 import { Headers, MediaTypes } from '../http.js'
-import { allOf, contains, equalsTo, item, field, opts, post, urlPath } from '../index.js'
+import { allOf, contains, equalTo, item, field, opts, post, urlPath } from '../index.js'
 import { mockHttp } from '../index.js'
 import { ok } from '../mock'
 
@@ -15,15 +15,15 @@ describe('HTTP - Form Url Encoded', function () {
   it('should accept form-url-encoded requests', function () {
     $.mock(
       post(urlPath('/test'))
-        .header('content-type', equalsTo(MediaTypes.APPLICATION_FORM_URL_ENCODED))
+        .header('content-type', equalTo(MediaTypes.APPLICATION_FORM_URL_ENCODED))
         .requestBody(
           allOf(
-            field('name', equalsTo('the name')),
-            field('description', equalsTo('some description')),
-            field('age', equalsTo('32')),
+            field('name', equalTo('the name')),
+            field('description', equalTo('some description')),
+            field('age', equalTo('32')),
             field('job', hasLength(2)),
             field('job', item(0, contains('tea'))),
-            field('job', item(1, equalsTo('developer'))),
+            field('job', item(1, equalTo('developer'))),
           ),
         )
         .reply(ok().body('done')),
@@ -40,7 +40,7 @@ describe('HTTP - Form Url Encoded', function () {
   it('should fail if it exceeds the body limit', function () {
     $.mock(
       post(urlPath('/test'))
-        .header('content-type', equalsTo(MediaTypes.APPLICATION_FORM_URL_ENCODED))
+        .header('content-type', equalTo(MediaTypes.APPLICATION_FORM_URL_ENCODED))
         .reply(ok().body('done')),
     )
 

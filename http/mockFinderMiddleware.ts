@@ -7,7 +7,7 @@ import { FindMockResult } from '@mockdog/core'
 import { modeIsAtLeast } from '@mockdog/core'
 import { BodyType, Headers, MediaTypes } from './http.js'
 import { HttpContext } from './HttpContext.js'
-import { HttpRequest } from './HttpRequest.js'
+import { HttpRequest } from './request.js'
 import { ResponseFixture, HttpMock } from './mock/index.js'
 
 export function mockFinderMiddleware(

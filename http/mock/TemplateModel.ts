@@ -8,7 +8,7 @@ export interface TemplateModel {
     url: string
     method: Methods
     headers: Record<string, string>
-    query: Record<string, string | Array<string>>
+    query: URLSearchParams
     body: BodyType
     isMultipart: boolean
     start: number

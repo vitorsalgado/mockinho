@@ -1,5 +1,5 @@
 import Supertest from 'supertest'
-import { equalsTo } from '@mockdog/matchers'
+import { equalTo } from '@mockdog/matchers'
 import { opts } from '../index.js'
 import { post } from '../index.js'
 import { urlPath } from '../index.js'
@@ -31,8 +31,8 @@ describe('Events', function () {
 
     $.mock(
       post(urlPath('/test'))
-        .header('content-type', equalsTo(MediaTypes.APPLICATION_FORM_URL_ENCODED))
-        .requestBody(field('name', equalsTo('the name')))
+        .header('content-type', equalTo(MediaTypes.APPLICATION_FORM_URL_ENCODED))
+        .requestBody(field('name', equalTo('the name')))
         .reply(ok()),
     )
 

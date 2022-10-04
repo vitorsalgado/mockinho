@@ -1,5 +1,5 @@
 import Supertest from 'supertest'
-import { equalsTo } from '@mockdog/matchers'
+import { equalTo } from '@mockdog/matchers'
 import { field } from '@mockdog/matchers'
 import { opts, get, urlPath, Headers, MediaTypes } from '../index.js'
 import { okJSON } from '../index.js'
@@ -26,9 +26,9 @@ describe('Forward Proxy', function () {
       try {
         target.mock(
           get(urlPath('/test'))
-            .header('proxy-header', equalsTo('100'))
-            .header('x-test', equalsTo('true'))
-            .header('x-dev', equalsTo('ts'))
+            .header('proxy-header', equalTo('100'))
+            .header('x-test', equalTo('true'))
+            .header('x-dev', equalTo('ts'))
             .reply(okJSON({ hello: 'world' }).header('x-proxy-reply', 'success')),
         )
 
@@ -89,10 +89,10 @@ describe('Forward Proxy', function () {
       try {
         target.mock(
           post(urlPath('/test'))
-            .header('proxy-header', equalsTo('100'))
-            .header('x-test', equalsTo('true'))
-            .header('x-dev', equalsTo('ts'))
-            .requestBody(field('data', equalsTo('test')))
+            .header('proxy-header', equalTo('100'))
+            .header('x-test', equalTo('true'))
+            .header('x-dev', equalTo('ts'))
+            .requestBody(field('data', equalTo('test')))
             .reply(okJSON({ hello: 'world' }).header('x-proxy-reply', 'success')),
         )
 

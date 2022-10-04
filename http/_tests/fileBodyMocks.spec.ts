@@ -1,7 +1,7 @@
 import Path from 'path'
 import Supertest from 'supertest'
 import { Headers, MediaTypes } from '../http.js'
-import { equalsTo, get, opts, post, urlPath } from '../index.js'
+import { equalTo, get, opts, post, urlPath } from '../index.js'
 import { ok } from '../mock/index.js'
 import mockHttp from '../mockHttp.js'
 
@@ -22,7 +22,7 @@ describe('HTTP - Working With File Body Mocks', function () {
     it('should use body mock located in the default directory', function () {
       $.mock(
         get(urlPath('/test'))
-          .header(Headers.Accept, equalsTo(MediaTypes.APPLICATION_JSON))
+          .header(Headers.Accept, equalTo(MediaTypes.APPLICATION_JSON))
           .reply(
             ok()
               .bodyFile('body-stub.json')
@@ -54,7 +54,7 @@ describe('HTTP - Working With File Body Mocks', function () {
     it('should use body mock located in the default directory', function () {
       $.mock(
         get(urlPath('/test'))
-          .header(Headers.Accept, equalsTo(MediaTypes.APPLICATION_JSON))
+          .header(Headers.Accept, equalTo(MediaTypes.APPLICATION_JSON))
           .reply(
             ok()
               .bodyFile('body-stub.json')

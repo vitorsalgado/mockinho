@@ -1,5 +1,5 @@
 import { Headers, MediaTypes } from '../http.js'
-import { HttpRequest } from '../HttpRequest.js'
+import { HttpRequest } from '../request.js'
 import { HttpContext } from '../HttpContext.js'
 import { ResponseBuilder } from './ResponseBuilder.js'
 import { ResponseFixture } from './ResponseFixture.js'

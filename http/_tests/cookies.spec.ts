@@ -1,5 +1,5 @@
 import Supertest from 'supertest'
-import { equalsTo } from '@mockdog/matchers'
+import { equalTo } from '@mockdog/matchers'
 import { field } from '@mockdog/matchers'
 import { opts } from '../index.js'
 import { post } from '../index.js'
@@ -20,7 +20,7 @@ describe('Cookies', function () {
     it('should apply matchers on the unsigned value', function () {
       $.mock(
         post(urlPath('/test'))
-          .cookie(cookieSignedName, equalsTo('test'))
+          .cookie(cookieSignedName, equalTo('test'))
           .reply(ok().body('done').cookie('cookie-test-res', 'test-res')),
       )
 
@@ -35,7 +35,7 @@ describe('Cookies', function () {
   describe('when a regular cookie is sent', function () {
     it('should apply matchers on cookie value', function () {
       $.mock(
-        post(urlPath('/test')).cookie(cookieSignedName, equalsTo('test')).reply(ok().body('done')),
+        post(urlPath('/test')).cookie(cookieSignedName, equalTo('test')).reply(ok().body('done')),
       )
 
       return Supertest($.listener())
@@ -50,7 +50,7 @@ describe('Cookies', function () {
     it('should convert value to object before applying matchers when calling .cookieJson()', function () {
       $.mock(
         post(urlPath('/test'))
-          .cookieJson(cookieSignedName, field('data.hello', equalsTo('world')))
+          .cookieJson(cookieSignedName, field('data.hello', equalTo('world')))
           .reply(ok().body('done')),
       )
 

@@ -6,10 +6,12 @@ import {
   stateMatcher,
   StateRepository,
 } from '@mockdog/core'
-import { allOf, anyItem, equalsTo, repeatTimes, wrap, Matcher, Predicate } from '@mockdog/matchers'
+import { allOf, anyItem, equalTo, repeatTimes, wrap, Matcher, Predicate } from '@mockdog/matchers'
 import { base64, JsonType, noNullElements, notBlank, notEmpty, notNull } from '@mockdog/x'
+import { Nullable } from '@mockdog/x/dist/types/nil.js'
 import { BodyType, Headers, Methods, Schemes } from '../http.js'
 import { bearerToken, urlPath } from '../matchers/index.js'
+import { HttpRequest } from '../request.js'
 import { HttpMock } from './HttpMock.js'
 import { ResponseBuilder } from './ResponseBuilder.js'
 import { ResponseDelegate } from './ResponseDelegate.js'
@@ -89,7 +91,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
   }
 
   scheme(scheme: Schemes): this {
-    this._expectations.push(this.spec('scheme', extractScheme, equalsTo(scheme), 1))
+    this._expectations.push(this.spec('scheme', extractScheme, equalTo(scheme), 1))
 
     return this
   }
@@ -100,7 +102,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
 
     if (typeof matcher === 'string') {
       this._expectations.push(
-        this.spec('header', extractHeader(key.toLowerCase()), equalsTo(matcher), 0.5),
+        this.spec('header', extractHeader(key.toLowerCase()), equalTo(matcher), 0.5),
       )
     } else {
       this._expectations.push(this.spec('header', extractHeader(key.toLowerCase()), matcher, 0.5))
@@ -122,7 +124,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
 
     if (typeof matcher === 'string') {
       this._expectations.push(
-        this.spec('header', extractHeader(Headers.ContentType), equalsTo(matcher), 0.5),
+        this.spec('header', extractHeader(Headers.ContentType), equalTo(matcher), 0.5),
       )
     } else {
       this._expectations.push(this.spec('header', extractHeader(Headers.ContentType), matcher, 0.5))
@@ -139,7 +141,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
       this.spec(
         'basic auth',
         extractHeader(Headers.Authorization),
-        equalsTo(base64.encode(`Basic ${username}:${password}`)),
+        equalTo(base64.encode(`Basic ${username}:${password}`)),
         0.5,
       ),
     )
@@ -155,20 +157,23 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     return this
   }
 
-  query(key: string, matcher: Matcher<string[]> | Matcher<string> | string | string[]): this {
+  query(
+    key: string,
+    matcher: Predicate<Nullable<string>> | Matcher<Nullable<string>> | string,
+  ): this {
     notBlank(key)
     notNull(matcher)
 
     if (typeof matcher === 'string') {
-      this._expectations.push(this.spec('query', extractQuery(key) as any, equalsTo(matcher), 0.5))
+      this._expectations.push(this.spec('query', extractQuery(key), equalTo(matcher), 0.5))
     } else {
-      this._expectations.push(this.spec('query', extractQuery(key) as any, matcher as any, 0.5))
+      this._expectations.push(this.spec('query', extractQuery(key), wrap(matcher), 0.5))
     }
 
     return this
   }
 
-  querystring(matcher: Matcher<Record<string, string | string[] | undefined>>): this {
+  querystring(matcher: Matcher<URLSearchParams>): this {
     notNull(matcher)
 
     this._expectations.push(this.spec('query', extractQueries, matcher, 3))
@@ -228,9 +233,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
 
   cookie(key: string, matcher: Matcher<string> | string): this {
     if (typeof matcher === 'string') {
-      this._expectations.push(
-        this.spec('cookie', extractCookie(key) as any, equalsTo(matcher), 0.5),
-      )
+      this._expectations.push(this.spec('cookie', extractCookie(key) as any, equalTo(matcher), 0.5))
     } else {
       this._expectations.push(this.spec('cookie', extractCookie(key) as any, matcher, 0.5))
     }
@@ -241,7 +244,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
   cookieJson(key: string, matcher: Matcher<JsonType> | string): this {
     if (typeof matcher === 'string') {
       this._expectations.push(
-        this.spec('cookie', extractCookieAsJson(key) as any, equalsTo(matcher), 0.5),
+        this.spec('cookie', extractCookieAsJson(key) as any, equalTo(matcher), 0.5),
       )
     } else {
       this._expectations.push(this.spec('cookie', extractCookieAsJson(key) as any, matcher, 0.5))
@@ -350,10 +353,10 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     )
   }
 
-  private spec<T, V>(
+  private spec<T, M = T>(
     target: string,
-    selector: (request: V) => T,
-    matcher: Matcher<T> | Predicate<V>,
+    selector: (request: HttpRequest) => T,
+    matcher: Matcher<M> | Predicate<M>,
     score: number = 0,
   ): MatcherSpecification<unknown, unknown> {
     return {

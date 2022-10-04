@@ -1,5 +1,5 @@
 import { StateRepository } from '@mockdog/core'
-import { equalsTo } from '@mockdog/matchers'
+import { equalTo } from '@mockdog/matchers'
 import { contentType } from '../../matchers/index.js'
 import { Deps, HttpMockBuilder, ok } from '../../mock/index.js'
 import { onRequestNotMatched } from '../builtin/onRequestNotMatched.js'
@@ -72,7 +72,7 @@ describe('onRequestNotMatched', function () {
       .id('test')
       .name('nice name')
       .expect(contentType('something'))
-      .url(equalsTo('http://localhost:8080'))
+      .url(equalTo('http://localhost:8080'))
       .method('GET')
       .reply(ok())
       .build(deps)

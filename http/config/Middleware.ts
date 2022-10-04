@@ -1,6 +1,6 @@
 import { Response } from 'express'
 import { NextFunction } from 'express'
-import { HttpRequest } from '../HttpRequest.js'
+import { HttpRequest } from '../request.js'
 
 export type Middleware = (
   req: HttpRequest,

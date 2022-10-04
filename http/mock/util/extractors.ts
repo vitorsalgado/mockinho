@@ -1,6 +1,6 @@
 import { Express } from 'express'
 import { BodyType, Methods, Schemes } from '../../http.js'
-import { HttpRequest } from '../../HttpRequest.js'
+import { HttpRequest } from '../../request.js'
 
 export const extractRequest = (request: HttpRequest): HttpRequest => request
 
@@ -21,12 +21,10 @@ export const extractHeaders = (request: HttpRequest): Record<string, string> => 
 
 export const extractQuery =
   (key: string) =>
-  (request: HttpRequest): string | string[] =>
-    request.query[key]
+  (request: HttpRequest): string | null =>
+    request.query.get(key)
 
-export const extractQueries = (
-  request: HttpRequest,
-): Record<string, string | string[] | undefined> => request.query
+export const extractQueries = (request: HttpRequest): URLSearchParams => request.query
 
 export const extractNothing = (): undefined => undefined
 

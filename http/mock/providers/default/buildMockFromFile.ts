@@ -2,7 +2,7 @@ import Path from 'path'
 import * as Fs from 'fs'
 import { isPresent } from '@mockdog/matchers'
 import { regex } from '@mockdog/matchers'
-import { equalsTo } from '@mockdog/matchers'
+import { equalTo } from '@mockdog/matchers'
 import { item } from '@mockdog/matchers'
 import { contains } from '@mockdog/matchers'
 import { anyOf } from '@mockdog/matchers'
@@ -60,7 +60,7 @@ export async function buildMockFromFile(
 
   if (mock.request.url) {
     if (ABSOLUTE_URL_REGEX.test(mock.request.url)) {
-      builder.url(equalsTo(mock.request.url, true))
+      builder.url(equalTo(mock.request.url, true))
     } else {
       builder.url(urlPath(extractPath(mock.request.url)))
     }
@@ -71,13 +71,13 @@ export async function buildMockFromFile(
   } else if (mock.request.urlPathPattern) {
     builder.url(urlPathMatching(mock.request.urlPathPattern))
   } else if (mock.request.urlExact) {
-    builder.url(equalsTo(mock.request.url))
+    builder.url(equalTo(mock.request.url))
   }
 
   if (mock.request.querystring) {
     for (const [key, value] of Object.entries(mock.request.querystring)) {
       if (typeof value !== 'object') {
-        builder.query(key, equalsTo(value) as any)
+        builder.query(key, equalTo(value) as any)
       } else {
         const matcherKey = getSingleMatcherFromObjectKeys(filename, Object.keys(value))
         builder.query(
@@ -98,7 +98,7 @@ export async function buildMockFromFile(
   if (mock.request.headers) {
     for (const [key, value] of Object.entries(mock.request.headers)) {
       if (typeof value !== 'object') {
-        builder.header(key.toLowerCase(), equalsTo(value))
+        builder.header(key.toLowerCase(), equalTo(value))
       } else {
         const matcherKey = getSingleMatcherFromObjectKeys(filename, Object.keys(value))
         builder.header(
@@ -118,7 +118,7 @@ export async function buildMockFromFile(
 
   if (mock.request.body) {
     if (typeof mock.request.body !== 'object') {
-      builder.requestBody(equalsTo<unknown>(mock.request.body))
+      builder.requestBody(equalTo<unknown>(mock.request.body))
     } else {
       if (Object.keys(mock.request.body).length > 0) {
         const matcherKey = getSingleMatcherFromObjectKeys(filename, Object.keys(mock.request.body))
@@ -253,7 +253,7 @@ function discoverMatcherByValue(
   mock: MockFile,
   value: string,
   parsers: Array<FieldParser>,
-  def = equalsTo,
+  def = equalTo,
 ): Matcher<unknown> {
   if (value === 'isPresent') {
     return isPresent()
@@ -291,15 +291,15 @@ function discoverMatcherByKey(
   if (key === 'urlPath') {
     return urlPath(values, true, mock.locale)
   } else if (key === 'url') {
-    return equalsTo(values, true, mock.locale)
+    return equalTo(values, true, mock.locale)
   } else if (key === 'urlPathMatching' || key === 'urlPathPattern') {
     return urlPathMatching(values)
   } else if (key === 'contains') {
     return contains(values)
   } else if (key === 'equals' || key === 'equalsTo') {
-    return equalsTo(values)
+    return equalTo(values)
   } else if (key === 'equalsIgnoringCase' || key === 'equalsToIgnoringCase') {
-    return equalsTo(values, true, mock.locale)
+    return equalTo(values, true, mock.locale)
   } else if (key === 'matches' || key === 'regex') {
     return regex(values)
   } else if (key === 'endsWith') {
@@ -342,7 +342,7 @@ function discoverMatcherByKey(
     const matcherEntry = findRequiredMatcherEntry(
       valueEntries,
       filename,
-      '"jsonPath" requires a matcher to apply on the json key. Eg.: "jsonPath": { path: "data.message", equalsTo: "test" }',
+      '"jsonPath" requires a matcher to apply on the json key. Eg.: "jsonPath": { path: "data.message", equalTo: "test" }',
     )
     const [k, v] = matcherEntry
 
@@ -382,7 +382,7 @@ function discoverMatcherByKey(
     const matcherEntry = findRequiredMatcherEntry(
       valueEntries,
       filename,
-      '"item" requires a matcher. Eg.: "item": { index: 1, equalsTo: "test" }',
+      '"item" requires a matcher. Eg.: "item": { index: 1, equalTo: "test" }',
     )
     const [k, v] = matcherEntry
 
@@ -396,7 +396,7 @@ function discoverMatcherByKey(
     const matcherEntry = findRequiredMatcherEntry(
       valueEntries,
       filename,
-      '"lowerCase" requires a matcher. Eg.: "lowerCase": { equalsTo: "test" }',
+      '"lowerCase" requires a matcher. Eg.: "lowerCase": { equalTo: "test" }',
     )
     const [k, v] = matcherEntry
 
@@ -406,7 +406,7 @@ function discoverMatcherByKey(
     const matcherEntry = findRequiredMatcherEntry(
       valueEntries,
       filename,
-      '"upperCase" requires a matcher. Eg.: "upperCase": { equalsTo: "test" }',
+      '"upperCase" requires a matcher. Eg.: "upperCase": { equalTo: "test" }',
     )
     const [k, v] = matcherEntry
 
@@ -415,7 +415,7 @@ function discoverMatcherByKey(
     const matcherEntry = findRequiredMatcherEntry(
       valueEntries,
       filename,
-      '"trim" requires a matcher. Eg.: "trim": { equalsTo: "test" }',
+      '"trim" requires a matcher. Eg.: "trim": { equalTo: "test" }',
     )
     const [k, v] = matcherEntry
 

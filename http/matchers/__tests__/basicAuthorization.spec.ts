@@ -1,6 +1,6 @@
-import { equalsTo } from '@mockdog/matchers'
+import { equalTo } from '@mockdog/matchers'
 import { base64 } from '@mockdog/x'
-import { HttpRequest } from '../../HttpRequest'
+import { HttpRequest } from '../../request.js'
 import { basicAuth } from '../basicAuth.js'
 
 describe('Basic Authorization', function () {
@@ -16,7 +16,7 @@ describe('Basic Authorization', function () {
     } as any
 
     expect(basicAuth(username, password)(req).pass).toBeTruthy()
-    expect(basicAuth(equalsTo(encoded))(req).pass).toBeTruthy()
+    expect(basicAuth(equalTo(encoded))(req).pass).toBeTruthy()
   })
 
   it('should throw error when username is provided but password no', function () {

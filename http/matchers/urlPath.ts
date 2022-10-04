@@ -1,5 +1,5 @@
 import { URL } from 'url'
-import { equalsTo } from '@mockdog/matchers'
+import { equalTo } from '@mockdog/matchers'
 import { Matcher } from '@mockdog/matchers'
 
 export const urlPath =
@@ -9,4 +9,4 @@ export const urlPath =
     locale: string | string[] | undefined = undefined,
   ): Matcher<string> =>
   value =>
-    equalsTo(path, ignoreCase, locale)(new URL(value).pathname)
+    equalTo(path, ignoreCase, locale)(new URL(value).pathname)

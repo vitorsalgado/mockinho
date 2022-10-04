@@ -1,7 +1,7 @@
-import { equalsTo } from '@mockdog/matchers'
+import { equalTo } from '@mockdog/matchers'
 import { Matcher } from '@mockdog/matchers'
 import { matcherHint, res } from '@mockdog/matchers/internal'
-import { HttpRequest } from '../HttpRequest.js'
+import { HttpRequest } from '../request.js'
 
 export const bearerToken =
   (matchers: Matcher<string> | string): Matcher<HttpRequest> =>
@@ -21,7 +21,7 @@ export const bearerToken =
 
       if (/^Bearer$/i.test(scheme)) {
         if (typeof matchers === 'string') {
-          return equalsTo(matchers)(value)
+          return equalTo(matchers)(value)
         }
 
         return matchers(value)

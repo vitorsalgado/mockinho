@@ -2,6 +2,7 @@ import Path from 'path'
 import Fs from 'fs'
 import Os from 'os'
 import Supertest from 'supertest'
+import jestBaseConfig from '../../../jest-base.config.js'
 import { run } from '../run'
 import { Argv } from '../../config'
 import { Defaults } from '../../config'
@@ -11,13 +12,18 @@ import { MockDogHttp } from '../../MockDogHttp'
 
 describe('cli', function () {
   const OLD_ENV = process.env
+  const OLD_EXIT = process.exit
+
+  const exitSpy: any = jest.fn()
 
   beforeEach(() => {
     process.env = { ...OLD_ENV }
+    process.exit = exitSpy
   })
 
   afterEach(() => {
     process.env = OLD_ENV
+    process.exit = OLD_EXIT
   })
 
   it('should import cli without errors', async function () {

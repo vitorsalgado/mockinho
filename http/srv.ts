@@ -13,11 +13,11 @@ import { ErrorCodes } from './ErrorCodes.js'
 import { logIncomingRequestMiddleware } from './hooks/logIncomingRequestMiddleware.js'
 import { logReqAndResMiddleware } from './hooks/logReqAndResMiddleware.js'
 import { HttpContext } from './HttpContext.js'
-import { HttpRequest } from './HttpRequest.js'
+import { HttpRequest } from './request.js'
 import { mockFinderMiddleware } from './mockFinderMiddleware.js'
 import { rawBodyMiddleware } from './rawBodyMiddleware.js'
 
-interface ConnectionInfo {
+export interface ConnectionInfo {
   enabled: boolean
   port: number
   host: string
@@ -85,6 +85,10 @@ export class HttpServer implements MockServer<HttpServerInfo> {
     this.expressApp.disable('x-powered-by')
     this.expressApp.disable('etag')
 
+    this.expressApp.set('query parser', (query: string) => {
+      return new URLSearchParams(query)
+    })
+
     this.expressApp.use(rawBodyMiddleware as Router)
     this.expressApp.use(express.json())
     this.expressApp.use(express.urlencoded(this.configuration.formUrlEncodedOptions))
@@ -101,13 +105,13 @@ export class HttpServer implements MockServer<HttpServerInfo> {
 
   async start(): Promise<HttpServerInfo> {
     this.additionalMiddlewares.forEach(middleware =>
-      this.expressApp.use(middleware.route, middleware.middleware as Router),
+      this.expressApp.use(middleware.route, middleware.middleware as unknown as Router),
     )
 
     const mockFinder = mockFinderMiddleware(this.context)
 
     this.expressApp.all('*', (req, res, next) =>
-      mockFinder(req as HttpRequest, res, next).catch(err => next(err)),
+      mockFinder(req as unknown as HttpRequest, res, next).catch(err => next(err)),
     )
 
     if (this.configuration.corsEnabled) {
