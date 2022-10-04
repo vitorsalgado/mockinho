@@ -1,4 +1,4 @@
-import { equalsTo } from '../equalsTo.js'
+import { equalTo } from '../equalTo.js'
 
 describe('EqualsTo', function () {
   describe('String', function () {
@@ -6,7 +6,7 @@ describe('EqualsTo', function () {
       const one = 'test'
       const other = 'test'
 
-      expect(equalsTo(one)(other).pass).toBeTruthy()
+      expect(equalTo(one)(other).pass).toBeTruthy()
     })
 
     it('should consider special characters', function () {
@@ -14,8 +14,8 @@ describe('EqualsTo', function () {
       const other = 'tést@--js-pão-de-queijo#___paçoca-com-tapioca'
       const otherWithErr = 'test@--js-pão-de-queijo#___paçoca-com-tapioca'
 
-      expect(equalsTo(one)(other).pass).toBeTruthy()
-      expect(equalsTo(one)(otherWithErr).pass).toBeFalsy()
+      expect(equalTo(one)(other).pass).toBeTruthy()
+      expect(equalTo(one)(otherWithErr).pass).toBeFalsy()
     })
 
     it('should not ignore case by default', function () {
@@ -24,22 +24,22 @@ describe('EqualsTo', function () {
       const one2 = 'Test'
       const other2 = 'Test'
 
-      expect(equalsTo(one1)(other1).pass).toBeFalsy()
-      expect(equalsTo(one2)(other2).pass).toBeTruthy()
+      expect(equalTo(one1)(other1).pass).toBeFalsy()
+      expect(equalTo(one2)(other2).pass).toBeTruthy()
     })
 
     it('should ignore case when specified to do so', function () {
       const one = 'Super-TEST'
       const other = 'supER-tEst'
 
-      expect(equalsTo(one, true)(other).pass).toBeTruthy()
+      expect(equalTo(one, true)(other).pass).toBeTruthy()
     })
 
     it('should compare in different locales', function () {
       const one = '龙'
       const other = '龙'
 
-      expect(equalsTo(one, true)(other).pass).toBeTruthy()
+      expect(equalTo(one, true)(other).pass).toBeTruthy()
     })
   })
 
@@ -47,8 +47,8 @@ describe('EqualsTo', function () {
     it('should compare numbers', function () {
       const val = 10
 
-      expect(equalsTo(val)(10).pass).toBeTruthy()
-      expect(equalsTo(val)(1000).pass).toBeFalsy()
+      expect(equalTo(val)(10).pass).toBeTruthy()
+      expect(equalTo(val)(1000).pass).toBeFalsy()
     })
   })
 
@@ -136,10 +136,10 @@ describe('EqualsTo', function () {
         ],
       }
 
-      expect(equalsTo(obj)(other).pass).toBeTruthy()
-      expect(equalsTo(obj as unknown)(invalidTypes as unknown).pass).toBeFalsy()
-      expect(equalsTo(obj as unknown)(missingFields as unknown).pass).toBeFalsy()
-      expect(equalsTo(obj as unknown)(unordered as unknown).pass).toBeTruthy()
+      expect(equalTo(obj)(other).pass).toBeTruthy()
+      expect(equalTo(obj as unknown)(invalidTypes as unknown).pass).toBeFalsy()
+      expect(equalTo(obj as unknown)(missingFields as unknown).pass).toBeFalsy()
+      expect(equalTo(obj as unknown)(unordered as unknown).pass).toBeTruthy()
     })
 
     it('should consider array items order but not the items properties ordering', function () {
@@ -164,8 +164,8 @@ describe('EqualsTo', function () {
         ],
       }
 
-      expect(equalsTo(obj)(ordered).pass).toBeTruthy()
-      expect(equalsTo(obj)(unordered).pass).toBeFalsy()
+      expect(equalTo(obj)(ordered).pass).toBeTruthy()
+      expect(equalTo(obj)(unordered).pass).toBeFalsy()
     })
   })
 })

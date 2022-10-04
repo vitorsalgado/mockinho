@@ -6,11 +6,13 @@ import { res } from './internal/res.js'
 export const not =
   <T>(matcher: Matcher<T>): Matcher<T> =>
   received => {
+    const matcherName = 'not'
     const r = matcher(received)
+
     return res(
-      'not',
+      matcherName,
       () =>
-        matcherHint(`not`, r.name) +
+        matcherHint(matcherName, r.name) +
         '\n' +
         `Matcher ${bold(r.name)} passed when it ${bold("shouldn't")}\n` +
         `Received: ${printReceived(received)}`,

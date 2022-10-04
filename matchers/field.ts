@@ -1,3 +1,4 @@
+import { red } from 'colorette'
 import { Matcher } from './base/index.js'
 import { indent, matcherHint } from './internal/fmt.js'
 import { reach } from './internal/reach.js'
@@ -9,7 +10,14 @@ export const field =
     const matcherName = 'field'
 
     if (typeof received !== 'object') {
-      return res(matcherName, () => 'jsonPath only accepts value of type object', false)
+      return res(
+        matcherName,
+        () =>
+          matcherHint(matcherName, path) +
+          '\n' +
+          `Expected value to be an object. got ${red(typeof received)}`,
+        false,
+      )
     }
 
     if (path.startsWith('$.')) {

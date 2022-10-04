@@ -1,9 +1,10 @@
+import { NullOrUndef } from '@mockdog/x'
 import { Matcher } from './base/index.js'
 import { matcherHint, printReceived } from './internal/fmt.js'
 import { res } from './internal/res.js'
 
 export const isPresent =
-  <T>(): Matcher<T> =>
+  <T>(): Matcher<NullOrUndef<T>> =>
   received => {
     const matcherName = 'isPresent'
 

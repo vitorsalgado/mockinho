@@ -1,3 +1,4 @@
+import { NullOrUndef } from '@mockdog/x'
 import { Matcher } from './base/index.js'
 import { matcherHint, printExpected, printReceived, res } from './internal/index.js'
 
@@ -5,13 +6,22 @@ export const regex = (pattern: RegExp | string): Matcher<string> => {
   const re = new RegExp(pattern)
   const matcherName = 'regex'
 
-  return received =>
-    res(matcherName, () => matcherHint(matcherName, pattern.toString()), re.test(received))
+  return received => {
+    if (received === null || received === undefined) {
+      return res(matcherName, () => matcherHint(matcherName, typeof received), false)
+    }
+
+    return res(matcherName, () => matcherHint(matcherName, pattern.toString()), re.test(received))
+  }
 }
 
-export const startsWith = (expected: string): Matcher<string> => {
-  return (received: string) => {
+export const startsWith = (expected: string): Matcher<NullOrUndef<string>> => {
+  return received => {
     const matcherName = 'startsWith'
+
+    if (received === null || received === undefined) {
+      return res(matcherName, () => matcherHint(matcherName, typeof received), false)
+    }
 
     return res(
       matcherName,
@@ -26,9 +36,13 @@ export const startsWith = (expected: string): Matcher<string> => {
 }
 
 export const endsWith =
-  (expected: string): Matcher<string> =>
+  (expected: string): Matcher<NullOrUndef<string>> =>
   received => {
     const matcherName = 'endsWith'
+
+    if (received === null || received === undefined) {
+      return res(matcherName, () => matcherHint(matcherName, typeof received), false)
+    }
 
     return res(
       matcherName,
@@ -42,16 +56,22 @@ export const endsWith =
   }
 
 export const toLowerCase =
-  (matcher: Matcher<string>, locales?: string | string[]): Matcher<string> =>
+  (
+    matcher: Matcher<NullOrUndef<string>>,
+    locales?: string | string[],
+  ): Matcher<NullOrUndef<string>> =>
   value =>
-    matcher(value.toLocaleLowerCase(locales))
+    matcher(value === null || value === undefined ? null : value.toLocaleLowerCase(locales))
 
 export const toUpperCase =
-  (matcher: Matcher<string>, locales?: string | string[]): Matcher<string> =>
+  (
+    matcher: Matcher<NullOrUndef<string>>,
+    locales?: string | string[],
+  ): Matcher<NullOrUndef<string>> =>
   value =>
-    matcher(value.toLocaleUpperCase(locales))
+    matcher(value === null || value === undefined ? null : value.toLocaleUpperCase(locales))
 
 export const trim =
-  (matcher: Matcher<string>): Matcher<string> =>
+  (matcher: Matcher<NullOrUndef<string>>): Matcher<NullOrUndef<string>> =>
   value =>
-    matcher(value.trim())
+    matcher(value === null || value === undefined ? null : value.trim())

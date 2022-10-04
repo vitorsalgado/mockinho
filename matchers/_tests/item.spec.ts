@@ -1,4 +1,4 @@
-import { equalsTo } from '../equalsTo.js'
+import { equalTo } from '../equalTo.js'
 import { item } from '../item.js'
 
 describe('Item', function () {
@@ -6,7 +6,7 @@ describe('Item', function () {
     const arr = ['apple', 'orange', 'banana']
     const index = 1
 
-    const result = item(index, equalsTo('orange'))(arr)
+    const result = item(index, equalTo('orange'))(arr)
 
     expect(result.pass).toBeTruthy()
   })

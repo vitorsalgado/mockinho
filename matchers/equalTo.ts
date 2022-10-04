@@ -1,15 +1,16 @@
 import assert from 'node:assert'
 import { diff } from 'jest-diff'
+import { NullOrUndef } from '@mockdog/x'
 import { Matcher } from './base/index.js'
 import { matcherHint } from './internal/fmt.js'
 import { res } from './internal/res.js'
 
-export const equalsTo =
+export const equalTo =
   <T>(
-    expected: T,
+    expected: NullOrUndef<T>,
     ignoreCase: boolean = false,
     locale: string | string[] | undefined = undefined,
-  ): Matcher<T> =>
+  ): Matcher<NullOrUndef<T>> =>
   received => {
     const matcherName = 'equalTo'
     let pass: boolean

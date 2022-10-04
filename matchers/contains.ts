@@ -1,14 +1,15 @@
+import { NullOrUndef } from '@mockdog/x'
 import { Matcher } from './base/index.js'
-import { equalsTo } from './equalsTo.js'
+import { equalTo } from './equalTo.js'
 import { printExpected, printReceived, matcherHint } from './internal/fmt.js'
 import { res } from './internal/res.js'
 
 export const contains =
-  (expected: string): Matcher<string | string[]> =>
+  (expected: string): Matcher<NullOrUndef<string | string[]>> =>
   received => {
     const matcherName = 'contains'
     const pass = Array.isArray(received)
-      ? received.some(x => equalsTo(expected)(x).pass)
+      ? received.some(x => equalTo(expected)(x).pass)
       : String(received).includes(expected)
 
     return res(

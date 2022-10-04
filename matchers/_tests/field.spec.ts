@@ -1,4 +1,4 @@
-import { equalsTo } from '../equalsTo.js'
+import { equalTo } from '../equalTo.js'
 import { field } from '../field.js'
 
 describe('Field Path', function () {
@@ -8,7 +8,7 @@ describe('Field Path', function () {
     const path = 'test.inner.message'
     const expected = 'hello world'
 
-    const matcher = field(path, equalsTo(expected))
+    const matcher = field(path, equalTo(expected))
 
     expect(matcher(obj).pass).toBeTruthy()
     expect(matcher(otherObj).pass).toBeFalsy()
@@ -20,7 +20,7 @@ describe('Field Path', function () {
     const path = '$.test.inner.message'
     const expected = 'hello world'
 
-    const matcher = field(path, equalsTo(expected))
+    const matcher = field(path, equalTo(expected))
 
     expect(matcher(obj).pass).toBeTruthy()
     expect(matcher(otherObj).pass).toBeFalsy()
@@ -31,6 +31,6 @@ describe('Field Path', function () {
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    expect(field('test.message', equalsTo('hello'))(value).pass).toBeFalsy()
+    expect(field('test.message', equalTo('hello'))(value).pass).toBeFalsy()
   })
 })

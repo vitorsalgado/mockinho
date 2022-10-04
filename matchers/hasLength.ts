@@ -1,10 +1,10 @@
-import { type } from 'os'
+import { NullOrUndef } from '@mockdog/x'
 import { Matcher } from './base/index.js'
 import { matcherHint, printExpected, printReceived } from './internal/fmt.js'
 import { res } from './internal/res.js'
 
 export const hasLength =
-  <T>(length: number): Matcher<Array<T> | string> =>
+  <T>(length: number): Matcher<NullOrUndef<Array<T> | string>> =>
   value => {
     const matcherName = 'hasLength'
 
