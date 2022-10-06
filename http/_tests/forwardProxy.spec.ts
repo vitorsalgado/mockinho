@@ -1,11 +1,11 @@
 import Supertest from 'supertest'
 import { equalTo } from '@mockdog/matchers'
 import { field } from '@mockdog/matchers'
-import { opts, get, urlPath, Headers, MediaTypes } from '../index.js'
+import { opts, get, urlPath, H, MediaTypes } from '../index.js'
 import { okJSON } from '../index.js'
 import { mockHttp } from '../index.js'
 import { badRequestJSON } from '../index.js'
-import { StatusCodes } from '../index.js'
+import { SC } from '../index.js'
 import { post } from '../index.js'
 
 describe('Forward Proxy', function () {
@@ -36,7 +36,7 @@ describe('Forward Proxy', function () {
 
         await Supertest($.listener())
           .get('/test')
-          .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
           .set('proxy-header', '100')
           .set('x-test', 'true')
           .set('x-dev', 'ts')
@@ -68,8 +68,8 @@ describe('Forward Proxy', function () {
 
         await Supertest($.listener())
           .get('/test')
-          .set(Headers.Accept, MediaTypes.APPLICATION_JSON)
-          .expect(StatusCodes.BAD_REQUEST)
+          .set(H.Accept, MediaTypes.APPLICATION_JSON)
+          .expect(SC.BadRequest)
           .expect(res => {
             expect(res.body.message).toEqual('boom!')
             expect(res.headers['x-proxy-reply']).toEqual('failure')
@@ -100,7 +100,7 @@ describe('Forward Proxy', function () {
 
         await Supertest($.listener())
           .post('/test')
-          .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
           .send(JSON.stringify({ data: 'test' }))
           .set('proxy-header', '100')
           .set('x-test', 'true')
@@ -135,7 +135,7 @@ describe('Forward Proxy', function () {
 
         await Supertest($.listener())
           .post('/nowhere')
-          .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
           .send(JSON.stringify({ data: 'test' }))
           .set('proxy-header', '100')
           .set('x-test', 'true')

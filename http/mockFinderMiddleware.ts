@@ -1,14 +1,13 @@
-import http from 'node:http'
 import { Readable } from 'stream'
 import { NextFunction } from 'express'
 import { Response } from 'express'
 import { findMockForRequest } from '@mockdog/core'
 import { FindMockResult } from '@mockdog/core'
 import { modeIsAtLeast } from '@mockdog/core'
-import { BodyType, MediaTypes, Headers as H } from './http.js'
+import { BodyType, MediaTypes, H as H } from './http.js'
 import { HttpContext } from './HttpContext.js'
 import { SrvRequest } from './request.js'
-import { ResponseFixture, HttpMock } from './mock/index.js'
+import { SrvResponse, HttpMock } from './mock/index.js'
 
 export function mockFinderMiddleware(context: HttpContext) {
   const configurations = context.configuration
@@ -20,44 +19,17 @@ export function mockFinderMiddleware(context: HttpContext) {
 
     if (result.hasMatch()) {
       const matched = result.matched()
-      const response = await matched.responseBuilder(context, req, matched)
+      const response = await matched.reply.build(req, res, { config: configurations })
 
-      if (response.proxyTo) {
-        const h = req.headers
-        const u = new URL(response.proxyTo)
-
-        Object.entries(response.proxyHeaders).forEach(([name, value]) => (h[name] = value))
-
-        const options: http.RequestOptions = {
-          port: u.port,
-          host: u.hostname,
-          path: req.url,
-          method: req.method,
-          headers: h,
+      // response was handled by the replier
+      if (response === null) {
+        for (const { onMockServed } of result.results()) {
+          if (onMockServed !== undefined) {
+            onMockServed()
+          }
         }
 
-        const proxy = http.request(options, function (m) {
-          for (const [name, value] of Object.entries(m.headers)) {
-            res.header(name, value)
-          }
-
-          for (const [name, value] of Object.entries(response.headers)) {
-            res.header(name, value)
-          }
-
-          res.writeHead(response.status)
-
-          m.on('data', chunk => res.write(chunk))
-          m.on('close', () => res.end())
-          m.on('end', () => res.end())
-        })
-
-        proxy.on('data', chunk => res.write(chunk))
-        proxy.on('close', () => res.end())
-        proxy.on('end', () => res.end())
-
-        proxy.write(req.rawBody)
-        proxy.end()
+        matched.hit()
 
         return
       }
@@ -157,7 +129,7 @@ function onRequestMatched(
   verbose: boolean,
   context: HttpContext,
   req: SrvRequest,
-  response: ResponseFixture,
+  response: SrvResponse,
   matched: HttpMock,
 ) {
   context.emit('onRequestMatched', {

@@ -27,7 +27,7 @@ export class MockDogHttp extends MockApp<
 > {
   constructor(config: HttpConfigurationBuilder | HttpConfiguration) {
     const configurations = config instanceof HttpConfigurationBuilder ? config.build() : config
-    const context = new HttpContext(configurations, new HttpMockRepository(), new StateRepository())
+    const context = new HttpContext(configurations, new HttpMockRepository())
     const httpServer = new HttpServer(context)
 
     super(context, httpServer)

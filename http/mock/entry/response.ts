@@ -1,3 +1,3 @@
-import { ResponseBuilder } from '../ResponseBuilder.js'
+import { StandardReply } from '../StandardReply.js'
 
-export const response = (): ResponseBuilder => ResponseBuilder.newBuilder()
+export const response = (): StandardReply => StandardReply.newBuilder()

@@ -26,9 +26,9 @@ import { Matcher } from '@mockdog/matchers'
 import { notBlank, notNull } from '@mockdog/x'
 import { HttpConfiguration } from '../../../config/index.js'
 import { urlPath, urlPathMatching } from '../../../matchers/index.js'
-import { HttpMockBuilder, response } from '../../index.js'
-import { ResponseBuilder } from '../../ResponseBuilder.js'
-import { multipleResponses } from '../../entry/multipleResponses.js'
+import { forwardedFrom } from '../../forward.js'
+import { HttpMockBuilder, Reply, response, StandardReply } from '../../index.js'
+import { sequence } from '../../seq.js'
 import { MockFile } from './MockFile.js'
 import { MockFileResponse } from './MockFile.js'
 import { getSingleMatcherFromObjectKeys } from './util/getSingleMatcherFromObjectKeys.js'
@@ -140,7 +140,7 @@ export async function buildMockFromFile(
     for (const [key, value] of Object.entries(mock.request.files)) {
       if (typeof value !== 'object') {
         if (value === '*' || value === 'anything' || value === 'any') {
-          // anything we simple dont add any matcher
+          // anything we simply don't add any matcher
         } else if (value === 'isPresent') {
           builder.file(key.toLowerCase(), isPresent())
         }
@@ -165,24 +165,25 @@ export async function buildMockFromFile(
     builder.scenario(mock.scenario.name, mock.scenario.requiredState, mock.scenario.newState)
   }
 
+  // FIXME: multiple responses by file
   if (Array.isArray(mock.response)) {
-    const multiple = multipleResponses().type(mock.responseType ?? 'sequential')
+    const multiple = sequence() //type(mock.responseType ?? 'sequential')
 
     if (
       mock.returnErrorOnNoResponse !== null &&
       typeof mock.returnErrorOnNoResponse !== 'undefined'
     ) {
-      multiple.errorOnNotFound(mock.returnErrorOnNoResponse)
+      //multiple.errorOnNotFound(mock.returnErrorOnNoResponse)
     }
 
     for (const response of mock.response) {
       multiple.add(await buildResponse(response, filename))
     }
 
-    builder.reply(multiple.build())
+    builder.reply(multiple)
   } else {
-    const response = await buildResponse(mock.response, filename)
-    builder.reply(response.build())
+    const reply = await buildResponse(mock.response, filename)
+    builder.reply(reply)
   }
 
   for (const additionalBuilder of configuration.mockFieldParsers) {
@@ -194,16 +195,27 @@ export async function buildMockFromFile(
 
 // region Utils
 
-async function buildResponse(mock: MockFileResponse, filename: string): Promise<ResponseBuilder> {
-  const res = response().status(mock.status ?? 200)
-
-  if (mock.headers) res.headers(mock.headers)
-  if (mock.latency) res.latency(mock.latency)
+async function buildResponse(mock: MockFileResponse, filename: string): Promise<Reply> {
+  let res
 
   if (mock.proxyFrom) {
-    if (mock.proxyHeaders) res.proxyHeaders(mock.proxyHeaders)
-    res.proxyFrom(mock.proxyFrom)
+    res = forwardedFrom()
+
+    if (mock.proxyHeaders) {
+      res.proxyHeaders(mock.proxyHeaders)
+    }
+
+    if (mock.latency) {
+      //res.latency(mock.latency)
+    }
+
+    res.target(mock.proxyFrom)
   } else {
+    res = response().status(mock.status ?? 200)
+
+    if (mock.headers) res.headers(mock.headers)
+    if (mock.latency) res.latency(mock.latency)
+
     if (mock.bodyFile) {
       if (Path.isAbsolute(mock.bodyFile)) {
         res.bodyFile(mock.bodyFile)
@@ -219,7 +231,7 @@ async function buildResponse(mock: MockFileResponse, filename: string): Promise<
     }
   }
 
-  if (mock.modelFile) {
+  if (mock.modelFile && res instanceof StandardReply) {
     const file = Path.isAbsolute(mock.modelFile)
       ? mock.modelFile
       : Path.resolve(Path.dirname(filename), mock.modelFile)
@@ -230,13 +242,13 @@ async function buildResponse(mock: MockFileResponse, filename: string): Promise<
     res.model(JSON.parse(content))
   }
 
-  if (mock.headerTemplates) {
+  if (mock.headerTemplates && res instanceof StandardReply) {
     for (const [key, value] of Object.entries(mock.headerTemplates)) {
       res.headerTemplate(key, value)
     }
   }
 
-  if (mock.helpers) {
+  if (mock.helpers && res instanceof StandardReply) {
     const file = Path.isAbsolute(mock.helpers)
       ? mock.helpers
       : Path.resolve(Path.dirname(filename), mock.helpers)
@@ -246,7 +258,7 @@ async function buildResponse(mock: MockFileResponse, filename: string): Promise<
     res.helpers(helpers as Helper)
   }
 
-  return res
+  return res as Reply
 }
 
 function discoverMatcherByValue(

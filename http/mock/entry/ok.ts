@@ -1,7 +1,7 @@
 import { JsonType } from '@mockdog/x'
-import { StatusCodes } from '../../http.js'
-import { ResponseBuilder } from '../ResponseBuilder.js'
+import { SC } from '../../http.js'
+import { StandardReply } from '../StandardReply.js'
 
-export const ok = (): ResponseBuilder => ResponseBuilder.newBuilder().status(StatusCodes.OK)
+export const ok = (): StandardReply => StandardReply.newBuilder().status(SC.OK)
 
-export const okJSON = (body: JsonType): ResponseBuilder => ok().bodyJSON(body)
+export const okJSON = (body: JsonType): StandardReply => ok().bodyJSON(body)

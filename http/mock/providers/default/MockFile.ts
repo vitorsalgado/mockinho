@@ -1,5 +1,4 @@
 import { Methods } from '../../../http.js'
-import { MultiResponseStrategy } from '../../MultipleResponseBuilder.js'
 
 interface Lax {
   [key: string]: unknown
@@ -14,9 +13,13 @@ export interface MockFileResponse extends Lax {
   body?: unknown
   bodyFile?: string
   bodyTemplate?: string
+
+  // FIXME: use field above. file://
   bodyTemplateFile?: string
   modelFile?: string
   helpers?: string
+
+  // FIXME: delay
   latency?: number
 }
 
@@ -51,7 +54,9 @@ export interface MockFile extends Lax {
 
   response: MockFileResponse | Array<MockFileResponse>
 
-  responseType?: MultiResponseStrategy
+  // FIXME: remove this. create a model for each reply type
+  responseType?: string
 
+  // FIXME: unused
   returnErrorOnNoResponse?: boolean
 }

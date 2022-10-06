@@ -8,7 +8,7 @@ import Multer from 'multer'
 import { log, MockServer } from '@mockdog/core'
 import { HttpConfiguration, Middleware, MiddlewareRoute } from './config/index.js'
 import { configureProxy } from './proxy.js'
-import { enhanceRequestMiddleware } from './enhanceRequestMiddleware.js'
+import { decorateRequest } from './decorateRequest.js'
 import { ErrorCodes } from './ErrorCodes.js'
 import { logIncomingRequestMiddleware } from './hooks/logIncomingRequestMiddleware.js'
 import { logReqAndResMiddleware } from './hooks/logReqAndResMiddleware.js'
@@ -99,7 +99,7 @@ export class HttpServer implements MockServer<HttpServerInfo> {
       CookieParse(this.configuration.cookieSecrets, this.configuration.cookieOptions) as Router,
     )
     this.expressApp.use(Multer(this.configuration.multiPartOptions).any() as Router)
-    this.expressApp.use(enhanceRequestMiddleware as Router)
+    this.expressApp.use(decorateRequest as unknown as Router)
     this.expressApp.use(logReqAndResMiddleware(this.context))
   }
 

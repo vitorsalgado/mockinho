@@ -4,7 +4,7 @@ import { opts } from '../index.js'
 import { get } from '../index.js'
 import { urlPath } from '../index.js'
 import { okJSON } from '../index.js'
-import { Headers } from '../index.js'
+import { H } from '../index.js'
 import { MediaTypes } from '../index.js'
 import { ok } from '../index.js'
 import { mockHttp } from '../index.js'
@@ -29,7 +29,7 @@ describe('Stateful Matchers', function () {
 
         return Supertest($.listener())
           .get('/test')
-          .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
           .expect(200)
           .expect(res => expect(res.body.data).toEqual(expected))
       })
@@ -41,17 +41,17 @@ describe('Stateful Matchers', function () {
 
         await Supertest($.listener())
           .get('/test')
-          .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
           .expect(200)
 
         await Supertest($.listener())
           .get('/test')
-          .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
           .expect(200)
 
         await Supertest($.listener())
           .get('/test')
-          .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
           .expect(500)
       })
     })
@@ -70,7 +70,7 @@ describe('Stateful Matchers', function () {
 
         return Supertest($.listener())
           .get('/test')
-          .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
           .expect(200)
           .expect(res => expect(res.body.data).toEqual(expected))
       })
@@ -82,17 +82,17 @@ describe('Stateful Matchers', function () {
 
         await Supertest($.listener())
           .get('/test')
-          .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
           .expect(200)
 
         await Supertest($.listener())
           .get('/test')
-          .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
           .expect(200)
 
         await Supertest($.listener())
           .get('/test')
-          .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
           .expect(500)
       })
     })

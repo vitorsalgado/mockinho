@@ -33,14 +33,14 @@ export interface MatchResult {
 
 export class Mock<TRequest = unknown> {
   constructor(
-    public readonly id: string,
-    public readonly name: string = '',
-    public readonly priority: number = 0,
-    public readonly enabled: boolean = true,
-    public readonly source: MockSource = 'code',
-    public readonly sourceDescription: string = '',
-    public readonly matchers: Array<MatcherSpecification<any, TRequest>> = [],
-    public readonly postActions: Array<PostAction<TRequest>> = [],
+    readonly id: string,
+    readonly name: string = '',
+    readonly priority: number = 0,
+    readonly enabled: boolean = true,
+    readonly source: MockSource = 'code',
+    readonly sourceDescription: string = '',
+    readonly matchers: Array<MatcherSpecification<any, TRequest>> = [],
+    readonly postActions: Array<PostAction<TRequest>> = [],
     public hits: number = 0,
   ) {
     if (!this.id) {

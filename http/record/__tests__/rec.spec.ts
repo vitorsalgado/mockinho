@@ -5,7 +5,7 @@ import Supertest from 'supertest'
 import { listFilenames } from '@mockdog/x'
 import { sleep } from '@mockdog/x'
 import { opts } from '../../config/index.js'
-import { Headers, MediaTypes } from '../../http.js'
+import { H, MediaTypes } from '../../http.js'
 import { okJSON } from '../../mock/index.js'
 import { get } from '../../mock/index.js'
 import mockHttp from '../../mockHttp.js'
@@ -43,7 +43,7 @@ describe('Record', function () {
 
         await Supertest($.listener())
           .get('/test')
-          .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
           .expect(200)
           .expect(res => {
             expect(res.body.hello).toEqual('world')

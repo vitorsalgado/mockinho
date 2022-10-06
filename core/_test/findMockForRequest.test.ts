@@ -1,4 +1,4 @@
-import { equalsTo } from '@mockdog/matchers'
+import { equalTo } from '@mockdog/matchers'
 import { FindMockResult } from '../findMockForRequest.js'
 import { findMockForRequest } from '../findMockForRequest.js'
 import { Mock } from '../mock.js'
@@ -39,7 +39,7 @@ describe('findMockForRequest', function () {
       true,
       'code',
       'desc',
-      [{ selector: () => 'test', matcher: equalsTo('dev'), score: 1, target: '' }],
+      [{ selector: () => 'test', matcher: equalTo('dev'), score: 1, target: '' }],
       [],
       0,
     )
@@ -50,7 +50,7 @@ describe('findMockForRequest', function () {
       true,
       'code',
       'desc',
-      [{ selector: () => 'test', matcher: equalsTo('test'), score: 1, target: '' }],
+      [{ selector: () => 'test', matcher: equalTo('test'), score: 1, target: '' }],
       [],
       0,
     )
@@ -85,7 +85,7 @@ describe('findMockForRequest', function () {
       true,
       'code',
       'desc',
-      [{ selector: () => 'test', matcher: equalsTo('dev'), score: 0, target: '' }],
+      [{ selector: () => 'test', matcher: equalTo('dev'), score: 0, target: '' }],
       [],
       0,
     )
@@ -98,8 +98,8 @@ describe('findMockForRequest', function () {
       'code',
       'desc',
       [
-        { selector: () => 'test', matcher: equalsTo('test'), score: 2, target: '' },
-        { selector: () => 'test', matcher: equalsTo('no-test'), score: 0, target: '' },
+        { selector: () => 'test', matcher: equalTo('test'), score: 2, target: '' },
+        { selector: () => 'test', matcher: equalTo('no-test'), score: 0, target: '' },
       ],
       [],
       0,
@@ -135,7 +135,7 @@ describe('findMockForRequest', function () {
       true,
       'code',
       'desc',
-      [{ selector: () => 'test', matcher: equalsTo('dev'), score: 0, target: '' }],
+      [{ selector: () => 'test', matcher: equalTo('dev'), score: 0, target: '' }],
       [],
       0,
     )
@@ -149,7 +149,7 @@ describe('findMockForRequest', function () {
       [
         {
           selector: () => 'test',
-          matcher: equalsTo('no-test'),
+          matcher: equalTo('no-test'),
           score: 0,
           target: '',
         },

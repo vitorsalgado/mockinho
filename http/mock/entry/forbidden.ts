@@ -1,8 +1,8 @@
 import { JsonType } from '@mockdog/x'
-import { StatusCodes } from '../../http.js'
-import { ResponseBuilder } from '../ResponseBuilder.js'
+import { SC } from '../../http.js'
+import { StandardReply } from '../StandardReply.js'
 import { response } from './response.js'
 
-export const forbidden = (): ResponseBuilder => response().status(StatusCodes.FORBIDDEN)
+export const forbidden = (): StandardReply => response().status(SC.Forbidden)
 
-export const forbiddenJSON = (body: JsonType): ResponseBuilder => forbidden().bodyJSON(body)
+export const forbiddenJSON = (body: JsonType): StandardReply => forbidden().bodyJSON(body)

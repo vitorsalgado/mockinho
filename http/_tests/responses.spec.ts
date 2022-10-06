@@ -1,12 +1,12 @@
 import Path from 'path'
 import Supertest from 'supertest'
 import { contains } from '@mockdog/matchers'
-import { get, Headers, MediaTypes, ok, opts, urlPath } from '../index.js'
+import { get, H, MediaTypes, ok, opts, urlPath } from '../index.js'
 import { created } from '../index.js'
 import { badRequest } from '../index.js'
-import { StatusCodes } from '../index.js'
+import { SC } from '../index.js'
 import { mockHttp } from '../index.js'
-import { multipleResponses } from '../mock/entry/multipleResponses'
+import { sequence } from '../mock/seq.js'
 
 describe('Responses', function () {
   const $ = mockHttp(
@@ -31,7 +31,7 @@ describe('Responses', function () {
 
       return Supertest($.listener())
         .get('/test?q=term')
-        .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+        .set(H.ContentType, MediaTypes.APPLICATION_JSON)
         .expect(200)
         .expect(res => expect(res.body.data).toEqual('Request method was: GET'))
     })
@@ -39,19 +39,15 @@ describe('Responses', function () {
 
   describe('when using multiple responses', function () {
     it('should use response based on request number', async function () {
-      $.mock(
-        get(urlPath('/test')).reply(
-          multipleResponses().type('sequential').add(ok(), created(), badRequest()),
-        ),
-      )
+      $.mock(get(urlPath('/test')).reply(sequence().add(ok(), created(), badRequest())))
 
-      await Supertest($.listener()).get('/test').expect(StatusCodes.OK)
-      await Supertest($.listener()).get('/test').expect(StatusCodes.CREATED)
-      await Supertest($.listener()).get('/test').expect(StatusCodes.BAD_REQUEST)
+      await Supertest($.listener()).get('/test').expect(SC.OK)
+      await Supertest($.listener()).get('/test').expect(SC.Created)
+      await Supertest($.listener()).get('/test').expect(SC.BadRequest)
 
       await Supertest($.listener())
         .get('/test')
-        .expect(StatusCodes.INTERNAL_SERVER_ERROR)
+        .expect(SC.InternalServerError)
         .expect(res => res.header['content-type'].includes('text/plain'))
     })
 
@@ -68,27 +64,21 @@ describe('Responses', function () {
       for await (const _ of count()) {
         await Supertest($.listener())
           .get('/test/random')
-          .expect(res => res.status === StatusCodes.OK || StatusCodes.BAD_REQUEST)
+          .expect(res => res.status === SC.OK || SC.BadRequest)
       }
     })
 
     it('should set sequential multiple responses based on file configuration', async function () {
-      await Supertest($.listener()).get('/test/sequential').expect(StatusCodes.OK)
-      await Supertest($.listener()).get('/test/sequential').expect(StatusCodes.BAD_REQUEST)
+      await Supertest($.listener()).get('/test/sequential').expect(SC.OK)
+      await Supertest($.listener()).get('/test/sequential').expect(SC.BadRequest)
     })
 
     describe('when .returnErrorOnNoResponse() is false', function () {
       it('should return the first route on collection', async function () {
-        await Supertest($.listener())
-          .get('/test/sequential/error-no-response')
-          .expect(StatusCodes.OK)
+        await Supertest($.listener()).get('/test/sequential/error-no-response').expect(SC.OK)
 
-        await Supertest($.listener())
-          .get('/test/sequential/error-no-response')
-          .expect(StatusCodes.OK)
-        await Supertest($.listener())
-          .get('/test/sequential/error-no-response')
-          .expect(StatusCodes.OK)
+        await Supertest($.listener()).get('/test/sequential/error-no-response').expect(SC.OK)
+        await Supertest($.listener()).get('/test/sequential/error-no-response').expect(SC.OK)
       })
     })
   })

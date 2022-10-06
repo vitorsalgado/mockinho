@@ -1,10 +1,9 @@
 import { JsonType } from '@mockdog/x'
-import { StatusCodes } from '../../http.js'
-import { ResponseBuilder } from '../ResponseBuilder.js'
+import { SC } from '../../http.js'
+import { StandardReply } from '../StandardReply.js'
 import { response } from './response.js'
 
-export const internalServerError = (): ResponseBuilder =>
-  response().status(StatusCodes.INTERNAL_SERVER_ERROR)
+export const internalServerError = (): StandardReply => response().status(SC.InternalServerError)
 
-export const internalServerErrorJSON = (body: JsonType): ResponseBuilder =>
+export const internalServerErrorJSON = (body: JsonType): StandardReply =>
   internalServerError().bodyJSON(body)

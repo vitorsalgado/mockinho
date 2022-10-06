@@ -1,8 +1,8 @@
 import { JsonType } from '@mockdog/x'
-import { StatusCodes } from '../../http.js'
-import { ResponseBuilder } from '../ResponseBuilder.js'
+import { SC } from '../../http.js'
+import { StandardReply } from '../StandardReply.js'
 import { response } from './response.js'
 
-export const notFound = (): ResponseBuilder => response().status(StatusCodes.NOT_FOUND)
+export const notFound = (): StandardReply => response().status(SC.NotFound)
 
-export const notFoundJSON = (body: JsonType): ResponseBuilder => notFound().bodyJSON(body)
+export const notFoundJSON = (body: JsonType): StandardReply => notFound().bodyJSON(body)

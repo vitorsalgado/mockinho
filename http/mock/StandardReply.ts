@@ -1,24 +1,19 @@
 import Path from 'path'
 import * as Fs from 'fs'
 import * as Util from 'util'
-import { CookieOptions } from 'express'
+import { CookieOptions, Response } from 'express'
 import { isTrue, JsonType, notBlank, notEmpty, notNull } from '@mockdog/x'
 import { HandlebarsTemplating, Helper, Template, TemplateDelegate } from '@mockdog/core'
-import { BodyType, Headers, MediaTypes, StatusCodes } from '../http.js'
+import { BodyType, H, MediaTypes, SC } from '../http.js'
 import { SrvRequest } from '../request.js'
-import { HttpContext } from '../HttpContext.js'
-import { ResponseFixture } from './ResponseFixture.js'
-import { Cookie } from './Cookie.js'
-import { CookieToClear } from './Cookie.js'
-import { HttpMock } from './HttpMock.js'
-import { ResponseDelegate } from './ResponseDelegate.js'
+import { Cookie, CookieToClear, Reply, ReplyCtx, SrvResponse } from './reply.js'
 import { TemplateModel } from './TemplateModel.js'
 
 const access = Util.promisify(Fs.access)
 const readFile = Util.promisify(Fs.readFile)
 
-export class ResponseBuilder {
-  protected _status: number = StatusCodes.OK
+export class StandardReply implements Reply {
+  protected _status: number = SC.OK
   protected _body: BodyType = undefined
   protected _bodyFile: string = ''
   protected _bodyFunction?: (request: SrvRequest) => BodyType
@@ -36,11 +31,9 @@ export class ResponseBuilder {
   protected _cookies: Array<Cookie> = []
   protected _cookiesToClear: Array<CookieToClear> = []
   protected _delay: number = 0
-  protected _proxyFrom: string = ''
-  protected _proxyHeaders: Record<string, string> = {}
   protected _model?: JsonType
 
-  static newBuilder = (): ResponseBuilder => new ResponseBuilder()
+  static newBuilder = (): StandardReply => new StandardReply()
 
   // region Builder
 
@@ -75,7 +68,7 @@ export class ResponseBuilder {
       return this
     }
 
-    this._headers[Headers.Location] = location
+    this._headers[H.Location] = location
 
     return this
   }
@@ -85,33 +78,6 @@ export class ResponseBuilder {
 
     for (const [key, value] of Object.entries(headers)) {
       this._headers[key] = value
-    }
-
-    return this
-  }
-
-  proxyFrom(target: string): this {
-    notBlank(target)
-
-    this._proxyFrom = target
-
-    return this
-  }
-
-  proxyHeader(key: string, value: string): this {
-    notBlank(key)
-    notNull(value)
-
-    this._proxyHeaders[key] = value
-
-    return this
-  }
-
-  proxyHeaders(headers: Record<string, string>): this {
-    notNull(headers)
-
-    for (const [key, value] of Object.entries(headers)) {
-      this._proxyHeaders[key] = value
     }
 
     return this
@@ -127,7 +93,7 @@ export class ResponseBuilder {
   bodyJSON(body: JsonType): this {
     notNull(body)
 
-    return this.body(JSON.stringify(body)).header(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+    return this.body(JSON.stringify(body)).header(H.ContentType, MediaTypes.APPLICATION_JSON)
   }
 
   bodyFile(path: string): this {
@@ -225,83 +191,66 @@ export class ResponseBuilder {
 
   // endregion
 
-  build(): ResponseDelegate {
-    if (this._bodyCtrl > 1) {
-      throw new Error(
-        'Found more than one body strategy setup. Choose between: .body(), .bodyJSON(), .bodyFile(), .bodyWith() or .bodyTemplate()',
+  async build(request: SrvRequest, res: Response, ctx: ReplyCtx): Promise<SrvResponse> {
+    notNull(request)
+    notNull(this._status)
+    isTrue(this._delay >= 0, 'Delay must be a positive number.')
+
+    if (this._bodyFile) {
+      const file = this._bodyFileRelativeToFixtures
+        ? await StandardReply.makeValidPath(ctx.config.mockDirectory, this._bodyFile)
+        : this._bodyFile
+
+      this._body = Fs.createReadStream(Path.resolve(file), 'utf8')
+    } else if (this._bodyFunction) {
+      const body = this._bodyFunction(request)
+
+      if (body instanceof Promise) {
+        this._body = await body
+      } else {
+        this._body = this._bodyFunction(request)
+      }
+    } else if (this._bodyTemplate) {
+      this._body = await this._bodyTemplate(
+        { request, model: this._model, env: process.env },
+        { ...this._templateHelpers },
+      )
+    } else if (this._bodyTemplatePath) {
+      const file = this._bodyFileRelativeToFixtures
+        ? await StandardReply.makeValidPath(ctx.config.mockDirectory, this._bodyTemplatePath)
+        : this._bodyTemplatePath
+
+      const buf = await readFile(file)
+      const content = buf.toString()
+
+      this._body = await this._templating.compile(content)(
+        { request, model: this._model, env: process.env },
+        { ...this._templateHelpers },
       )
     }
 
-    return async (
-      context: HttpContext,
-      request: SrvRequest,
-      _mock: HttpMock,
-    ): Promise<ResponseFixture> => {
-      notNull(context)
-      notNull(this._status)
-      isTrue(this._delay >= 0, 'Delay must be a positive number.')
-
-      if (this._bodyFile) {
-        const file = this._bodyFileRelativeToFixtures
-          ? await ResponseBuilder.makeValidPath(context.configuration.mockDirectory, this._bodyFile)
-          : this._bodyFile
-
-        this._body = Fs.createReadStream(Path.resolve(file), 'utf8')
-      } else if (this._bodyFunction) {
-        const body = this._bodyFunction(request)
-
-        if (body instanceof Promise) {
-          this._body = await body
-        } else {
-          this._body = this._bodyFunction(request)
-        }
-      } else if (this._bodyTemplate) {
-        this._body = await this._bodyTemplate(
-          { request, model: this._model, env: process.env },
+    for (const [key, template] of Object.entries(this._headersWithTemplateValue)) {
+      this.header(
+        key,
+        await template(
+          {
+            request,
+            model: this._model,
+            env: process.env,
+          },
           { ...this._templateHelpers },
-        )
-      } else if (this._bodyTemplatePath) {
-        const file = this._bodyFileRelativeToFixtures
-          ? await ResponseBuilder.makeValidPath(
-              context.configuration.mockDirectory,
-              this._bodyTemplatePath,
-            )
-          : this._bodyTemplatePath
-
-        const buf = await readFile(file)
-        const content = buf.toString()
-
-        this._body = await this._templating.compile(content)(
-          { request, model: this._model, env: process.env },
-          { ...this._templateHelpers },
-        )
-      }
-
-      for (const [key, template] of Object.entries(this._headersWithTemplateValue)) {
-        this.header(
-          key,
-          await template(
-            {
-              request,
-              model: this._model,
-              env: process.env,
-            },
-            { ...this._templateHelpers },
-          ),
-        )
-      }
-
-      return new ResponseFixture(
-        this._status,
-        this._headers,
-        this._body,
-        this._cookies,
-        this._cookiesToClear,
-        this._delay,
-        this._proxyFrom,
-        this._proxyHeaders,
+        ),
       )
     }
+
+    return new SrvResponse(
+      this._status,
+      this._headers,
+      this._body,
+      this._cookies,
+      this._cookiesToClear,
+      this._delay,
+    )
   }
 
   // region Util

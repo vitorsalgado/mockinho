@@ -7,10 +7,10 @@ import { SrvRequest } from '../index.js'
 import { get } from '../index.js'
 import { urlPath } from '../index.js'
 import { ok } from '../index.js'
-import { Headers } from '../index.js'
+import { H } from '../index.js'
 import { MediaTypes } from '../index.js'
 import { created } from '../index.js'
-import { StatusCodes } from '../index.js'
+import { SC } from '../index.js'
 
 describe('Custom Middlewares', function () {
   function customMiddleware(req: SrvRequest, res: Response, next: NextFunction) {
@@ -41,8 +41,8 @@ describe('Custom Middlewares', function () {
 
       return Supertest($.listener())
         .get('/test')
-        .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
-        .expect(StatusCodes.OK)
+        .set(H.ContentType, MediaTypes.APPLICATION_JSON)
+        .expect(SC.OK)
     })
   })
 
@@ -62,13 +62,13 @@ describe('Custom Middlewares', function () {
 
       await Supertest($.listener())
         .get('/test')
-        .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
-        .expect(StatusCodes.OK)
+        .set(H.ContentType, MediaTypes.APPLICATION_JSON)
+        .expect(SC.OK)
 
       await Supertest($.listener())
         .get('/hey')
-        .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
-        .expect(StatusCodes.CREATED)
+        .set(H.ContentType, MediaTypes.APPLICATION_JSON)
+        .expect(SC.Created)
     })
   })
 })

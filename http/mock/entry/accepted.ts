@@ -1,5 +1,5 @@
-import { StatusCodes } from '../../http.js'
-import { ResponseBuilder } from '../ResponseBuilder.js'
+import { SC } from '../../http.js'
+import { StandardReply } from '../StandardReply.js'
 import { response } from './response.js'
 
-export const accepted = (): ResponseBuilder => response().status(StatusCodes.ACCEPTED)
+export const accepted = (): StandardReply => response().status(SC.Accepted)

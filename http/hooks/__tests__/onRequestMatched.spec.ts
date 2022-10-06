@@ -2,7 +2,7 @@
 
 import { Readable } from 'stream'
 import { nowInMs } from '@mockdog/x'
-import { ResponseFixture } from '../../mock/index.js'
+import { SrvResponse } from '../../mock/index.js'
 import { onRequestMatched } from '../builtin/onRequestMatched.js'
 
 describe('onRequestMatched', function () {
@@ -17,7 +17,7 @@ describe('onRequestMatched', function () {
       verbose: true,
       start: nowInMs(),
       method: 'PATCH',
-      responseDefinition: new ResponseFixture(
+      responseDefinition: new SrvResponse(
         200,
         { 'content-type': 'application/json' },
         { test: true },
@@ -42,7 +42,7 @@ describe('onRequestMatched', function () {
       verbose: true,
       start: nowInMs(),
       method: 'POST',
-      responseDefinition: new ResponseFixture(
+      responseDefinition: new SrvResponse(
         200,
         { 'content-type': 'application/json' },
         undefined,
@@ -67,7 +67,7 @@ describe('onRequestMatched', function () {
       verbose: true,
       start: nowInMs(),
       method: 'DELETE',
-      responseDefinition: new ResponseFixture(
+      responseDefinition: new SrvResponse(
         200,
         { 'content-type': 'application/json' },
         Buffer.from('nice txt'),
@@ -98,7 +98,7 @@ describe('onRequestMatched', function () {
       verbose: true,
       start: nowInMs(),
       method: 'GET',
-      responseDefinition: new ResponseFixture(
+      responseDefinition: new SrvResponse(
         200,
         { 'content-type': 'application/json' },
         Readable.from(txt(), { objectMode: false }),

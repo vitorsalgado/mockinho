@@ -1,7 +1,7 @@
 import type { Config as JestConfig } from '@jest/types'
 
 const config: JestConfig.InitialOptions = {
-  verbose: true,
+  verbose: false,
   collectCoverage: false,
   testTimeout: 24000000,
   resetModules: true,

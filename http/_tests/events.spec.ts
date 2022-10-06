@@ -6,7 +6,7 @@ import { urlPath } from '../index.js'
 import { MediaTypes } from '../index.js'
 import { field } from '../index.js'
 import { ok } from '../index.js'
-import { Headers } from '../index.js'
+import { H } from '../index.js'
 import { mockHttp } from '../index.js'
 
 describe('Events', function () {
@@ -38,7 +38,7 @@ describe('Events', function () {
 
     await Supertest($.listener())
       .post('/test')
-      .set(Headers.ContentType, MediaTypes.APPLICATION_FORM_URL_ENCODED)
+      .set(H.ContentType, MediaTypes.APPLICATION_FORM_URL_ENCODED)
       .send('name=the+name&description=some+description&age=32&job=teacher&job=developer')
       .expect(200)
 

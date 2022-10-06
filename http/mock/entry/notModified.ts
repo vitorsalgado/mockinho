@@ -1,5 +1,5 @@
-import { StatusCodes } from '../../http.js'
-import { ResponseBuilder } from '../ResponseBuilder.js'
+import { SC } from '../../http.js'
+import { StandardReply } from '../StandardReply.js'
 import { response } from './response.js'
 
-export const notModified = (): ResponseBuilder => response().status(StatusCodes.NOT_MODIFIED)
+export const notModified = (): StandardReply => response().status(SC.NotModified)

@@ -1,5 +1,5 @@
-import { StatusCodes } from '../../http.js'
-import { ResponseBuilder } from '../ResponseBuilder.js'
+import { SC } from '../../http.js'
+import { StandardReply } from '../StandardReply.js'
 import { response } from './response.js'
 
-export const noContent = (): ResponseBuilder => response().status(StatusCodes.NO_CONTENT)
+export const noContent = (): StandardReply => response().status(SC.NoContent)

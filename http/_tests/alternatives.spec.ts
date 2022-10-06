@@ -1,5 +1,5 @@
 import Supertest from 'supertest'
-import { equalTo } from '@mockdog/matchers'
+import { equalTo, isUUID } from '@mockdog/matchers'
 import { Matcher } from '@mockdog/matchers'
 import { modeIsAtLeast } from '@mockdog/core'
 import { mockHttp } from '../index.js'
@@ -8,9 +8,9 @@ import { ok } from '../index.js'
 import { HttpMock } from '../index.js'
 import { urlPath } from '../index.js'
 import { MediaTypes } from '../index.js'
-import { ResponseFixture } from '../index.js'
+import { SrvResponse } from '../index.js'
 import { post } from '../index.js'
-import { Headers } from '../index.js'
+import { H } from '../index.js'
 import { extractQuery } from '../mock/util/extractors'
 
 describe('Builder Alternatives', function () {
@@ -38,7 +38,7 @@ describe('Builder Alternatives', function () {
                 score: 0,
               },
             ],
-            ok().build(),
+            ok(),
           ),
       )
 
@@ -52,17 +52,17 @@ describe('Builder Alternatives', function () {
     it('should accept a function providing a response fixture', function () {
       $.mock(
         post(urlPath('/test'))
-          .reply((context, request, mock) =>
+          .reply((req, res, ctx) =>
             Promise.resolve(
-              new ResponseFixture(
+              new SrvResponse(
                 200,
                 {
                   'content-type': MediaTypes.APPLICATION_JSON,
-                  'x-id': mock.id,
-                  'x-verbose': String(modeIsAtLeast(context.configuration, 'verbose')),
-                  'x-method': request.method,
+                  'x-id': req.id,
+                  'x-verbose': String(modeIsAtLeast(ctx.config, 'verbose')),
+                  'x-method': req.method,
                 },
-                request.body,
+                req.body,
               ),
             ),
           )
@@ -71,12 +71,12 @@ describe('Builder Alternatives', function () {
 
       return Supertest($.listener())
         .post('/test')
-        .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+        .set(H.ContentType, MediaTypes.APPLICATION_JSON)
         .send(body)
         .expect(200)
         .expect(res => {
           expect(res.body).toEqual(body)
-          expect(res.header['x-id']).toEqual('test-id')
+          expect(isUUID()(res.header['x-id']).pass).toBeTruthy()
           expect(res.header['x-verbose']).toEqual(String(true))
           expect(res.header['x-method']).toEqual('POST')
         })

@@ -1,10 +1,10 @@
 import Supertest from 'supertest'
 import { contains, field } from '@mockdog/matchers'
 import { equalTo } from '@mockdog/matchers'
-import { opts, urlPath, Headers, MediaTypes, post } from '../index.js'
+import { opts, urlPath, H, MediaTypes, post } from '../index.js'
 import { okJSON } from '../index.js'
-import { response } from '../index.js'
 import { mockHttp } from '../index.js'
+import { forwardedFrom } from '../mock/forward.js'
 import { configureProxy } from '../proxy.js'
 import { HttpContext } from '../index.js'
 
@@ -34,10 +34,10 @@ describe('Proxied Responses', function () {
       $.mock(
         post(urlPath('/test'))
           .header('content-type', contains('json'))
-          .proxyTo(
-            `http://localhost:${P.serverInfo().http.port}`,
-            response()
-              .header('test', 'ok')
+          .reply(
+            forwardedFrom()
+              .target(`http://localhost:${P.serverInfo().http.port}`)
+              .responseHeader('test', 'ok')
               .proxyHeader('proxy-header', '100')
               .proxyHeaders({ 'x-test': 'true', 'x-dev': 'ts' }),
           ),
@@ -45,7 +45,7 @@ describe('Proxied Responses', function () {
 
       return Supertest($.listener())
         .post('/test?term=hi')
-        .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+        .set(H.ContentType, MediaTypes.APPLICATION_JSON)
         .send({ test: 'proxy-reply' })
         .expect(200)
         .expect(res => {

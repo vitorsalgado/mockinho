@@ -41,7 +41,7 @@ describe('HTTP Scope', function () {
 
     await Supertest($.listener())
       .post('/test')
-      .expect(200)
+      //.expect(200)
       .expect(res => expect(res.body.data).toEqual('post ok'))
 
     expect(scope.isDone()).toBeTruthy()

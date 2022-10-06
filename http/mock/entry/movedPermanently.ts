@@ -1,6 +1,6 @@
-import { StatusCodes } from '../../http.js'
-import { ResponseBuilder } from '../ResponseBuilder.js'
+import { SC } from '../../http.js'
+import { StandardReply } from '../StandardReply.js'
 import { response } from './response.js'
 
-export const movedPermanently = (location?: string): ResponseBuilder =>
-  response().status(StatusCodes.MOVED_PERMANENTLY).headerLocation(location)
+export const movedPermanently = (location?: string): StandardReply =>
+  response().status(SC.Moved_Permanently).headerLocation(location)

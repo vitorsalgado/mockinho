@@ -6,15 +6,14 @@ import {
   stateMatcher,
   StateRepository,
 } from '@mockdog/core'
-import { allOf, anyItem, equalTo, repeatTimes, wrap, Matcher, Predicate } from '@mockdog/matchers'
-import { base64, JsonType, noNullElements, notBlank, notEmpty, notNull } from '@mockdog/x'
-import { Nullable } from '@mockdog/x'
-import { BodyType, Headers, Methods, Schemes } from '../http.js'
+import { allOf, anyItem, equalTo, Matcher, Predicate, repeatTimes, wrap } from '@mockdog/matchers'
+import { base64, JsonType, noNullElements, notBlank, notEmpty, notNull, Nullable } from '@mockdog/x'
+import { BodyType, H, Methods, Schemes } from '../http.js'
 import { bearerToken, urlPath } from '../matchers/index.js'
 import { SrvRequest } from '../request.js'
+import { ForwardReply } from './forward.js'
 import { HttpMock } from './HttpMock.js'
-import { ResponseBuilder } from './ResponseBuilder.js'
-import { ResponseDelegate } from './ResponseDelegate.js'
+import { Reply, ReplyFn, wrapReply } from './reply.js'
 import {
   extractBody,
   extractCookie,
@@ -44,7 +43,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
   private _scenarioNewState: string = State.STATE_STARTED
   private _scenarioRequiredState: string = ''
   private readonly _expectations: Array<MatcherSpecification<unknown, unknown>> = []
-  private _responseBuilder!: ResponseDelegate
+  private _reply!: Reply
 
   constructor(
     private readonly _source: MockSource = 'code',
@@ -124,10 +123,10 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
 
     if (typeof matcher === 'string') {
       this._expectations.push(
-        this.spec('header', extractHeader(Headers.ContentType), equalTo(matcher), 0.5),
+        this.spec('header', extractHeader(H.ContentType), equalTo(matcher), 0.5),
       )
     } else {
-      this._expectations.push(this.spec('header', extractHeader(Headers.ContentType), matcher, 0.5))
+      this._expectations.push(this.spec('header', extractHeader(H.ContentType), matcher, 0.5))
     }
 
     return this
@@ -140,7 +139,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     this._expectations.push(
       this.spec(
         'basic auth',
-        extractHeader(Headers.Authorization),
+        extractHeader(H.Authorization),
         equalTo(base64.encode(`Basic ${username}:${password}`)),
         0.5,
       ),
@@ -304,23 +303,20 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     return this
   }
 
-  proxyTo(target: string, response: ResponseBuilder): this {
-    response.proxyFrom(target)
-
-    this._responseBuilder = response.build()
-
+  proxyTo(target: string, reply: ForwardReply): this {
+    this._reply = reply.target(target)
     return this
   }
 
-  reply(response: ResponseBuilder | ResponseDelegate): this {
-    this._responseBuilder = response instanceof ResponseBuilder ? response.build() : response
+  reply(reply: Reply | ReplyFn): this {
+    this._reply = wrapReply(reply)
     return this
   }
 
   validate(): void {
     notEmpty(this._expectations, 'Mocks needs to have at least one Matcher.')
     noNullElements(this._expectations, 'Matchers list must not contain null or undefined elements.')
-    notNull(this._responseBuilder, 'Response definition is required. Call .reply() to create one.')
+    notNull(this._reply, 'Response definition is required. Call .reply() to create one.')
   }
 
   build(deps: Deps): HttpMock {
@@ -349,7 +345,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
       this._source,
       this._sourceDescription,
       this._expectations,
-      this._responseBuilder,
+      this._reply,
     )
   }
 

@@ -18,10 +18,9 @@ describe('HttpContext', function () {
       .multiPartOptions({ limits: { fieldNameSize: 10 } })
       .build()
 
-    const ctx = new HttpContext(cfg, new HttpMockRepository(), new StateRepository())
+    const ctx = new HttpContext(cfg, new HttpMockRepository())
 
     expect(ctx.configuration).toEqual(cfg)
     expect(ctx.mockRepository).toBeInstanceOf(HttpMockRepository)
-    expect(ctx.scenarioRepository).toBeInstanceOf(StateRepository)
   })
 })

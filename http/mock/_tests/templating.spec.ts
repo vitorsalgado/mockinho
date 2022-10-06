@@ -1,6 +1,6 @@
 import Path from 'path'
 import Supertest from 'supertest'
-import { Headers, MediaTypes } from '../../http.js'
+import { H, MediaTypes } from '../../http.js'
 import { mockHttp } from '../../mockHttp'
 import { opts } from '../../config'
 import { get } from '../entry'
@@ -17,7 +17,7 @@ describe('Templating', function () {
     $.mock(
       get('/test').reply(
         ok()
-          .header(Headers.ContentType, MediaTypes.TEXT_PLAIN)
+          .header(H.ContentType, MediaTypes.TEXT_PLAIN)
           .model({ testLib: 'Jest!' })
           .helpers({ toUpper: (value: string) => value.toUpperCase() })
           .bodyTemplate('this is a test using: {{toUpper model.testLib}}'),
@@ -34,7 +34,7 @@ describe('Templating', function () {
     $.mock(
       get('/test').reply(
         ok()
-          .header(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+          .header(H.ContentType, MediaTypes.APPLICATION_JSON)
           .model({ testLib: 'Jest!' })
           .helpers({ toLower: (value: string) => value.toLowerCase() })
           .bodyTemplate('{ "testLib": "{{toLower model.testLib}}" }'),
@@ -51,7 +51,7 @@ describe('Templating', function () {
     $.mock(
       get('/test').reply(
         ok()
-          .header(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+          .header(H.ContentType, MediaTypes.APPLICATION_JSON)
           .model({ testLib: 'Jest!' })
           .helpers({ toLower: (value: string) => value.toLowerCase() })
           .bodyTemplate({ testLib: '{{toLower model.testLib}}' }),
@@ -68,7 +68,7 @@ describe('Templating', function () {
     $.mock(
       get('/test').reply(
         ok()
-          .header(Headers.ContentType, MediaTypes.TEXT_PLAIN)
+          .header(H.ContentType, MediaTypes.TEXT_PLAIN)
           .bodyTemplate('NODE_ENV is: {{env.NODE_ENV}}'),
       ),
     )
@@ -83,7 +83,7 @@ describe('Templating', function () {
     $.mock(
       get('/test').reply(
         ok()
-          .header(Headers.ContentType, MediaTypes.TEXT_PLAIN)
+          .header(H.ContentType, MediaTypes.TEXT_PLAIN)
           .bodyTemplate('Method is: {{request.method}}'),
       ),
     )
@@ -98,7 +98,7 @@ describe('Templating', function () {
     $.mock(
       get('/test').reply(
         ok()
-          .header(Headers.ContentType, MediaTypes.TEXT_PLAIN)
+          .header(H.ContentType, MediaTypes.TEXT_PLAIN)
           .model({ title: 'Test Template File' })
           .helpers({ toUpper: (value: string) => value.toUpperCase() })
           .bodyTemplatePath(Path.join(__dirname, '__fixtures__', 'template.txt')),
@@ -119,7 +119,7 @@ describe('Templating', function () {
     $.mock(
       get('/test').reply(
         ok()
-          .header(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+          .header(H.ContentType, MediaTypes.APPLICATION_JSON)
           .headerTemplate('x-id', '{{request.id}}')
           .bodyWith(request => ({
             id: request.id,

@@ -1,12 +1,12 @@
-import { Headers, Methods, StatusCodes } from '../../http.js'
-import { ResponseBuilder } from '../ResponseBuilder.js'
+import { H, Methods, SC } from '../../http.js'
+import { StandardReply } from '../StandardReply.js'
 import { response } from './response.js'
 
-export const methodNotAllowed = (allows?: Methods): ResponseBuilder => {
-  const builder = response().status(StatusCodes.METHOD_NOT_ALLOWED)
+export const methodNotAllowed = (allows?: Methods): StandardReply => {
+  const builder = response().status(SC.MethodNotAllowed)
 
   if (allows) {
-    return builder.header(Headers.Allow, allows)
+    return builder.header(H.Allow, allows)
   }
 
   return builder

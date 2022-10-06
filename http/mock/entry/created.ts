@@ -1,9 +1,9 @@
 import { JsonType } from '@mockdog/x'
-import { StatusCodes } from '../../http.js'
-import { ResponseBuilder } from '../ResponseBuilder.js'
+import { SC } from '../../http.js'
+import { StandardReply } from '../StandardReply.js'
 
-export const created = (location?: string): ResponseBuilder =>
-  ResponseBuilder.newBuilder().headerLocation(location).status(StatusCodes.CREATED)
+export const created = (location?: string): StandardReply =>
+  StandardReply.newBuilder().headerLocation(location).status(SC.Created)
 
-export const createdJSON = (body: JsonType, location?: string): ResponseBuilder =>
+export const createdJSON = (body: JsonType, location?: string): StandardReply =>
   created(location).bodyJSON(body)

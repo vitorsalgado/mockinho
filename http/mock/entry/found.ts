@@ -1,6 +1,6 @@
-import { StatusCodes } from '../../http.js'
-import { ResponseBuilder } from '../ResponseBuilder.js'
+import { SC } from '../../http.js'
+import { StandardReply } from '../StandardReply.js'
 import { response } from './response.js'
 
-export const found = (location?: string): ResponseBuilder =>
-  response().headerLocation(location).status(StatusCodes.FOUND)
+export const found = (location?: string): StandardReply =>
+  response().headerLocation(location).status(SC.Found)

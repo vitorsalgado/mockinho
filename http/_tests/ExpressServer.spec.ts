@@ -1,7 +1,7 @@
 import Supertest from 'supertest'
 import { contains } from '@mockdog/matchers'
 import { StateRepository } from '@mockdog/core'
-import { Headers, MediaTypes } from '../http.js'
+import { H, MediaTypes } from '../http.js'
 import { HttpContext } from '../HttpContext'
 import { opts, post, HttpConfigurationBuilder, HttpServer } from '../index.js'
 import { HttpMockRepository } from '../index.js'
@@ -25,7 +25,7 @@ describe('Express Http Server', function () {
     .enableCors({ maxAge: 10 })
     .build()
 
-  const ctx = new HttpContext(cfg, new HttpMockRepository(), new StateRepository())
+  const ctx = new HttpContext(cfg, new HttpMockRepository())
   const httpServer = new HttpServer(ctx)
 
   beforeAll(() => $.start())
@@ -52,7 +52,7 @@ describe('Express Http Server', function () {
 
     return Supertest($.listener())
       .post('/test?q=term')
-      .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+      .set(H.ContentType, MediaTypes.APPLICATION_JSON)
       .send(undefined)
       .expect(200)
       .expect(res => expect(res.body.data).toEqual(expected))
@@ -69,7 +69,7 @@ describe('Express Http Server', function () {
 
     return Supertest($.listener())
       .post('/test?q=term')
-      .set(Headers.ContentType, MediaTypes.APPLICATION_JSON)
+      .set(H.ContentType, MediaTypes.APPLICATION_JSON)
       .send('<?xml version="1.0" encoding="UTF-8"?><test><name>tester</name></test>')
       .expect(400)
   })

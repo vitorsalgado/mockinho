@@ -1,6 +1,6 @@
 import Supertest from 'supertest'
 import { hasLength } from '@mockdog/matchers'
-import { Headers, MediaTypes } from '../http.js'
+import { H, MediaTypes } from '../http.js'
 import { allOf, contains, equalTo, item, field, opts, post, urlPath } from '../index.js'
 import { mockHttp } from '../index.js'
 import { ok } from '../mock'
@@ -31,7 +31,7 @@ describe('HTTP - Form Url Encoded', function () {
 
     return Supertest($.listener())
       .post('/test?q=term')
-      .set(Headers.ContentType, MediaTypes.APPLICATION_FORM_URL_ENCODED)
+      .set(H.ContentType, MediaTypes.APPLICATION_FORM_URL_ENCODED)
       .send('name=the+name&description=some+description&age=32&job=teacher&job=developer')
       .expect(200)
       .expect(res => expect(res.text).toEqual('done'))
@@ -46,7 +46,7 @@ describe('HTTP - Form Url Encoded', function () {
 
     return Supertest($.listener())
       .post('/test?q=term')
-      .set(Headers.ContentType, MediaTypes.APPLICATION_FORM_URL_ENCODED)
+      .set(H.ContentType, MediaTypes.APPLICATION_FORM_URL_ENCODED)
       .send(
         'name=the+name&description=some+description&age=32&job=teacher&job=developer&other=super-failure-test',
       )

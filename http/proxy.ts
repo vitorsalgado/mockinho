@@ -9,7 +9,7 @@ import { createProxyMiddleware } from 'http-proxy-middleware'
 import { Express } from 'express'
 import { log } from '@mockdog/core'
 import { modeIsAtLeast } from '@mockdog/core'
-import { Headers, MediaTypes } from './http.js'
+import { H, MediaTypes } from './http.js'
 import { RecordDispatcher } from './record/index.js'
 import { SrvRequest } from './request.js'
 import { HttpContext } from './HttpContext.js'
@@ -41,7 +41,7 @@ export function configureProxy(
       request.target = target
 
       if (request.rawBody) {
-        proxyReq.setHeader(Headers.ContentLength, Buffer.byteLength(request.rawBody))
+        proxyReq.setHeader(H.ContentLength, Buffer.byteLength(request.rawBody))
         proxyReq.write(request.rawBody)
       }
     } as (proxyReq: ClientRequest, request: IncomingMessage) => void,
