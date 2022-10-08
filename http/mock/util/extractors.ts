@@ -15,6 +15,7 @@ export const extractBody = (request: SrvRequest): BodyType => request.body
 export const extractHeader =
   (key: string) =>
   (request: SrvRequest): string =>
+    // FIXME: use request.header()
     request.headers[key]
 
 export const extractHeaders = (request: SrvRequest): Record<string, string> => request.headers

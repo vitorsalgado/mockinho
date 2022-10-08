@@ -4,6 +4,7 @@ import * as Util from 'util'
 import { CookieOptions, Response } from 'express'
 import { isTrue, JsonType, notBlank, notEmpty, notNull } from '@mockdog/x'
 import { HandlebarsTemplating, Helper, Template, TemplateDelegate } from '@mockdog/core'
+import { HeaderList } from '../headers.js'
 import { BodyType, H, MediaTypes, SC } from '../http.js'
 import { SrvRequest } from '../request.js'
 import { Cookie, CookieToClear, Reply, ReplyCtx, SrvResponse } from './reply.js'
@@ -25,7 +26,7 @@ export class StandardReply implements Reply {
   protected _templating: Template<TemplateModel> = new HandlebarsTemplating()
 
   protected _bodyCtrl: number = 0
-  protected _headers: Record<string, string> = {}
+  protected _headers = new HeaderList()
   protected _headersWithTemplateValue: Record<string, TemplateDelegate<TemplateModel>> = {}
 
   protected _cookies: Array<Cookie> = []
@@ -49,7 +50,7 @@ export class StandardReply implements Reply {
     notBlank(key)
     notNull(value)
 
-    this._headers[key] = value
+    this._headers.append(key, value)
 
     return this
   }
@@ -63,12 +64,8 @@ export class StandardReply implements Reply {
     return this
   }
 
-  headerLocation(location?: string): this {
-    if (location === null || typeof location === 'undefined') {
-      return this
-    }
-
-    this._headers[H.Location] = location
+  headerLocation(location: string = ''): this {
+    this._headers.set(H.Location, location)
 
     return this
   }
@@ -77,7 +74,7 @@ export class StandardReply implements Reply {
     notNull(headers)
 
     for (const [key, value] of Object.entries(headers)) {
-      this._headers[key] = value
+      this._headers.append(key, value)
     }
 
     return this

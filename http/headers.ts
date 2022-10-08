@@ -1,6 +1,6 @@
 const sHeaders = Symbol('headers')
 
-export class Headers {
+export class HeaderList {
   private readonly [sHeaders]: Map<string, string>
 
   constructor(init?: [string, string] | Record<string, string> | string[][]) {
@@ -16,7 +16,7 @@ export class Headers {
     const existing = this.get(name)
     const newValue = existing ? existing + ',' + value : value
 
-    this.set(Headers.normalizeHeaderName(name), newValue)
+    this.set(HeaderList.normalizeHeaderName(name), newValue)
   }
 
   set(name: string, value: string): this {
@@ -24,21 +24,21 @@ export class Headers {
       throw new TypeError('Header name must not be null or empty.')
     }
 
-    this[sHeaders].set(Headers.normalizeHeaderName(name), value)
+    this[sHeaders].set(HeaderList.normalizeHeaderName(name), value)
 
     return this
   }
 
   get(key: string): string | undefined {
-    return this[sHeaders].get(Headers.normalizeHeaderName(key))
+    return this[sHeaders].get(HeaderList.normalizeHeaderName(key))
   }
 
   delete(key: string): boolean {
-    return this[sHeaders].delete(Headers.normalizeHeaderName(key))
+    return this[sHeaders].delete(HeaderList.normalizeHeaderName(key))
   }
 
   has(key: string): boolean {
-    return this[sHeaders].has(Headers.normalizeHeaderName(key))
+    return this[sHeaders].has(HeaderList.normalizeHeaderName(key))
   }
 
   keys(): IterableIterator<string> {
@@ -93,7 +93,7 @@ export class Headers {
     )
   }
 
-  merge(headers: Headers): void {
+  merge(headers: HeaderList): void {
     for (const [name, value] of headers) {
       if (!this.has(name)) {
         this.set(name, value)

@@ -1,5 +1,6 @@
 import { CookieOptions, Response } from 'express'
 import { HttpConfiguration } from '../config/index.js'
+import { HeaderList } from '../headers.js'
 import { BodyType } from '../http.js'
 import { SrvRequest } from '../request.js'
 
@@ -17,7 +18,7 @@ export interface CookieToClear {
 export class SrvResponse {
   constructor(
     public readonly status: number,
-    public readonly headers: Record<string, string> = {},
+    public readonly headers = new HeaderList(),
     public readonly body: BodyType = null,
     public readonly cookies: Array<Cookie> = [],
     public readonly cookiesToClear: Array<CookieToClear> = [],

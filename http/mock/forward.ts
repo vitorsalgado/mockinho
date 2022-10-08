@@ -1,7 +1,7 @@
 import http from 'node:http'
 import { Response } from 'express'
 import { notBlank, notNull } from '@mockdog/x'
-import { Headers } from '../headers.js'
+import { HeaderList } from '../headers.js'
 import { SC } from '../http.js'
 import { SrvRequest } from '../request.js'
 import { Reply, ReplyCtx, SrvResponse } from './reply.js'
@@ -25,9 +25,9 @@ export class ForwardReply implements Reply {
   private _status: number = 0
   private _statusMessage?: string
   private _delay = 0
-  private readonly _proxyHeaders = new Headers()
+  private readonly _proxyHeaders = new HeaderList()
   private readonly _proxyHeadersToRemove: string[] = []
-  private readonly _responseHeaders = new Headers()
+  private readonly _responseHeaders = new HeaderList()
 
   constructor(private _target: string = '') {}
 
@@ -104,7 +104,7 @@ export class ForwardReply implements Reply {
       }
     }
 
-    const h = new Headers(req.headers)
+    const h = new HeaderList(req.headers)
 
     for (const n of this._proxyHeadersToRemove) {
       if (h.has(n)) {

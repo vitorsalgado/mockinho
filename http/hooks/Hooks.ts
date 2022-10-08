@@ -1,3 +1,4 @@
+import { HeaderList } from '../headers.js'
 import { Methods } from '../http.js'
 import { HttpMock } from '../mock/index.js'
 import { HttpServerInfo } from '../srv.js'
@@ -44,7 +45,7 @@ export interface Hooks {
     readonly path: string
     readonly responseDefinition: {
       readonly status: number
-      readonly headers: Record<string, string>
+      readonly headers: HeaderList
       readonly body: unknown
     }
     readonly mock: {

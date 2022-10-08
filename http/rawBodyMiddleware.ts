@@ -1,9 +1,9 @@
-import { Request } from 'express'
 import { Response } from 'express'
 import { NextFunction } from 'express'
+import { SrvRequest } from './request.js'
 
 export function rawBodyMiddleware(
-  request: Request & { [key: string]: unknown },
+  request: SrvRequest,
   response: Response,
   next: NextFunction,
 ): void {
