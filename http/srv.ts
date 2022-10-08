@@ -7,6 +7,7 @@ import express, { Express, NextFunction, Request, Response, Router } from 'expre
 import Multer from 'multer'
 import { log, MockServer } from '@mockdog/core'
 import { HttpConfiguration, Middleware, MiddlewareRoute } from './config/index.js'
+import { bodyParser } from './mid/body_parser.js'
 import { configureProxy } from './proxy.js'
 import { decorateRequest } from './decorateRequest.js'
 import { ErrorCodes } from './ErrorCodes.js'
@@ -90,6 +91,7 @@ export class HttpServer implements MockServer<HttpServerInfo> {
     })
 
     this.expressApp.use(rawBodyMiddleware as unknown as Router)
+    this.expressApp.use(bodyParser(this.configuration.requestBodyParsers) as unknown as Router) // should come before regular body parsers
     this.expressApp.use(express.json())
     this.expressApp.use(express.urlencoded(this.configuration.formUrlEncodedOptions))
     this.expressApp.use(express.text())

@@ -8,6 +8,7 @@ import { Options } from 'http-proxy-middleware'
 import { Configuration } from '@mockdog/core'
 import { Mode } from '@mockdog/core'
 import { Level } from '@mockdog/core'
+import { RequestBodyParser } from '../mid/body_parser.js'
 import { RecordOptions } from '../record/index.js'
 import { FieldParser } from '../mock/providers/default/FieldParser.js'
 import { MiddlewareRoute } from './MiddlewareRoute.js'
@@ -36,6 +37,7 @@ export interface HttpConfiguration extends Configuration {
   recordEnabled: boolean
   recordOptions: RecordOptions | undefined
   mockFieldParsers: Array<FieldParser>
+  requestBodyParsers: Array<RequestBodyParser>
   watch: boolean
   formUrlEncodedOptions: OptionsUrlencoded
   multiPartOptions: Multer.Options

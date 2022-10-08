@@ -12,6 +12,7 @@ import { Level } from '@mockdog/core'
 import { Mode } from '@mockdog/core'
 import { Plugin } from '@mockdog/core'
 import { MockProviderFactory } from '@mockdog/core'
+import { RequestBodyParser } from '../mid/body_parser.js'
 import { RecordOptions } from '../record/index.js'
 import { RecordOptionsBuilder } from '../record/index.js'
 import { HttpMockProviderFactory } from '../mock/providers/HttpMockProvider.js'
@@ -59,6 +60,7 @@ export class HttpConfigurationBuilder {
   private _cookieSecrets: Array<string> = []
   private _cookieOptions?: CookieParseOptions
   private _middlewares: Array<MiddlewareRoute> = []
+  private _requestBodyParsers: Array<RequestBodyParser> = []
   private _plugins: Array<Plugin<unknown>> = []
   private _props: Map<string, unknown> = new Map<string, unknown>()
   private _argv?: Argv
@@ -203,6 +205,11 @@ export class HttpConfigurationBuilder {
 
   watch(value: boolean = true): this {
     this._watch = value
+    return this
+  }
+
+  requestBodyParser(...parsers: Array<RequestBodyParser>): this {
+    this._requestBodyParsers.push(...parsers)
     return this
   }
 
@@ -368,6 +375,7 @@ export class HttpConfigurationBuilder {
       mockFilesEnabled: this._loadMockFiles,
       recordEnabled: this._recordEnabled,
       recordOptions: this._recordOptions,
+      requestBodyParsers: this._requestBodyParsers,
       mockProviderFactories: this._mockProviderFactories as unknown as Array<
         MockProviderFactory<HttpMock, unknown>
       >,
