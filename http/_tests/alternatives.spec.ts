@@ -2,6 +2,7 @@ import Supertest from 'supertest'
 import { equalTo, isUUID } from '@mockdog/matchers'
 import { Matcher } from '@mockdog/matchers'
 import { modeIsAtLeast } from '@mockdog/core'
+import { HeaderList } from '../headers.js'
 import { mockHttp } from '../index.js'
 import { opts } from '../index.js'
 import { ok } from '../index.js'
@@ -56,12 +57,12 @@ describe('Builder Alternatives', function () {
             Promise.resolve(
               new SrvResponse(
                 200,
-                {
+                new HeaderList({
                   'content-type': MediaTypes.APPLICATION_JSON,
                   'x-id': req.id,
                   'x-verbose': String(modeIsAtLeast(ctx.config, 'verbose')),
                   'x-method': req.method,
-                },
+                }),
                 req.body,
               ),
             ),

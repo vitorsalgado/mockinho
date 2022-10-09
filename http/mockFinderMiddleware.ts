@@ -4,7 +4,7 @@ import { Response } from 'express'
 import { findMockForRequest } from '@mockdog/core'
 import { FindMockResult } from '@mockdog/core'
 import { modeIsAtLeast } from '@mockdog/core'
-import { BodyType, MediaTypes, H as H } from './http.js'
+import { MediaTypes, H as H } from './http.js'
 import { HttpContext } from './HttpContext.js'
 import { SrvRequest } from './request.js'
 import { SrvResponse, HttpMock } from './mock/index.js'
@@ -34,35 +34,23 @@ export function mockFinderMiddleware(context: HttpContext) {
         return
       }
 
-      let body: BodyType
-
-      if (response.body instanceof Readable) {
-        const data: Array<string | unknown> = []
-        let acc = 0
-
-        for await (const chunk of response.body) {
-          data.push(chunk)
-          acc += chunk.length
-        }
-
-        if (response.body.readableEnded) {
-          if (data.every(d => typeof d === 'string')) {
-            body = Buffer.from(data.join('')).toString('utf-8')
-          } else {
-            body = Buffer.concat(data as unknown as Uint8Array[], acc)
-          }
-        }
-      } else {
-        body = response.body
-      }
-
       const replier = () => {
-        response.cookiesToClear.forEach(cookie => res.clearCookie(cookie.key, cookie.options))
-        response.cookies.forEach(cookie =>
-          res.cookie(cookie.key, cookie.value, cookie.options ?? {}),
-        )
+        for (const cookie of response.cookiesToClear) {
+          res.clearCookie(cookie.key, cookie.options)
+        }
 
-        res.set(response.headers).status(response.status).send(body)
+        for (const cookie of response.cookies) {
+          res.cookie(cookie.key, cookie.value, cookie.options ?? {})
+        }
+
+        res.set(response.headers.toObject()).status(response.status)
+
+        if (response.body instanceof Readable) {
+          response.body.on('end', () => res.end())
+          response.body.pipe(res)
+        } else {
+          res.send(response.body)
+        }
       }
 
       for (const { onMockServed } of result.results()) {

@@ -2,6 +2,7 @@
 
 import { Readable } from 'stream'
 import { nowInMs } from '@mockdog/x'
+import { HeaderList } from '../../headers.js'
 import { SrvResponse } from '../../mock/index.js'
 import { onRequestMatched } from '../builtin/onRequestMatched.js'
 
@@ -19,7 +20,7 @@ describe('onRequestMatched', function () {
       method: 'PATCH',
       responseDefinition: new SrvResponse(
         200,
-        { 'content-type': 'application/json' },
+        new HeaderList({ 'content-type': 'application/json' }),
         { test: true },
         [],
         [],
@@ -44,7 +45,7 @@ describe('onRequestMatched', function () {
       method: 'POST',
       responseDefinition: new SrvResponse(
         200,
-        { 'content-type': 'application/json' },
+        new HeaderList({ 'content-type': 'application/json' }),
         undefined,
         [],
         [],
@@ -69,7 +70,7 @@ describe('onRequestMatched', function () {
       method: 'DELETE',
       responseDefinition: new SrvResponse(
         200,
-        { 'content-type': 'application/json' },
+        new HeaderList({ 'content-type': 'application/json' }),
         Buffer.from('nice txt'),
         [],
         [],
@@ -100,7 +101,7 @@ describe('onRequestMatched', function () {
       method: 'GET',
       responseDefinition: new SrvResponse(
         200,
-        { 'content-type': 'application/json' },
+        new HeaderList({ 'content-type': 'application/json' }),
         Readable.from(txt(), { objectMode: false }),
         [],
         [],
