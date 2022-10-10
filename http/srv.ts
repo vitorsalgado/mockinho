@@ -10,7 +10,7 @@ import { HttpConfiguration, Middleware, MiddlewareRoute } from './config/index.j
 import { bodyParser } from './mid/body_parser.js'
 import { configureProxy } from './proxy.js'
 import { decorateRequest } from './decorateRequest.js'
-import { ErrorCodes } from './ErrorCodes.js'
+import { ErrorCodes } from './_internal/errors.js'
 import { logIncomingRequestMiddleware } from './hooks/logIncomingRequestMiddleware.js'
 import { logReqAndResMiddleware } from './hooks/logReqAndResMiddleware.js'
 import { HttpContext } from './HttpContext.js'

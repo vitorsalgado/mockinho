@@ -60,6 +60,8 @@ export class SequenceReply implements Reply {
       )
     }
 
+    this._hits++
+
     return reply.build(req, res, ctx)
   }
 }

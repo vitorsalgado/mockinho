@@ -76,11 +76,26 @@ export default {
           ],
         },
 
-        responseType: { type: 'string' },
+        sequence: {
+          type: 'object',
+          properties: {
+            restartAfterEnded: { type: 'boolean' },
+            afterEnded: { type: 'object', $ref: '#/definitions/response' },
+            responses: { type: 'array', items: { $ref: '#/definitions/response' } },
+          },
+          required: ['responses'],
+        },
 
-        returnErrorOnNoResponse: { type: 'boolean' },
+        random: {
+          type: 'object',
+          properties: {
+            responses: { type: 'array', items: { $ref: '#/definitions/response' } },
+          },
+          required: ['responses'],
+        },
       },
-      required: ['request', 'response'],
+
+      required: ['request'],
       additionalProperties: true,
     },
 
@@ -105,7 +120,7 @@ export default {
           },
         },
         helpers: { type: 'string' },
-        latency: { type: 'number' },
+        delay: { type: 'number' },
       },
       required: ['status'],
     },

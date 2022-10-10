@@ -1,28 +1,5 @@
 import { Methods } from '../../../http.js'
 
-interface Lax {
-  [key: string]: unknown
-}
-
-export interface MockFileResponse extends Lax {
-  status: number
-  headers?: Record<string, string>
-  headerTemplates?: Record<string, string>
-  proxyHeaders?: Record<string, string>
-  proxyFrom?: string
-  body?: unknown
-  bodyFile?: string
-  bodyTemplate?: string
-
-  // FIXME: use field above. file://
-  bodyTemplateFile?: string
-  modelFile?: string
-  helpers?: string
-
-  // FIXME: delay
-  latency?: number
-}
-
 export interface MockFile extends Lax {
   id?: string
   priority?: number
@@ -52,11 +29,38 @@ export interface MockFile extends Lax {
     helpers?: string
   } & Lax
 
-  response: MockFileResponse | Array<MockFileResponse>
+  response?: MockFileResponse
 
-  // FIXME: remove this. create a model for each reply type
-  responseType?: string
+  sequence?: {
+    responses: Array<MockFileResponse>
+    restartAfterEnded?: boolean
+    afterEnded?: MockFileResponse
+  }
 
-  // FIXME: unused
-  returnErrorOnNoResponse?: boolean
+  random?: {
+    responses: Array<MockFileResponse>
+  }
+}
+
+export interface Lax {
+  [key: string]: unknown
+}
+
+export interface MockFileResponse extends Lax {
+  status: number
+  headers?: Record<string, string>
+  headerTemplates?: Record<string, string>
+  proxyHeaders?: Record<string, string>
+  proxyFrom?: string
+  body?: unknown
+  bodyFile?: string
+  bodyTemplate?: string
+
+  // FIXME: use field above. file://
+  bodyTemplateFile?: string
+  modelFile?: string
+  helpers?: string
+
+  // FIXME: delay
+  delay?: number
 }

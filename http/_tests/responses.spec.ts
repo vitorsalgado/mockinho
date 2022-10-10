@@ -47,7 +47,7 @@ describe('Responses', function () {
 
       await Supertest($.listener())
         .get('/test')
-        .expect(SC.InternalServerError)
+        .expect(SC.TeaPot)
         .expect(res => res.header['content-type'].includes('text/plain'))
     })
 
@@ -71,15 +71,6 @@ describe('Responses', function () {
     it('should set sequential multiple responses based on file configuration', async function () {
       await Supertest($.listener()).get('/test/sequential').expect(SC.OK)
       await Supertest($.listener()).get('/test/sequential').expect(SC.BadRequest)
-    })
-
-    describe('when .returnErrorOnNoResponse() is false', function () {
-      it('should return the first route on collection', async function () {
-        await Supertest($.listener()).get('/test/sequential/error-no-response').expect(SC.OK)
-
-        await Supertest($.listener()).get('/test/sequential/error-no-response').expect(SC.OK)
-        await Supertest($.listener()).get('/test/sequential/error-no-response').expect(SC.OK)
-      })
     })
   })
 })

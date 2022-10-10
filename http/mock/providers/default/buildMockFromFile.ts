@@ -1,42 +1,47 @@
+import Fs from 'fs'
 import Path from 'path'
-import * as Fs from 'fs'
-import { isPresent } from '@mockdog/matchers'
-import { regex } from '@mockdog/matchers'
-import { equalTo } from '@mockdog/matchers'
-import { item } from '@mockdog/matchers'
-import { contains } from '@mockdog/matchers'
-import { anyOf } from '@mockdog/matchers'
-import { field } from '@mockdog/matchers'
-import { isUUID } from '@mockdog/matchers'
-import { allOf } from '@mockdog/matchers'
-import { not } from '@mockdog/matchers'
-import { toUpperCase } from '@mockdog/matchers'
-import { toLowerCase } from '@mockdog/matchers'
-import { endsWith } from '@mockdog/matchers'
-import { repeatTimes } from '@mockdog/matchers'
-import { hasLength } from '@mockdog/matchers'
-import { startsWith } from '@mockdog/matchers'
-import { trim } from '@mockdog/matchers'
-import { everyItem } from '@mockdog/matchers'
-import { empty } from '@mockdog/matchers'
-import { LoadMockError } from '@mockdog/core'
-import { Helper } from '@mockdog/core'
-import { importModule } from '@mockdog/x'
-import { Matcher } from '@mockdog/matchers'
-import { notBlank, notNull } from '@mockdog/x'
+import { isPromise } from 'util/types'
+import { Helper, LoadMockError } from '@mockdog/core'
+import {
+  allOf,
+  anyOf,
+  contains,
+  empty,
+  endsWith,
+  equalTo,
+  everyItem,
+  field,
+  hasLength,
+  isPresent,
+  isUUID,
+  item,
+  Matcher,
+  not,
+  regex,
+  repeatTimes,
+  startsWith,
+  toLowerCase,
+  toUpperCase,
+  trim,
+} from '@mockdog/matchers'
+import { importModule, notBlank, notNull } from '@mockdog/x'
+import { err } from '../../../_internal/errors.js'
 import { HttpConfiguration } from '../../../config/index.js'
 import { urlPath, urlPathMatching } from '../../../matchers/index.js'
+import { response } from '../../entry/index.js'
 import { forwardedFrom } from '../../forward.js'
-import { HttpMockBuilder, Reply, response, StandardReply } from '../../index.js'
+import { HttpMockBuilder } from '../../HttpMockBuilder.js'
+import { random } from '../../rand.js'
+import { Reply } from '../../reply.js'
 import { sequence } from '../../seq.js'
-import { MockFile } from './MockFile.js'
-import { MockFileResponse } from './MockFile.js'
-import { getSingleMatcherFromObjectKeys } from './util/getSingleMatcherFromObjectKeys.js'
-import { findRequiredParameter } from './util/findRequiredParameter.js'
-import { findRequiredMatcherEntry } from './util/findRequiredMatcherEntry.js'
-import { findOptionalParameter } from './util/findOptionalParameter.js'
+import { StandardReply } from '../../StandardReply.js'
 import { FieldParser } from './FieldParser.js'
+import { MockFile, MockFileResponse } from './MockFile.js'
 import { extractPath } from './util/extractPath.js'
+import { findOptionalParameter } from './util/findOptionalParameter.js'
+import { findRequiredMatcherEntry } from './util/findRequiredMatcherEntry.js'
+import { findRequiredParameter } from './util/findRequiredParameter.js'
+import { getSingleMatcherFromObjectKeys } from './util/getSingleMatcherFromObjectKeys.js'
 
 const ABSOLUTE_URL_REGEX = /^[a-zA-Z][a-zA-Z\d+\-.]*?:/
 
@@ -77,7 +82,7 @@ export async function buildMockFromFile(
   if (mock.request.querystring) {
     for (const [key, value] of Object.entries(mock.request.querystring)) {
       if (typeof value !== 'object') {
-        builder.query(key, equalTo(value) as any)
+        builder.query(key, equalTo(value))
       } else {
         const matcherKey = getSingleMatcherFromObjectKeys(filename, Object.keys(value))
         builder.query(
@@ -165,29 +170,42 @@ export async function buildMockFromFile(
     builder.scenario(mock.scenario.name, mock.scenario.requiredState, mock.scenario.newState)
   }
 
-  // FIXME: multiple responses by file
-  if (Array.isArray(mock.response)) {
-    const multiple = sequence() //type(mock.responseType ?? 'sequential')
+  if (mock.response) {
+    builder.reply(await buildResponse(mock.response, filename))
+  } else if (mock.sequence) {
+    const seq = sequence()
 
-    if (
-      mock.returnErrorOnNoResponse !== null &&
-      typeof mock.returnErrorOnNoResponse !== 'undefined'
-    ) {
-      //multiple.errorOnNotFound(mock.returnErrorOnNoResponse)
+    if (mock.sequence.restartAfterEnded === true) {
+      seq.restartAfterEnded()
     }
 
-    for (const response of mock.response) {
-      multiple.add(await buildResponse(response, filename))
+    if (mock.sequence.afterEnded) {
+      seq.replyAfterEnded(await buildResponse(mock.sequence.afterEnded, filename))
     }
 
-    builder.reply(multiple)
+    for (const res of mock.sequence.responses) {
+      seq.add(await buildResponse(res, filename))
+    }
+
+    builder.reply(seq)
+  } else if (mock.random) {
+    const rand = random()
+
+    for (const res of mock.random.responses) {
+      rand.add(await buildResponse(res, filename))
+    }
+
+    builder.reply(rand)
   } else {
-    const reply = await buildResponse(mock.response, filename)
-    builder.reply(reply)
+    throw err.ErrNoResponseDefined()
   }
 
-  for (const additionalBuilder of configuration.mockFieldParsers) {
-    additionalBuilder.parse(configuration, filename, mock, builder)
+  for await (const additionalBuilder of configuration.mockFieldParsers) {
+    const p = additionalBuilder.parse(configuration, filename, mock, builder)
+
+    if (isPromise(p)) {
+      await p
+    }
   }
 
   return builder
@@ -205,16 +223,12 @@ async function buildResponse(mock: MockFileResponse, filename: string): Promise<
       res.proxyHeaders(mock.proxyHeaders)
     }
 
-    if (mock.latency) {
-      //res.latency(mock.latency)
-    }
-
     res.target(mock.proxyFrom)
   } else {
     res = response().status(mock.status ?? 200)
 
     if (mock.headers) res.headers(mock.headers)
-    if (mock.latency) res.latency(mock.latency)
+    if (mock.delay) res.delay(mock.delay)
 
     if (mock.bodyFile) {
       if (Path.isAbsolute(mock.bodyFile)) {
@@ -228,6 +242,10 @@ async function buildResponse(mock: MockFileResponse, filename: string): Promise<
       res.bodyTemplatePath(mock.bodyTemplateFile)
     } else if (mock.body) {
       res.body(mock.body)
+    }
+
+    if (mock.delay) {
+      res.delay(mock.delay)
     }
   }
 

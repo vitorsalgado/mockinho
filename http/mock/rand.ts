@@ -5,6 +5,8 @@ import { SrvRequest } from '../request.js'
 import { Reply, ReplyCtx, ReplyFn, SrvResponse, wrapReply } from './reply.js'
 import { StandardReply } from './StandardReply.js'
 
+export const random = () => new RandomReply()
+
 export class RandomReply implements Reply {
   private readonly _replies: Array<Reply> = []
 

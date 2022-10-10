@@ -1,6 +1,6 @@
 {
   "verbose": false,
-  "ignore": ["*.spec.ts", "/__fixtures__/", "/__tests__"],
+  "ignore": ["*.spec.ts", "/__fixtures__/", "/__tests__", "/_tests"],
   "ext": "js,ts,json,env,yaml,yml",
   "exec": "ts-node --emit --compiler-options='{\"allowJs\": false }' --project http/tsconfig.json http/src/cli/index.ts"
 }

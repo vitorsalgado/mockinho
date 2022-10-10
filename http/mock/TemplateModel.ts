@@ -14,6 +14,5 @@ export interface TemplateModel {
     start: number
     [key: string]: unknown
   }
-  readonly env: Record<string, string | undefined>
   readonly model?: JsonType
 }

@@ -50,6 +50,7 @@
     "object-hash": "^3.0.0",
     "pino": "^8.6.0",
     "pino-pretty": "^9.1.0",
+    "thread-stream": "^2.2.0",
     "uuid": "^9.0.0",
     "yargs": "^17.5.1"
   },

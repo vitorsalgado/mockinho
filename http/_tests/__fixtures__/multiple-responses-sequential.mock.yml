@@ -4,18 +4,17 @@ request:
   method: GET
   urlPath: /test/sequential
 
-responseType: sequential
-
-response:
-  - status: 200
-    body:
-      message: response one
-    headers:
-      Content-Type: application/json
-      X-Res: 1
-  - status: 400
-    body:
-      error: failed
-    headers:
-      Content-Type: application/json
-      X-Res: 2
+sequence:
+  responses:
+    - status: 200
+      body:
+        message: response one
+      headers:
+        Content-Type: application/json
+        X-Res: 1
+    - status: 400
+      body:
+        error: failed
+      headers:
+        Content-Type: application/json
+        X-Res: 2

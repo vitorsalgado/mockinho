@@ -178,7 +178,7 @@ export class StandardReply implements Reply {
     return this
   }
 
-  latency(ms: number): this {
+  delay(ms: number): this {
     notNull(ms)
 
     this._delay = ms
@@ -209,7 +209,7 @@ export class StandardReply implements Reply {
       }
     } else if (this._bodyTemplate) {
       this._body = await this._bodyTemplate(
-        { request, model: this._model, env: process.env },
+        { request, model: this._model },
         { ...this._templateHelpers },
       )
     } else if (this._bodyTemplatePath) {
@@ -221,7 +221,7 @@ export class StandardReply implements Reply {
       const content = buf.toString()
 
       this._body = await this._templating.compile(content)(
-        { request, model: this._model, env: process.env },
+        { request, model: this._model },
         { ...this._templateHelpers },
       )
     }
@@ -233,7 +233,6 @@ export class StandardReply implements Reply {
           {
             request,
             model: this._model,
-            env: process.env,
           },
           { ...this._templateHelpers },
         ),

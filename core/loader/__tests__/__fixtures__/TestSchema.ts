@@ -77,8 +77,6 @@ export default {
         },
 
         responseType: { type: 'string' },
-
-        returnErrorOnNoResponse: { type: 'boolean' },
       },
       required: ['request', 'response'],
       additionalProperties: true,

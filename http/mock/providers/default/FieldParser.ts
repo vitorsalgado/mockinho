@@ -19,5 +19,5 @@ export interface FieldParser {
     filename: string,
     mock: MockFile,
     mockBuilder: HttpMockBuilder,
-  ): void
+  ): Promise<void> | void
 }

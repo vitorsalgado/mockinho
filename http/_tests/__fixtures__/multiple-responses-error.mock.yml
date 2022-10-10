@@ -4,13 +4,11 @@ request:
   method: GET
   urlPath: /test/sequential/error-no-response
 
-responseType: sequential
-returnErrorOnNoResponse: false
-
-response:
-  - status: 200
-    body:
-      message: response one
-    headers:
-      Content-Type: application/json
-      X-Res: 1
+sequence:
+  responses:
+    - status: 200
+      body:
+        message: response one
+      headers:
+        Content-Type: application/json
+        X-Res: 1
