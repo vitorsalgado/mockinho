@@ -1,4 +1,5 @@
-export * from '@mockdog/matchers'
+import { HttpConfiguration, HttpConfigurationBuilder } from './config/index.js'
+import { MockDogHttp } from './MockDogHttp.js'
 
 export * from './config/index.js'
 export * from './hooks/index.js'
@@ -8,7 +9,12 @@ export * from './HttpContext.js'
 export * from './request.js'
 export * from './MockDogHttp.js'
 export * from './matchers/index.js'
-export * from './mockHttp.js'
 export * from './_internal/errors.js'
 export * from './srv.js'
 export * from './http.js'
+
+export const httpMock = (
+  configurations: HttpConfigurationBuilder | HttpConfiguration,
+): MockDogHttp => new MockDogHttp(configurations)
+
+export default httpMock

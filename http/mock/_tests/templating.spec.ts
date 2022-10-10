@@ -1,13 +1,13 @@
 import Path from 'path'
 import Supertest from 'supertest'
 import { H, MediaTypes } from '../../http.js'
-import { mockHttp } from '../../mockHttp'
+import httpMock from '../../index.js'
 import { opts } from '../../config'
 import { get } from '../entry'
 import { ok } from '../entry'
 
 describe('Templating', function () {
-  const $ = mockHttp(opts().dynamicHttpPort().enableFileMocks(false))
+  const $ = httpMock(opts().dynamicHttpPort().enableFileMocks(false))
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
@@ -132,7 +132,7 @@ describe('Templating', function () {
           .header(H.ContentType, MediaTypes.APPLICATION_JSON)
           .headerTemplate('x-id', '{{request.id}}')
           .bodyWith(request => ({
-            id: request.id,
+            id: request.$internals.id,
           })),
       ),
     )

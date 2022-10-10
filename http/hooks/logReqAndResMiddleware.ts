@@ -11,17 +11,17 @@ export function logReqAndResMiddleware(context: HttpContext) {
 
     response.on('close', () =>
       context.emit('onRequestEnd', {
-        id: req.id,
-        elapsed: nowInMs() - req.start,
-        proxied: req.proxied,
+        id: req.$internals.id,
+        elapsed: nowInMs() - req.$internals.start,
+        proxied: req.$internals.proxy,
         request: {
           method: req.method,
-          href: req.href,
+          href: req.$internals.href,
           path: req.path,
           query: req.query,
           params: req.params,
           headers: req.headers,
-          isMultipart: req.isMultipart,
+          isMultipart: req.$internals.isMultipart,
           files: req.files,
         },
         response: { status: response.statusCode, headers: response.getHeaders() },

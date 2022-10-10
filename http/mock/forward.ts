@@ -151,7 +151,7 @@ export class ForwardReply implements Reply {
       })
 
       proxy.on('error', err => reject(err))
-      proxy.write(req.rawBody)
+      proxy.write(req.$internals.rawBody)
       proxy.end(() => resolve(null))
     })
   }

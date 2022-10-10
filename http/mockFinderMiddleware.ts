@@ -122,7 +122,7 @@ function onRequestMatched(
 ) {
   context.emit('onRequestMatched', {
     verbose,
-    start: req.start,
+    start: req.$internals.start,
     url: req.url,
     path: req.path,
     method: req.method,

@@ -1,4 +1,4 @@
-import { RecordOptionsBuilder } from './RecordOptionsBuilder.js'
+import { RecordOptionsBuilder } from './options_builder.js'
 
 export function rec(): RecordOptionsBuilder {
   return new RecordOptionsBuilder()

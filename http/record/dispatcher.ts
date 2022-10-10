@@ -1,13 +1,34 @@
-import './recordWorker.js'
+import { execSync } from 'child_process'
 
 import Path from 'path'
 import { Worker } from 'worker_threads'
-import { execSync } from 'child_process'
 import { HttpConfiguration } from '../config/index.js'
+import { BodyType, Methods } from '../http.js'
 import { HttpContext } from '../HttpContext.js'
-import { RecordArgs } from './RecordArgs.js'
-import { RecordOptions } from './RecordOptions.js'
-import { Result } from './Result.js'
+import { RecordOptions } from './options.js'
+import './worker.js'
+
+export interface RecordArgs {
+  request: {
+    id: string
+    url: string
+    path: string
+    method: Methods
+    headers: Record<string, string>
+    query: URLSearchParams
+    body: BodyType
+  }
+  response: {
+    status: number
+    headers: Record<string, string>
+    body: Buffer
+  }
+}
+
+export interface Result {
+  mock: string
+  mockBody?: string
+}
 
 export class RecordDispatcher {
   private readonly worker: Worker
@@ -20,7 +41,7 @@ export class RecordDispatcher {
       throw new Error('You must provide at least the record destination.')
     }
 
-    this.worker = new Worker(Path.join(__dirname, 'recordWorker.js'), {
+    this.worker = new Worker(Path.join(__dirname, 'worker.js'), {
       workerData: {
         ...this.configuration.recordOptions,
         extension: this.configuration.mockFilesExtension,

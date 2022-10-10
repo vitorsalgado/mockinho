@@ -1,13 +1,13 @@
 import Supertest from 'supertest'
 import { opts } from '../../config/index.js'
-import { mockHttp } from '../../mockHttp.js'
+import httpMock from '../../index.js'
 import { urlPath } from '../../matchers'
 import { get } from '../index'
 import { okJSON } from '../entry'
 import { post } from '../entry/post.js'
 
 describe('HTTP Scope', function () {
-  const $ = mockHttp(opts().dynamicHttpPort().enableFileMocks(false))
+  const $ = httpMock(opts().dynamicHttpPort().enableFileMocks(false))
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())

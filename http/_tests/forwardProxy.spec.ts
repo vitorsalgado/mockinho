@@ -3,13 +3,13 @@ import { equalTo } from '@mockdog/matchers'
 import { field } from '@mockdog/matchers'
 import { opts, get, urlPath, H, MediaTypes } from '../index.js'
 import { okJSON } from '../index.js'
-import { mockHttp } from '../index.js'
+import { httpMock } from '../index.js'
 import { badRequestJSON } from '../index.js'
 import { SC } from '../index.js'
 import { post } from '../index.js'
 
 describe('Forward Proxy', function () {
-  const target = mockHttp(opts().dynamicHttpPort().trace())
+  const target = httpMock(opts().dynamicHttpPort().trace())
 
   beforeAll(() => target.start())
   afterAll(() => target.finalize())
@@ -17,7 +17,7 @@ describe('Forward Proxy', function () {
 
   describe('when forward proxying requests', function () {
     it('should return success response from target', async function () {
-      const $ = mockHttp(
+      const $ = httpMock(
         opts()
           .dynamicHttpPort()
           .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`),
@@ -51,7 +51,7 @@ describe('Forward Proxy', function () {
     })
 
     it('should return error response from target', async function () {
-      const $ = mockHttp(
+      const $ = httpMock(
         opts()
           .dynamicHttpPort()
           .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`),
@@ -80,7 +80,7 @@ describe('Forward Proxy', function () {
     })
 
     it('should send the body', async function () {
-      const $ = mockHttp(
+      const $ = httpMock(
         opts()
           .dynamicHttpPort()
           .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`),
@@ -116,7 +116,7 @@ describe('Forward Proxy', function () {
     })
 
     it('should capture proxy exceptions and return a 500 and plain text', async function () {
-      const $ = mockHttp(
+      const $ = httpMock(
         opts()
           .dynamicHttpPort()
           .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`, {

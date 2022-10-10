@@ -1,4 +1,4 @@
 export * from './rec.js'
-export * from './RecordDispatcher.js'
-export * from './RecordOptions.js'
-export * from './RecordOptionsBuilder.js'
+export * from './dispatcher.js'
+export * from './options.js'
+export * from './options_builder.js'

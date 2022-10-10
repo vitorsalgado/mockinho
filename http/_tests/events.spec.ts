@@ -1,16 +1,15 @@
 import Supertest from 'supertest'
-import { equalTo } from '@mockdog/matchers'
+import { equalTo, field } from '@mockdog/matchers'
 import { opts } from '../index.js'
 import { post } from '../index.js'
 import { urlPath } from '../index.js'
 import { MediaTypes } from '../index.js'
-import { field } from '../index.js'
 import { ok } from '../index.js'
 import { H } from '../index.js'
-import { mockHttp } from '../index.js'
+import { httpMock } from '../index.js'
 
 describe('Events', function () {
-  const $ = mockHttp(opts().dynamicHttpPort().formUrlEncodedOptions({ limit: 80 }))
+  const $ = httpMock(opts().dynamicHttpPort().formUrlEncodedOptions({ limit: 80 }))
 
   it('should trigger attach event listener', async function () {
     const start = jest.fn()

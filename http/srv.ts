@@ -9,14 +9,13 @@ import { log, MockServer } from '@mockdog/core'
 import { HttpConfiguration, Middleware, MiddlewareRoute } from './config/index.js'
 import { bodyParser } from './mid/body_parser.js'
 import { configureProxy } from './proxy.js'
-import { decorateRequest } from './decorateRequest.js'
+import { decorateRequest } from './mid/decorate_request.js'
 import { ErrorCodes } from './_internal/errors.js'
 import { logIncomingRequestMiddleware } from './hooks/logIncomingRequestMiddleware.js'
 import { logReqAndResMiddleware } from './hooks/logReqAndResMiddleware.js'
 import { HttpContext } from './HttpContext.js'
 import { SrvRequest } from './request.js'
 import { mockFinderMiddleware } from './mockFinderMiddleware.js'
-import { rawBodyMiddleware } from './rawBodyMiddleware.js'
 
 export interface ConnectionInfo {
   enabled: boolean
@@ -90,7 +89,7 @@ export class HttpServer implements MockServer<HttpServerInfo> {
       return new URLSearchParams(query)
     })
 
-    this.expressApp.use(rawBodyMiddleware as unknown as Router)
+    this.expressApp.use(decorateRequest as unknown as Router)
     this.expressApp.use(bodyParser(this.configuration.requestBodyParsers) as unknown as Router) // should come before regular body parsers
     this.expressApp.use(express.json())
     this.expressApp.use(express.urlencoded(this.configuration.formUrlEncodedOptions))
@@ -101,7 +100,6 @@ export class HttpServer implements MockServer<HttpServerInfo> {
       CookieParse(this.configuration.cookieSecrets, this.configuration.cookieOptions) as Router,
     )
     this.expressApp.use(Multer(this.configuration.multiPartOptions).any() as Router)
-    this.expressApp.use(decorateRequest as unknown as Router)
     this.expressApp.use(logReqAndResMiddleware(this.context))
   }
 

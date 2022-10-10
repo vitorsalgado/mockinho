@@ -1,11 +1,11 @@
 import Supertest from 'supertest'
 import { equalTo } from '@mockdog/matchers'
 import { opts } from '../config/index.js'
-import { get, mockHttp, ok } from '../index.js'
+import { get, httpMock, ok } from '../index.js'
 import { urlPath } from '../matchers/index.js'
 
 describe('querystring', function () {
-  const $ = mockHttp(opts().dynamicHttpPort())
+  const $ = httpMock(opts().dynamicHttpPort())
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())

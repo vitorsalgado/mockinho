@@ -4,7 +4,7 @@ import { contains, equalTo, field } from '@mockdog/matchers'
 import { fromFile } from '@mockdog/x'
 import { H, MediaTypes } from '../http.js'
 import { get } from '../mock/index.js'
-import { mockHttp } from '../index.js'
+import { httpMock } from '../index.js'
 import { urlPath } from '../matchers/index.js'
 import { ok, okJSON, post } from '../mock/index.js'
 import { opts } from '../config/index.js'
@@ -12,7 +12,7 @@ import { opts } from '../config/index.js'
 const fixture = (name: string) => Path.join(__dirname, `_fixtures/__content__${name}`)
 
 describe('MockDog HTTP', function () {
-  const $ = mockHttp(opts().dynamicHttpPort().trace())
+  const $ = httpMock(opts().dynamicHttpPort().trace())
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())

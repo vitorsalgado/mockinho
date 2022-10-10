@@ -1,12 +1,12 @@
 import Supertest from 'supertest'
-import { hasLength } from '@mockdog/matchers'
+import { allOf, contains, equalTo, field, hasLength, item } from '@mockdog/matchers'
 import { H, MediaTypes } from '../http.js'
-import { allOf, contains, equalTo, item, field, opts, post, urlPath } from '../index.js'
-import { mockHttp } from '../index.js'
+import { opts, post, urlPath } from '../index.js'
+import { httpMock } from '../index.js'
 import { ok } from '../mock'
 
 describe('HTTP - Form Url Encoded', function () {
-  const $ = mockHttp(opts().dynamicHttpPort().formUrlEncodedOptions({ limit: 80 }))
+  const $ = httpMock(opts().dynamicHttpPort().formUrlEncodedOptions({ limit: 80 }))
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())

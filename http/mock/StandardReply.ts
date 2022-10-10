@@ -8,7 +8,7 @@ import { HeaderList } from '../headers.js'
 import { BodyType, H, MediaTypes, SC } from '../http.js'
 import { SrvRequest } from '../request.js'
 import { Cookie, CookieToClear, Reply, ReplyCtx, SrvResponse } from './reply.js'
-import { TemplateModel } from './TemplateModel.js'
+import { TemplateModel, TmplRequest } from './TemplateModel.js'
 
 const access = Util.promisify(Fs.access)
 const readFile = Util.promisify(Fs.readFile)
@@ -209,7 +209,7 @@ export class StandardReply implements Reply {
       }
     } else if (this._bodyTemplate) {
       this._body = await this._bodyTemplate(
-        { request, model: this._model },
+        { request: StandardReply.toRequestTmpl(request), model: this._model },
         { ...this._templateHelpers },
       )
     } else if (this._bodyTemplatePath) {
@@ -221,7 +221,7 @@ export class StandardReply implements Reply {
       const content = buf.toString()
 
       this._body = await this._templating.compile(content)(
-        { request, model: this._model },
+        { request: StandardReply.toRequestTmpl(request), model: this._model },
         { ...this._templateHelpers },
       )
     }
@@ -231,7 +231,7 @@ export class StandardReply implements Reply {
         key,
         await template(
           {
-            request,
+            request: StandardReply.toRequestTmpl(request),
             model: this._model,
           },
           { ...this._templateHelpers },
@@ -259,6 +259,20 @@ export class StandardReply implements Reply {
       .catch(() => {
         throw new TypeError(`File ${file} not found!`)
       })
+  }
+
+  private static toRequestTmpl(r: SrvRequest): TmplRequest {
+    return {
+      id: r.$internals.id,
+      href: r.$internals.href,
+      url: r.url,
+      method: r.method,
+      headers: r.headers,
+      query: r.query,
+      body: r.body,
+      isMultipart: r.$internals.isMultipart,
+      start: r.$internals.start,
+    }
   }
 
   // endregion

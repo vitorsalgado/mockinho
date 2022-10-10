@@ -5,10 +5,10 @@ import { opts } from '../index.js'
 import { post } from '../index.js'
 import { urlPath } from '../index.js'
 import { ok } from '../index.js'
-import { mockHttp } from '../index.js'
+import { httpMock } from '../index.js'
 
 describe('Cookies', function () {
-  const $ = mockHttp(opts().dynamicHttpPort().cookieOptions('super-secret'))
+  const $ = httpMock(opts().dynamicHttpPort().cookieOptions('super-secret'))
   const cookieSignedName = 'cookie-test'
   const cookieSignedValue = 's%3Atest.d7jIkuqZkCaFT0czqQ8b6KyUv077GFUH1mxQR%2Fj7SyQ'
 

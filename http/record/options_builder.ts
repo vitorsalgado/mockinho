@@ -1,5 +1,5 @@
 import Path from 'path'
-import { RecordOptions } from './RecordOptions.js'
+import { RecordOptions } from './options.js'
 
 export class RecordOptionsBuilder {
   private _destination: string = ''

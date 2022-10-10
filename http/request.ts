@@ -1,18 +1,22 @@
 import { Request, Express } from 'express'
 import { BodyType, Methods } from './http.js'
 
-export interface SrvRequest
-  extends Request<{ [key: string]: string }, any, BodyType, URLSearchParams> {
+export interface SrvRequestInternals {
   id: string
   href: string
-  url: string
+  rawBody: Buffer | null
+  isMultipart: boolean
+  start: number
+  proxy: boolean
+  proxyTarget: string
+}
+
+export interface SrvRequest
+  extends Request<{ [key: string]: string }, any, BodyType, URLSearchParams> {
   method: Methods
   headers: Record<string, string>
-  rawBody: Buffer
-  isMultipart: boolean
   files: Array<Express.Multer.File>
-  start: number
-  proxied: boolean
+  locals: Record<string, any>
 
-  [key: string]: unknown
+  $internals: SrvRequestInternals
 }

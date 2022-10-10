@@ -9,12 +9,12 @@ const { isMainThread } = require('worker_threads')
 const Hash = require('object-hash')
 const Mime = require('mime-types')
 
-const writeFile = Util.promisify(Fs.writeFile)
-const access = Util.promisify(Fs.access)
-
 // Exit if not in the context of a Worker
 // File can be imported just to ensure it will be on TypeScript build output
 if (!parentPort || isMainThread) return
+
+const writeFile = Util.promisify(Fs.writeFile)
+const access = Util.promisify(Fs.access)
 
 parentPort.on('message', async data => {
   const { destination, extension, captureRequestHeaders, captureResponseHeaders } = workerData

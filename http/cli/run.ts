@@ -2,7 +2,7 @@
 
 import { red } from 'colorette'
 import { bold } from 'colorette'
-import { mockHttp } from '../mockHttp.js'
+import httpMock from '../index.js'
 import { MockDogHttp } from '../MockDogHttp.js'
 import { Argv } from '../config/index.js'
 import { opts } from '../config/index.js'
@@ -27,7 +27,7 @@ export async function run(options: Argv): Promise<MockDogHttp> {
   }
 
   const config = builder.build()
-  const mockhttp = mockHttp(config)
+  const mockhttp = httpMock(config)
 
   // Watch remains disabled when record is enabled
   // to avoid issues with newly created files from recorded responses

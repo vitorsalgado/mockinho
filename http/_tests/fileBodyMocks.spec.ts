@@ -1,13 +1,13 @@
 import Path from 'path'
 import Supertest from 'supertest'
+import { equalTo } from '@mockdog/matchers'
 import { H, MediaTypes } from '../http.js'
-import { equalTo, get, opts, post, urlPath } from '../index.js'
+import { get, httpMock, opts, post, urlPath } from '../index.js'
 import { ok } from '../mock/index.js'
-import mockHttp from '../mockHttp.js'
 
 describe('HTTP - Working With File Body Mocks', function () {
   describe('Default Path', function () {
-    const $ = mockHttp(
+    const $ = httpMock(
       opts().dynamicHttpPort().trace().rootDir(Path.join(__dirname, './_fixtures/file_mocks_test')),
     )
 
@@ -39,7 +39,7 @@ describe('HTTP - Working With File Body Mocks', function () {
   })
 
   describe('Local', function () {
-    const $ = mockHttp(opts().dynamicHttpPort().mockDirectory(Path.join(__dirname, '_fixtures')))
+    const $ = httpMock(opts().dynamicHttpPort().mockDirectory(Path.join(__dirname, '_fixtures')))
 
     beforeAll(() => $.start())
     afterAll(() => $.finalize())

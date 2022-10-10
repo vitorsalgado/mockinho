@@ -3,14 +3,14 @@ import { contains, field } from '@mockdog/matchers'
 import { equalTo } from '@mockdog/matchers'
 import { opts, urlPath, H, MediaTypes, post } from '../index.js'
 import { okJSON } from '../index.js'
-import { mockHttp } from '../index.js'
+import { httpMock } from '../index.js'
 import { forwardedFrom } from '../mock/forward.js'
 import { configureProxy } from '../proxy.js'
 import { HttpContext } from '../index.js'
 
 describe('Proxied Responses', function () {
-  const $ = mockHttp(opts().dynamicHttpPort().trace())
-  const P = mockHttp(opts().dynamicHttpPort().trace())
+  const $ = httpMock(opts().dynamicHttpPort().trace())
+  const P = httpMock(opts().dynamicHttpPort().trace())
 
   beforeAll(() => Promise.all([$.start(), P.start()]))
   afterAll(() => Promise.all([$.finalize(), P.finalize()]))

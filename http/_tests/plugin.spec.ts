@@ -1,6 +1,6 @@
 import Supertest from 'supertest'
 import { Plugin } from '@mockdog/core'
-import { mockHttp } from '../mockHttp'
+import httpMock from '../index.js'
 import { opts } from '../config'
 import { get } from '../mock'
 import { okJSON } from '../mock'
@@ -12,7 +12,7 @@ interface TestOptions {
 }
 
 describe('plugins', function () {
-  const $ = mockHttp(opts().dynamicHttpPort())
+  const $ = httpMock(opts().dynamicHttpPort())
 
   afterAll(() => $.finalize())
   afterEach(async () => {

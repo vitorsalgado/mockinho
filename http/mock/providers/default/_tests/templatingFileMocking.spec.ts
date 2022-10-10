@@ -1,10 +1,10 @@
 import Path from 'path'
 import Supertest from 'supertest'
 import { opts } from '../../../../config'
-import mockHttp from '../../../../mockHttp'
+import httpMock from '../../../../index.js'
 
 describe('Templating File Mock', function () {
-  const $ = mockHttp(
+  const $ = httpMock(
     opts()
       .dynamicHttpPort()
       .enableFileMocks()

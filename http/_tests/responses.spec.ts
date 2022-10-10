@@ -5,11 +5,11 @@ import { get, H, MediaTypes, ok, opts, urlPath } from '../index.js'
 import { created } from '../index.js'
 import { badRequest } from '../index.js'
 import { SC } from '../index.js'
-import { mockHttp } from '../index.js'
+import { httpMock } from '../index.js'
 import { sequence } from '../mock/seq.js'
 
 describe('Responses', function () {
-  const $ = mockHttp(
+  const $ = httpMock(
     opts()
       .dynamicHttpPort()
       .trace()

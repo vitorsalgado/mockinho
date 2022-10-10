@@ -2,11 +2,11 @@ import Path from 'path'
 import crypto from 'crypto'
 import Supertest from 'supertest'
 import { opts } from '../config'
-import { mockHttp } from '../mockHttp'
+import httpMock from '../index.js'
 
 describe('HTTP - File Mocking', function () {
   describe('Default Path', function () {
-    const $ = mockHttp(
+    const $ = httpMock(
       opts()
         .dynamicHttpPort()
         .enableFileMocks()

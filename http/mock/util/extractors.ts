@@ -8,7 +8,7 @@ export const extractScheme = (request: SrvRequest): Schemes => request.protocol 
 
 export const extractMethod = (request: SrvRequest): Methods => request.method
 
-export const extractUrl = (request: SrvRequest): string => request.href
+export const extractUrl = (request: SrvRequest): string => request.$internals.href
 
 export const extractBody = (request: SrvRequest): BodyType => request.body
 

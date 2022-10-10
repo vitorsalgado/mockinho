@@ -37,12 +37,12 @@ export function configureProxy(
 
       context.emit('onProxyRequest', { target })
 
-      request.proxied = true
-      request.target = target
+      request.$internals.proxy = true
+      request.$internals.proxyTarget = target
 
-      if (request.rawBody) {
-        proxyReq.setHeader(H.ContentLength, Buffer.byteLength(request.rawBody))
-        proxyReq.write(request.rawBody)
+      if (request.$internals.rawBody) {
+        proxyReq.setHeader(H.ContentLength, Buffer.byteLength(request.$internals.rawBody))
+        proxyReq.write(request.$internals.rawBody)
       }
     } as (proxyReq: ClientRequest, request: IncomingMessage) => void,
 
@@ -77,7 +77,7 @@ export function configureProxy(
 
       dispatcher.record({
         request: {
-          id: request.id,
+          id: request.$internals.id,
           url: request.url,
           path: request.path,
           method: request.method,
@@ -108,7 +108,7 @@ function onProxyResponse(
 ): void {
   context.emit('onProxyResponse', {
     verbose: modeIsAtLeast(context.configuration, 'verbose'),
-    start: request.start,
+    start: request.$internals.start,
     method: request.method,
     url: request.url,
     path: request.path,

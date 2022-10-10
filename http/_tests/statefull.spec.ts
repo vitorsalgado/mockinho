@@ -7,10 +7,10 @@ import { okJSON } from '../index.js'
 import { H } from '../index.js'
 import { MediaTypes } from '../index.js'
 import { ok } from '../index.js'
-import { mockHttp } from '../index.js'
+import { httpMock } from '../index.js'
 
 describe('Stateful Matchers', function () {
-  const $ = mockHttp(opts().dynamicHttpPort().trace())
+  const $ = httpMock(opts().dynamicHttpPort().trace())
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())

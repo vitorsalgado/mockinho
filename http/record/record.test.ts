@@ -4,15 +4,15 @@ import Os from 'os'
 import Supertest from 'supertest'
 import { listFilenames } from '@mockdog/x'
 import { sleep } from '@mockdog/x'
-import { opts } from '../../config/index.js'
-import { H, MediaTypes } from '../../http.js'
-import { okJSON } from '../../mock/index.js'
-import { get } from '../../mock/index.js'
-import mockHttp from '../../mockHttp.js'
-import { urlPath } from '../../matchers/index.js'
+import { opts } from '../config/index.js'
+import { H, MediaTypes } from '../http.js'
+import httpMock from '../index.js'
+import { okJSON } from '../mock/index.js'
+import { get } from '../mock/index.js'
+import { urlPath } from '../matchers/index.js'
 
 describe('Record', function () {
-  const target = mockHttp(opts().dynamicHttpPort().trace())
+  const target = httpMock(opts().dynamicHttpPort().trace())
 
   beforeAll(() => target.start())
   afterAll(() => target.finalize())
@@ -25,7 +25,7 @@ describe('Record', function () {
 
       Fs.mkdirSync(recordDir)
 
-      const $ = mockHttp(
+      const $ = httpMock(
         opts()
           .dynamicHttpPort()
           .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`)

@@ -3,7 +3,7 @@ import { equalTo, isUUID } from '@mockdog/matchers'
 import { Matcher } from '@mockdog/matchers'
 import { modeIsAtLeast } from '@mockdog/core'
 import { HeaderList } from '../headers.js'
-import { mockHttp } from '../index.js'
+import { httpMock } from '../index.js'
 import { opts } from '../index.js'
 import { ok } from '../index.js'
 import { HttpMock } from '../index.js'
@@ -15,7 +15,7 @@ import { H } from '../index.js'
 import { extractQuery } from '../mock/util/extractors'
 
 describe('Builder Alternatives', function () {
-  const $ = mockHttp(opts().dynamicHttpPort().trace())
+  const $ = httpMock(opts().dynamicHttpPort().trace())
 
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
@@ -59,7 +59,7 @@ describe('Builder Alternatives', function () {
                 200,
                 new HeaderList({
                   'content-type': MediaTypes.APPLICATION_JSON,
-                  'x-id': req.id,
+                  'x-id': req.$internals.id,
                   'x-verbose': String(modeIsAtLeast(ctx.config, 'verbose')),
                   'x-method': req.method,
                 }),
