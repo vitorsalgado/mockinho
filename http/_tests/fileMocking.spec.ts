@@ -7,7 +7,10 @@ import { mockHttp } from '../mockHttp'
 describe('HTTP - File Mocking', function () {
   describe('Default Path', function () {
     const $ = mockHttp(
-      opts().dynamicHttpPort().enableFileMocks().rootDir(Path.join(__dirname, '../')),
+      opts()
+        .dynamicHttpPort()
+        .enableFileMocks()
+        .rootDir(Path.join(__dirname, './_fixtures/file_mocks_test')),
     )
 
     beforeAll(() => $.start())

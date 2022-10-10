@@ -22,15 +22,15 @@ describe('Form MultiPart', function () {
           files => files.some(x => x.fieldname.includes('image')),
           files => files.length === 2,
         )
-        .requestFields(field('field-test-1', contains('test-value')))
-        .requestFields(field('field-test-2', equalTo('field-test-value-2')))
+        .fields(field('field-test-1', contains('test-value')))
+        .fields(field('field-test-2', equalTo('field-test-value-2')))
         .reply(ok()),
     )
 
     await Supertest($.listener())
       .post('/test')
-      .attach('text', Path.join(__dirname, '__fixtures__/mp-text.txt'))
-      .attach('image', Path.join(__dirname, '__fixtures__/mp-logo.png'))
+      .attach('text', Path.join(__dirname, '_fixtures/mp-text.txt'))
+      .attach('image', Path.join(__dirname, '_fixtures/mp-logo.png'))
       .field('field-test-1', 'field-test-value-1')
       .field('field-test-2', 'field-test-value-2')
       .field('field-test-3', ['val1', 'val2'])

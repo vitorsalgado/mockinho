@@ -1,6 +1,5 @@
 import Supertest from 'supertest'
 import { contains } from '@mockdog/matchers'
-import { StateRepository } from '@mockdog/core'
 import { H, MediaTypes } from '../http.js'
 import { HttpContext } from '../HttpContext'
 import { opts, post, HttpConfigurationBuilder, HttpServer } from '../index.js'

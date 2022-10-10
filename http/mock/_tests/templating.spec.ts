@@ -69,7 +69,12 @@ describe('Templating', function () {
       get('/test').reply(
         ok()
           .header(H.ContentType, MediaTypes.TEXT_PLAIN)
-          .bodyTemplate('NODE_ENV is: {{env.NODE_ENV}}'),
+          .bodyTemplate('NODE_ENV is: {{model.env.NODE_ENV}}')
+          .model({
+            env: {
+              NODE_ENV: 'test',
+            },
+          }),
       ),
     )
 
@@ -99,9 +104,14 @@ describe('Templating', function () {
       get('/test').reply(
         ok()
           .header(H.ContentType, MediaTypes.TEXT_PLAIN)
-          .model({ title: 'Test Template File' })
+          .model({
+            title: 'Test Template File',
+            env: {
+              NODE_ENV: 'test',
+            },
+          })
           .helpers({ toUpper: (value: string) => value.toUpperCase() })
-          .bodyTemplatePath(Path.join(__dirname, '__fixtures__', 'template.txt')),
+          .bodyTemplatePath(Path.join(__dirname, '_fixtures', 'template.txt')),
       ),
     )
 

@@ -30,7 +30,7 @@ describe.skip('watcher', function () {
 
     it('should include it on mock repository', async function () {
       const tmp = Fs.mkdtempSync(Path.join(Os.tmpdir(), 'mockdog-'))
-      const mocks = Path.join(tmp, '__fixtures__')
+      const mocks = Path.join(tmp, '_fixtures')
 
       Fs.mkdirSync(mocks)
 

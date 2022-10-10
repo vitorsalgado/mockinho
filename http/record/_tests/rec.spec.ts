@@ -21,7 +21,7 @@ describe('Record', function () {
   describe('when recording', function () {
     it('should return success response from target', async function () {
       const tmp = Fs.mkdtempSync(Path.join(Os.tmpdir(), 'mockdog-'))
-      const recordDir = Path.join(tmp, '__fixtures__')
+      const recordDir = Path.join(tmp, '_fixtures')
 
       Fs.mkdirSync(recordDir)
 

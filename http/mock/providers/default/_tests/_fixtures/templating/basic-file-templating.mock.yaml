@@ -11,5 +11,5 @@ response:
     Content-Type: application/json
   headerTemplates:
     method: '{{request.method}}'
-    env: '{{toUpper env.NODE_ENV}}'
+    env: '{{toUpper model.mode}}'
   helpers: helpers.ts

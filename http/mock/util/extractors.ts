@@ -25,7 +25,9 @@ export const extractQuery =
   (request: SrvRequest): string | null =>
     request.query.get(key)
 
-export const extractQueries = (request: SrvRequest): URLSearchParams => request.query
+export const extractQueries = (key: string) => (request: SrvRequest) => request.query.getAll(key)
+
+export const extractFullQuerystring = (request: SrvRequest): URLSearchParams => request.query
 
 export const extractNothing = (): undefined => undefined
 

@@ -64,7 +64,7 @@ describe('Stateful Matchers', function () {
 
         $.mock(
           get(urlPath('/test'))
-            .repeatTimes(2)
+            .repeat(2)
             .reply(okJSON({ data: expected })),
         )
 
@@ -78,7 +78,7 @@ describe('Stateful Matchers', function () {
 
     describe('and it did reach the maximum allowed value', function () {
       it('should fail to return response fixture', async function () {
-        $.mock(get(urlPath('/test')).repeatTimes(2).reply(ok()))
+        $.mock(get(urlPath('/test')).repeat(2).reply(ok()))
 
         await Supertest($.listener())
           .get('/test')

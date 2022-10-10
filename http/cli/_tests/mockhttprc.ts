@@ -10,7 +10,7 @@ const config: InitialOptions = {
 
   timeout: 3_600_000,
 
-  mockDirectory: Path.join(__dirname, '__fixtures__'),
+  mockDirectory: Path.join(__dirname, '_fixtures'),
   mockFilesExtension: 'mock',
 
   record: {
@@ -28,7 +28,7 @@ const config: InitialOptions = {
     },
   },
 
-  plugins: ['./__fixtures__/plugin-ts.ts'],
+  plugins: ['./_fixtures/plugin-ts.ts'],
 }
 
 export default config

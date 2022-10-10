@@ -13,7 +13,7 @@ module.exports = {
 
   timeout: 3_600_000,
 
-  mockDirectory: Path.join(__dirname, '__fixtures__'),
+  mockDirectory: Path.join(__dirname, '_fixtures'),
   mockFilesExtension: 'test-js',
 
   record: {
@@ -24,5 +24,5 @@ module.exports = {
     enabled: false,
   },
 
-  plugins: ['./__fixtures__/plugin-js.js'],
+  plugins: ['./_fixtures/plugin-js.js'],
 }

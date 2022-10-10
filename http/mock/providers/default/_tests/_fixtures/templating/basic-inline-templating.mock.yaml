@@ -5,7 +5,7 @@ request:
   urlPath: '/test/inline'
 response:
   status: 200
-  bodyTemplate: "Title is: {{model.title}}\nMode is: {{env.NODE_ENV}}"
+  bodyTemplate: "Title is: {{model.title}}\nMode is: {{model.mode}}"
   modelFile: model.json
   headers:
     Content-Type: text/plain

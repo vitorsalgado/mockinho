@@ -2,7 +2,7 @@ import { Mode } from '@mockdog/core'
 import { Level } from '@mockdog/core'
 
 export const Defaults = {
-  fixturesDir: '__fixtures__',
+  fixturesDir: '_fixtures',
   port: 0,
   host: 'localhost',
   mode: 'verbose' as Mode,

@@ -129,7 +129,7 @@ export default Yargs(hideBin(process.argv))
       type: 'string',
     },
     'mock-dir': {
-      describe: 'Mock files directory. defaults to __fixtures__ relative to the root directory.',
+      describe: 'Mock files directory. defaults to _fixtures relative to the root directory.',
       type: 'string',
     },
     'mock-extension': {

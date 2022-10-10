@@ -7,7 +7,9 @@ import mockHttp from '../mockHttp.js'
 
 describe('HTTP - Working With File Body Mocks', function () {
   describe('Default Path', function () {
-    const $ = mockHttp(opts().dynamicHttpPort().trace().rootDir(Path.join(__dirname, '../')))
+    const $ = mockHttp(
+      opts().dynamicHttpPort().trace().rootDir(Path.join(__dirname, './_fixtures/file_mocks_test')),
+    )
 
     beforeAll(() => $.start())
     afterAll(() => $.finalize())
@@ -37,7 +39,7 @@ describe('HTTP - Working With File Body Mocks', function () {
   })
 
   describe('Local', function () {
-    const $ = mockHttp(opts().dynamicHttpPort().mockDirectory(Path.join(__dirname, '__fixtures__')))
+    const $ = mockHttp(opts().dynamicHttpPort().mockDirectory(Path.join(__dirname, '_fixtures')))
 
     beforeAll(() => $.start())
     afterAll(() => $.finalize())

@@ -9,7 +9,7 @@ import { urlPath } from '../matchers/index.js'
 import { ok, okJSON, post } from '../mock/index.js'
 import { opts } from '../config/index.js'
 
-const fixture = (name: string) => Path.join(__dirname, `__fixtures__/__content__${name}`)
+const fixture = (name: string) => Path.join(__dirname, `_fixtures/__content__${name}`)
 
 describe('MockDog HTTP', function () {
   const $ = mockHttp(opts().dynamicHttpPort().trace())
@@ -40,7 +40,7 @@ describe('MockDog HTTP', function () {
 
       // $.mock(
       //   buildStubFromFile(
-      //     JSON.parse(Fs.readFileSync(Path.join(__dirname, '__fixtures__/stub.json')).toString())
+      //     JSON.parse(Fs.readFileSync(Path.join(__dirname, '_fixtures/stub.json')).toString())
       //   )
       // )
 

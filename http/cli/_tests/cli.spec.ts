@@ -51,7 +51,7 @@ describe('cli', function () {
         expect(config.mode).toEqual('info')
         expect(config.httpPort).toEqual(0)
         expect(config.timeout).toEqual(3_600_000)
-        expect(config.mockDirectory).toEqual(Path.join(__dirname, '__fixtures__'))
+        expect(config.mockDirectory).toEqual(Path.join(__dirname, '_fixtures'))
         expect(config.mockFilesExtension).toEqual('mock')
         expect(config.recordEnabled).toBeFalsy()
         expect(config.proxyEnabled).toBeTruthy()
@@ -84,7 +84,7 @@ describe('cli', function () {
         expect(config.mode).toEqual('silent')
         expect(config.httpPort).toEqual(0)
         expect(config.timeout).toEqual(3_600_000)
-        expect(config.mockDirectory).toEqual(Path.join(__dirname, '__fixtures__'))
+        expect(config.mockDirectory).toEqual(Path.join(__dirname, '_fixtures'))
         expect(config.mockFilesExtension).toEqual('test-js')
         expect(config.recordEnabled).toBeFalsy()
         expect(config.proxyEnabled).toBeFalsy()
@@ -208,7 +208,7 @@ describe('cli', function () {
         cors: false,
         cookieSecrets: [],
         proxy: undefined,
-        plugin: ['./__fixtures__/plugin-js.js', './__fixtures__/plugin-ts.ts'],
+        plugin: ['./_fixtures/plugin-js.js', './_fixtures/plugin-ts.ts'],
       }
       const mockhttp = await run(argv)
       const config = mockhttp.configuration()

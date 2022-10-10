@@ -24,11 +24,12 @@ import {
   extractMethod,
   extractMultiPartFiles,
   extractNothing,
-  extractQueries,
+  extractFullQuerystring,
   extractQuery,
   extractRequest,
   extractScheme,
   extractUrl,
+  extractQueries,
 } from './util/extractors.js'
 
 export interface Deps {
@@ -172,10 +173,23 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     return this
   }
 
+  queries(key: string, matcher: Predicate<Array<string>> | Matcher<Array<string>> | string): this {
+    notBlank(key)
+    notNull(matcher)
+
+    if (typeof matcher === 'string') {
+      this._expectations.push(this.spec('query', extractQueries(key), equalTo(matcher), 0.5))
+    } else {
+      this._expectations.push(this.spec('query', extractQueries(key), wrap(matcher), 0.5))
+    }
+
+    return this
+  }
+
   querystring(matcher: Matcher<URLSearchParams>): this {
     notNull(matcher)
 
-    this._expectations.push(this.spec('query', extractQueries, matcher, 3))
+    this._expectations.push(this.spec('query', extractFullQuerystring, matcher, 3))
 
     return this
   }
@@ -193,7 +207,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     return this
   }
 
-  requestFields(...matchers: Array<Matcher<BodyType>>): this {
+  fields(...matchers: Array<Matcher<BodyType>>): this {
     return this.requestBody(...matchers)
   }
 
@@ -252,7 +266,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     return this
   }
 
-  repeatTimes(times: number): this {
+  repeat(times: number): this {
     notNull(times)
 
     this._expectations.push(this.spec('request', extractNothing, repeatTimes(times), 0))

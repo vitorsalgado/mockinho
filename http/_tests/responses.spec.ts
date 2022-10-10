@@ -14,7 +14,7 @@ describe('Responses', function () {
       .dynamicHttpPort()
       .trace()
       .enableFileMocks()
-      .mockDirectory(Path.join(__dirname, '__fixtures__')),
+      .mockDirectory(Path.join(__dirname, '_fixtures')),
   )
 
   beforeAll(() => $.start())

@@ -54,7 +54,7 @@ describe('onRequestMatched', function () {
       mock: {
         id: '0c349f0f-10c7-49c4-beb2-62da0eda2fb5',
         name: 'stub-test',
-        sourceDescription: '__fixtures__/nice-file.json',
+        sourceDescription: '_fixtures/nice-file.json',
       },
     })
 
@@ -79,7 +79,7 @@ describe('onRequestMatched', function () {
       mock: {
         id: '',
         name: 'stub-test',
-        sourceDescription: '__fixtures__/nice-file.json',
+        sourceDescription: '_fixtures/nice-file.json',
       },
     })
 
@@ -110,7 +110,7 @@ describe('onRequestMatched', function () {
       mock: {
         id: '0c349f0f-10c7-49c4-beb2-62da0eda2fb5',
         name: '',
-        sourceDescription: '__fixtures__/nice-file.json',
+        sourceDescription: '_fixtures/nice-file.json',
       },
     })
 
