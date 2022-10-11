@@ -30,7 +30,7 @@ describe('MockDog HTTP', function () {
 
       return Supertest($.listener())
         .get('/test?q=term')
-        .set(H.ContentType, MediaTypes.APPLICATION_JSON)
+        .set(H.ContentType, MediaTypes.JSON)
         .expect(200)
         .expect(res => expect(res.body.data).toEqual(expected))
     })
@@ -46,7 +46,7 @@ describe('MockDog HTTP', function () {
 
       return Supertest($.listener())
         .get('/test')
-        .set(H.ContentType, MediaTypes.APPLICATION_JSON)
+        .set(H.ContentType, MediaTypes.JSON)
         .expect(200)
         .expect(res => expect(res.body.data).toEqual(expected))
     })
@@ -58,12 +58,12 @@ describe('MockDog HTTP', function () {
         post(urlPath('/test'))
           .header('content-type', contains('json'))
           .requestBody(field('user.name', equalTo('tester')))
-          .reply(ok().body('done').header(H.ContentType, MediaTypes.TEXT_PLAIN)),
+          .reply(ok().body('done').header(H.ContentType, MediaTypes.PlainText)),
       )
 
       return Supertest($.listener())
         .post('/test?q=term')
-        .set(H.ContentType, MediaTypes.APPLICATION_JSON)
+        .set(H.ContentType, MediaTypes.JSON)
         .send({ user: { name: 'tester' }, address: { street: 'street A' }, age: 50 })
         .expect(200)
         .expect(res => expect(res.text).toEqual('done'))
@@ -74,7 +74,7 @@ describe('MockDog HTTP', function () {
         post(urlPath('/test')).reply(
           ok()
             .body(fromFile(fixture('simple.json')))
-            .header(H.ContentType, MediaTypes.APPLICATION_JSON),
+            .header(H.ContentType, MediaTypes.JSON),
         ),
       )
 
@@ -108,14 +108,14 @@ describe('MockDog HTTP', function () {
       await Supertest($.listener())
         .post('/test')
         .set('content', 'nothing')
-        .set(H.ContentType, MediaTypes.APPLICATION_JSON)
+        .set(H.ContentType, MediaTypes.JSON)
         .send({ message: 'hey' })
         .expect(200)
         .expect(res => expect(res.body.data).toEqual('started'))
 
       await Supertest($.listener())
         .post('/test')
-        .set(H.ContentType, MediaTypes.APPLICATION_JSON)
+        .set(H.ContentType, MediaTypes.JSON)
         .set('content', 'nothing')
         .send({ message: 'hey' })
         .expect(200)

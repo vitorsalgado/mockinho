@@ -43,7 +43,7 @@ describe('Proxied Responses', function () {
 
       return Supertest($.listener())
         .post('/test?term=hi')
-        .set(H.ContentType, MediaTypes.APPLICATION_JSON)
+        .set(H.ContentType, MediaTypes.JSON)
         .send({ test: 'proxy-reply' })
         .expect(200)
         .expect(res => {

@@ -55,7 +55,7 @@ export function configureProxy(
       ((error, req, res) => {
         context.emit('onError', error)
 
-        res.writeHead(500, { 'content-type': MediaTypes.TEXT_PLAIN })
+        res.writeHead(500, { 'content-type': MediaTypes.PlainText })
         res.end('Proxy Error: ' + error.message)
       }),
   }

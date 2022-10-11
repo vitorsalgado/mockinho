@@ -38,10 +38,7 @@ describe('Custom Middlewares', function () {
           .reply(ok()),
       )
 
-      return Supertest($.listener())
-        .get('/test')
-        .set(H.ContentType, MediaTypes.APPLICATION_JSON)
-        .expect(SC.OK)
+      return Supertest($.listener()).get('/test').set(H.ContentType, MediaTypes.JSON).expect(SC.OK)
     })
   })
 
@@ -62,14 +59,11 @@ describe('Custom Middlewares', function () {
           .reply(created()),
       )
 
-      await Supertest($.listener())
-        .get('/test')
-        .set(H.ContentType, MediaTypes.APPLICATION_JSON)
-        .expect(SC.OK)
+      await Supertest($.listener()).get('/test').set(H.ContentType, MediaTypes.JSON).expect(SC.OK)
 
       await Supertest($.listener())
         .get('/hey')
-        .set(H.ContentType, MediaTypes.APPLICATION_JSON)
+        .set(H.ContentType, MediaTypes.JSON)
         .expect(SC.Created)
     })
   })

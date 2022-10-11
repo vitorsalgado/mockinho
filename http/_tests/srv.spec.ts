@@ -51,7 +51,7 @@ describe('Express Http Server', function () {
 
     return Supertest($.listener())
       .post('/test?q=term')
-      .set(H.ContentType, MediaTypes.APPLICATION_JSON)
+      .set(H.ContentType, MediaTypes.JSON)
       .send(undefined)
       .expect(200)
       .expect(res => expect(res.body.data).toEqual(expected))
@@ -68,7 +68,7 @@ describe('Express Http Server', function () {
 
     return Supertest($.listener())
       .post('/test?q=term')
-      .set(H.ContentType, MediaTypes.APPLICATION_JSON)
+      .set(H.ContentType, MediaTypes.JSON)
       .send('<?xml version="1.0" encoding="UTF-8"?><test><name>tester</name></test>')
       .expect(400)
   })

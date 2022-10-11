@@ -29,7 +29,7 @@ describe('Responses', function () {
 
       return Supertest($.listener())
         .get('/test?q=term')
-        .set(H.ContentType, MediaTypes.APPLICATION_JSON)
+        .set(H.ContentType, MediaTypes.JSON)
         .expect(200)
         .expect(res => expect(res.body.data).toEqual('Request method was: GET'))
     })

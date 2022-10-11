@@ -30,7 +30,7 @@ export class RandomReply implements Reply {
       return Promise.resolve(
         StandardReply.newBuilder()
           .status(SC.TeaPot)
-          .header(H.ContentType, MediaTypes.TEXT_PLAIN)
+          .header(H.ContentType, MediaTypes.PlainText)
           .body(message)
           .build(req, res, ctx),
       )

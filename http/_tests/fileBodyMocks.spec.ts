@@ -25,15 +25,13 @@ describe('HTTP - Working With File Body Mocks', function () {
     it('should use body mock located in the default directory', function () {
       $.mock(
         get(urlPath('/test'))
-          .header(H.Accept, equalTo(MediaTypes.APPLICATION_JSON))
-          .reply(
-            ok().bodyFile('body-stub.json').header(H.ContentType, MediaTypes.APPLICATION_JSON),
-          ),
+          .header(H.Accept, equalTo(MediaTypes.JSON))
+          .reply(ok().bodyFile('body-stub.json').header(H.ContentType, MediaTypes.JSON)),
       )
 
       return Supertest($.listener())
         .get('/test')
-        .set(H.Accept, MediaTypes.APPLICATION_JSON)
+        .set(H.Accept, MediaTypes.JSON)
         .expect(200)
         .expect(res => expect(res.body.context).toEqual('default-fixture-path'))
     })
@@ -55,15 +53,13 @@ describe('HTTP - Working With File Body Mocks', function () {
     it('should use body mock located in the default directory', function () {
       $.mock(
         get(urlPath('/test'))
-          .header(H.Accept, equalTo(MediaTypes.APPLICATION_JSON))
-          .reply(
-            ok().bodyFile('body-stub.json').header(H.ContentType, MediaTypes.APPLICATION_JSON),
-          ),
+          .header(H.Accept, equalTo(MediaTypes.JSON))
+          .reply(ok().bodyFile('body-stub.json').header(H.ContentType, MediaTypes.JSON)),
       )
 
       return Supertest($.listener())
         .get('/test')
-        .set(H.Accept, MediaTypes.APPLICATION_JSON)
+        .set(H.Accept, MediaTypes.JSON)
         .expect(200)
         .expect(res => expect(res.body.context).toEqual('local-body-stub'))
     })

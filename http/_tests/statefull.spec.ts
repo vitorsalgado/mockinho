@@ -27,7 +27,7 @@ describe('Stateful Matchers', function () {
 
         return Supertest($.listener())
           .get('/test')
-          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
+          .set(H.ContentType, MediaTypes.JSON)
           .expect(200)
           .expect(res => expect(res.body.data).toEqual(expected))
       })
@@ -37,20 +37,11 @@ describe('Stateful Matchers', function () {
       it('should fail to return response fixture', async function () {
         $.mock(get(urlPath('/test')).expect(repeat(2)).reply(ok()))
 
-        await Supertest($.listener())
-          .get('/test')
-          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
-          .expect(200)
+        await Supertest($.listener()).get('/test').set(H.ContentType, MediaTypes.JSON).expect(200)
 
-        await Supertest($.listener())
-          .get('/test')
-          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
-          .expect(200)
+        await Supertest($.listener()).get('/test').set(H.ContentType, MediaTypes.JSON).expect(200)
 
-        await Supertest($.listener())
-          .get('/test')
-          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
-          .expect(500)
+        await Supertest($.listener()).get('/test').set(H.ContentType, MediaTypes.JSON).expect(500)
       })
     })
   })
@@ -68,7 +59,7 @@ describe('Stateful Matchers', function () {
 
         return Supertest($.listener())
           .get('/test')
-          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
+          .set(H.ContentType, MediaTypes.JSON)
           .expect(200)
           .expect(res => expect(res.body.data).toEqual(expected))
       })
@@ -78,20 +69,11 @@ describe('Stateful Matchers', function () {
       it('should fail to return response fixture', async function () {
         $.mock(get(urlPath('/test')).repeat(2).reply(ok()))
 
-        await Supertest($.listener())
-          .get('/test')
-          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
-          .expect(200)
+        await Supertest($.listener()).get('/test').set(H.ContentType, MediaTypes.JSON).expect(200)
 
-        await Supertest($.listener())
-          .get('/test')
-          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
-          .expect(200)
+        await Supertest($.listener()).get('/test').set(H.ContentType, MediaTypes.JSON).expect(200)
 
-        await Supertest($.listener())
-          .get('/test')
-          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
-          .expect(500)
+        await Supertest($.listener()).get('/test').set(H.ContentType, MediaTypes.JSON).expect(500)
       })
     })
   })

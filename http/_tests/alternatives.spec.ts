@@ -57,7 +57,7 @@ describe('Builder Alternatives', function () {
               new SrvResponse(
                 200,
                 new HeaderList({
-                  'content-type': MediaTypes.APPLICATION_JSON,
+                  'content-type': MediaTypes.JSON,
                   'x-id': req.$internals.id,
                   'x-verbose': String(modeIsAtLeast(ctx.config, 'verbose')),
                   'x-method': req.method,
@@ -71,7 +71,7 @@ describe('Builder Alternatives', function () {
 
       return Supertest($.listener())
         .post('/test')
-        .set(H.ContentType, MediaTypes.APPLICATION_JSON)
+        .set(H.ContentType, MediaTypes.JSON)
         .send(body)
         .expect(200)
         .expect(res => {

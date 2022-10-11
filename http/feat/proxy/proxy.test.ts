@@ -36,7 +36,7 @@ describe('Forward Proxy', function () {
 
         await Supertest($.listener())
           .get('/test')
-          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
+          .set(H.ContentType, MediaTypes.JSON)
           .set('proxy-header', '100')
           .set('x-test', 'true')
           .set('x-dev', 'ts')
@@ -68,7 +68,7 @@ describe('Forward Proxy', function () {
 
         await Supertest($.listener())
           .get('/test')
-          .set(H.Accept, MediaTypes.APPLICATION_JSON)
+          .set(H.Accept, MediaTypes.JSON)
           .expect(SC.BadRequest)
           .expect(res => {
             expect(res.body.message).toEqual('boom!')
@@ -100,7 +100,7 @@ describe('Forward Proxy', function () {
 
         await Supertest($.listener())
           .post('/test')
-          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
+          .set(H.ContentType, MediaTypes.JSON)
           .send(JSON.stringify({ data: 'test' }))
           .set('proxy-header', '100')
           .set('x-test', 'true')
@@ -135,7 +135,7 @@ describe('Forward Proxy', function () {
 
         await Supertest($.listener())
           .post('/nowhere')
-          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
+          .set(H.ContentType, MediaTypes.JSON)
           .send(JSON.stringify({ data: 'test' }))
           .set('proxy-header', '100')
           .set('x-test', 'true')

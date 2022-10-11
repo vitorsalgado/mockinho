@@ -30,14 +30,14 @@ describe('Events', function () {
 
     $.mock(
       post(urlPath('/test'))
-        .header('content-type', equalTo(MediaTypes.APPLICATION_FORM_URL_ENCODED))
+        .header('content-type', equalTo(MediaTypes.FormURLEncoded))
         .requestBody(field('name', equalTo('the name')))
         .reply(ok()),
     )
 
     await Supertest($.listener())
       .post('/test')
-      .set(H.ContentType, MediaTypes.APPLICATION_FORM_URL_ENCODED)
+      .set(H.ContentType, MediaTypes.FormURLEncoded)
       .send('name=the+name&description=some+description&age=32&job=teacher&job=developer')
       .expect(200)
 

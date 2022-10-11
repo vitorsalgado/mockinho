@@ -48,7 +48,7 @@ export class SequenceReply implements Reply {
       return Promise.resolve(
         StandardReply.newBuilder()
           .status(SC.TeaPot)
-          .header(H.ContentType, MediaTypes.TEXT_PLAIN)
+          .header(H.ContentType, MediaTypes.PlainText)
           .body(
             'Reply not found in the sequence.' +
               '\n' +

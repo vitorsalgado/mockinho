@@ -16,7 +16,7 @@ describe('HTTP - Form Url Encoded', function () {
   it('should accept form-url-encoded requests', function () {
     $.mock(
       post(urlPath('/test'))
-        .header('content-type', equalTo(MediaTypes.APPLICATION_FORM_URL_ENCODED))
+        .header('content-type', equalTo(MediaTypes.FormURLEncoded))
         .requestBody(
           allOf(
             field('name', equalTo('the name')),
@@ -32,7 +32,7 @@ describe('HTTP - Form Url Encoded', function () {
 
     return Supertest($.listener())
       .post('/test?q=term')
-      .set(H.ContentType, MediaTypes.APPLICATION_FORM_URL_ENCODED)
+      .set(H.ContentType, MediaTypes.FormURLEncoded)
       .send('name=the+name&description=some+description&age=32&job=teacher&job=developer')
       .expect(200)
       .expect(res => expect(res.text).toEqual('done'))
@@ -41,13 +41,13 @@ describe('HTTP - Form Url Encoded', function () {
   it('should fail if it exceeds the body limit', function () {
     $.mock(
       post(urlPath('/test'))
-        .header('content-type', equalTo(MediaTypes.APPLICATION_FORM_URL_ENCODED))
+        .header('content-type', equalTo(MediaTypes.FormURLEncoded))
         .reply(ok().body('done')),
     )
 
     return Supertest($.listener())
       .post('/test?q=term')
-      .set(H.ContentType, MediaTypes.APPLICATION_FORM_URL_ENCODED)
+      .set(H.ContentType, MediaTypes.FormURLEncoded)
       .send(
         'name=the+name&description=some+description&age=32&job=teacher&job=developer&other=super-failure-test',
       )

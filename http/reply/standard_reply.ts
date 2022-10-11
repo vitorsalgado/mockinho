@@ -92,7 +92,7 @@ export class StandardReply implements Reply {
   bodyJSON(body: JsonType): this {
     notNull(body)
 
-    return this.body(JSON.stringify(body)).header(H.ContentType, MediaTypes.APPLICATION_JSON)
+    return this.body(JSON.stringify(body)).header(H.ContentType, MediaTypes.JSON)
   }
 
   bodyFile(path: string): this {

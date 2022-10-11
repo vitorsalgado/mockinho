@@ -16,7 +16,7 @@ describe('Templating', function () {
     $.mock(
       get('/test').reply(
         ok()
-          .header(H.ContentType, MediaTypes.TEXT_PLAIN)
+          .header(H.ContentType, MediaTypes.PlainText)
           .model({ testLib: 'Jest!' })
           .helpers({ toUpper: (value: string) => value.toUpperCase() })
           .bodyTemplate('this is a test using: {{toUpper model.testLib}}'),
@@ -33,7 +33,7 @@ describe('Templating', function () {
     $.mock(
       get('/test').reply(
         ok()
-          .header(H.ContentType, MediaTypes.APPLICATION_JSON)
+          .header(H.ContentType, MediaTypes.JSON)
           .model({ testLib: 'Jest!' })
           .helpers({ toLower: (value: string) => value.toLowerCase() })
           .bodyTemplate('{ "testLib": "{{toLower model.testLib}}" }'),
@@ -50,7 +50,7 @@ describe('Templating', function () {
     $.mock(
       get('/test').reply(
         ok()
-          .header(H.ContentType, MediaTypes.APPLICATION_JSON)
+          .header(H.ContentType, MediaTypes.JSON)
           .model({ testLib: 'Jest!' })
           .helpers({ toLower: (value: string) => value.toLowerCase() })
           .bodyTemplate({ testLib: '{{toLower model.testLib}}' }),
@@ -67,7 +67,7 @@ describe('Templating', function () {
     $.mock(
       get('/test').reply(
         ok()
-          .header(H.ContentType, MediaTypes.TEXT_PLAIN)
+          .header(H.ContentType, MediaTypes.PlainText)
           .bodyTemplate('NODE_ENV is: {{model.env.NODE_ENV}}')
           .model({
             env: {
@@ -87,7 +87,7 @@ describe('Templating', function () {
     $.mock(
       get('/test').reply(
         ok()
-          .header(H.ContentType, MediaTypes.TEXT_PLAIN)
+          .header(H.ContentType, MediaTypes.PlainText)
           .bodyTemplate('Method is: {{request.method}}'),
       ),
     )
@@ -102,7 +102,7 @@ describe('Templating', function () {
     $.mock(
       get('/test').reply(
         ok()
-          .header(H.ContentType, MediaTypes.TEXT_PLAIN)
+          .header(H.ContentType, MediaTypes.PlainText)
           .model({
             title: 'Test Template File',
             env: {
@@ -128,7 +128,7 @@ describe('Templating', function () {
     $.mock(
       get('/test').reply(
         ok()
-          .header(H.ContentType, MediaTypes.APPLICATION_JSON)
+          .header(H.ContentType, MediaTypes.JSON)
           .headerTemplate('x-id', '{{request.id}}')
           .bodyFn(request => ({
             id: request.$internals.id,

@@ -15,7 +15,7 @@ describe('onRequestReceived', function () {
       method: 'PATCH',
       url: 'http://localhost:3000/test',
       path: '/test',
-      headers: { 'content-type': MediaTypes.APPLICATION_JSON },
+      headers: { 'content-type': MediaTypes.JSON },
       body: Buffer.from('data'),
     })
 
@@ -41,7 +41,7 @@ describe('onRequestReceived', function () {
       method: 'PUT',
       url: 'http://localhost:3000/test',
       path: '/test',
-      headers: { 'content-type': MediaTypes.APPLICATION_JSON },
+      headers: { 'content-type': MediaTypes.JSON },
       body: { hello: 'world' },
     })
 
@@ -54,7 +54,7 @@ describe('onRequestReceived', function () {
       method: 'PUT',
       url: 'http://localhost:3000/test',
       path: '/test',
-      headers: { 'content-type': MediaTypes.APPLICATION_JSON },
+      headers: { 'content-type': MediaTypes.JSON },
       body: {},
     })
 
@@ -73,7 +73,7 @@ describe('onRequestReceived', function () {
       method: 'PUT',
       url: 'http://localhost:3000/test',
       path: '/test',
-      headers: { 'content-type': MediaTypes.APPLICATION_JSON },
+      headers: { 'content-type': MediaTypes.JSON },
       body: Readable.from(txt(), { objectMode: false }),
     })
 

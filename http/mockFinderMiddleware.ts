@@ -80,7 +80,7 @@ export function mockFinderMiddleware(context: HttpContext) {
     }
 
     res
-      .set(H.ContentType, MediaTypes.TEXT_PLAIN)
+      .set(H.ContentType, MediaTypes.PlainText)
       .status(500)
       .send(
         `Request was not matched.${result

@@ -43,7 +43,7 @@ describe('Record', function () {
 
         await Supertest($.listener())
           .get('/customers/100/test?q=name|email|address&actions=move+run')
-          .set(H.ContentType, MediaTypes.APPLICATION_JSON)
+          .set(H.ContentType, MediaTypes.JSON)
           .expect(200)
           .expect(res => {
             expect(res.body.hello).toEqual('world')
