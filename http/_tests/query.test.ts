@@ -3,7 +3,7 @@ import { equalTo } from '@mockdog/matchers'
 import { opts } from '../config/index.js'
 import { httpMock } from '../index.js'
 import { urlPath } from '../feat/matchers/index.js'
-import { get } from '../mock_builder.js'
+import { get } from '../builder.js'
 import { ok } from '../reply/index.js'
 
 describe('querystring', function () {

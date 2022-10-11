@@ -1,7 +1,7 @@
 import Supertest from 'supertest'
 import { httpMock, opts } from '../index.js'
 import { urlPath } from '../feat/matchers/index.js'
-import { del, get, head, patch, post, put, request } from '../mock_builder.js'
+import { del, get, head, patch, post, put, request } from '../builder.js'
 import { ok } from '../reply/index.js'
 
 describe('CORS', function () {

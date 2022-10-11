@@ -1,4 +1,4 @@
-import { get } from '../../../mock_builder.js'
+import { get } from '../../../builder.js'
 import { MockDogHttp } from '../../../MockDogHttp.js'
 import { HttpConfiguration } from '../../../config/index.js'
 import { okJSON } from '../../../reply/index.js'

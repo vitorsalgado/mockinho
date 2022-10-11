@@ -4,10 +4,10 @@ import { bold } from 'colorette'
 import { Hooks } from '../Hooks.js'
 
 export function onRecord(event: Hooks['onRecord']): void {
-  console.log(`${bold('RECORDED RESPONSE')}`)
-  console.log(`${bold('Mock: ')}${event.mock}`)
+  process.stdout.write(`${bold('RECORDED RESPONSE')}\n`)
+  process.stdout.write(`${bold('Mock: ')}${event.mock}\n`)
 
   if (event.mockBody) {
-    console.log(`${bold('Body: ')}${event.mockBody}`)
+    process.stdout.write(`${bold('Body: ')}${event.mockBody}\n`)
   }
 }

@@ -13,7 +13,7 @@ import { envReader } from '../config/index.js'
 import { printInfo } from './printInfo.js'
 import { configureWatcher } from './configureWatcher.js'
 
-export async function run(options: Argv): Promise<MockDogHttp> {
+export async function run(options: Argv, banner: string): Promise<MockDogHttp> {
   const builder = opts().enableFileMocks().verbose()
 
   const configurationProviders = [
@@ -62,7 +62,7 @@ export async function run(options: Argv): Promise<MockDogHttp> {
   })
 
   return mockhttp.start().then(info => {
-    printInfo(config, options, info)
+    printInfo(config, options, info, banner)
 
     return mockhttp
   })

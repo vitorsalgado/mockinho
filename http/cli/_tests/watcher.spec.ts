@@ -42,7 +42,7 @@ describe.skip('watcher', function () {
         mockDir: mocks,
         watch: true,
       }
-      const mockhttp = await run(argv)
+      const mockhttp = await run(argv, '')
 
       try {
         Fs.writeFileSync(Path.join(mocks, 'test.mock.json'), Buffer.from(JSON.stringify(spec)))

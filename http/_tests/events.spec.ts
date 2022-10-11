@@ -5,7 +5,7 @@ import { urlPath } from '../index.js'
 import { MediaTypes } from '../index.js'
 import { H } from '../index.js'
 import { httpMock } from '../index.js'
-import { post } from '../mock_builder.js'
+import { post } from '../builder.js'
 import { ok } from '../reply/index.js'
 
 describe('Events', function () {

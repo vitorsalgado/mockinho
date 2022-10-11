@@ -2,7 +2,7 @@ import Supertest from 'supertest'
 import { opts } from '../config/index.js'
 import { urlPath } from '../feat/matchers/index.js'
 import httpMock from '../index.js'
-import { get, post } from '../mock_builder.js'
+import { get, post } from '../builder.js'
 import { okJSON } from '../reply/index.js'
 
 describe('HTTP Scope', function () {

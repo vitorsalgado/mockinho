@@ -4,7 +4,7 @@ import { field } from '@mockdog/matchers'
 import { opts } from '../index.js'
 import { urlPath } from '../index.js'
 import { httpMock } from '../index.js'
-import { post } from '../mock_builder.js'
+import { post } from '../builder.js'
 import { ok } from '../reply/index.js'
 
 describe('Cookies', function () {

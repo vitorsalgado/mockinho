@@ -4,7 +4,7 @@ import { field } from '@mockdog/matchers'
 import { opts, urlPath, H, MediaTypes, HttpContext } from '../../index.js'
 import { httpMock } from '../../index.js'
 import { SC } from '../../index.js'
-import { get, post } from '../../mock_builder.js'
+import { get, post } from '../../builder.js'
 import { badRequest, okJSON } from '../../reply/index.js'
 import { configureProxy } from './index.js'
 

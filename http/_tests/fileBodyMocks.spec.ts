@@ -3,7 +3,7 @@ import Supertest from 'supertest'
 import { equalTo } from '@mockdog/matchers'
 import { H, MediaTypes } from '../http.js'
 import { httpMock, opts, urlPath } from '../index.js'
-import { get, post } from '../mock_builder.js'
+import { get, post } from '../builder.js'
 import { ok } from '../reply/index.js'
 
 describe('HTTP - Working With File Body Mocks', function () {

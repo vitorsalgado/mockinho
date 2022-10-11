@@ -1,30 +1,27 @@
-/* eslint-disable @typescript-eslint/no-var-requires,no-console */
+/* eslint-disable @typescript-eslint/no-var-requires */
 
-const Fs = require('fs')
+const Fs = require('fs/promises')
 const Path = require('path')
-const Util = require('util')
 const Stream = require('stream').Stream
 const { parentPort, workerData } = require('worker_threads')
 const { isMainThread } = require('worker_threads')
-const Hash = require('object-hash')
 const Mime = require('mime-types')
 
 // Exit if not in the context of a Worker
 // File can be imported just to ensure it will be on TypeScript build output
-if (!parentPort || isMainThread) return
-
-const writeFile = Util.promisify(Fs.writeFile)
-const access = Util.promisify(Fs.access)
+if (!parentPort || isMainThread) {
+  return
+}
 
 parentPort.on('message', async data => {
   const { destination, extension, captureRequestHeaders, captureResponseHeaders } = workerData
   const { request, response } = data
 
-  const name = `${request.method}${request.path.split('/').join('-')}`
+  const sanitized = request.path.replaceAll(/ /g, '-').replaceAll(/[^a-z0-9]/gi, '_')
+  const name = `${request.method}_${sanitized}`
   const hasResponseBody = response.body.length && response.body.length > 0
 
   let query
-  let requestBody
   const requestHeaders = {}
   const responseHeaders = {}
 
@@ -48,25 +45,10 @@ parentPort.on('message', async data => {
     query = request.query
   }
 
-  if (request.body) {
-    requestBody = request.body
-  }
-
   const ext = Mime.extension(response.headers['content-type'])
-  const mockHash = Hash(
-    {
-      url: request.url,
-      method: request.method,
-      headers: requestHeaders,
-      query,
-      body: requestBody,
-    },
-    { algorithm: 'sha1' },
-  ).substr(0, 8)
-
-  const mockFile = `${name}-${mockHash}.${extension}.json`
+  const mockFile = `${name}.${extension}.json`
   const mockPath = Path.join(destination, mockFile)
-  const mockBodyFile = `${name}-${mockHash}.${ext ?? 'bin'}`
+  const mockBodyFile = `${name}.${ext ?? 'bin'}`
   const mockBodyPath = Path.join(destination, mockBodyFile)
 
   const mock = {
@@ -78,9 +60,9 @@ parentPort.on('message', async data => {
       headers: requestHeaders,
       querystring: query,
       body:
-        !(requestBody instanceof Buffer) && !(requestBody instanceof Stream)
+        !(request.body instanceof Buffer) && !(request.body instanceof Stream)
           ? {
-              equalsTo: requestBody,
+              equalsTo: request.body,
             }
           : undefined,
     },
@@ -95,7 +77,7 @@ parentPort.on('message', async data => {
   let exists
 
   try {
-    await access(mockFile)
+    await Fs.access(mockFile)
     exists = true
   } catch {
     exists = false
@@ -103,8 +85,8 @@ parentPort.on('message', async data => {
 
   if (!exists) {
     Promise.all([
-      writeFile(mockPath, Buffer.from(JSON.stringify(mock, null, 2))),
-      hasResponseBody ? writeFile(mockBodyPath, response.body) : Promise.resolve(),
+      Fs.writeFile(mockPath, Buffer.from(JSON.stringify(mock, null, 2))),
+      hasResponseBody ? Fs.writeFile(mockBodyPath, response.body) : Promise.resolve(),
     ])
       .then(() => parentPort.postMessage({ mock: mockFile, mockBody: mockBodyFile }))
       .catch(err => parentPort.postMessage(err))

@@ -1,6 +1,6 @@
 import { StateRepository } from '@mockdog/core'
 import { equalTo, isPresent } from '@mockdog/matchers'
-import { Deps, HttpMockBuilder } from '../../../mock_builder.js'
+import { Deps, HttpMockBuilder } from '../../../builder.js'
 import { ok } from '../../../reply/index.js'
 import { onRequestNotMatched } from '../builtin/onRequestNotMatched.js'
 

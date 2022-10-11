@@ -10,7 +10,7 @@ import { onRequestMatched, onRequestNotMatched, onRequestReceived } from './feat
 import { Hooks } from './feat/hooks/index.js'
 import { HttpContext } from './HttpContext.js'
 import { HttpMock, HttpMockRepository } from './mock.js'
-import { Deps } from './mock_builder.js'
+import { Deps } from './builder.js'
 import { HttpServer, HttpServerInfo } from './srv.js'
 import { defaultMockProviderFactory } from './loaders/default/defaultMockProviderFactory.js'
 import { onProxyRequest } from './feat/hooks/builtin/onProxyRequest.js'
@@ -53,7 +53,7 @@ export class MockDogHttp extends MockApp<
     return { stateRepository: new StateRepository() }
   }
 
-  async start(): Promise<HttpServerInfo> {
+  start(): Promise<HttpServerInfo> {
     return super.start().then(info => {
       this._context.emit('onStart', { info })
       return info

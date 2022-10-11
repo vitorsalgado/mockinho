@@ -3,7 +3,7 @@ import Supertest from 'supertest'
 import { opts } from '../config/index.js'
 import { SC } from '../http.js'
 import httpMock, { urlPath } from '../index.js'
-import { get } from '../mock_builder.js'
+import { get } from '../builder.js'
 import { badRequest, created, ok } from './replies.js'
 import { sequence } from './sequence.js'
 

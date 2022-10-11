@@ -9,7 +9,7 @@ import { urlPath } from '../index.js'
 import { MediaTypes } from '../index.js'
 import { H } from '../index.js'
 import { HttpMock } from '../mock.js'
-import { post } from '../mock_builder.js'
+import { post } from '../builder.js'
 import { ok, SrvResponse } from '../reply/index.js'
 import { selector } from '../_internal/request_value_selectors.js'
 

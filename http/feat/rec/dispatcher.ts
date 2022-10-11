@@ -1,13 +1,13 @@
+import './worker.js'
+
 import { execSync } from 'child_process'
 import http from 'node:http'
-
-import Path from 'path'
-import { Worker } from 'worker_threads'
+import Path from 'node:path'
+import { Worker } from 'node:worker_threads'
 import { HttpConfiguration } from '../../config/index.js'
 import { BodyType, Methods } from '../../http.js'
 import { HttpContext } from '../../HttpContext.js'
 import { RecordOptions } from './options.js'
-import './worker.js'
 
 export interface RecordArgs {
   request: {

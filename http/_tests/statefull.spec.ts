@@ -4,7 +4,7 @@ import { opts, urlPath } from '../index.js'
 import { H } from '../index.js'
 import { MediaTypes } from '../index.js'
 import { httpMock } from '../index.js'
-import { get } from '../mock_builder.js'
+import { get } from '../builder.js'
 import { ok, okJSON } from '../reply/index.js'
 
 describe('Stateful Matchers', function () {

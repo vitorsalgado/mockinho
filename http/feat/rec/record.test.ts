@@ -1,4 +1,4 @@
-import Fs from 'fs'
+import Fs from 'fs/promises'
 import Path from 'path'
 import Os from 'os'
 import Supertest from 'supertest'
@@ -7,7 +7,7 @@ import { sleep } from '@mockdog/x'
 import { opts } from '../../config/index.js'
 import { H, MediaTypes } from '../../http.js'
 import httpMock from '../../index.js'
-import { get } from '../../mock_builder.js'
+import { get } from '../../builder.js'
 import { okJSON } from '../../reply/index.js'
 import { urlPath } from '../matchers/index.js'
 
@@ -20,10 +20,10 @@ describe('Record', function () {
 
   describe('when recording', function () {
     it('should return success response from target', async function () {
-      const tmp = Fs.mkdtempSync(Path.join(Os.tmpdir(), 'mockdog-'))
+      const tmp = await Fs.mkdtemp(Path.join(Os.tmpdir(), 'mockdog-'))
       const recordDir = Path.join(tmp, '_fixtures')
 
-      Fs.mkdirSync(recordDir)
+      await Fs.mkdir(recordDir)
 
       const $ = httpMock(
         opts()
@@ -34,7 +34,7 @@ describe('Record', function () {
 
       try {
         target.mock(
-          get(urlPath('/test')).reply(
+          get(urlPath('/customers/100/test')).reply(
             okJSON({ hello: 'world' }).header('x-proxy-reply', 'success'),
           ),
         )
@@ -42,7 +42,7 @@ describe('Record', function () {
         await $.start()
 
         await Supertest($.listener())
-          .get('/test')
+          .get('/customers/100/test?q=name|email|address&actions=move+run')
           .set(H.ContentType, MediaTypes.APPLICATION_JSON)
           .expect(200)
           .expect(res => {
@@ -61,8 +61,7 @@ describe('Record', function () {
         expect(mocks).toHaveLength(1)
         expect(bodies).toHaveLength(1)
       } finally {
-        await $.finalize()
-        Fs.rmdirSync(tmp, { recursive: true })
+        await Promise.all([$.finalize(), Fs.rm(tmp, { recursive: true })])
       }
     }, 7500)
   })

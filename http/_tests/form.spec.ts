@@ -3,7 +3,7 @@ import { allOf, contains, equalTo, field, hasLength, item } from '@mockdog/match
 import { H, MediaTypes } from '../http.js'
 import { opts, urlPath } from '../index.js'
 import { httpMock } from '../index.js'
-import { post } from '../mock_builder.js'
+import { post } from '../builder.js'
 import { ok } from '../reply/index.js'
 
 describe('HTTP - Form Url Encoded', function () {

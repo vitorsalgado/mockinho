@@ -3,7 +3,7 @@ import Supertest from 'supertest'
 import { equalTo, contains, field } from '@mockdog/matchers'
 import { httpMock, opts, urlPath } from '../index.js'
 import { fileContent } from '../feat/matchers'
-import { post } from '../mock_builder.js'
+import { post } from '../builder.js'
 import { ok } from '../reply/index.js'
 
 describe('Form MultiPart', function () {

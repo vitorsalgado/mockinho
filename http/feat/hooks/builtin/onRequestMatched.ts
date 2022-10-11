@@ -9,7 +9,7 @@ export function onRequestMatched(event: Hooks['onRequestMatched']): void {
   const hasHeaders = headers.length > 0
 
   // eslint-disable-next-line no-console
-  console.log(
+  process.stdout.write(
     `${greenBright(bold('REQUEST MATCHED'))} ${new Date().toISOString()} ${green(
       `<--- ${event.method} ${event.path}`,
     )}` +
@@ -47,6 +47,7 @@ export function onRequestMatched(event: Hooks['onRequestMatched']): void {
                   : JSON.stringify(event.responseDefinition.body))
               : ''
           }\n`,
-      ),
+      ) +
+      '\n',
   )
 }

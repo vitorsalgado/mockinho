@@ -3,7 +3,7 @@ import Supertest from 'supertest'
 import { contains } from '@mockdog/matchers'
 import { H, MediaTypes, opts, urlPath } from '../index.js'
 import { httpMock } from '../index.js'
-import { get } from '../mock_builder.js'
+import { get } from '../builder.js'
 import { ok } from './replies.js'
 
 describe('Responses', function () {

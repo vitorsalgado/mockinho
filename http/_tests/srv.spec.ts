@@ -6,7 +6,7 @@ import { opts, HttpConfigurationBuilder, HttpServer, httpMock } from '../index.j
 
 import { urlPath } from '../feat/matchers'
 import { HttpMockRepository } from '../mock.js'
-import { post } from '../mock_builder.js'
+import { post } from '../builder.js'
 import { okJSON } from '../reply/index.js'
 
 describe('Express Http Server', function () {

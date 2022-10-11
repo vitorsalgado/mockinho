@@ -2,7 +2,7 @@ import Path from 'path'
 import Fs from 'fs'
 import Os from 'os'
 import Supertest from 'supertest'
-import { get } from '../../mock_builder.js'
+import { get } from '../../builder.js'
 import { ok } from '../../reply/index.js'
 import { run } from '../run'
 import { Argv } from '../../config'
@@ -35,7 +35,7 @@ describe('cli', function () {
   describe('when using a typescript configuration file', function () {
     it('should read the configuration', async function () {
       const argv: Argv = { rootDir: __dirname }
-      const mockhttp = await run(argv)
+      const mockhttp = await run(argv, '')
       const config = mockhttp.configuration()
       const tsconfig = await import('./mockhttprc.js')
 
@@ -68,7 +68,7 @@ describe('cli', function () {
   describe('when specifying a custom javascript config file', function () {
     it('should read the specific configuration and not the default ones', async function () {
       const argv: Argv = { rootDir: __dirname, config: 'mockhttprc-custom.js' }
-      const mockhttp = await run(argv)
+      const mockhttp = await run(argv, '')
       const config = mockhttp.configuration()
       const jsconfig = await import('./mockhttprc-custom')
 
@@ -118,7 +118,7 @@ describe('cli', function () {
       process.env.MOCK_PROXY = 'https://example.org'
 
       const argv: Argv = { rootDir: __dirname }
-      const mockhttp = await run(argv)
+      const mockhttp = await run(argv, '')
       const config = mockhttp.configuration()
 
       try {
@@ -155,7 +155,7 @@ describe('cli', function () {
       process.env.MOCK_RECORD = 'true'
 
       const argv: Argv = { rootDir: __dirname }
-      const mockhttp = await run(argv)
+      const mockhttp = await run(argv, '')
       const config = mockhttp.configuration()
 
       try {
@@ -210,7 +210,7 @@ describe('cli', function () {
         proxy: undefined,
         plugin: ['./_fixtures/plugin-js.js', './_fixtures/plugin-ts.ts'],
       }
-      const mockhttp = await run(argv)
+      const mockhttp = await run(argv, '')
       const config = mockhttp.configuration()
 
       try {
@@ -269,7 +269,7 @@ describe('cli', function () {
         proxyHeaders: ['x-test=abc', 'x-ctx=test'],
         watch: true,
       }
-      const mockhttp = await run(argv)
+      const mockhttp = await run(argv, '')
       const config = mockhttp.configuration()
 
       try {
@@ -310,7 +310,7 @@ describe('cli', function () {
         mockDir: 'data',
         mockExtension: 'test',
       }
-      const mockhttp = await run(argv)
+      const mockhttp = await run(argv, '')
       const config = mockhttp.configuration()
 
       try {
@@ -339,7 +339,7 @@ describe('cli', function () {
         mockDir: 'data',
         mockExtension: 'test',
       }
-      const mockhttp = await run(argv)
+      const mockhttp = await run(argv, '')
       const config = mockhttp.configuration()
 
       try {

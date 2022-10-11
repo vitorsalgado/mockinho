@@ -6,7 +6,7 @@ import { H, MediaTypes } from '../http.js'
 import { httpMock } from '../index.js'
 import { urlPath } from '../feat/matchers/index.js'
 import { opts } from '../config/index.js'
-import { get, post } from '../mock_builder.js'
+import { get, post } from '../builder.js'
 import { ok, okJSON } from '../reply/index.js'
 
 const fixture = (name: string) => Path.join(__dirname, `_fixtures/__content__${name}`)

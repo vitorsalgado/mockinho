@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import 'dotenv/config'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import Yargs from 'yargs/yargs'
@@ -9,7 +8,15 @@ import { Argv } from '../config/index.js'
 import { run } from './run.js'
 import { printErrorAndExit } from './utils.js'
 
-export const Groups = {
+const Banner = `
+ _     _   _    _    __  __    _      _   _ _____ _____ ____
+| |   | | | |  / \\  |  \\/  |  / \\    | | | |_   _|_   _|  _ \\
+| |   | |_| | / _ \\ | |\\/| | / _ \\   | |_| | | |   | | | |_) |
+| |___|  _  |/ ___ \\| |  | |/ ___ \\  |  _  | | |   | | |  __/
+|_____|_| |_/_/   \\_\\_|  |_/_/   \\_\\ |_| |_| |_|   |_| |_|
+`
+
+const Groups = {
   http: 'HTTP:',
   https: 'HTTPS:',
   watch: 'Watch:',
@@ -245,4 +252,4 @@ export default Yargs(hideBin(process.argv))
     },
   })
   .parseAsync()
-  .then(argv => run(argv as unknown as Argv).catch(printErrorAndExit))
+  .then(argv => run(argv as unknown as Argv, Banner).catch(printErrorAndExit))

@@ -5,11 +5,15 @@ import { bold } from 'colorette'
 import { HttpConfiguration } from '../config/index.js'
 import { Argv } from '../config/index.js'
 import { HttpServerInfo } from '../srv.js'
-import Banner from './banner.js'
 import { parseServerInfo } from './utils.js'
 
-export function printInfo(config: HttpConfiguration, options: Argv, info: HttpServerInfo): void {
-  console.log(Banner)
+export function printInfo(
+  config: HttpConfiguration,
+  options: Argv,
+  info: HttpServerInfo,
+  banner: string,
+): void {
+  console.log(banner)
   console.log(bold('Version: ') + '1.0.0')
   console.log(bold('Log Mode: ') + config.mode)
   console.log(bold('Mocks: ') + config.mockDirectory)

@@ -5,5 +5,7 @@ import { blueBright } from 'colorette'
 import { Hooks } from '../Hooks.js'
 
 export function onProxyRequest(event: Hooks['onProxyRequest']): void {
-  console.log(`${blueBright(bold('PROXYING REQUEST'))}${blueBright(' ---> ' + event.target)}\n`)
+  process.stdout.write(
+    `${blueBright(bold('PROXYING REQUEST'))}${blueBright(' ---> ' + event.target)}\n\n`,
+  )
 }

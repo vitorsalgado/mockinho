@@ -1,6 +1,6 @@
 import { Matcher } from '@mockdog/matchers'
 import { HttpConfiguration } from '../../config/index.js'
-import { HttpMockBuilder } from '../../mock_builder.js'
+import { HttpMockBuilder } from '../../builder.js'
 import { MockFile } from './MockFile.js'
 
 export interface FieldParser {
