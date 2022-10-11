@@ -1,11 +1,10 @@
 import Supertest from 'supertest'
 import { equalTo } from '@mockdog/matchers'
 import { field } from '@mockdog/matchers'
-import { opts } from '../index.js'
-import { post } from '../index.js'
+import { opts, post } from '../index.js'
 import { urlPath } from '../index.js'
-import { ok } from '../index.js'
 import { httpMock } from '../index.js'
+import { ok } from '../mock/reply/index.js'
 
 describe('Cookies', function () {
   const $ = httpMock(opts().dynamicHttpPort().cookieOptions('super-secret'))

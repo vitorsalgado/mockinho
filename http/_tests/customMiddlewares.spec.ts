@@ -1,16 +1,14 @@
 import { Response } from 'express'
 import { NextFunction } from 'express'
 import Supertest from 'supertest'
-import { httpMock } from '../index.js'
+import { get, httpMock } from '../index.js'
 import { opts } from '../index.js'
 import { SrvRequest } from '../index.js'
-import { get } from '../index.js'
 import { urlPath } from '../index.js'
-import { ok } from '../index.js'
 import { H } from '../index.js'
 import { MediaTypes } from '../index.js'
-import { created } from '../index.js'
 import { SC } from '../index.js'
+import { created, ok } from '../mock/reply/index.js'
 
 describe('Custom Middlewares', function () {
   function customMiddleware(req: SrvRequest, res: Response, next: NextFunction) {

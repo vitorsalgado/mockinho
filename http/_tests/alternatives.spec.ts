@@ -3,16 +3,15 @@ import { equalTo, isUUID } from '@mockdog/matchers'
 import { Matcher } from '@mockdog/matchers'
 import { modeIsAtLeast } from '@mockdog/core'
 import { HeaderList } from '../headers.js'
-import { httpMock } from '../index.js'
+import { httpMock, post } from '../index.js'
 import { opts } from '../index.js'
-import { ok } from '../index.js'
 import { HttpMock } from '../index.js'
 import { urlPath } from '../index.js'
 import { MediaTypes } from '../index.js'
 import { SrvResponse } from '../index.js'
-import { post } from '../index.js'
 import { H } from '../index.js'
-import { extractQuery } from '../mock/util/extractors'
+import { ok } from '../mock/reply/index.js'
+import { selector } from '../mock/request_value_selectors.js'
 
 describe('Builder Alternatives', function () {
   const $ = httpMock(opts().dynamicHttpPort().trace())
@@ -34,7 +33,7 @@ describe('Builder Alternatives', function () {
             [
               {
                 target: '',
-                selector: extractQuery('term') as (ctx: unknown) => unknown,
+                selector: selector.query('term') as (ctx: unknown) => unknown,
                 matcher: equalTo('test') as Matcher<unknown>,
                 score: 0,
               },

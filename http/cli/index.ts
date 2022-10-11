@@ -1,14 +1,23 @@
 #!/usr/bin/env node
 
 import 'dotenv/config'
-import Yargs from 'yargs/yargs'
-import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
+import Yargs from 'yargs/yargs'
 import { Mode } from '@mockdog/core'
 import { Argv } from '../config/index.js'
 import { run } from './run.js'
 import { printErrorAndExit } from './utils.js'
-import { Groups } from './groups.js'
+
+export const Groups = {
+  http: 'HTTP:',
+  https: 'HTTPS:',
+  watch: 'Watch:',
+  record: 'Record:',
+  proxy: 'Proxy:',
+  internal: 'Internal:',
+  server: 'Server:',
+}
 
 // noinspection TypeScriptValidateJSTypes
 export default Yargs(hideBin(process.argv))

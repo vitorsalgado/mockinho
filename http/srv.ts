@@ -8,11 +8,11 @@ import Multer from 'multer'
 import { log, MockServer } from '@mockdog/core'
 import { HttpConfiguration, Middleware, MiddlewareRoute } from './config/index.js'
 import { bodyParser } from './mid/body_parser.js'
-import { configureProxy } from './proxy.js'
+import { configureProxy } from './features/proxy/index.js'
 import { decorateRequest } from './mid/decorate_request.js'
 import { ErrorCodes } from './_internal/errors.js'
-import { logIncomingRequestMiddleware } from './hooks/logIncomingRequestMiddleware.js'
-import { logReqAndResMiddleware } from './hooks/logReqAndResMiddleware.js'
+import { logIncomingRequestMiddleware } from './features/hooks/logIncomingRequestMiddleware.js'
+import { logReqAndResMiddleware } from './features/hooks/logReqAndResMiddleware.js'
 import { HttpContext } from './HttpContext.js'
 import { SrvRequest } from './request.js'
 import { mockFinderMiddleware } from './mockFinderMiddleware.js'
@@ -85,9 +85,7 @@ export class HttpServer implements MockServer<HttpServerInfo> {
     this.expressApp.disable('x-powered-by')
     this.expressApp.disable('etag')
 
-    this.expressApp.set('query parser', (query: string) => {
-      return new URLSearchParams(query)
-    })
+    this.expressApp.set('query parser', (query: string) => new URLSearchParams(query))
 
     this.expressApp.use(decorateRequest as unknown as Router)
     this.expressApp.use(bodyParser(this.configuration.requestBodyParsers) as unknown as Router) // should come before regular body parsers
@@ -97,9 +95,9 @@ export class HttpServer implements MockServer<HttpServerInfo> {
 
     this.expressApp.use(logIncomingRequestMiddleware(this.context))
     this.expressApp.use(
-      CookieParse(this.configuration.cookieSecrets, this.configuration.cookieOptions) as Router,
+      CookieParse(this.configuration.cookieSecrets, this.configuration.cookieOptions),
     )
-    this.expressApp.use(Multer(this.configuration.multiPartOptions).any() as Router)
+    this.expressApp.use(Multer(this.configuration.multiPartOptions).any())
     this.expressApp.use(logReqAndResMiddleware(this.context))
   }
 

@@ -2,11 +2,11 @@ import Path from 'path'
 import Fs from 'fs'
 import Os from 'os'
 import Supertest from 'supertest'
+import { get } from '../../mock/index.js'
+import { ok } from '../../mock/index.js'
 import { run } from '../run'
 import { Argv } from '../../config'
 import { Defaults } from '../../config'
-import { get } from '../../mock'
-import { ok } from '../../mock'
 import { MockDogHttp } from '../../MockDogHttp'
 
 describe('cli', function () {

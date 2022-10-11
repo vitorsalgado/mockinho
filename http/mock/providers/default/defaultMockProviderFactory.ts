@@ -1,6 +1,6 @@
 import { loadMockFiles } from '@mockdog/core'
 import { HttpConfiguration } from '../../../config/index.js'
-import { HttpMockBuilder } from '../../HttpMockBuilder.js'
+import { HttpMockBuilder } from '../../httpmock_builder.js'
 import { HttpMockProvider } from '../HttpMockProvider.js'
 import { buildMockFromFile } from './buildMockFromFile.js'
 import { MockFile } from './MockFile.js'

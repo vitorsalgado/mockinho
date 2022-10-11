@@ -2,11 +2,11 @@ import Supertest from 'supertest'
 import { contains } from '@mockdog/matchers'
 import { H, MediaTypes } from '../http.js'
 import { HttpContext } from '../HttpContext'
-import { opts, post, HttpConfigurationBuilder, HttpServer, httpMock } from '../index.js'
+import { opts, HttpConfigurationBuilder, HttpServer, httpMock, post } from '../index.js'
 import { HttpMockRepository } from '../index.js'
 
-import { urlPath } from '../matchers'
-import { okJSON } from '../mock'
+import { urlPath } from '../features/matchers'
+import { okJSON } from '../mock/reply/index.js'
 
 describe('Express Http Server', function () {
   const $ = httpMock(opts().dynamicHttpPort())

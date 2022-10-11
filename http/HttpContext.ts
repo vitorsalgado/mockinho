@@ -1,6 +1,6 @@
 import { Context } from '@mockdog/core'
 import { HttpConfiguration } from './config/index.js'
-import { HookListener } from './hooks/index.js'
+import { HookListener } from './features/hooks/index.js'
 import { HttpMockRepository } from './mock/index.js'
 import { HttpMock } from './mock/index.js'
 

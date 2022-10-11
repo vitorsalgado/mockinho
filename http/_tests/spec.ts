@@ -3,11 +3,10 @@ import Supertest from 'supertest'
 import { contains, equalTo, field } from '@mockdog/matchers'
 import { fromFile } from '@mockdog/x'
 import { H, MediaTypes } from '../http.js'
-import { get } from '../mock/index.js'
-import { httpMock } from '../index.js'
-import { urlPath } from '../matchers/index.js'
-import { ok, okJSON, post } from '../mock/index.js'
+import { get, httpMock, post } from '../index.js'
+import { urlPath } from '../features/matchers/index.js'
 import { opts } from '../config/index.js'
+import { ok, okJSON } from '../mock/reply/index.js'
 
 const fixture = (name: string) => Path.join(__dirname, `_fixtures/__content__${name}`)
 

@@ -3,7 +3,7 @@ import { allOf, contains, equalTo, field, hasLength, item } from '@mockdog/match
 import { H, MediaTypes } from '../http.js'
 import { opts, post, urlPath } from '../index.js'
 import { httpMock } from '../index.js'
-import { ok } from '../mock'
+import { ok } from '../mock/reply/index.js'
 
 describe('HTTP - Form Url Encoded', function () {
   const $ = httpMock(opts().dynamicHttpPort().formUrlEncodedOptions({ limit: 80 }))
