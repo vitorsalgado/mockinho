@@ -18,7 +18,7 @@ import {
   Matcher,
   not,
   regex,
-  repeatTimes,
+  repeat,
   startsWith,
   toLowerCase,
   toUpperCase,
@@ -34,7 +34,7 @@ import { response } from '../../reply/index.js'
 import { random } from '../../reply/random.js'
 import { Reply } from '../../reply/reply.js'
 import { sequence } from '../../reply/sequence.js'
-import { StandardReply } from '../../reply/standard_reply.js'
+import { StandardReply } from '../../reply/index.js'
 import { FieldParser } from './FieldParser.js'
 import { MockFile, MockFileResponse } from './MockFile.js'
 import { extractPath } from './util/extractPath.js'
@@ -344,8 +344,8 @@ function discoverMatcherByKey(
     return isPresent()
   } else if (key === 'isUUID') {
     return isUUID()
-  } else if (key === 'times' || key === 'repeatTimes') {
-    return repeatTimes(values)
+  } else if (key === 'times' || key === 'repeat') {
+    return repeat(values)
   } else if (key === 'everyItem') {
     if (valueIsText) {
       return everyItem(discoverMatcherByValue(mock, values, parsers))

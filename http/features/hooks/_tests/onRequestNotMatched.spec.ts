@@ -1,7 +1,6 @@
 import { StateRepository } from '@mockdog/core'
-import { equalTo } from '@mockdog/matchers'
-import { ok } from '../../../mock/reply/index.js'
-import { contentType } from '../../matchers/index.js'
+import { equalTo, isPresent } from '@mockdog/matchers'
+import { ok } from '../../../mock/index.js'
 import { Deps, HttpMockBuilder } from '../../../mock/index.js'
 import { onRequestNotMatched } from '../builtin/onRequestNotMatched.js'
 
@@ -18,10 +17,7 @@ describe('onRequestNotMatched', function () {
   })
 
   it('should log with mock without name and id', function () {
-    const mock = HttpMockBuilder.newBuilder()
-      .expect(contentType('something'))
-      .reply(ok())
-      .build(deps)
+    const mock = HttpMockBuilder.newBuilder().contentType(isPresent()).reply(ok()).build(deps)
 
     onRequestNotMatched({
       verbose: true,
@@ -36,7 +32,7 @@ describe('onRequestNotMatched', function () {
     const mock = new HttpMockBuilder('file', './somewhere')
       .id('test')
       .name('nice name')
-      .expect(contentType('something'))
+      .contentType(isPresent())
       .reply(ok())
       .build(deps)
 
@@ -53,7 +49,6 @@ describe('onRequestNotMatched', function () {
     const mock = new HttpMockBuilder('file', './somewhere')
       .id('test')
       .name('nice name')
-      .expect(contentType('something'))
       .url('http://localhost:8080')
       .method('PATCH')
       .reply(ok())
@@ -72,7 +67,6 @@ describe('onRequestNotMatched', function () {
     const mock = new HttpMockBuilder('file', './somewhere')
       .id('test')
       .name('nice name')
-      .expect(contentType('something'))
       .url(equalTo('http://localhost:8080'))
       .method('GET')
       .reply(ok())

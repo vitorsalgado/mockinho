@@ -2,7 +2,7 @@ import { Matcher } from './base/index.js'
 import { matcherHint } from './internal/fmt.js'
 import { res } from './internal/res.js'
 
-export const repeatTimes = (max: number): Matcher => {
+export const repeat = (max: number): Matcher => {
   if (max <= 0) {
     throw new RangeError('Parameter max must be greater than 0.')
   }

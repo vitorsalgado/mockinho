@@ -6,13 +6,12 @@ import {
   stateMatcher,
   StateRepository,
 } from '@mockdog/core'
-import { allOf, anyItem, equalTo, Matcher, Predicate, repeatTimes, wrap } from '@mockdog/matchers'
+import { allOf, anyItem, equalTo, Matcher, Predicate, repeat, wrap } from '@mockdog/matchers'
 import { base64, JsonType, noNullElements, notBlank, notEmpty, notNull, Nullable } from '@mockdog/x'
-import { bearerToken, urlPath } from '../features/matchers/index.js'
+import { basicAuth, bearerToken, urlPath } from '../features/matchers/index.js'
 import { BodyType, H, Methods, Schemes } from '../http.js'
 import { SrvRequest } from '../request.js'
 import { HttpMock } from './httpmock.js'
-import { ForwardReply } from './reply/forward.js'
 import { Reply, ReplyFn, wrapReply } from './reply/reply.js'
 import { selector } from './request_value_selectors.js'
 
@@ -69,27 +68,36 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
   method(...method: Methods[]): this {
     notNull(method)
 
-    this._expectations.push(this.spec('method', selector.method, anyItem(...method), 3))
+    this._expectations.push(
+      this.spec(makeTarget('method', method.join(',')), selector.method, anyItem(...method), 3),
+    )
 
     return this
   }
 
-  scheme(scheme: Schemes): this {
-    this._expectations.push(this.spec('scheme', selector.scheme, equalTo(scheme), 1))
+  scheme(...scheme: Schemes[]): this {
+    this._expectations.push(
+      this.spec(makeTarget('scheme', scheme.join(',')), selector.scheme, equalTo(scheme, true), 1),
+    )
 
     return this
   }
 
-  header(key: string, matcher: Matcher<string> | string): this {
+  header(
+    key: string,
+    matcher: Predicate<Nullable<string>> | Matcher<Nullable<string>> | string,
+  ): this {
     notBlank(key)
     notNull(matcher)
 
+    const target = `header(${key})`
+
     if (typeof matcher === 'string') {
       this._expectations.push(
-        this.spec('header', selector.header(key.toLowerCase()), equalTo(matcher), 0.5),
+        this.spec(target, selector.header(key.toLowerCase()), equalTo(matcher, true), 0.5),
       )
     } else {
-      this._expectations.push(this.spec('header', selector.header(key.toLowerCase()), matcher, 0.5))
+      this._expectations.push(this.spec(target, selector.header(key), wrap(matcher), 0.5))
     }
 
     return this
@@ -103,29 +111,33 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     return this
   }
 
-  contentType(matcher: Matcher<string> | string): this {
+  contentType(matcher: Predicate<Nullable<string>> | Matcher<Nullable<string>> | string): this {
     notNull(matcher)
+
+    const target = makeTarget('header', 'content-type')
 
     if (typeof matcher === 'string') {
       this._expectations.push(
-        this.spec('header', selector.header(H.ContentType), equalTo(matcher), 0.5),
+        this.spec(target, selector.header(H.ContentType), equalTo(matcher, true), 0.5),
       )
     } else {
-      this._expectations.push(this.spec('header', selector.header(H.ContentType), matcher, 0.5))
+      this._expectations.push(this.spec(target, selector.header(H.ContentType), wrap(matcher), 0.5))
     }
 
     return this
   }
 
-  basicAuth(username: string, password: string): this {
+  basicAuth(username: string | Matcher<string>, password: string = ''): this {
     notNull(username)
     notNull(password)
 
+    const encoded = base64.encode(`${username}:${password}`)
+
     this._expectations.push(
       this.spec(
-        'basic auth',
-        selector.header(H.Authorization),
-        equalTo(base64.encode(`Basic ${username}:${password}`)),
+        makeTarget('basic_auth', encoded),
+        selector.request,
+        basicAuth(username, password),
         0.5,
       ),
     )
@@ -136,7 +148,9 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
   bearerToken(token: string): this {
     notNull(token)
 
-    this._expectations.push(this.spec('bearer token', selector.request, bearerToken(token), 0.5))
+    this._expectations.push(
+      this.spec(makeTarget('bearer_token', token), selector.request, bearerToken(token), 0.5),
+    )
 
     return this
   }
@@ -148,10 +162,12 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     notBlank(key)
     notNull(matcher)
 
+    const target = makeTarget('query', key)
+
     if (typeof matcher === 'string') {
-      this._expectations.push(this.spec('query', selector.query(key), equalTo(matcher), 0.5))
+      this._expectations.push(this.spec(target, selector.query(key), equalTo(matcher), 0.5))
     } else {
-      this._expectations.push(this.spec('query', selector.query(key), wrap(matcher), 0.5))
+      this._expectations.push(this.spec(target, selector.query(key), wrap(matcher), 0.5))
     }
 
     return this
@@ -161,10 +177,12 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     notBlank(key)
     notNull(matcher)
 
+    const target = makeTarget('query', key)
+
     if (typeof matcher === 'string') {
-      this._expectations.push(this.spec('query', selector.queries(key), equalTo(matcher), 0.5))
+      this._expectations.push(this.spec(target, selector.queries(key), equalTo(matcher), 0.5))
     } else {
-      this._expectations.push(this.spec('query', selector.queries(key), wrap(matcher), 0.5))
+      this._expectations.push(this.spec(target, selector.queries(key), wrap(matcher), 0.5))
     }
 
     return this
@@ -173,7 +191,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
   querystring(matcher: Matcher<URLSearchParams>): this {
     notNull(matcher)
 
-    this._expectations.push(this.spec('query', selector.fullQuerystring, matcher, 3))
+    this._expectations.push(this.spec('querystring', selector.fullQuerystring, matcher, 3))
 
     return this
   }
@@ -202,54 +220,56 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     noNullElements(matchers)
 
     if (matchers.length === 0) {
-      this._expectations.push(this.spec('file', selector.files, wrap(matchers[0]), 3))
+      this._expectations.push(this.spec('files', selector.files, wrap(matchers[0]), 3))
     }
 
     this._expectations.push(
-      this.spec('file', selector.files, allOf(...matchers.map(x => wrap(x))), 5),
+      this.spec('files', selector.files, allOf(...matchers.map(x => wrap(x))), 5),
     )
 
     return this
   }
 
-  file(fieldName: string, ...matchers: Array<Matcher<Express.Multer.File | undefined>>): this {
-    notBlank(fieldName)
+  file(field: string, ...matchers: Array<Matcher<Express.Multer.File | undefined>>): this {
+    notBlank(field)
     notEmpty(matchers)
     noNullElements(matchers)
 
+    const target = makeTarget('file', field)
+
     if (matchers.length === 0) {
-      this._expectations.push(
-        this.spec('file', selector.fileByFieldName(fieldName), matchers[0], 3),
-      )
+      this._expectations.push(this.spec(target, selector.fileByFieldName(field), matchers[0], 3))
     }
 
     this._expectations.push(
-      this.spec('file', selector.fileByFieldName(fieldName), allOf(...matchers), 5),
+      this.spec(target, selector.fileByFieldName(field), allOf(...matchers), 5),
     )
 
     return this
   }
 
-  cookie(key: string, matcher: Matcher<string> | string): this {
+  cookie(
+    name: string,
+    matcher: Predicate<Nullable<string>> | Matcher<Nullable<string>> | string,
+  ): this {
+    const target = makeTarget('cookie', name)
+
     if (typeof matcher === 'string') {
-      this._expectations.push(
-        this.spec('cookie', selector.cookie(key) as any, equalTo(matcher), 0.5),
-      )
+      this._expectations.push(this.spec(target, selector.cookie(name), equalTo(matcher), 0.5))
     } else {
-      this._expectations.push(this.spec('cookie', selector.cookie(key) as any, matcher, 0.5))
+      this._expectations.push(this.spec(target, selector.cookie(name), wrap(matcher), 0.5))
     }
 
     return this
   }
 
-  cookieJson(key: string, matcher: Matcher<JsonType> | string): this {
-    if (typeof matcher === 'string') {
-      this._expectations.push(
-        this.spec('cookie', selector.jsonCookie(key) as any, equalTo(matcher), 0.5),
-      )
-    } else {
-      this._expectations.push(this.spec('cookie', selector.jsonCookie(key) as any, matcher, 0.5))
-    }
+  cookieJson(
+    name: string,
+    matcher: Predicate<Nullable<JsonType>> | Matcher<Nullable<JsonType>>,
+  ): this {
+    this._expectations.push(
+      this.spec(makeTarget('cookieJSON', name), selector.jsonCookie(name), wrap(matcher), 0.5),
+    )
 
     return this
   }
@@ -257,22 +277,20 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
   repeat(times: number): this {
     notNull(times)
 
-    this._expectations.push(this.spec('request', selector.nothing, repeatTimes(times), 0))
+    this._expectations.push(
+      this.spec(makeTarget('request', times), selector.nothing, repeat(times), 0),
+    )
 
     return this
   }
 
-  expect(...matchers: Array<Predicate | Matcher>): this {
+  expect(...matchers: Array<Predicate<SrvRequest> | Matcher<SrvRequest>>): this {
     notEmpty(matchers)
     noNullElements(matchers)
 
-    if (matchers.length === 1) {
-      this._expectations.push(this.spec('request', selector.request, wrap(matchers[0]), 1))
-    } else {
-      this._expectations.push(
-        this.spec('request', selector.request, allOf(...matchers.map(x => wrap(x))), 1),
-      )
-    }
+    this._expectations.push(
+      this.spec('request', selector.request, allOf(...matchers.map(x => wrap(x))), 1),
+    )
 
     return this
   }
@@ -305,11 +323,6 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     return this
   }
 
-  proxyTo(target: string, reply: ForwardReply): this {
-    this._reply = reply.target(target)
-    return this
-  }
-
   reply(reply: Reply | ReplyFn): this {
     this._reply = wrapReply(reply)
     return this
@@ -327,14 +340,12 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     if (this._scenario) {
       this._expectations.push(
         this.spec(
-          'state',
+          makeTarget('state', this._scenario),
           selector.nothing,
-          wrap(
-            stateMatcher(deps.stateRepository)(
-              this._scenario,
-              this._scenarioRequiredState,
-              this._scenarioNewState,
-            ),
+          stateMatcher(deps.stateRepository)(
+            this._scenario,
+            this._scenarioRequiredState,
+            this._scenarioNewState,
           ),
         ),
       )
@@ -354,7 +365,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
   private spec<T, M = T>(
     target: string,
     selector: (request: SrvRequest) => T,
-    matcher: Matcher<M> | Predicate<M>,
+    matcher: Matcher<M>,
     score: number = 0,
   ): MatcherSpecification<unknown, unknown> {
     return {
@@ -368,20 +379,32 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
 
 export const anyMethod = (urlMatcher: Matcher<string> | string): HttpMockBuilder =>
   HttpMockBuilder.newBuilder().url(urlMatcher)
+
 export const del = (urlMatcher: Matcher<string> | string): HttpMockBuilder =>
   forMethod('DELETE', urlMatcher)
+
 export const get = (urlMatcher: Matcher<string> | string): HttpMockBuilder =>
   forMethod('GET', urlMatcher)
+
 export const head = (urlMatcher: Matcher<string> | string): HttpMockBuilder =>
   forMethod('HEAD', urlMatcher)
+
 export const patch = (urlMatcher: Matcher<string> | string): HttpMockBuilder =>
   forMethod('PATCH', urlMatcher)
+
 export const put = (urlMatcher: Matcher<string> | string): HttpMockBuilder =>
   forMethod('PUT', urlMatcher)
+
 export const post = (urlMatcher: Matcher<string> | string): HttpMockBuilder =>
   forMethod('POST', urlMatcher)
+
 export const request = (urlMatcher: Matcher<string> | string): HttpMockBuilder =>
   HttpMockBuilder.newBuilder().url(urlMatcher)
 
-const forMethod = (method: Methods, urlMatcher: Matcher<string> | string): HttpMockBuilder =>
-  HttpMockBuilder.newBuilder().method(method).url(urlMatcher)
+function forMethod(method: Methods, urlMatcher: Matcher<string> | string): HttpMockBuilder {
+  return HttpMockBuilder.newBuilder().method(method).url(urlMatcher)
+}
+
+function makeTarget(target: string, param: unknown): string {
+  return `${target}(${param})`
+}

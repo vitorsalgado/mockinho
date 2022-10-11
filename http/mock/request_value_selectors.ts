@@ -15,9 +15,8 @@ export const selector = {
 
   header:
     (key: string) =>
-    (request: SrvRequest): string =>
-      // FIXME: use request.header()
-      request.headers[key],
+    (request: SrvRequest): string | null =>
+      request.header(key) || null,
 
   headers: (request: SrvRequest): Record<string, string> => request.headers,
 
@@ -30,7 +29,7 @@ export const selector = {
 
   fullQuerystring: (request: SrvRequest): URLSearchParams => request.query,
 
-  nothing: (): undefined => undefined,
+  nothing: (): null => null,
 
   files: (request: SrvRequest): Array<Express.Multer.File> => request.files,
 
@@ -41,25 +40,25 @@ export const selector = {
 
   cookie:
     (key: string) =>
-    (request: SrvRequest): string | undefined => {
+    (request: SrvRequest): string | null => {
       if (request.cookies && request.cookies[key]) {
         return request.cookies[key]
       } else if (request.signedCookies && request.signedCookies[key]) {
         return request.signedCookies[key]
       }
 
-      return undefined
+      return null
     },
 
   jsonCookie:
     (key: string) =>
-    (request: SrvRequest): string | undefined => {
+    (request: SrvRequest): string | null => {
       if (request.cookies && request.cookies[key]) {
         return JSON.parse(request.cookies[key])
       } else if (request.signedCookies && request.signedCookies[key]) {
         return JSON.parse(request.signedCookies[key])
       }
 
-      return undefined
+      return null
     },
 }
