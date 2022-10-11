@@ -1,9 +1,14 @@
 const sHeaders = Symbol('headers')
 
+export type HeaderListInitTypes =
+  | [string, string]
+  | Record<string, string | string[] | undefined>
+  | string[][]
+
 export class HeaderList {
   private readonly [sHeaders]: Map<string, string>
 
-  constructor(init?: [string, string] | Record<string, string> | string[][]) {
+  constructor(init?: HeaderListInitTypes) {
     this[sHeaders] = new Map<string, string>()
     this.initialize(init)
   }
@@ -53,15 +58,6 @@ export class HeaderList {
     return this[sHeaders].entries()
   }
 
-  forEach(
-    callback: (value: string, key: string, map: Map<string, string>) => void,
-    thisArg?: any,
-  ): void {
-    for (const [key, value] of this[sHeaders]) {
-      callback.call(thisArg, value, key, this[sHeaders])
-    }
-  }
-
   get size(): number {
     return this[sHeaders].size
   }
@@ -101,14 +97,6 @@ export class HeaderList {
     }
   }
 
-  mergeObject(obj: Record<string, string>): void {
-    for (const [k, v] of Object.entries(obj)) {
-      if (!this.has(k)) {
-        this.set(k, v)
-      }
-    }
-  }
-
   isEmpty(): boolean {
     return this[sHeaders].size === 0
   }
@@ -119,22 +107,32 @@ export class HeaderList {
     return name.toLowerCase()
   }
 
-  private initialize(init: any): void {
-    if (init !== null && init !== undefined) {
-      if (Array.isArray(init)) {
-        for (let i = 0; i < init.length; i++) {
-          const h = init[i]
+  private initialize(init?: HeaderListInitTypes): void {
+    if (init === null || init === undefined) {
+      return
+    }
 
-          if (h.length !== 2) {
-            throw new TypeError('Header init must be an 2d array or an object.')
-          }
+    if (Array.isArray(init)) {
+      for (let i = 0; i < init.length; i++) {
+        const h = init[i]
 
-          const [k, v] = init[i]
-
-          this.append(k, v)
+        if (h.length !== 2) {
+          throw new TypeError('Header init must be an 2d array or an object.')
         }
-      } else if (typeof init === 'object') {
-        this.mergeObject(init)
+
+        const [k, v] = init[i]
+
+        this.append(k, v)
+      }
+    } else if (typeof init === 'object') {
+      for (const [k, v] of Object.entries(init)) {
+        if (!this.has(k)) {
+          if (Array.isArray(v)) {
+            this.set(k, v.join(', '))
+          } else {
+            this.set(k, v || '')
+          }
+        }
       }
     }
   }

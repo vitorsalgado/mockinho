@@ -1,3 +1,4 @@
+import http from 'node:http'
 import { Express } from 'express'
 import { BodyType, Methods, Schemes } from '../http.js'
 import { SrvRequest } from '../request.js'
@@ -18,7 +19,7 @@ export const selector = {
     (request: SrvRequest): string | null =>
       request.header(key) || null,
 
-  headers: (request: SrvRequest): Record<string, string> => request.headers,
+  headers: (request: SrvRequest): http.IncomingHttpHeaders => request.headers,
 
   query:
     (key: string) =>

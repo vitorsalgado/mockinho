@@ -16,5 +16,9 @@ export const both =
       () =>
         matcherHint(matcherName) + '\nFirst: \n' + one.message() + '\nSecond: \n' + other.message(),
       pass,
+      () => {
+        one.onMockServed?.()
+        other.onMockServed?.()
+      },
     )
   }

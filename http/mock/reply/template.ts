@@ -1,3 +1,4 @@
+import http from 'node:http'
 import { JsonType } from '@mockdog/x'
 import { BodyType, Methods } from '../../http.js'
 
@@ -6,7 +7,7 @@ export interface TmplRequest {
   href: string
   url: string
   method: Methods
-  headers: Record<string, string>
+  headers: http.IncomingHttpHeaders
   query: URLSearchParams
   body: BodyType
   isMultipart: boolean

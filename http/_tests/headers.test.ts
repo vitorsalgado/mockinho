@@ -117,24 +117,6 @@ describe('Headers', function () {
     })
   })
 
-  it('should merge object, ignoring', () => {
-    const h = new HeaderList([])
-    const obj = {
-      name: 'test',
-      age: '32',
-    }
-
-    h.set('accept', 'everything')
-    h.set('cache', 'always')
-    h.mergeObject(obj)
-
-    expect(h.size).toEqual(4)
-    expect(h.get('accept')).toEqual('everything')
-    expect(h.get('cache')).toEqual('always')
-    expect(h.get('name')).toEqual('test')
-    expect(h.get('age')).toEqual('32')
-  })
-
   it('should merge two headers', () => {
     const h1 = new HeaderList([])
 

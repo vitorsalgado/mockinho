@@ -7,7 +7,8 @@ export const anyOf =
   <T>(...matchers: Array<Matcher<T>>): Matcher<T> =>
   received => {
     const matcherName = 'anyOf'
-    const msg: [number, Result][] = []
+    const failed: [number, Result][] = []
+    const passed: Result[] = []
     let pass = false
 
     for (let i = 0; i < matchers.length; i++) {
@@ -15,8 +16,9 @@ export const anyOf =
 
       if (r.pass) {
         pass = true
+        passed.push(r)
       } else {
-        msg.push([i, r])
+        failed.push([i, r])
       }
     }
 
@@ -26,7 +28,8 @@ export const anyOf =
         matcherHint(matcherName) +
         '\n' +
         'Result: \n' +
-        msg.map(([i, r]) => `${String(i)}${indent(r.message())}`).join('\n\n'),
+        failed.map(([i, r]) => `${String(i)}${indent(r.message())}`).join('\n\n'),
       pass,
+      () => passed.forEach(({ onMockServed }) => onMockServed && onMockServed()),
     )
   }

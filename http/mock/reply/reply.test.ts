@@ -23,7 +23,7 @@ describe('Responses', function () {
       $.mock(
         get(urlPath('/test'))
           .header('content-type', contains('json'))
-          .reply(ok().bodyWith(request => ({ data: `Request method was: ${request.method}` }))),
+          .reply(ok().bodyFn(request => ({ data: `Request method was: ${request.method}` }))),
       )
 
       return Supertest($.listener())

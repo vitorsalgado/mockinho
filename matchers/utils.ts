@@ -1,7 +1,7 @@
 import { Matcher, OnMockServed, Predicate } from './base/index.js'
 import { res } from './internal/index.js'
 
-export const wrap = <V = any>(
+export const fromPredicate = <V = any>(
   matcher: Matcher<V> | Predicate<V>,
   options: {
     name: string
@@ -28,4 +28,4 @@ export const wrap = <V = any>(
   }
 }
 
-export const fn = <V = any>(predicate: Predicate<V>) => wrap(predicate)
+export const fn = <V = any>(predicate: Predicate<V>) => fromPredicate(predicate)

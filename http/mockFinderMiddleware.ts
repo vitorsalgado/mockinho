@@ -51,11 +51,11 @@ export function mockFinderMiddleware(context: HttpContext) {
         } else {
           res.send(response.body)
         }
-      }
 
-      for (const { onMockServed } of result.results()) {
-        if (onMockServed !== undefined) {
-          onMockServed()
+        for (const { onMockServed } of result.results()) {
+          if (onMockServed !== undefined) {
+            onMockServed()
+          }
         }
       }
 

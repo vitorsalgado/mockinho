@@ -8,8 +8,8 @@ import { HttpConfigurationBuilder } from '../HttpConfigurationBuilder'
 import { SrvRequest } from '../../request.js'
 import { Defaults } from '../Defaults'
 import { RecordOptions } from '../../features/rec'
-import { defaultMockProviderFactory } from '../../mock/providers/default/defaultMockProviderFactory'
-import { FieldParser } from '../../mock/providers/default/FieldParser'
+import { defaultMockProviderFactory } from '../../mock/loaders/default/defaultMockProviderFactory'
+import { FieldParser } from '../../mock/loaders/default/FieldParser'
 import { MockDogHttp } from '../../MockDogHttp'
 
 describe('Configurations Builder', function () {

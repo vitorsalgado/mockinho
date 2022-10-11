@@ -1,3 +1,4 @@
+import http from 'node:http'
 import {
   MatcherSpecification,
   MockBuilder,
@@ -6,12 +7,20 @@ import {
   stateMatcher,
   StateRepository,
 } from '@mockdog/core'
-import { allOf, anyItem, equalTo, Matcher, Predicate, repeat, wrap } from '@mockdog/matchers'
+import {
+  allOf,
+  anyItem,
+  equalTo,
+  Matcher,
+  Predicate,
+  repeat,
+  fromPredicate,
+} from '@mockdog/matchers'
 import { base64, JsonType, noNullElements, notBlank, notEmpty, notNull, Nullable } from '@mockdog/x'
 import { basicAuth, bearerToken, urlPath } from '../features/matchers/index.js'
 import { BodyType, H, Methods, Schemes } from '../http.js'
 import { SrvRequest } from '../request.js'
-import { HttpMock } from './httpmock.js'
+import { HttpMock } from './mock.js'
 import { Reply, ReplyFn, wrapReply } from './reply/reply.js'
 import { selector } from './request_value_selectors.js'
 
@@ -97,16 +106,16 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
         this.spec(target, selector.header(key.toLowerCase()), equalTo(matcher, true), 0.5),
       )
     } else {
-      this._expectations.push(this.spec(target, selector.header(key), wrap(matcher), 0.5))
+      this._expectations.push(this.spec(target, selector.header(key), fromPredicate(matcher), 0.5))
     }
 
     return this
   }
 
-  headers(matcher: Matcher<Record<string, string>>): this {
+  headers(matcher: Matcher<http.IncomingHttpHeaders> | Predicate<http.IncomingHttpHeaders>): this {
     notNull(matcher)
 
-    this._expectations.push(this.spec('header', selector.headers, matcher, 3))
+    this._expectations.push(this.spec('header', selector.headers, fromPredicate(matcher), 3))
 
     return this
   }
@@ -121,7 +130,9 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
         this.spec(target, selector.header(H.ContentType), equalTo(matcher, true), 0.5),
       )
     } else {
-      this._expectations.push(this.spec(target, selector.header(H.ContentType), wrap(matcher), 0.5))
+      this._expectations.push(
+        this.spec(target, selector.header(H.ContentType), fromPredicate(matcher), 0.5),
+      )
     }
 
     return this
@@ -167,7 +178,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     if (typeof matcher === 'string') {
       this._expectations.push(this.spec(target, selector.query(key), equalTo(matcher), 0.5))
     } else {
-      this._expectations.push(this.spec(target, selector.query(key), wrap(matcher), 0.5))
+      this._expectations.push(this.spec(target, selector.query(key), fromPredicate(matcher), 0.5))
     }
 
     return this
@@ -182,7 +193,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     if (typeof matcher === 'string') {
       this._expectations.push(this.spec(target, selector.queries(key), equalTo(matcher), 0.5))
     } else {
-      this._expectations.push(this.spec(target, selector.queries(key), wrap(matcher), 0.5))
+      this._expectations.push(this.spec(target, selector.queries(key), fromPredicate(matcher), 0.5))
     }
 
     return this
@@ -220,11 +231,11 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     noNullElements(matchers)
 
     if (matchers.length === 0) {
-      this._expectations.push(this.spec('files', selector.files, wrap(matchers[0]), 3))
+      this._expectations.push(this.spec('files', selector.files, fromPredicate(matchers[0]), 3))
     }
 
     this._expectations.push(
-      this.spec('files', selector.files, allOf(...matchers.map(x => wrap(x))), 5),
+      this.spec('files', selector.files, allOf(...matchers.map(x => fromPredicate(x))), 5),
     )
 
     return this
@@ -257,7 +268,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     if (typeof matcher === 'string') {
       this._expectations.push(this.spec(target, selector.cookie(name), equalTo(matcher), 0.5))
     } else {
-      this._expectations.push(this.spec(target, selector.cookie(name), wrap(matcher), 0.5))
+      this._expectations.push(this.spec(target, selector.cookie(name), fromPredicate(matcher), 0.5))
     }
 
     return this
@@ -268,7 +279,12 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     matcher: Predicate<Nullable<JsonType>> | Matcher<Nullable<JsonType>>,
   ): this {
     this._expectations.push(
-      this.spec(makeTarget('cookieJSON', name), selector.jsonCookie(name), wrap(matcher), 0.5),
+      this.spec(
+        makeTarget('cookieJSON', name),
+        selector.jsonCookie(name),
+        fromPredicate(matcher),
+        0.5,
+      ),
     )
 
     return this
@@ -289,7 +305,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     noNullElements(matchers)
 
     this._expectations.push(
-      this.spec('request', selector.request, allOf(...matchers.map(x => wrap(x))), 1),
+      this.spec('request', selector.request, allOf(...matchers.map(x => fromPredicate(x))), 1),
     )
 
     return this

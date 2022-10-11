@@ -11,7 +11,7 @@ export const badGateway = (): StandardReply => response().status(SC.BadGateway)
 export const badRequest = (): StandardReply => response().status(SC.BadRequest)
 
 export const created = (location?: string): StandardReply =>
-  StandardReply.newBuilder().headerLocation(location).status(SC.Created)
+  StandardReply.newBuilder().location(location).status(SC.Created)
 
 export const createdJSON = (body: JsonType, location?: string): StandardReply =>
   created(location).bodyJSON(body)
@@ -19,7 +19,7 @@ export const createdJSON = (body: JsonType, location?: string): StandardReply =>
 export const forbidden = (): StandardReply => response().status(SC.Forbidden)
 
 export const found = (location?: string): StandardReply =>
-  response().headerLocation(location).status(SC.Found)
+  response().location(location).status(SC.Found)
 
 export const gatewayTimeout = (): StandardReply => response().status(SC.GatewayTimeout)
 
@@ -36,7 +36,7 @@ export const methodNotAllowed = (allows?: Methods): StandardReply => {
 }
 
 export const movedPermanently = (location?: string): StandardReply =>
-  response().status(SC.Moved_Permanently).headerLocation(location)
+  response().status(SC.Moved_Permanently).location(location)
 
 export const noContent = (): StandardReply => response().status(SC.NoContent)
 
@@ -51,7 +51,7 @@ export const ok = (): StandardReply => StandardReply.newBuilder().status(SC.OK)
 export const okJSON = (body: JsonType): StandardReply => ok().bodyJSON(body)
 
 export const seeOther = (location?: string): StandardReply =>
-  response().status(SC.SeeOther).headerLocation(location)
+  response().status(SC.SeeOther).location(location)
 
 export const serviceUnavailable = (): StandardReply => response().status(SC.ServiceUnavailable)
 

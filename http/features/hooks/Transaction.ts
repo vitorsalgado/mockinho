@@ -1,3 +1,4 @@
+import http from 'node:http'
 import { Express } from 'express'
 import { Methods } from '../../http.js'
 
@@ -12,7 +13,7 @@ export interface Transaction {
     path: string
     query: URLSearchParams
     params: Record<string, unknown>
-    headers: Record<string, string>
+    headers: http.IncomingHttpHeaders
     isMultipart: boolean
     files: Array<Express.Multer.File>
   }

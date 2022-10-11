@@ -64,8 +64,10 @@ export class StandardReply implements Reply {
     return this
   }
 
-  headerLocation(location: string = ''): this {
-    this._headers.set(H.Location, location)
+  location(location?: string): this {
+    if (location) {
+      this._headers.set(H.Location, location)
+    }
 
     return this
   }
@@ -103,7 +105,7 @@ export class StandardReply implements Reply {
     return this
   }
 
-  bodyWith(builder: (request: SrvRequest) => BodyType | Promise<BodyType>): this {
+  bodyFn(builder: (request: SrvRequest) => BodyType | Promise<BodyType>): this {
     this._bodyFunction = builder
     this._bodyCtrl++
 

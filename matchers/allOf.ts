@@ -7,7 +7,8 @@ export const allOf =
   <T>(...matchers: Array<Matcher<T>>): Matcher<T> =>
   received => {
     const matcherName = 'allOf'
-    const msg: [number, Result][] = []
+    const failed: [number, Result][] = []
+    const passed: Result[] = []
     let pass = true
 
     for (let i = 0; i < matchers.length; i++) {
@@ -15,7 +16,9 @@ export const allOf =
 
       if (!r.pass) {
         pass = false
-        msg.push([i, r])
+        failed.push([i, r])
+      } else {
+        passed.push(r)
       }
     }
 
@@ -25,7 +28,13 @@ export const allOf =
         matcherHint(matcherName) +
         '\n' +
         'Result: \n' +
-        msg.map(([i, r]) => `${String(i)}${indent(r.message())}`).join('\n\n'),
+        failed.map(([i, r]) => `${String(i)}${indent(r.message())}`).join('\n\n'),
       pass,
+      () =>
+        passed.forEach(({ onMockServed }) => {
+          if (onMockServed !== undefined) {
+            onMockServed()
+          }
+        }),
     )
   }

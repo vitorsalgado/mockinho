@@ -14,7 +14,6 @@ export interface SrvRequestInternals {
 export interface SrvRequest
   extends Request<{ [key: string]: string }, any, BodyType, URLSearchParams> {
   method: Methods
-  headers: Record<string, string>
   files: Array<Express.Multer.File>
   locals: Record<string, any>
 

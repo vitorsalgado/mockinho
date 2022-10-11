@@ -46,7 +46,7 @@ export abstract class MockApp<
 
   protected abstract deps(): DEPS
 
-  mock(...mockBuilder: Array<MockBuilder<MOCK, DEPS> | ((context: CONTEXT) => MOCK)>): Scope<MOCK> {
+  mock(...mockBuilder: Array<MockBuilder<MOCK, DEPS> | ((request: CONTEXT) => MOCK)>): Scope<MOCK> {
     const added = mockBuilder
       .map(builder =>
         typeof builder === 'function' ? builder(this._context) : builder.build(this.deps()),

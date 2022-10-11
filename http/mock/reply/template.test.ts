@@ -130,7 +130,7 @@ describe('Templating', function () {
         ok()
           .header(H.ContentType, MediaTypes.APPLICATION_JSON)
           .headerTemplate('x-id', '{{request.id}}')
-          .bodyWith(request => ({
+          .bodyFn(request => ({
             id: request.$internals.id,
           })),
       ),

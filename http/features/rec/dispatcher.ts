@@ -1,4 +1,5 @@
 import { execSync } from 'child_process'
+import http from 'node:http'
 
 import Path from 'path'
 import { Worker } from 'worker_threads'
@@ -14,7 +15,7 @@ export interface RecordArgs {
     url: string
     path: string
     method: Methods
-    headers: Record<string, string>
+    headers: http.IncomingHttpHeaders
     query: URLSearchParams
     body: BodyType
   }

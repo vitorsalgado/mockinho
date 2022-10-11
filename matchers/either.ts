@@ -17,5 +17,9 @@ export const either =
       matcherName,
       () => matcherHint(matcherName) + `\nReceived: ${printReceived(received)}\n${indent(msg())}`,
       pass,
+      () => {
+        one.onMockServed?.()
+        other.onMockServed?.()
+      },
     )
   }
