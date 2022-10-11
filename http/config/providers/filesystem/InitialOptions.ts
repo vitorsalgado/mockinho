@@ -5,7 +5,7 @@ import Multer from 'multer'
 import { CorsOptions } from 'cors'
 import { Options } from 'http-proxy-middleware'
 import { Mode } from '@mockdog/core'
-import { RecordOptions } from '../../../features/rec/index.js'
+import { RecordOptions } from '../../../feat/rec/index.js'
 
 export type InitialOptions = Partial<{
   readonly mode?: Mode

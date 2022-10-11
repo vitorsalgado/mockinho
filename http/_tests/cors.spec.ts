@@ -1,8 +1,8 @@
 import Supertest from 'supertest'
-import { del, get, head, opts, patch, post, put, request } from '../index.js'
-import { httpMock } from '../index.js'
-import { urlPath } from '../features/matchers/index.js'
-import { ok } from '../mock/reply/index.js'
+import { httpMock, opts } from '../index.js'
+import { urlPath } from '../feat/matchers/index.js'
+import { del, get, head, patch, post, put, request } from '../mock_builder.js'
+import { ok } from '../reply/index.js'
 
 describe('CORS', function () {
   const $ = httpMock(opts().dynamicHttpPort().enableCors({ methods: '*' }))

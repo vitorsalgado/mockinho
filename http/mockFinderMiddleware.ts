@@ -6,8 +6,9 @@ import { FindMockResult } from '@mockdog/core'
 import { modeIsAtLeast } from '@mockdog/core'
 import { MediaTypes, H as H } from './http.js'
 import { HttpContext } from './HttpContext.js'
+import { HttpMock } from './mock.js'
+import { SrvResponse } from './reply/index.js'
 import { SrvRequest } from './request.js'
-import { SrvResponse, HttpMock } from './mock/index.js'
 
 export function mockFinderMiddleware(context: HttpContext) {
   const configurations = context.configuration

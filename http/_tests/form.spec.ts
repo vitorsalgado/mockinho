@@ -1,9 +1,10 @@
 import Supertest from 'supertest'
 import { allOf, contains, equalTo, field, hasLength, item } from '@mockdog/matchers'
 import { H, MediaTypes } from '../http.js'
-import { opts, post, urlPath } from '../index.js'
+import { opts, urlPath } from '../index.js'
 import { httpMock } from '../index.js'
-import { ok } from '../mock/reply/index.js'
+import { post } from '../mock_builder.js'
+import { ok } from '../reply/index.js'
 
 describe('HTTP - Form Url Encoded', function () {
   const $ = httpMock(opts().dynamicHttpPort().formUrlEncodedOptions({ limit: 80 }))

@@ -1,11 +1,11 @@
 import Supertest from 'supertest'
 import { repeat } from '@mockdog/matchers'
-import { get, opts } from '../index.js'
-import { urlPath } from '../index.js'
+import { opts, urlPath } from '../index.js'
 import { H } from '../index.js'
 import { MediaTypes } from '../index.js'
 import { httpMock } from '../index.js'
-import { ok, okJSON } from '../mock/index.js'
+import { get } from '../mock_builder.js'
+import { ok, okJSON } from '../reply/index.js'
 
 describe('Stateful Matchers', function () {
   const $ = httpMock(opts().dynamicHttpPort().trace())

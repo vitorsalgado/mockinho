@@ -1,11 +1,12 @@
 import Supertest from 'supertest'
 import { equalTo, field } from '@mockdog/matchers'
-import { opts, post } from '../index.js'
+import { opts } from '../index.js'
 import { urlPath } from '../index.js'
 import { MediaTypes } from '../index.js'
 import { H } from '../index.js'
 import { httpMock } from '../index.js'
-import { ok } from '../mock/reply/index.js'
+import { post } from '../mock_builder.js'
+import { ok } from '../reply/index.js'
 
 describe('Events', function () {
   const $ = httpMock(opts().dynamicHttpPort().formUrlEncodedOptions({ limit: 80 }))

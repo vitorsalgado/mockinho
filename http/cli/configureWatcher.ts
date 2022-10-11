@@ -7,9 +7,9 @@ import { red } from 'colorette'
 import { loadSingleMockFile } from '@mockdog/core'
 import { HttpConfiguration } from '../config/index.js'
 import { MockDogHttp } from '../MockDogHttp.js'
-import { buildMockFromFile } from '../mock/loaders/default/buildMockFromFile.js'
-import MockFileSchema from '../mock/loaders/default/MockFileSchema.js'
-import { MockFile } from '../mock/loaders/default/MockFile.js'
+import { buildMockFromFile } from '../loaders/default/buildMockFromFile.js'
+import MockFileSchema from '../loaders/default/MockFileSchema.js'
+import { MockFile } from '../loaders/default/MockFile.js'
 import { watcher } from './watcher.js'
 
 export function configureWatcher(config: HttpConfiguration, mockhttp: MockDogHttp): void {

@@ -1,9 +1,10 @@
 import Path from 'path'
 import Supertest from 'supertest'
 import { equalTo, contains, field } from '@mockdog/matchers'
-import { httpMock, opts, post, urlPath } from '../index.js'
-import { fileContent } from '../features/matchers'
-import { ok } from '../mock/reply/index.js'
+import { httpMock, opts, urlPath } from '../index.js'
+import { fileContent } from '../feat/matchers'
+import { post } from '../mock_builder.js'
+import { ok } from '../reply/index.js'
 
 describe('Form MultiPart', function () {
   const $ = httpMock(opts().dynamicHttpPort())
