@@ -2,12 +2,13 @@ import Supertest from 'supertest'
 import { repeat } from '@mockdog/matchers'
 import { opts, urlPath } from '../index.js'
 import { H } from '../index.js'
-import { MediaTypes } from '../index.js'
+import { Media } from '../index.js'
 import { httpMock } from '../index.js'
 import { get } from '../builder.js'
 import { ok, okJSON } from '../reply/index.js'
+import { AppVars } from '../vars.js'
 
-describe('Stateful Matchers', function () {
+describe('Repeat', function () {
   const $ = httpMock(opts().dynamicHttpPort().trace())
 
   beforeAll(() => $.start())
@@ -27,7 +28,7 @@ describe('Stateful Matchers', function () {
 
         return Supertest($.listener())
           .get('/test')
-          .set(H.ContentType, MediaTypes.JSON)
+          .set(H.ContentType, Media.JSON)
           .expect(200)
           .expect(res => expect(res.body.data).toEqual(expected))
       })
@@ -37,11 +38,14 @@ describe('Stateful Matchers', function () {
       it('should fail to return response fixture', async function () {
         $.mock(get(urlPath('/test')).expect(repeat(2)).reply(ok()))
 
-        await Supertest($.listener()).get('/test').set(H.ContentType, MediaTypes.JSON).expect(200)
+        await Supertest($.listener()).get('/test').set(H.ContentType, Media.JSON).expect(200)
 
-        await Supertest($.listener()).get('/test').set(H.ContentType, MediaTypes.JSON).expect(200)
+        await Supertest($.listener()).get('/test').set(H.ContentType, Media.JSON).expect(200)
 
-        await Supertest($.listener()).get('/test').set(H.ContentType, MediaTypes.JSON).expect(500)
+        await Supertest($.listener())
+          .get('/test')
+          .set(H.ContentType, Media.JSON)
+          .expect(AppVars.NoMatchStatus)
       })
     })
   })
@@ -59,7 +63,7 @@ describe('Stateful Matchers', function () {
 
         return Supertest($.listener())
           .get('/test')
-          .set(H.ContentType, MediaTypes.JSON)
+          .set(H.ContentType, Media.JSON)
           .expect(200)
           .expect(res => expect(res.body.data).toEqual(expected))
       })
@@ -69,11 +73,14 @@ describe('Stateful Matchers', function () {
       it('should fail to return response fixture', async function () {
         $.mock(get(urlPath('/test')).repeat(2).reply(ok()))
 
-        await Supertest($.listener()).get('/test').set(H.ContentType, MediaTypes.JSON).expect(200)
+        await Supertest($.listener()).get('/test').set(H.ContentType, Media.JSON).expect(200)
 
-        await Supertest($.listener()).get('/test').set(H.ContentType, MediaTypes.JSON).expect(200)
+        await Supertest($.listener()).get('/test').set(H.ContentType, Media.JSON).expect(200)
 
-        await Supertest($.listener()).get('/test').set(H.ContentType, MediaTypes.JSON).expect(500)
+        await Supertest($.listener())
+          .get('/test')
+          .set(H.ContentType, Media.JSON)
+          .expect(AppVars.NoMatchStatus)
       })
     })
   })

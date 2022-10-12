@@ -1,7 +1,7 @@
 import Supertest from 'supertest'
 import { contains, field } from '@mockdog/matchers'
 import { equalTo } from '@mockdog/matchers'
-import { opts, urlPath, H, MediaTypes, post } from '../index.js'
+import { opts, urlPath, H, Media, post } from '../index.js'
 import { httpMock } from '../index.js'
 import { forwardedFrom } from './forward.js'
 import { okJSON } from './replies.js'
@@ -43,7 +43,7 @@ describe('Proxied Responses', function () {
 
       return Supertest($.listener())
         .post('/test?term=hi')
-        .set(H.ContentType, MediaTypes.JSON)
+        .set(H.ContentType, Media.JSON)
         .send({ test: 'proxy-reply' })
         .expect(200)
         .expect(res => {

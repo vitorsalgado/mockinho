@@ -11,7 +11,7 @@ export const H = {
   Allow: 'allow',
 }
 
-export const MediaTypes = {
+export const Media = {
   JSON: 'application/json',
   FormURLEncoded: 'application/x-www-form-urlencoded',
   PlainText: 'text/plain',

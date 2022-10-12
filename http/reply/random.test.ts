@@ -2,7 +2,7 @@ import Path from 'path'
 import Supertest from 'supertest'
 import { opts } from '../config/index.js'
 import { SC } from '../http.js'
-import httpMock from '../index.js'
+import { httpMock } from '../index.js'
 
 describe('Random Responses', function () {
   const $ = httpMock(

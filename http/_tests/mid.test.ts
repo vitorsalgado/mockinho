@@ -6,7 +6,7 @@ import { opts } from '../index.js'
 import { SrvRequest } from '../index.js'
 import { urlPath } from '../index.js'
 import { H } from '../index.js'
-import { MediaTypes } from '../index.js'
+import { Media } from '../index.js'
 import { SC } from '../index.js'
 import { get } from '../builder.js'
 import { created, ok } from '../reply/index.js'
@@ -38,7 +38,7 @@ describe('Custom Middlewares', function () {
           .reply(ok()),
       )
 
-      return Supertest($.listener()).get('/test').set(H.ContentType, MediaTypes.JSON).expect(SC.OK)
+      return Supertest($.listener()).get('/test').set(H.ContentType, Media.JSON).expect(SC.OK)
     })
   })
 
@@ -59,12 +59,9 @@ describe('Custom Middlewares', function () {
           .reply(created()),
       )
 
-      await Supertest($.listener()).get('/test').set(H.ContentType, MediaTypes.JSON).expect(SC.OK)
+      await Supertest($.listener()).get('/test').set(H.ContentType, Media.JSON).expect(SC.OK)
 
-      await Supertest($.listener())
-        .get('/hey')
-        .set(H.ContentType, MediaTypes.JSON)
-        .expect(SC.Created)
+      await Supertest($.listener()).get('/hey').set(H.ContentType, Media.JSON).expect(SC.Created)
     })
   })
 })

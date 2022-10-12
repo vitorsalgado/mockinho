@@ -1,17 +1,14 @@
 import Supertest from 'supertest'
 import { equalTo, isUUID } from '@mockdog/matchers'
-import { Matcher } from '@mockdog/matchers'
 import { modeIsAtLeast } from '@mockdog/core'
 import { HeaderList } from '../headers.js'
 import { httpMock } from '../index.js'
 import { opts } from '../index.js'
 import { urlPath } from '../index.js'
-import { MediaTypes } from '../index.js'
+import { Media } from '../index.js'
 import { H } from '../index.js'
-import { HttpMock } from '../mock.js'
 import { post } from '../builder.js'
 import { ok, SrvResponse } from '../reply/index.js'
-import { selector } from '../_internal/request_value_selectors.js'
 
 describe('Builder Alternatives', function () {
   const $ = httpMock(opts().dynamicHttpPort().trace())
@@ -19,32 +16,6 @@ describe('Builder Alternatives', function () {
   beforeAll(() => $.start())
   afterAll(() => $.finalize())
   afterEach(() => $.resetMocks())
-
-  describe('when using $.mock', function () {
-    it('should accept a function providing a HttpMock', function () {
-      $.mock(
-        () =>
-          new HttpMock(
-            '1',
-            'test',
-            0,
-            'code',
-            '',
-            [
-              {
-                target: '',
-                selector: selector.query('term') as (ctx: unknown) => unknown,
-                matcher: equalTo('test') as Matcher<unknown>,
-                score: 0,
-              },
-            ],
-            ok(),
-          ),
-      )
-
-      return Supertest($.listener()).post('/test?term=test').expect(200)
-    })
-  })
 
   describe('when using .reply', function () {
     const body = { message: 'hello' }
@@ -57,7 +28,7 @@ describe('Builder Alternatives', function () {
               new SrvResponse(
                 200,
                 new HeaderList({
-                  'content-type': MediaTypes.JSON,
+                  'content-type': Media.JSON,
                   'x-id': req.$internals.id,
                   'x-verbose': String(modeIsAtLeast(ctx.config, 'verbose')),
                   'x-method': req.method,
@@ -71,7 +42,7 @@ describe('Builder Alternatives', function () {
 
       return Supertest($.listener())
         .post('/test')
-        .set(H.ContentType, MediaTypes.JSON)
+        .set(H.ContentType, Media.JSON)
         .send(body)
         .expect(200)
         .expect(res => {

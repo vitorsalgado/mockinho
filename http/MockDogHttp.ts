@@ -1,6 +1,6 @@
 import { Express } from 'express'
 import { notBlank } from '@mockdog/x'
-import { StateRepository } from '@mockdog/core'
+import { MockBuilder, Scope, StateRepository } from '@mockdog/core'
 import { modeIsAtLeast } from '@mockdog/core'
 import { MockApp } from '@mockdog/core'
 import { HttpConfigurationBuilder } from './config/index.js'
@@ -25,6 +25,8 @@ export class MockDogHttp extends MockApp<
   HttpConfiguration,
   HttpContext
 > {
+  private readonly _stateRepository = new StateRepository()
+
   constructor(config: HttpConfigurationBuilder | HttpConfiguration) {
     const configurations = config instanceof HttpConfigurationBuilder ? config.build() : config
     const context = new HttpContext(configurations, new HttpMockRepository())
@@ -50,7 +52,17 @@ export class MockDogHttp extends MockApp<
   }
 
   protected deps(): Deps {
-    return { stateRepository: new StateRepository() }
+    return { stateRepository: this._stateRepository }
+  }
+
+  mock(builder: MockBuilder<HttpMock, Deps> | Array<MockBuilder<HttpMock, Deps>>): Scope<HttpMock> {
+    const builders = Array.isArray(builder) ? builder : [builder]
+    const added = builders
+      .map(b => b.build(this.deps()))
+      .map(mock => this._mockRepository.save(mock))
+      .map(mock => mock.id)
+
+    return new Scope(this._mockRepository, added)
   }
 
   start(): Promise<HttpServerInfo> {
@@ -76,5 +88,11 @@ export class MockDogHttp extends MockApp<
 
   listener(): Express {
     return this._mockServer.server()
+  }
+
+  protected applyMocksFromProviders(): Promise<void> {
+    return Promise.all(this._mockProviders.map(provider => provider())).then(mocks =>
+      mocks.flatMap(x => x).forEach(mock => this.mock(mock)),
+    )
   }
 }

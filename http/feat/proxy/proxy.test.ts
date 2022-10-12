@@ -1,11 +1,12 @@
 import Supertest from 'supertest'
 import { equalTo } from '@mockdog/matchers'
 import { field } from '@mockdog/matchers'
-import { opts, urlPath, H, MediaTypes, HttpContext } from '../../index.js'
+import { opts, urlPath, H, Media, HttpContext } from '../../index.js'
 import { httpMock } from '../../index.js'
 import { SC } from '../../index.js'
 import { get, post } from '../../builder.js'
 import { badRequest, okJSON } from '../../reply/index.js'
+import { AppVars } from '../../vars.js'
 import { configureProxy } from './index.js'
 
 describe('Forward Proxy', function () {
@@ -36,7 +37,7 @@ describe('Forward Proxy', function () {
 
         await Supertest($.listener())
           .get('/test')
-          .set(H.ContentType, MediaTypes.JSON)
+          .set(H.ContentType, Media.JSON)
           .set('proxy-header', '100')
           .set('x-test', 'true')
           .set('x-dev', 'ts')
@@ -60,7 +61,7 @@ describe('Forward Proxy', function () {
       try {
         target.mock(
           get(urlPath('/test')).reply(
-            badRequest().bodyJSON({ message: 'boom!' }).header('x-proxy-reply', 'failure'),
+            badRequest().json({ message: 'boom!' }).header('x-proxy-reply', 'failure'),
           ),
         )
 
@@ -68,7 +69,7 @@ describe('Forward Proxy', function () {
 
         await Supertest($.listener())
           .get('/test')
-          .set(H.Accept, MediaTypes.JSON)
+          .set(H.Accept, Media.JSON)
           .expect(SC.BadRequest)
           .expect(res => {
             expect(res.body.message).toEqual('boom!')
@@ -100,7 +101,7 @@ describe('Forward Proxy', function () {
 
         await Supertest($.listener())
           .post('/test')
-          .set(H.ContentType, MediaTypes.JSON)
+          .set(H.ContentType, Media.JSON)
           .send(JSON.stringify({ data: 'test' }))
           .set('proxy-header', '100')
           .set('x-test', 'true')
@@ -135,12 +136,12 @@ describe('Forward Proxy', function () {
 
         await Supertest($.listener())
           .post('/nowhere')
-          .set(H.ContentType, MediaTypes.JSON)
+          .set(H.ContentType, Media.JSON)
           .send(JSON.stringify({ data: 'test' }))
           .set('proxy-header', '100')
           .set('x-test', 'true')
           .set('x-dev', 'ts')
-          .expect(500)
+          .expect(AppVars.NoMatchStatus)
           .expect(res => {
             expect(res.headers['content-type']).toContain('text/plain')
           })

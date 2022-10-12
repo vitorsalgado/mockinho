@@ -5,8 +5,8 @@ import Supertest from 'supertest'
 import { listFilenames } from '@mockdog/x'
 import { sleep } from '@mockdog/x'
 import { opts } from '../../config/index.js'
-import { H, MediaTypes } from '../../http.js'
-import httpMock from '../../index.js'
+import { H, Media } from '../../http.js'
+import { httpMock } from '../../index.js'
 import { get } from '../../builder.js'
 import { okJSON } from '../../reply/index.js'
 import { urlPath } from '../matchers/index.js'
@@ -43,7 +43,7 @@ describe('Record', function () {
 
         await Supertest($.listener())
           .get('/customers/100/test?q=name|email|address&actions=move+run')
-          .set(H.ContentType, MediaTypes.JSON)
+          .set(H.ContentType, Media.JSON)
           .expect(200)
           .expect(res => {
             expect(res.body.hello).toEqual('world')

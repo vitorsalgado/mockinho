@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
 
 import { Readable } from 'stream'
-import { MediaTypes } from '../../../http.js'
+import { Media } from '../../../http.js'
 import { onRequestReceived } from '../builtin/onRequestReceived.js'
 
 describe('onRequestReceived', function () {
   beforeEach(() => {
-    jest.spyOn(console, 'log')
+    jest.spyOn(process.stdout, 'write')
   })
 
   it('should log more data when in verbose mode', function () {
@@ -15,11 +15,11 @@ describe('onRequestReceived', function () {
       method: 'PATCH',
       url: 'http://localhost:3000/test',
       path: '/test',
-      headers: { 'content-type': MediaTypes.JSON },
+      headers: { 'content-type': Media.JSON },
       body: Buffer.from('data'),
     })
 
-    expect(console.log).toHaveBeenCalled()
+    expect(process.stdout.write).toHaveBeenCalled()
   })
 
   it('should log some data when not in verbose mode', function () {
@@ -32,7 +32,7 @@ describe('onRequestReceived', function () {
       body: 'data',
     })
 
-    expect(console.log).toHaveBeenCalled()
+    expect(process.stdout.write).toHaveBeenCalled()
   })
 
   it('should log request body when it is a object', function () {
@@ -41,11 +41,11 @@ describe('onRequestReceived', function () {
       method: 'PUT',
       url: 'http://localhost:3000/test',
       path: '/test',
-      headers: { 'content-type': MediaTypes.JSON },
+      headers: { 'content-type': Media.JSON },
       body: { hello: 'world' },
     })
 
-    expect(console.log).toHaveBeenCalled()
+    expect(process.stdout.write).toHaveBeenCalled()
   })
 
   it('should not log body when body is object with no keys', function () {
@@ -54,11 +54,9 @@ describe('onRequestReceived', function () {
       method: 'PUT',
       url: 'http://localhost:3000/test',
       path: '/test',
-      headers: { 'content-type': MediaTypes.JSON },
+      headers: { 'content-type': Media.JSON },
       body: {},
     })
-
-    expect(console.log).toHaveBeenCalled()
   })
 
   it('should not log body when it a stream', function () {
@@ -73,10 +71,10 @@ describe('onRequestReceived', function () {
       method: 'PUT',
       url: 'http://localhost:3000/test',
       path: '/test',
-      headers: { 'content-type': MediaTypes.JSON },
+      headers: { 'content-type': Media.JSON },
       body: Readable.from(txt(), { objectMode: false }),
     })
 
-    expect(console.log).toHaveBeenCalled()
+    expect(process.stdout.write).toHaveBeenCalled()
   })
 })

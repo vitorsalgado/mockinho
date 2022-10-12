@@ -5,7 +5,7 @@ import { CookieOptions, Response } from 'express'
 import { isTrue, JsonType, notBlank, notEmpty, notNull } from '@mockdog/x'
 import { HandlebarsTemplating, Helper, Template, TemplateDelegate } from '@mockdog/core'
 import { HeaderList } from '../headers.js'
-import { BodyType, H, MediaTypes, SC } from '../http.js'
+import { BodyType, H, Media, SC } from '../http.js'
 import { SrvRequest } from '../request.js'
 import { TemplateModel, TmplRequest } from './template.js'
 import { Cookie, CookieToClear, Reply, ReplyCtx, SrvResponse } from './reply.js'
@@ -89,10 +89,12 @@ export class StandardReply implements Reply {
     return this
   }
 
-  bodyJSON(body: JsonType): this {
-    notNull(body)
+  json(body: JsonType): this {
+    return this.body(JSON.stringify(notNull(body))).header(H.ContentType, Media.JSON)
+  }
 
-    return this.body(JSON.stringify(body)).header(H.ContentType, MediaTypes.JSON)
+  text(text: string): this {
+    return this.body(text).header(H.ContentType, Media.PlainText)
   }
 
   bodyFile(path: string): this {

@@ -1,6 +1,6 @@
 import { Response } from 'express'
 import { notEmpty } from '@mockdog/x'
-import { H, MediaTypes, SC } from '../http.js'
+import { H, Media, SC } from '../http.js'
 import { SrvRequest } from '../request.js'
 import { Reply, ReplyCtx, ReplyFn, SrvResponse, wrapReply } from './reply.js'
 import { StandardReply } from './standard_reply.js'
@@ -31,7 +31,7 @@ export class SequenceReply implements Reply {
     return this
   }
 
-  build(req: SrvRequest, res: Response, ctx: ReplyCtx): Promise<SrvResponse | null> {
+  build(req: SrvRequest, res: Response, ctx: ReplyCtx): Promise<SrvResponse | null | void> {
     if (this._restartSequenceAfterEnded && this._afterEndedReply) {
       throw new Error(
         '"Sequence Reply" cannot use both "reply after ended" and "restart after ended" strategies for when the sequence is over.',
@@ -48,7 +48,7 @@ export class SequenceReply implements Reply {
       return Promise.resolve(
         StandardReply.newBuilder()
           .status(SC.TeaPot)
-          .header(H.ContentType, MediaTypes.PlainText)
+          .header(H.ContentType, Media.PlainText)
           .body(
             'Reply not found in the sequence.' +
               '\n' +

@@ -1,6 +1,6 @@
 import Supertest from 'supertest'
 import { Plugin } from '@mockdog/core'
-import httpMock, { get } from '../index.js'
+import { get, httpMock } from '../index.js'
 import { opts } from '../config'
 import { okJSON } from '../reply/index.js'
 import { MockDogHttp } from '../MockDogHttp'

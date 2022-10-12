@@ -2,11 +2,12 @@ import Supertest from 'supertest'
 import { equalTo, field } from '@mockdog/matchers'
 import { opts } from '../index.js'
 import { urlPath } from '../index.js'
-import { MediaTypes } from '../index.js'
+import { Media } from '../index.js'
 import { H } from '../index.js'
 import { httpMock } from '../index.js'
 import { post } from '../builder.js'
 import { ok } from '../reply/index.js'
+import { AppVars } from '../vars.js'
 
 describe('Events', function () {
   const $ = httpMock(opts().dynamicHttpPort().formUrlEncodedOptions({ limit: 80 }))
@@ -30,18 +31,18 @@ describe('Events', function () {
 
     $.mock(
       post(urlPath('/test'))
-        .header('content-type', equalTo(MediaTypes.FormURLEncoded))
+        .header('content-type', equalTo(Media.FormURLEncoded))
         .requestBody(field('name', equalTo('the name')))
         .reply(ok()),
     )
 
     await Supertest($.listener())
       .post('/test')
-      .set(H.ContentType, MediaTypes.FormURLEncoded)
+      .set(H.ContentType, Media.FormURLEncoded)
       .send('name=the+name&description=some+description&age=32&job=teacher&job=developer')
       .expect(200)
 
-    await Supertest($.listener()).get('/none').expect(500)
+    await Supertest($.listener()).get('/none').expect(AppVars.NoMatchStatus)
 
     await $.close()
 

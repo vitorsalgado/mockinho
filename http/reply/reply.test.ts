@@ -1,7 +1,7 @@
 import Path from 'path'
 import Supertest from 'supertest'
 import { contains } from '@mockdog/matchers'
-import { H, MediaTypes, opts, urlPath } from '../index.js'
+import { H, Media, opts, urlPath } from '../index.js'
 import { httpMock } from '../index.js'
 import { get } from '../builder.js'
 import { ok } from './replies.js'
@@ -29,7 +29,7 @@ describe('Responses', function () {
 
       return Supertest($.listener())
         .get('/test?q=term')
-        .set(H.ContentType, MediaTypes.JSON)
+        .set(H.ContentType, Media.JSON)
         .expect(200)
         .expect(res => expect(res.body.data).toEqual('Request method was: GET'))
     })

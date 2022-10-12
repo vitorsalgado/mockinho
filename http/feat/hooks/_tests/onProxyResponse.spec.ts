@@ -5,7 +5,7 @@ import { onProxyResponse } from '../builtin/onProxyResponse.js'
 
 describe('onProxyResponse', function () {
   beforeEach(() => {
-    jest.spyOn(console, 'log')
+    jest.spyOn(process.stdout, 'write')
   })
 
   it('should accept a regular event payload', function () {
@@ -21,7 +21,7 @@ describe('onProxyResponse', function () {
       },
     })
 
-    expect(console.log).toHaveBeenCalled()
+    expect(process.stdout.write).toHaveBeenCalled()
   })
 
   it('should log event without headers', function () {
@@ -37,7 +37,7 @@ describe('onProxyResponse', function () {
       },
     })
 
-    expect(console.log).toHaveBeenCalled()
+    expect(process.stdout.write).toHaveBeenCalled()
   })
 
   it('should log event not verbose', function () {
@@ -53,6 +53,6 @@ describe('onProxyResponse', function () {
       },
     })
 
-    expect(console.log).toHaveBeenCalled()
+    expect(process.stdout.write).toHaveBeenCalled()
   })
 })

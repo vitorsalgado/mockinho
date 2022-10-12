@@ -4,11 +4,12 @@ import { Response } from 'express'
 import { findMockForRequest } from '@mockdog/core'
 import { FindMockResult } from '@mockdog/core'
 import { modeIsAtLeast } from '@mockdog/core'
-import { MediaTypes, H as H } from './http.js'
+import { Media, H } from './http.js'
 import { HttpContext } from './HttpContext.js'
 import { HttpMock } from './mock.js'
 import { SrvResponse } from './reply/index.js'
 import { SrvRequest } from './request.js'
+import { AppVars } from './vars.js'
 
 export function mockFinderMiddleware(context: HttpContext) {
   const configurations = context.configuration
@@ -23,7 +24,7 @@ export function mockFinderMiddleware(context: HttpContext) {
       const response = await matched.reply.build(req, res, { config: configurations })
 
       // response was handled by the replier
-      if (response === null) {
+      if (response === null || response === undefined) {
         for (const { onMockServed } of result.results()) {
           if (onMockServed !== undefined) {
             onMockServed()
@@ -80,8 +81,8 @@ export function mockFinderMiddleware(context: HttpContext) {
     }
 
     res
-      .set(H.ContentType, MediaTypes.PlainText)
-      .status(500)
+      .set(H.ContentType, Media.PlainText)
+      .status(AppVars.NoMatchStatus)
       .send(
         `Request was not matched.${result
           .closestMatch()

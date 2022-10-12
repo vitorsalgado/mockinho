@@ -19,6 +19,7 @@ import {
 import { base64, JsonType, noNullElements, notBlank, notEmpty, notNull, Nullable } from '@mockdog/x'
 import { basicAuth, bearerToken, urlPath } from './feat/matchers/index.js'
 import { BodyType, H, Methods, Schemes } from './http.js'
+import { response } from './reply/index.js'
 import { SrvRequest } from './request.js'
 import { HttpMock } from './mock.js'
 import { Reply, ReplyFn, wrapReply } from './reply/reply.js'
@@ -66,7 +67,10 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
 
     if (typeof matcher === 'string') {
       notBlank(matcher)
-      this._expectations.push(this.spec('url', selector.url, urlPath(matcher), 10))
+
+      this._expectations.push(
+        this.spec(makeTarget('url', matcher), selector.url, urlPath(matcher), 10),
+      )
     } else {
       this._expectations.push(this.spec('url', selector.url, matcher, 10))
     }
@@ -115,7 +119,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
   headers(matcher: Matcher<http.IncomingHttpHeaders> | Predicate<http.IncomingHttpHeaders>): this {
     notNull(matcher)
 
-    this._expectations.push(this.spec('header', selector.headers, fromPredicate(matcher), 3))
+    this._expectations.push(this.spec('headers', selector.headers, fromPredicate(matcher), 3))
 
     return this
   }
@@ -339,15 +343,20 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     return this
   }
 
-  reply(reply: Reply | ReplyFn): this {
-    this._reply = wrapReply(reply)
-    return this
-  }
+  /**
+   * Reply a mocked response with the given specification
+   *
+   * @param reply - Mock response specification.
+   * @param body - Response body. Will only be considered if the first parameter is a number.
+   */
+  reply(reply: Reply | ReplyFn | number, body?: BodyType): this {
+    if (typeof reply === 'number') {
+      this._reply = response().status(reply).body(body)
+    } else {
+      this._reply = wrapReply(reply)
+    }
 
-  validate(): void {
-    notEmpty(this._expectations, 'Mocks needs to have at least one Matcher.')
-    noNullElements(this._expectations, 'Matchers list must not contain null or undefined elements.')
-    notNull(this._reply, 'Response definition is required. Call .reply() to create one.')
+    return this
   }
 
   build(deps: Deps): HttpMock {
@@ -390,6 +399,12 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
       selector,
       score,
     } as MatcherSpecification<unknown, unknown>
+  }
+
+  private validate(): void {
+    notEmpty(this._expectations, 'Mocks needs to have at least one Matcher.')
+    noNullElements(this._expectations, 'Matchers list must not contain null or undefined elements.')
+    notNull(this._reply, 'Response definition is required. Call .reply() to create one.')
   }
 }
 

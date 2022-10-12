@@ -8,7 +8,7 @@ import { onRequestMatched } from '../builtin/onRequestMatched.js'
 
 describe('onRequestMatched', function () {
   beforeEach(() => {
-    jest.spyOn(console, 'log')
+    jest.spyOn(process.stdout, 'write')
   })
 
   it('should accept a regular event payload', function () {
@@ -33,7 +33,7 @@ describe('onRequestMatched', function () {
       },
     })
 
-    expect(console.log).toHaveBeenCalled()
+    expect(process.stdout.write).toHaveBeenCalled()
   })
 
   it('should accept no response body', function () {
@@ -58,7 +58,7 @@ describe('onRequestMatched', function () {
       },
     })
 
-    expect(console.log).toHaveBeenCalled()
+    expect(process.stdout.write).toHaveBeenCalled()
   })
 
   it('should accept a buffer body', function () {
@@ -83,7 +83,7 @@ describe('onRequestMatched', function () {
       },
     })
 
-    expect(console.log).toHaveBeenCalled()
+    expect(process.stdout.write).toHaveBeenCalled()
   })
 
   it('should accept a stream body', function () {
@@ -114,6 +114,6 @@ describe('onRequestMatched', function () {
       },
     })
 
-    expect(console.log).toHaveBeenCalled()
+    expect(process.stdout.write).toHaveBeenCalled()
   })
 })

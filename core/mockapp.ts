@@ -4,7 +4,6 @@ import { MockRepository } from './mockrepository.js'
 import { Mock } from './mock.js'
 import { PluginRegistration } from './plugin.js'
 import { Configuration } from './config.js'
-import { Scope } from './scope.js'
 import { MockBuilder } from './mockbuilder.js'
 import { MockProvider } from './provider.js'
 import { Plugin } from './plugin.js'
@@ -45,17 +44,6 @@ export abstract class MockApp<
   protected abstract setup(): void
 
   protected abstract deps(): DEPS
-
-  mock(...mockBuilder: Array<MockBuilder<MOCK, DEPS> | ((request: CONTEXT) => MOCK)>): Scope<MOCK> {
-    const added = mockBuilder
-      .map(builder =>
-        typeof builder === 'function' ? builder(this._context) : builder.build(this.deps()),
-      )
-      .map(mock => this._mockRepository.save(mock))
-      .map(mock => mock.id)
-
-    return new Scope(this._mockRepository, added)
-  }
 
   mockProvider(provider: MockProvider<MockBuilder<MOCK, DEPS>>): void {
     this._mockProviders.push(provider)
@@ -118,11 +106,7 @@ export abstract class MockApp<
 
   // region Internal
 
-  protected applyMocksFromProviders(): Promise<void> {
-    return Promise.all(this._mockProviders.map(provider => provider())).then(mocks =>
-      mocks.flatMap(x => x).forEach(mock => this.mock(mock)),
-    )
-  }
+  protected abstract applyMocksFromProviders(): Promise<void>
 
   // endregion
 }

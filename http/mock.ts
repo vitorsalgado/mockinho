@@ -9,7 +9,7 @@ export class HttpMock extends Mock {
     source: MockSource,
     sourceDescription: string,
     matcherSpecifications: Array<MatcherSpecification<unknown, unknown>>,
-    public readonly reply: Reply,
+    readonly reply: Reply,
   ) {
     super(id, name, priority, true, source, sourceDescription, matcherSpecifications, [], 0)
   }

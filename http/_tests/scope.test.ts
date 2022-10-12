@@ -1,9 +1,10 @@
 import Supertest from 'supertest'
 import { opts } from '../config/index.js'
 import { urlPath } from '../feat/matchers/index.js'
-import httpMock from '../index.js'
+import { httpMock } from '../index.js'
 import { get, post } from '../builder.js'
 import { okJSON } from '../reply/index.js'
+import { AppVars } from '../vars.js'
 
 describe('HTTP Scope', function () {
   const $ = httpMock(opts().dynamicHttpPort().enableFileMocks(false))
@@ -13,10 +14,10 @@ describe('HTTP Scope', function () {
   afterEach(() => $.resetMocks())
 
   it('isDone() should return true when all mocks where called', async function () {
-    const scope = $.mock(
+    const scope = $.mock([
       get(urlPath('/test')).reply(okJSON({ data: 'get ok' })),
       post(urlPath('/test')).reply(okJSON({ data: 'post ok' })),
-    )
+    ])
 
     const otherScope = $.mock(
       get(urlPath('/some-other-mock')).reply(okJSON({ data: 'outside mock' })),
@@ -33,7 +34,7 @@ describe('HTTP Scope', function () {
     expect(scope.isDone()).toBeFalsy()
     expect(scope.pendingMocks()).toHaveLength(1)
 
-    await Supertest($.listener()).get('/other-test').expect(500)
+    await Supertest($.listener()).get('/other-test').expect(AppVars.NoMatchStatus)
 
     expect(scope.isDone()).toBeFalsy()
     expect(scope.pendingMocks()).toHaveLength(1)
@@ -51,10 +52,10 @@ describe('HTTP Scope', function () {
   })
 
   it('should throw error when scope is not done and ensureIsDone() is called', async function () {
-    const scope = $.mock(
+    const scope = $.mock([
       get(urlPath('/test')).reply(okJSON({ data: 'get ok' })),
       post(urlPath('/test')).reply(okJSON({ data: 'post ok' })),
-    )
+    ])
 
     await Supertest($.listener())
       .get('/test')
@@ -65,19 +66,19 @@ describe('HTTP Scope', function () {
   })
 
   it('should print pending mocks', async function () {
-    const scope = $.mock(
+    const scope = $.mock([
       get(urlPath('/test')).reply(okJSON({ data: 'get ok' })),
       post(urlPath('/test')).reply(okJSON({ data: 'post ok' })),
-    )
+    ])
 
     expect(() => scope.printPendingMocks()).not.toThrowError()
   })
 
   it('should not print pending mocks when scope is done', async function () {
-    const scope = $.mock(
+    const scope = $.mock([
       get(urlPath('/test')).reply(okJSON({ data: 'get ok' })),
       post(urlPath('/test')).reply(okJSON({ data: 'post ok' })),
-    )
+    ])
 
     scope.abortPendingMocks()
 
@@ -85,10 +86,10 @@ describe('HTTP Scope', function () {
   })
 
   it('should abort pending mocks when abortPendingMocks() is called', async function () {
-    const scope = $.mock(
+    const scope = $.mock([
       get(urlPath('/test')).reply(okJSON({ data: 'get ok' })),
       post(urlPath('/test')).reply(okJSON({ data: 'post ok' })),
-    )
+    ])
 
     await Supertest($.listener())
       .get('/test')
@@ -100,17 +101,17 @@ describe('HTTP Scope', function () {
 
     scope.abortPendingMocks()
 
-    await Supertest($.listener()).post('/test').expect(500)
+    await Supertest($.listener()).post('/test').expect(AppVars.NoMatchStatus)
 
     expect(scope.isDone()).toBeTruthy()
     expect(scope.pendingMocks()).toHaveLength(0)
   })
 
   it('should remove all mocks when calling .clean()', async function () {
-    const scope = $.mock(
+    const scope = $.mock([
       get(urlPath('/test')).reply(okJSON({ data: 'get ok' })),
       post(urlPath('/test')).reply(okJSON({ data: 'post ok' })),
-    )
+    ])
 
     await Supertest($.listener())
       .get('/test')
@@ -124,9 +125,9 @@ describe('HTTP Scope', function () {
 
     scope.clean()
 
-    await Supertest($.listener()).get('/test').expect(500)
+    await Supertest($.listener()).get('/test').expect(AppVars.NoMatchStatus)
 
-    await Supertest($.listener()).post('/test').expect(500)
+    await Supertest($.listener()).post('/test').expect(AppVars.NoMatchStatus)
 
     expect(scope.pendingMocks()).toHaveLength(0)
     expect(scope.isDone()).toBeTruthy()

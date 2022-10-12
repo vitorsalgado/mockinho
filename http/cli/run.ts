@@ -2,7 +2,7 @@
 
 import { red } from 'colorette'
 import { bold } from 'colorette'
-import httpMock from '../index.js'
+import { httpMock } from '../index.js'
 import { MockDogHttp } from '../MockDogHttp.js'
 import { Argv } from '../config/index.js'
 import { opts } from '../config/index.js'

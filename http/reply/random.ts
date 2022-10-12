@@ -1,6 +1,6 @@
 import { Response } from 'express'
 import { notEmpty } from '@mockdog/x'
-import { H, MediaTypes, SC } from '../http.js'
+import { H, Media, SC } from '../http.js'
 import { SrvRequest } from '../request.js'
 import { Reply, ReplyCtx, ReplyFn, SrvResponse, wrapReply } from './reply.js'
 import { StandardReply } from './standard_reply.js'
@@ -18,7 +18,7 @@ export class RandomReply implements Reply {
     return this
   }
 
-  build(req: SrvRequest, res: Response, ctx: ReplyCtx): Promise<SrvResponse | null> {
+  build(req: SrvRequest, res: Response, ctx: ReplyCtx): Promise<SrvResponse | null | void> {
     const reply = this._replies[Math.floor(Math.random() * this._replies.length)]
 
     if (!reply) {
@@ -30,7 +30,7 @@ export class RandomReply implements Reply {
       return Promise.resolve(
         StandardReply.newBuilder()
           .status(SC.TeaPot)
-          .header(H.ContentType, MediaTypes.PlainText)
+          .header(H.ContentType, Media.PlainText)
           .body(message)
           .build(req, res, ctx),
       )

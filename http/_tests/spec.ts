@@ -2,12 +2,13 @@ import * as Path from 'path'
 import Supertest from 'supertest'
 import { contains, equalTo, field } from '@mockdog/matchers'
 import { fromFile } from '@mockdog/x'
-import { H, MediaTypes } from '../http.js'
+import { H, Media } from '../http.js'
 import { httpMock } from '../index.js'
 import { urlPath } from '../feat/matchers/index.js'
 import { opts } from '../config/index.js'
 import { get, post } from '../builder.js'
 import { ok, okJSON } from '../reply/index.js'
+import { AppVars } from '../vars.js'
 
 const fixture = (name: string) => Path.join(__dirname, `_fixtures/__content__${name}`)
 
@@ -30,7 +31,7 @@ describe('MockDog HTTP', function () {
 
       return Supertest($.listener())
         .get('/test?q=term')
-        .set(H.ContentType, MediaTypes.JSON)
+        .set(H.ContentType, Media.JSON)
         .expect(200)
         .expect(res => expect(res.body.data).toEqual(expected))
     })
@@ -46,7 +47,7 @@ describe('MockDog HTTP', function () {
 
       return Supertest($.listener())
         .get('/test')
-        .set(H.ContentType, MediaTypes.JSON)
+        .set(H.ContentType, Media.JSON)
         .expect(200)
         .expect(res => expect(res.body.data).toEqual(expected))
     })
@@ -58,12 +59,12 @@ describe('MockDog HTTP', function () {
         post(urlPath('/test'))
           .header('content-type', contains('json'))
           .requestBody(field('user.name', equalTo('tester')))
-          .reply(ok().body('done').header(H.ContentType, MediaTypes.PlainText)),
+          .reply(ok().body('done').header(H.ContentType, Media.PlainText)),
       )
 
       return Supertest($.listener())
         .post('/test?q=term')
-        .set(H.ContentType, MediaTypes.JSON)
+        .set(H.ContentType, Media.JSON)
         .send({ user: { name: 'tester' }, address: { street: 'street A' }, age: 50 })
         .expect(200)
         .expect(res => expect(res.text).toEqual('done'))
@@ -74,7 +75,7 @@ describe('MockDog HTTP', function () {
         post(urlPath('/test')).reply(
           ok()
             .body(fromFile(fixture('simple.json')))
-            .header(H.ContentType, MediaTypes.JSON),
+            .header(H.ContentType, Media.JSON),
         ),
       )
 
@@ -108,20 +109,20 @@ describe('MockDog HTTP', function () {
       await Supertest($.listener())
         .post('/test')
         .set('content', 'nothing')
-        .set(H.ContentType, MediaTypes.JSON)
+        .set(H.ContentType, Media.JSON)
         .send({ message: 'hey' })
         .expect(200)
         .expect(res => expect(res.body.data).toEqual('started'))
 
       await Supertest($.listener())
         .post('/test')
-        .set(H.ContentType, MediaTypes.JSON)
+        .set(H.ContentType, Media.JSON)
         .set('content', 'nothing')
         .send({ message: 'hey' })
         .expect(200)
         .expect(res => expect(res.body.data).toEqual('phase 2'))
 
-      await Supertest($.listener()).post('/').expect(500)
+      await Supertest($.listener()).post('/').expect(AppVars.NoMatchStatus)
     })
   })
 })

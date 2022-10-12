@@ -2,11 +2,17 @@
   "extends": "./tsconfig.json",
   "exclude": [
     "dist",
+    "coverage",
+    "tools",
     "node_modules",
     "**/__tests__/",
+    "**/_tests/",
     "**/__fixtures__",
-    "*.spec.ts",
-    "*.spec.js",
-    "*.config.ts"
+    "**/_fixtures",
+    "**/*.spec.ts",
+    "**/*.spec.js",
+    "**/*.test.ts",
+    "**/*.test.js",
+    "**/*.config.ts"
   ]
 }

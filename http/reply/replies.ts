@@ -14,7 +14,7 @@ export const created = (location?: string): StandardReply =>
   StandardReply.newBuilder().location(location).status(SC.Created)
 
 export const createdJSON = (body: JsonType, location?: string): StandardReply =>
-  created(location).bodyJSON(body)
+  created(location).json(body)
 
 export const forbidden = (): StandardReply => response().status(SC.Forbidden)
 
@@ -42,13 +42,13 @@ export const noContent = (): StandardReply => response().status(SC.NoContent)
 
 export const notFound = (): StandardReply => response().status(SC.NotFound)
 
-export const notFoundJSON = (body: JsonType): StandardReply => notFound().bodyJSON(body)
+export const notFoundJSON = (body: JsonType): StandardReply => notFound().json(body)
 
 export const notModified = (): StandardReply => response().status(SC.NotModified)
 
 export const ok = (): StandardReply => StandardReply.newBuilder().status(SC.OK)
 
-export const okJSON = (body: JsonType): StandardReply => ok().bodyJSON(body)
+export const okJSON = (body: JsonType): StandardReply => ok().json(body)
 
 export const seeOther = (location?: string): StandardReply =>
   response().status(SC.SeeOther).location(location)

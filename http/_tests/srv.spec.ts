@@ -1,6 +1,6 @@
 import Supertest from 'supertest'
 import { contains } from '@mockdog/matchers'
-import { H, MediaTypes } from '../http.js'
+import { H, Media } from '../http.js'
 import { HttpContext } from '../HttpContext'
 import { opts, HttpConfigurationBuilder, HttpServer, httpMock } from '../index.js'
 
@@ -51,7 +51,7 @@ describe('Express Http Server', function () {
 
     return Supertest($.listener())
       .post('/test?q=term')
-      .set(H.ContentType, MediaTypes.JSON)
+      .set(H.ContentType, Media.JSON)
       .send(undefined)
       .expect(200)
       .expect(res => expect(res.body.data).toEqual(expected))
@@ -68,7 +68,7 @@ describe('Express Http Server', function () {
 
     return Supertest($.listener())
       .post('/test?q=term')
-      .set(H.ContentType, MediaTypes.JSON)
+      .set(H.ContentType, Media.JSON)
       .send('<?xml version="1.0" encoding="UTF-8"?><test><name>tester</name></test>')
       .expect(400)
   })

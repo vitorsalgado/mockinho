@@ -9,7 +9,7 @@ import { createProxyMiddleware } from 'http-proxy-middleware'
 import { Express } from 'express'
 import { log } from '@mockdog/core'
 import { modeIsAtLeast } from '@mockdog/core'
-import { H, MediaTypes } from '../../http.js'
+import { H, Media } from '../../http.js'
 import { RecordDispatcher } from '../rec/index.js'
 import { SrvRequest } from '../../request.js'
 import { HttpContext } from '../../HttpContext.js'
@@ -55,7 +55,7 @@ export function configureProxy(
       ((error, req, res) => {
         context.emit('onError', error)
 
-        res.writeHead(500, { 'content-type': MediaTypes.PlainText })
+        res.writeHead(500, { 'content-type': Media.PlainText })
         res.end('Proxy Error: ' + error.message)
       }),
   }

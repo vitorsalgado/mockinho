@@ -12,7 +12,7 @@ describe('CORS', function () {
   afterEach(() => $.resetMocks())
 
   it('server should work with CORS setup', async function () {
-    const scope = $.mock(
+    const scope = $.mock([
       get(urlPath('/test')).reply(ok()),
       post(urlPath('/test')).reply(ok()),
       put(urlPath('/test')).reply(ok()),
@@ -20,7 +20,7 @@ describe('CORS', function () {
       patch(urlPath('/test')).reply(ok()),
       head(urlPath('/test')).reply(ok()),
       request(urlPath('/test')).method('OPTIONS').reply(ok()),
-    )
+    ])
 
     await Supertest($.listener()).get('/test').expect(200)
     await Supertest($.listener()).post('/test').expect(200)

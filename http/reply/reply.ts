@@ -34,16 +34,20 @@ export interface ReplyCtx {
   config: HttpConfiguration
 }
 
-export type ReplyFn = (req: SrvRequest, res: Response, ctx: ReplyCtx) => Promise<SrvResponse | null>
+export type ReplyFn = (
+  req: SrvRequest,
+  res: Response,
+  ctx: ReplyCtx,
+) => Promise<SrvResponse | null | void>
 
 export interface Reply {
-  build(req: SrvRequest, res: Response, ctx: ReplyCtx): Promise<SrvResponse | null>
+  build(req: SrvRequest, res: Response, ctx: ReplyCtx): Promise<SrvResponse | null | void>
 }
 
 export class ReplyWrapper implements Reply {
   constructor(private readonly _replyFn: ReplyFn) {}
 
-  build(req: SrvRequest, res: Response, ctx: ReplyCtx): Promise<SrvResponse | null> {
+  build(req: SrvRequest, res: Response, ctx: ReplyCtx): Promise<SrvResponse | null | void> {
     return this._replyFn(req, res, ctx)
   }
 }
