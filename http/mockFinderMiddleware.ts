@@ -25,40 +25,100 @@ export function mockFinderMiddleware(context: HttpContext) {
 
       // response was handled by the replier
       if (response === null || response === undefined) {
-        for (const { onMockServed } of result.results()) {
-          if (onMockServed !== undefined) {
-            onMockServed()
-          }
-        }
-
-        matched.hit()
-
+        afterMockServed(matched, result)
         return
       }
 
       const replier = () => {
-        for (const cookie of response.cookiesToClear) {
-          res.clearCookie(cookie.key, cookie.options)
-        }
-
-        for (const cookie of response.cookies) {
+        for (const cookie of response.cookiesToClear) res.clearCookie(cookie.key, cookie.options)
+        for (const cookie of response.cookies)
           res.cookie(cookie.key, cookie.value, cookie.options ?? {})
+
+        const { status, headers } = response
+
+        if (!response.trailers.isEmpty()) {
+          let header = ''
+          for (const [key] of response.trailers) {
+            header += ' '
+            header += key
+          }
+
+          headers.delete('Content-Type')
+          headers.set('Transfer-Encoding', 'chunked')
+          headers.set('Trailer', header.trim())
         }
 
-        res.set(response.headers.toObject()).status(response.status)
+        if (response.body === null || response.body === undefined) {
+          if (
+            status >= 200 &&
+            status !== 204 &&
+            status !== 304 &&
+            req.method !== 'HEAD' &&
+            response.trailers.isEmpty()
+          ) {
+            headers.set('content-length', '0')
+          }
+
+          res.writeHead(response.status, headers.toObject())
+          res.addTrailers(response.trailers.toObject())
+          res.end(null)
+
+          afterMockServed(matched, result)
+
+          return
+        }
+
+        const requestContentType = req.header('content-type')
+        const hasContentType =
+          requestContentType !== undefined && response.headers.has('Content-Type')
 
         if (response.body instanceof Readable) {
-          response.body.on('end', () => res.end())
+          res.writeHead(response.status, headers.toObject())
+          response.body.on('end', () => {
+            res.addTrailers(response.trailers.toObject())
+            res.end(null)
+          })
+
           response.body.pipe(res)
         } else {
-          res.send(response.body)
+          switch (typeof response.body) {
+            case 'string':
+              if (!hasContentType) {
+                res.type('text')
+              }
+
+              res.writeHead(response.status, headers.toObject())
+              res.write(response.body)
+
+              break
+
+            case 'boolean':
+            case 'number':
+            case 'object':
+              if (Buffer.isBuffer(response.body)) {
+                if (!hasContentType) {
+                  res.type('bin')
+                }
+
+                res.writeHead(response.status, headers.toObject())
+                res.write(response.body)
+              } else {
+                if (!hasContentType) {
+                  res.type('json')
+                }
+
+                res.writeHead(response.status, headers.toObject())
+                res.write(JSON.stringify(response.body))
+              }
+
+              break
+          }
+
+          res.addTrailers(response.trailers.toObject())
+          res.end(null)
         }
 
-        for (const { onMockServed } of result.results()) {
-          if (onMockServed !== undefined) {
-            onMockServed()
-          }
-        }
+        afterMockServed(matched, result)
       }
 
       onRequestMatched(isVerbose, context, req, response, matched)
@@ -68,8 +128,6 @@ export function mockFinderMiddleware(context: HttpContext) {
       } else {
         replier()
       }
-
-      matched.hit()
 
       return
     }
@@ -96,6 +154,16 @@ export function mockFinderMiddleware(context: HttpContext) {
             .join(''),
       )
   }
+}
+
+function afterMockServed(matched: HttpMock, result: FindMockResult<HttpMock>) {
+  for (const { onMockServed } of result.results()) {
+    if (onMockServed !== undefined) {
+      onMockServed()
+    }
+  }
+
+  matched.hit()
 }
 
 // region Events

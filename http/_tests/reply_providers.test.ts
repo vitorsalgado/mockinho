@@ -1,9 +1,9 @@
 import Supertest from 'supertest'
 import fetch from 'node-fetch'
 import { opts } from '../config/index.js'
-import { get, H, httpMock, Media, SC } from '../index.js'
+import { get, httpMock, SC } from '../index.js'
 
-describe('Response', function () {
+describe('Providing Replies', function () {
   const $ = httpMock(opts().dynamicHttpPort())
 
   beforeAll(() => $.start())

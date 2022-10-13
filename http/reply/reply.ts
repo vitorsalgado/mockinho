@@ -20,6 +20,7 @@ export class SrvResponse {
     public readonly status: number,
     public readonly headers = new HeaderList(),
     public readonly body: BodyType = null,
+    public readonly trailers = new HeaderList(),
     public readonly cookies: Array<Cookie> = [],
     public readonly cookiesToClear: Array<CookieToClear> = [],
     public readonly delay: number = 0,

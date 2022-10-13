@@ -15,7 +15,7 @@ export * from './srv.js'
 export * from './http.js'
 
 export const req = { request, anyMethod, get, post, put, del, patch, head }
-export * as res from './reply/replies.js'
+export * as reply from './reply/replies.js'
 
 export const httpMock = (
   configurations: HttpConfigurationBuilder | HttpConfiguration,

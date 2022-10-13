@@ -29,6 +29,7 @@ export class StandardReply implements Reply {
   protected _headers = new HeaderList()
   protected _headersWithTemplateValue: Record<string, TemplateDelegate<TemplateModel>> = {}
 
+  protected _trailers = new HeaderList()
   protected _cookies: Array<Cookie> = []
   protected _cookiesToClear: Array<CookieToClear> = []
   protected _delay: number = 0
@@ -64,19 +65,24 @@ export class StandardReply implements Reply {
     return this
   }
 
-  location(location?: string): this {
-    if (location) {
-      this._headers.set(H.Location, location)
-    }
-
-    return this
-  }
-
   headers(headers: Record<string, string>): this {
     notNull(headers)
 
     for (const [key, value] of Object.entries(headers)) {
       this._headers.append(key, value)
+    }
+
+    return this
+  }
+
+  trailer(name: string, value: string = ''): this {
+    this._trailers.append(name, value)
+    return this
+  }
+
+  location(location?: string): this {
+    if (location) {
+      this._headers.set(H.Location, location)
     }
 
     return this
@@ -247,6 +253,7 @@ export class StandardReply implements Reply {
       this._status,
       this._headers,
       this._body,
+      this._trailers,
       this._cookies,
       this._cookiesToClear,
       this._delay,
