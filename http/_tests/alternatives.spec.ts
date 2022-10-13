@@ -27,6 +27,7 @@ describe('Builder Alternatives', function () {
             Promise.resolve(
               new SrvResponse(
                 200,
+                undefined,
                 new HeaderList({
                   'content-type': Media.JSON,
                   'x-id': req.$internals.id,

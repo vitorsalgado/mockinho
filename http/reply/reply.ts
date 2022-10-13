@@ -18,6 +18,7 @@ export interface CookieToClear {
 export class SrvResponse {
   constructor(
     public readonly status: number,
+    public readonly statusMessage?: string,
     public readonly headers = new HeaderList(),
     public readonly body: BodyType = null,
     public readonly trailers = new HeaderList(),

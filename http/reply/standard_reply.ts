@@ -15,6 +15,7 @@ const readFile = Util.promisify(Fs.readFile)
 
 export class StandardReply implements Reply {
   protected _status: number = SC.OK
+  protected _statusMessage?: string
   protected _body: BodyType = undefined
   protected _bodyFile: string = ''
   protected _bodyFunction?: (request: SrvRequest) => BodyType
@@ -44,6 +45,11 @@ export class StandardReply implements Reply {
 
     this._status = status
 
+    return this
+  }
+
+  statusMessage(message: string): this {
+    this._statusMessage = message
     return this
   }
 
@@ -251,6 +257,7 @@ export class StandardReply implements Reply {
 
     return new SrvResponse(
       this._status,
+      this._statusMessage,
       this._headers,
       this._body,
       this._trailers,

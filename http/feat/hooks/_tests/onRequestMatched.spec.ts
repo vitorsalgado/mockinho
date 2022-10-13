@@ -20,6 +20,7 @@ describe('onRequestMatched', function () {
       method: 'PATCH',
       responseDefinition: new SrvResponse(
         200,
+        undefined,
         new HeaderList({ 'content-type': 'application/json' }),
         { test: true },
         new HeaderList(),
@@ -46,6 +47,7 @@ describe('onRequestMatched', function () {
       method: 'POST',
       responseDefinition: new SrvResponse(
         200,
+        undefined,
         new HeaderList({ 'content-type': 'application/json' }),
         undefined,
         new HeaderList(),
@@ -72,6 +74,7 @@ describe('onRequestMatched', function () {
       method: 'DELETE',
       responseDefinition: new SrvResponse(
         200,
+        undefined,
         new HeaderList({ 'content-type': 'application/json' }),
         Buffer.from('nice txt'),
         new HeaderList(),
@@ -104,6 +107,7 @@ describe('onRequestMatched', function () {
       method: 'GET',
       responseDefinition: new SrvResponse(
         200,
+        undefined,
         new HeaderList({ 'content-type': 'application/json' }),
         Readable.from(txt(), { objectMode: false }),
         new HeaderList(),

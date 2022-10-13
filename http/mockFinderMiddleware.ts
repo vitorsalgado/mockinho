@@ -43,7 +43,7 @@ export function mockFinderMiddleware(context: HttpContext) {
             header += key
           }
 
-          headers.delete('Content-Type')
+          headers.delete('Content-Length')
           headers.set('Transfer-Encoding', 'chunked')
           headers.set('Trailer', header.trim())
         }
@@ -59,7 +59,7 @@ export function mockFinderMiddleware(context: HttpContext) {
             headers.set('content-length', '0')
           }
 
-          res.writeHead(response.status, headers.toObject())
+          writeHead(res, response)
           res.addTrailers(response.trailers.toObject())
           res.end(null)
 
@@ -73,7 +73,7 @@ export function mockFinderMiddleware(context: HttpContext) {
           requestContentType !== undefined && response.headers.has('Content-Type')
 
         if (response.body instanceof Readable) {
-          res.writeHead(response.status, headers.toObject())
+          writeHead(res, response)
           response.body.on('end', () => {
             res.addTrailers(response.trailers.toObject())
             res.end(null)
@@ -87,7 +87,7 @@ export function mockFinderMiddleware(context: HttpContext) {
                 res.type('text')
               }
 
-              res.writeHead(response.status, headers.toObject())
+              writeHead(res, response)
               res.write(response.body)
 
               break
@@ -100,14 +100,14 @@ export function mockFinderMiddleware(context: HttpContext) {
                   res.type('bin')
                 }
 
-                res.writeHead(response.status, headers.toObject())
+                writeHead(res, response)
                 res.write(response.body)
               } else {
                 if (!hasContentType) {
                   res.type('json')
                 }
 
-                res.writeHead(response.status, headers.toObject())
+                writeHead(res, response)
                 res.write(JSON.stringify(response.body))
               }
 
@@ -153,6 +153,14 @@ export function mockFinderMiddleware(context: HttpContext) {
             .map(item => `\nName: ${item.name}\nId: ${item.id}\nFile: ${item.filename}`)
             .join(''),
       )
+  }
+}
+
+function writeHead(res: Response, response: SrvResponse) {
+  if (response.statusMessage !== undefined) {
+    res.writeHead(response.status, response.statusMessage, response.headers.toObject())
+  } else {
+    res.writeHead(response.status, response.headers.toObject())
   }
 }
 
