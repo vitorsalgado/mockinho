@@ -18,7 +18,7 @@ describe('Js Example', function () {
   beforeAll(async () => {
     await $.start()
 
-    fastify = buildFastify({}, { api: $.serverInfo().http.baseUrl })
+    fastify = buildFastify({}, { api: $.serverInfo().http.url })
 
     await fastify.ready()
   })

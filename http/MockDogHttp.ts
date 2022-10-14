@@ -6,9 +6,13 @@ import { MockApp } from '@mockdog/core'
 import { HttpConfigurationBuilder } from './config/index.js'
 import { HttpConfiguration } from './config/index.js'
 import { Middleware } from './config/index.js'
-import { onRequestMatched, onRequestNotMatched, onRequestReceived } from './feat/hooks/index.js'
+import {
+  HookListener,
+  onRequestMatched,
+  onRequestNotMatched,
+  onRequestReceived,
+} from './feat/hooks/index.js'
 import { Hooks } from './feat/hooks/index.js'
-import { HttpContext } from './HttpContext.js'
 import { HttpMock, HttpMockRepository } from './mock.js'
 import { Deps } from './builder.js'
 import { HttpServer, HttpServerInfo } from './srv.js'
@@ -20,39 +24,25 @@ import { onRecord } from './feat/hooks/builtin/onRecord.js'
 export class MockDogHttp extends MockApp<
   HttpMock,
   HttpServerInfo,
-  Deps,
+  Express,
   HttpServer,
-  HttpConfiguration,
-  HttpContext
+  Deps,
+  HttpConfiguration
 > {
   private readonly _stateRepository = new StateRepository()
+  private readonly _hooks = new HookListener()
 
   constructor(config: HttpConfigurationBuilder | HttpConfiguration) {
-    const configurations = config instanceof HttpConfigurationBuilder ? config.build() : config
-    const context = new HttpContext(configurations, new HttpMockRepository())
-    const httpServer = new HttpServer(context)
+    super(
+      config instanceof HttpConfigurationBuilder ? config.build() : config,
+      new HttpMockRepository(),
+    )
 
-    super(context, httpServer)
+    this.setup()
   }
 
-  setup(): void {
-    // FIXME: new logger
-    // LoggerUtil.instance().subscribe(new PinoLogger(this._configuration.logLevel))
-
-    if (modeIsAtLeast(this._configuration, 'info')) {
-      this.on('onRequestStart', onRequestReceived)
-      this.on('onRequestNotMatched', onRequestNotMatched)
-      this.on('onRequestMatched', onRequestMatched)
-      this.on('onProxyRequest', onProxyRequest)
-      this.on('onProxyResponse', onProxyResponse)
-      this.on('onRecord', onRecord)
-    }
-
-    this._mockProviders.push(defaultMockProviderFactory(this._configuration))
-  }
-
-  protected deps(): Deps {
-    return { stateRepository: this._stateRepository }
+  get hooks() {
+    return this._hooks
   }
 
   mock(builder: MockBuilder<HttpMock, Deps> | Array<MockBuilder<HttpMock, Deps>>): Scope<HttpMock> {
@@ -67,14 +57,14 @@ export class MockDogHttp extends MockApp<
 
   start(): Promise<HttpServerInfo> {
     return super.start().then(info => {
-      this._context.emit('onStart', { info })
+      this._hooks.emit('onStart', { info })
       return info
     })
   }
 
   on<E extends keyof Hooks>(hook: E, listener: (args: Hooks[E]) => void): this {
     notBlank(hook)
-    this._context.on(hook, listener)
+    this._hooks.on(hook, listener)
     return this
   }
 
@@ -83,7 +73,7 @@ export class MockDogHttp extends MockApp<
   }
 
   close(): Promise<void> {
-    return super.close().finally(() => this._context.emit('onClose'))
+    return super.close().finally(() => this._hooks.emit('onClose'))
   }
 
   listener(): Express {
@@ -94,5 +84,30 @@ export class MockDogHttp extends MockApp<
     return Promise.all(this._mockProviders.map(provider => provider())).then(mocks =>
       mocks.flatMap(x => x).forEach(mock => this.mock(mock)),
     )
+  }
+
+  protected setup(): void {
+    // FIXME: new logger
+    // LoggerUtil.instance().subscribe(new PinoLogger(this._configuration.logLevel))
+
+    if (modeIsAtLeast(this._configuration, 'info')) {
+      this.on('onRequestStart', onRequestReceived)
+      this.on('onRequestNotMatched', onRequestNotMatched)
+      this.on('onRequestMatched', onRequestMatched)
+      this.on('onProxyRequest', onProxyRequest)
+      this.on('onProxyResponse', onProxyResponse)
+      this.on('onRecord', onRecord)
+    }
+
+    this._mockProviders.push(defaultMockProviderFactory(this._configuration))
+    this._mockServer.setup()
+  }
+
+  protected buildServer(): HttpServer {
+    return new HttpServer(this)
+  }
+
+  protected deps(): Deps {
+    return { stateRepository: this._stateRepository }
   }
 }

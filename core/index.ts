@@ -2,7 +2,6 @@ export * from './loader/index.js'
 export * from './log/index.js'
 
 export * from './config.js'
-export * from './context.js'
 export * from './error.js'
 export * from './findMockForRequest.js'
 export * from './mock.js'

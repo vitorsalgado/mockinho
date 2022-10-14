@@ -1,14 +1,14 @@
 import { JsonType } from '@mockdog/x'
 import { H, Methods, SC } from '../http.js'
-import { StandardReply } from './standard_reply.js'
+import { StandardReply } from './standard.js'
 
-export const response = (): StandardReply => StandardReply.newBuilder()
+export const newReply = (): StandardReply => StandardReply.newBuilder()
 
-export const accepted = (): StandardReply => response().status(SC.Accepted)
+export const accepted = (): StandardReply => newReply().status(SC.Accepted)
 
-export const badGateway = (): StandardReply => response().status(SC.BadGateway)
+export const badGateway = (): StandardReply => newReply().status(SC.BadGateway)
 
-export const badRequest = (): StandardReply => response().status(SC.BadRequest)
+export const badRequest = (): StandardReply => newReply().status(SC.BadRequest)
 
 export const created = (location?: string): StandardReply =>
   StandardReply.newBuilder().location(location).status(SC.Created)
@@ -16,17 +16,17 @@ export const created = (location?: string): StandardReply =>
 export const createdJSON = (body: JsonType, location?: string): StandardReply =>
   created(location).json(body)
 
-export const forbidden = (): StandardReply => response().status(SC.Forbidden)
+export const forbidden = (): StandardReply => newReply().status(SC.Forbidden)
 
 export const found = (location?: string): StandardReply =>
-  response().location(location).status(SC.Found)
+  newReply().location(location).status(SC.Found)
 
-export const gatewayTimeout = (): StandardReply => response().status(SC.GatewayTimeout)
+export const gatewayTimeout = (): StandardReply => newReply().status(SC.GatewayTimeout)
 
-export const internalServerError = (): StandardReply => response().status(SC.InternalServerError)
+export const internalServerError = (): StandardReply => newReply().status(SC.InternalServerError)
 
 export const methodNotAllowed = (allows?: Methods): StandardReply => {
-  const builder = response().status(SC.MethodNotAllowed)
+  const builder = newReply().status(SC.MethodNotAllowed)
 
   if (allows) {
     return builder.header(H.Allow, allows)
@@ -36,27 +36,27 @@ export const methodNotAllowed = (allows?: Methods): StandardReply => {
 }
 
 export const movedPermanently = (location?: string): StandardReply =>
-  response().status(SC.Moved_Permanently).location(location)
+  newReply().status(SC.Moved_Permanently).location(location)
 
-export const noContent = (): StandardReply => response().status(SC.NoContent)
+export const noContent = (): StandardReply => newReply().status(SC.NoContent)
 
-export const notFound = (): StandardReply => response().status(SC.NotFound)
+export const notFound = (): StandardReply => newReply().status(SC.NotFound)
 
 export const notFoundJSON = (body: JsonType): StandardReply => notFound().json(body)
 
-export const notModified = (): StandardReply => response().status(SC.NotModified)
+export const notModified = (): StandardReply => newReply().status(SC.NotModified)
 
 export const ok = (): StandardReply => StandardReply.newBuilder().status(SC.OK)
 
 export const okJSON = (body: JsonType): StandardReply => ok().json(body)
 
 export const seeOther = (location?: string): StandardReply =>
-  response().status(SC.SeeOther).location(location)
+  newReply().status(SC.SeeOther).location(location)
 
-export const serviceUnavailable = (): StandardReply => response().status(SC.ServiceUnavailable)
+export const serviceUnavailable = (): StandardReply => newReply().status(SC.ServiceUnavailable)
 
 export const unauthorized = (wwwAuth?: string): StandardReply => {
-  const builder = response().status(SC.Unauthorized)
+  const builder = newReply().status(SC.Unauthorized)
 
   if (wwwAuth) {
     return builder.header(H.WwwAuthenticate, wwwAuth)
@@ -65,4 +65,4 @@ export const unauthorized = (wwwAuth?: string): StandardReply => {
   return builder
 }
 
-export const unprocessableEntity = (): StandardReply => response().status(SC.UnprocessableEntity)
+export const unprocessableEntity = (): StandardReply => newReply().status(SC.UnprocessableEntity)

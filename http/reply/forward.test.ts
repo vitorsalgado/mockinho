@@ -34,7 +34,7 @@ describe('Proxied Responses', function () {
           .header('content-type', contains('json'))
           .reply(
             forwardedFrom()
-              .target(`http://localhost:${P.serverInfo().http.port}`)
+              .target(`http://localhost:${P.info.http.port}`)
               .responseHeader('test', 'ok')
               .proxyHeader('proxy-header', '100')
               .proxyHeaders({ 'x-test': 'true', 'x-dev': 'ts' }),

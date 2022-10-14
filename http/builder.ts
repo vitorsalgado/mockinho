@@ -19,7 +19,7 @@ import {
 import { base64, JsonType, noNullElements, notBlank, notEmpty, notNull, Nullable } from '@mockdog/x'
 import { basicAuth, bearerToken, urlPath } from './feat/matchers/index.js'
 import { BodyType, H, Methods, Schemes } from './http.js'
-import { response } from './reply/index.js'
+import { newReply } from './reply/index.js'
 import { SrvRequest } from './request.js'
 import { HttpMock } from './mock.js'
 import { Reply, ReplyFn, wrapReply } from './reply/reply.js'
@@ -351,7 +351,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
    */
   reply(reply: Reply | ReplyFn | number, body?: BodyType): this {
     if (typeof reply === 'number') {
-      this._reply = response().status(reply).body(body)
+      this._reply = newReply().status(reply).body(body)
     } else {
       this._reply = wrapReply(reply)
     }

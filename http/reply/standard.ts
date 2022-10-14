@@ -40,16 +40,12 @@ export class StandardReply implements Reply {
 
   // region Builder
 
-  status(status: number): this {
+  status(status: number, message?: string): this {
     notNull(status)
 
     this._status = status
-
-    return this
-  }
-
-  statusMessage(message: string): this {
     this._statusMessage = message
+
     return this
   }
 

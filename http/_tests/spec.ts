@@ -8,7 +8,7 @@ import { urlPath } from '../feat/matchers/index.js'
 import { opts } from '../config/index.js'
 import { get, post } from '../builder.js'
 import { ok, okJSON } from '../reply/index.js'
-import { AppVars } from '../vars.js'
+import { AppVars } from '../_internal/vars.js'
 
 const fixture = (name: string) => Path.join(__dirname, `_fixtures/__content__${name}`)
 

@@ -5,18 +5,18 @@ import { findMockForRequest } from '@mockdog/core'
 import { FindMockResult } from '@mockdog/core'
 import { modeIsAtLeast } from '@mockdog/core'
 import { Media, H } from './http.js'
-import { HttpContext } from './HttpContext.js'
 import { HttpMock } from './mock.js'
+import { MockDogHttp } from './MockDogHttp.js'
 import { SrvResponse } from './reply/index.js'
 import { SrvRequest } from './request.js'
-import { AppVars } from './vars.js'
+import { AppVars } from './_internal/vars.js'
 
-export function mockFinderMiddleware(context: HttpContext) {
-  const configurations = context.configuration
+export function mockFinderMiddleware(app: MockDogHttp) {
+  const configurations = app.config
   const isVerbose = modeIsAtLeast(configurations, 'verbose')
 
   return async function (req: SrvRequest, res: Response, next: NextFunction): Promise<void> {
-    const mocks = context.mockRepository.fetchSorted()
+    const mocks = app.store.fetchSorted()
     const result = findMockForRequest<SrvRequest, HttpMock>(req, mocks)
 
     if (result.hasMatch()) {
@@ -74,6 +74,7 @@ export function mockFinderMiddleware(context: HttpContext) {
 
         if (response.body instanceof Readable) {
           writeHead(res, response)
+
           response.body.on('end', () => {
             res.addTrailers(response.trailers.toObject())
             res.end(null)
@@ -121,7 +122,7 @@ export function mockFinderMiddleware(context: HttpContext) {
         afterMockServed(matched, result)
       }
 
-      onRequestMatched(isVerbose, context, req, response, matched)
+      onRequestMatched(isVerbose, req, response, matched)
 
       if (response.hasDelay()) {
         setTimeout(replier, response.delay)
@@ -132,7 +133,7 @@ export function mockFinderMiddleware(context: HttpContext) {
       return
     }
 
-    onRequestNotMatched(isVerbose, context, req, result)
+    onRequestNotMatched(isVerbose, req, result)
 
     if (configurations.proxyEnabled) {
       return next()
@@ -176,13 +177,8 @@ function afterMockServed(matched: HttpMock, result: FindMockResult<HttpMock>) {
 
 // region Events
 
-function onRequestNotMatched(
-  verbose: boolean,
-  context: HttpContext,
-  req: SrvRequest,
-  result: FindMockResult<HttpMock>,
-) {
-  context.emit('onRequestNotMatched', {
+function onRequestNotMatched(verbose: boolean, req: SrvRequest, result: FindMockResult<HttpMock>) {
+  req.$ctx.hooks.emit('onRequestNotMatched', {
     verbose,
     url: req.url,
     path: req.path,
@@ -193,12 +189,11 @@ function onRequestNotMatched(
 
 function onRequestMatched(
   verbose: boolean,
-  context: HttpContext,
   req: SrvRequest,
   response: SrvResponse,
   matched: HttpMock,
 ) {
-  context.emit('onRequestMatched', {
+  req.$ctx.hooks.emit('onRequestMatched', {
     verbose,
     start: req.$internals.start,
     url: req.url,

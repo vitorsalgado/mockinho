@@ -4,7 +4,7 @@ import { urlPath } from '../feat/matchers/index.js'
 import { httpMock } from '../index.js'
 import { get, post } from '../builder.js'
 import { okJSON } from '../reply/index.js'
-import { AppVars } from '../vars.js'
+import { AppVars } from '../_internal/vars.js'
 
 describe('HTTP Scope', function () {
   const $ = httpMock(opts().dynamicHttpPort().enableFileMocks(false))

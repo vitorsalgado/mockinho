@@ -1,5 +1,5 @@
 import Supertest from 'supertest'
-import { httpMock, opts, reply, req } from '../index.js'
+import { httpMock, opts, reply, req, SC } from '../index.js'
 
 describe('Reply', function () {
   const $ = httpMock(opts().dynamicHttpPort())
@@ -9,7 +9,7 @@ describe('Reply', function () {
   afterEach(() => $.resetMocks())
 
   test('set status and status message', () => {
-    $.mock(req.get('/test').reply(reply.ok().statusMessage('HEY')))
+    $.mock(req.get('/test').reply(reply.newReply().status(SC.OK, 'HEY')))
 
     return Supertest($.listener())
       .get('/test')

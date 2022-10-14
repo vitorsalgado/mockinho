@@ -30,7 +30,7 @@ import { HttpConfiguration } from '../../config/index.js'
 import { urlPath, urlPathMatching } from '../../feat/matchers/index.js'
 import { forwardedFrom } from '../../reply/forward.js'
 import { HttpMockBuilder } from '../../builder.js'
-import { response } from '../../reply/index.js'
+import { newReply } from '../../reply/index.js'
 import { random } from '../../reply/random.js'
 import { Reply } from '../../reply/reply.js'
 import { sequence } from '../../reply/sequence.js'
@@ -225,7 +225,7 @@ async function buildResponse(mock: MockFileResponse, filename: string): Promise<
 
     res.target(mock.proxyFrom)
   } else {
-    res = response().status(mock.status ?? 200)
+    res = newReply().status(mock.status ?? 200)
 
     if (mock.headers) res.headers(mock.headers)
     if (mock.delay) res.delay(mock.delay)

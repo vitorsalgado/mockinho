@@ -6,7 +6,7 @@ import Path from 'node:path'
 import { Worker } from 'node:worker_threads'
 import { HttpConfiguration } from '../../config/index.js'
 import { BodyType, Methods } from '../../http.js'
-import { HttpContext } from '../../HttpContext.js'
+import type { MockDogHttp } from '../../MockDogHttp.js'
 import { RecordOptions } from './options.js'
 
 export interface RecordArgs {
@@ -35,8 +35,8 @@ export class RecordDispatcher {
   private readonly worker: Worker
   private readonly configuration: HttpConfiguration
 
-  constructor(private readonly context: HttpContext) {
-    this.configuration = context.configuration
+  constructor(private readonly app: MockDogHttp) {
+    this.configuration = app.config
 
     if (!this.configuration.recordOptions || !this.configuration.recordOptions.destination) {
       throw new Error('You must provide at least the record destination.')
@@ -55,24 +55,24 @@ export class RecordDispatcher {
       execSync(`mkdir -p ${Path.join(this.configuration.recordOptions.destination)}`)
     } catch (e) {
       const error = e as Error
-      this.context.emit('onError', error)
+      this.app.hooks.emit('onError', error)
     }
   }
 
   init(): void {
     this.worker.on('message', (result: Result | Error) => {
       if (result instanceof Error) {
-        this.context.emit('onError', result)
+        this.app.hooks.emit('onError', result)
         return
       }
 
-      this.context.emit('onRecord', result)
+      this.app.hooks.emit('onRecord', result)
     })
   }
 
   record(message: RecordArgs): void {
     this.worker.postMessage(message)
-    this.context.emit('onRecordDispatched')
+    this.app.hooks.emit('onRecordDispatched')
   }
 
   terminate(): Promise<number> {

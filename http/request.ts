@@ -1,5 +1,6 @@
 import { Request, Express } from 'express'
 import { BodyType, Methods } from './http.js'
+import type { MockDogHttp } from './MockDogHttp.js'
 
 export interface SrvRequestInternals {
   id: string
@@ -18,4 +19,5 @@ export interface SrvRequest
   locals: Record<string, any>
 
   $internals: SrvRequestInternals
+  $ctx: MockDogHttp
 }

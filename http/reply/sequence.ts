@@ -3,7 +3,7 @@ import { notEmpty } from '@mockdog/x'
 import { H, Media, SC } from '../http.js'
 import { SrvRequest } from '../request.js'
 import { Reply, ReplyCtx, ReplyFn, SrvResponse, wrapReply } from './reply.js'
-import { StandardReply } from './standard_reply.js'
+import { StandardReply } from './standard.js'
 
 export const sequence = () => new SequenceReply()
 

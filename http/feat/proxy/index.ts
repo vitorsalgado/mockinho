@@ -6,36 +6,35 @@ import { Server as NodeHttpsServer } from 'https'
 import { Options } from 'http-proxy-middleware'
 import { responseInterceptor } from 'http-proxy-middleware'
 import { createProxyMiddleware } from 'http-proxy-middleware'
-import { Express } from 'express'
 import { log } from '@mockdog/core'
 import { modeIsAtLeast } from '@mockdog/core'
 import { H, Media } from '../../http.js'
+import type { MockDogHttp } from '../../MockDogHttp.js'
 import { RecordDispatcher } from '../rec/index.js'
 import { SrvRequest } from '../../request.js'
-import { HttpContext } from '../../HttpContext.js'
 
 export function configureProxy(
-  context: HttpContext,
-  expressApp: Express,
+  app: MockDogHttp,
   serverInstances: Array<NodeHttpServer | NodeHttpsServer>,
 ): void {
-  if (!context.configuration.proxyOptions.target) {
+  if (!app.config.proxyOptions.target) {
     throw new Error('Proxy target must not be empty or undefined.')
   }
 
-  let opts: Options = context.configuration.proxyOptions
+  const conf = app.config
+  let opts: Options = conf.proxyOptions
 
   opts = {
-    ...context.configuration.proxyOptions,
+    ...conf.proxyOptions,
 
     logLevel: 'silent',
     timeout: opts.timeout ?? 30 * 1000,
     proxyTimeout: opts.proxyTimeout ?? 30 * 1000,
 
     onProxyReq: function (proxyReq, request: SrvRequest) {
-      const target = String(context.configuration.proxyOptions.target)
+      const target = String(conf.proxyOptions.target)
 
-      context.emit('onProxyRequest', { target })
+      app.hooks.emit('onProxyRequest', { target })
 
       request.$internals.proxy = true
       request.$internals.proxyTarget = target
@@ -47,21 +46,21 @@ export function configureProxy(
     } as (proxyReq: ClientRequest, request: IncomingMessage) => void,
 
     onProxyRes: function (proxyRes, req, res) {
-      onProxyResponse(context, req as unknown as SrvRequest, res)
+      onProxyResponse(req as unknown as SrvRequest, res)
     },
 
     onError:
       opts.onError ??
       ((error, req, res) => {
-        context.emit('onError', error)
+        app.hooks.emit('onError', error)
 
         res.writeHead(500, { 'content-type': Media.PlainText })
         res.end('Proxy Error: ' + error.message)
       }),
   }
 
-  if (context.configuration.recordEnabled) {
-    const dispatcher = new RecordDispatcher(context)
+  if (conf.recordEnabled) {
+    const dispatcher = new RecordDispatcher(app)
 
     for (const server of serverInstances) {
       server.on('close', () =>
@@ -92,22 +91,18 @@ export function configureProxy(
         },
       })
 
-      onProxyResponse(context, request, res)
+      onProxyResponse(request, res)
 
       return responseBuffer
     })
   }
 
-  expressApp.use('*', createProxyMiddleware(opts))
+  app.server.instance.use('*', createProxyMiddleware(opts))
 }
 
-function onProxyResponse(
-  context: HttpContext,
-  request: SrvRequest,
-  response: ServerResponse,
-): void {
-  context.emit('onProxyResponse', {
-    verbose: modeIsAtLeast(context.configuration, 'verbose'),
+function onProxyResponse(request: SrvRequest, response: ServerResponse): void {
+  request.$ctx.hooks.emit('onProxyResponse', {
+    verbose: modeIsAtLeast(request.$ctx.config, 'verbose'),
     start: request.$internals.start,
     method: request.method,
     url: request.url,

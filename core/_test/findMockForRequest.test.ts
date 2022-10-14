@@ -3,9 +3,6 @@ import { FindMockResult } from '../findMockForRequest.js'
 import { findMockForRequest } from '../findMockForRequest.js'
 import { Mock } from '../mock.js'
 import { MockInMemoryRepository } from '../mockrepository.js'
-import { StateRepository } from '../state.js'
-import { Context } from '../context.js'
-import { Configuration } from '../config.js'
 
 describe('findMockForRequest', function () {
   class TestRepo extends MockInMemoryRepository<Mock> {
@@ -14,23 +11,8 @@ describe('findMockForRequest', function () {
     }
   }
 
-  type TestConfig = Configuration
-
-  const testConfig: TestConfig = {
-    logLevel: 'info',
-    mode: 'verbose',
-    mockProviderFactories: [],
-    plugins: [],
-  }
-
   describe('when theres is a match', function () {
     const repo = new TestRepo()
-
-    const ctx = {
-      configuration: testConfig,
-      scenarioRepository: new StateRepository(),
-      mockRepository: repo,
-    } as Context<Mock, TestConfig, TestRepo>
 
     const mock1 = new Mock(
       'test-id-1',
@@ -71,12 +53,6 @@ describe('findMockForRequest', function () {
 
   describe('when theres is no match', function () {
     const repo = new TestRepo()
-
-    const ctx = {
-      configuration: testConfig,
-      scenarioRepository: new StateRepository(),
-      mockRepository: repo,
-    } as Context<Mock, TestConfig, TestRepo>
 
     const mock1 = new Mock(
       'test-id-1',
@@ -121,12 +97,6 @@ describe('findMockForRequest', function () {
 
   describe('when no match and unable to determine a close match', function () {
     const repo = new TestRepo()
-
-    const ctx = {
-      configuration: { mode: 'trace', logLevel: 'info', plugins: [], mockProviderFactories: [] },
-      scenarioRepository: new StateRepository(),
-      mockRepository: repo,
-    } as Context<Mock, TestConfig, TestRepo>
 
     const mock1 = new Mock(
       'test-id-1',

@@ -5,23 +5,23 @@ import CookieParse from 'cookie-parser'
 import Cors from 'cors'
 import express, { Express, NextFunction, Request, Response, Router } from 'express'
 import Multer from 'multer'
-import { log, MockServer } from '@mockdog/core'
+import { log, Server } from '@mockdog/core'
 import { HttpConfiguration, Middleware, MiddlewareRoute } from './config/index.js'
 import { bodyParser } from './feat/bodyparsers/body_parser.js'
 import { configureProxy } from './feat/proxy/index.js'
-import { decorateRequest } from './request_decorator.js'
+import { decorateRequest } from './decorateRequest.js'
 import { ErrorCodes } from './_internal/errors.js'
 import { logIncomingRequestMiddleware } from './feat/hooks/logIncomingRequestMiddleware.js'
 import { logReqAndResMiddleware } from './feat/hooks/logReqAndResMiddleware.js'
-import { HttpContext } from './HttpContext.js'
 import { SrvRequest } from './request.js'
 import { mockFinderMiddleware } from './mockFinderMiddleware.js'
+import type { MockDogHttp } from './MockDogHttp.js'
 
 export interface ConnectionInfo {
   enabled: boolean
   port: number
   host: string
-  baseUrl: string
+  url: string
 }
 
 export interface HttpServerInfo {
@@ -29,7 +29,7 @@ export interface HttpServerInfo {
   https: ConnectionInfo
 }
 
-export class HttpServer implements MockServer<HttpServerInfo> {
+export class HttpServer implements Server<HttpServerInfo, Express> {
   private readonly configuration: HttpConfiguration
   private readonly serverInstances: Array<NodeHttpServer | NodeHttpsServer> = []
   private readonly expressApp: Express
@@ -39,8 +39,8 @@ export class HttpServer implements MockServer<HttpServerInfo> {
   private readonly information: HttpServerInfo
   private readonly additionalMiddlewares: Array<MiddlewareRoute> = []
 
-  constructor(private readonly context: HttpContext) {
-    this.configuration = context.configuration
+  constructor(private readonly app: MockDogHttp) {
+    this.configuration = app.config
     this.expressApp = express()
 
     if (this.configuration.useHttp) {
@@ -60,18 +60,26 @@ export class HttpServer implements MockServer<HttpServerInfo> {
         enabled: this.configuration.useHttp,
         port: 0,
         host: this.configuration.httpHost,
-        baseUrl: '',
+        url: '',
       },
 
       https: {
         enabled: this.configuration.useHttps,
         port: 0,
         host: this.configuration.httpsHost,
-        baseUrl: '',
+        url: '',
       },
     }
 
     this.additionalMiddlewares.push(...this.configuration.middlewares)
+  }
+
+  get info(): HttpServerInfo {
+    return this.information
+  }
+
+  get instance(): Express {
+    return this.expressApp
   }
 
   setup(): void {
@@ -87,18 +95,18 @@ export class HttpServer implements MockServer<HttpServerInfo> {
 
     this.expressApp.set('query parser', (query: string) => new URLSearchParams(query))
 
-    this.expressApp.use(decorateRequest as unknown as Router)
-    this.expressApp.use(bodyParser(this.configuration.requestBodyParsers) as unknown as Router) // should come before regular body parsers
-    this.expressApp.use(express.json())
-    this.expressApp.use(express.urlencoded(this.configuration.formUrlEncodedOptions))
-    this.expressApp.use(express.text())
+    this.mid(decorateRequest(this.app))
+    this.mid(bodyParser(this.configuration.requestBodyParsers)) // should come before regular body parsers
+    this.mid(express.json())
+    this.mid(express.urlencoded(this.configuration.formUrlEncodedOptions))
+    this.mid(express.text())
 
-    this.expressApp.use(logIncomingRequestMiddleware(this.context))
+    this.mid(logIncomingRequestMiddleware)
     this.expressApp.use(
       CookieParse(this.configuration.cookieSecrets, this.configuration.cookieOptions),
     )
     this.expressApp.use(Multer(this.configuration.multiPartOptions).any())
-    this.expressApp.use(logReqAndResMiddleware(this.context))
+    this.mid(logReqAndResMiddleware)
   }
 
   async start(): Promise<HttpServerInfo> {
@@ -106,7 +114,7 @@ export class HttpServer implements MockServer<HttpServerInfo> {
       this.expressApp.use(middleware.route, middleware.middleware as unknown as Router),
     )
 
-    const mockFinder = mockFinderMiddleware(this.context)
+    const mockFinder = mockFinderMiddleware(this.app)
 
     this.expressApp.all('*', (req, res, next) =>
       mockFinder(req as unknown as SrvRequest, res, next).catch(err => next(err)),
@@ -117,13 +125,13 @@ export class HttpServer implements MockServer<HttpServerInfo> {
     }
 
     if (this.configuration.proxyEnabled) {
-      configureProxy(this.context, this.expressApp, this.serverInstances)
+      configureProxy(this.app, this.serverInstances)
     }
 
     this.expressApp.use(
       (error: Error & Record<string, unknown>, req: Request, res: Response, next: NextFunction) => {
         if (error) {
-          this.context.emit('onError', error)
+          this.app.hooks.emit('onError', error)
 
           log.error(error)
 
@@ -151,10 +159,10 @@ export class HttpServer implements MockServer<HttpServerInfo> {
 
       this.information.http.port = port
       this.information.http.host = this.configuration.httpHost
-      this.information.http.baseUrl = `http://${this.configuration.httpHost}:${port}`
+      this.information.http.url = `http://${this.configuration.httpHost}:${port}`
 
       this.httpServer.on('error', (err: Error & Record<string, unknown>) =>
-        this.context.emit('onError', err),
+        this.app.hooks.emit('onError', err),
       )
     }
 
@@ -168,10 +176,10 @@ export class HttpServer implements MockServer<HttpServerInfo> {
 
       this.information.https.port = port
       this.information.https.host = this.configuration.httpsHost
-      this.information.https.baseUrl = `http://${this.configuration.httpsHost}:${port}`
+      this.information.https.url = `http://${this.configuration.httpsHost}:${port}`
 
       this.httpsServer.on('error', (err: Error & Record<string, unknown>) =>
-        this.context.emit('onError', err),
+        this.app.hooks.emit('onError', err),
       )
     }
 
@@ -188,10 +196,6 @@ export class HttpServer implements MockServer<HttpServerInfo> {
     } else {
       this.additionalMiddlewares.push({ route: '*', middleware: route })
     }
-  }
-
-  info(): HttpServerInfo {
-    return this.information
   }
 
   server(): Express {
@@ -219,5 +223,11 @@ export class HttpServer implements MockServer<HttpServerInfo> {
     }
 
     await Promise.all(listeners)
+  }
+
+  private mid(
+    mid: (req: SrvRequest, res: Response, next: NextFunction) => Promise<void> | void,
+  ): void {
+    this.expressApp.use(mid as unknown as Router)
   }
 }

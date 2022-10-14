@@ -1,11 +1,9 @@
 import Supertest from 'supertest'
 import { contains } from '@mockdog/matchers'
 import { H, Media } from '../http.js'
-import { HttpContext } from '../HttpContext'
 import { opts, HttpConfigurationBuilder, HttpServer, httpMock } from '../index.js'
 
 import { urlPath } from '../feat/matchers'
-import { HttpMockRepository } from '../mock.js'
 import { post } from '../builder.js'
 import { okJSON } from '../reply/index.js'
 
@@ -24,8 +22,7 @@ describe('Express Http Server', function () {
     .enableCors({ maxAge: 10 })
     .build()
 
-  const ctx = new HttpContext(cfg, new HttpMockRepository())
-  const httpServer = new HttpServer(ctx)
+  const httpServer = new HttpServer(httpMock(opts()))
 
   beforeAll(() => $.start())
   afterAll(async () => {
@@ -37,7 +34,7 @@ describe('Express Http Server', function () {
   it('should return server connection information', async function () {
     await httpServer.start()
 
-    expect(httpServer.info().http.port).toBeGreaterThan(0)
+    expect(httpServer.info.http.port).toBeGreaterThan(0)
   })
 
   it('should accept empty json requests', function () {

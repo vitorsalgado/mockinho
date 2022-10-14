@@ -16,7 +16,7 @@ describe('Trailers', function () {
         .reply(reply.ok().text('hello world').header('test', 'ok').trailer('ETag', 'test-value')),
     )
 
-    const u = $.serverInfo().http.baseUrl + '/test'
+    const u = $.info.http.url + '/test'
 
     http
       .get(u, res => {
@@ -35,7 +35,7 @@ describe('Trailers', function () {
   test('trailers with no response body', function (done) {
     $.mock(req.get('/empty').reply(reply.ok().header('test', 'ok').trailer('ETag', 'test-value')))
 
-    const u = $.serverInfo().http.baseUrl + '/empty'
+    const u = $.info.http.url + '/empty'
 
     http
       .get(u, res => {
@@ -66,7 +66,7 @@ describe('Trailers', function () {
         ),
     )
 
-    const u = $.serverInfo().http.baseUrl + '/stream'
+    const u = $.info.http.url + '/stream'
 
     http
       .get(u, res => {

@@ -28,7 +28,7 @@ describe('Record', function () {
       const $ = httpMock(
         opts()
           .dynamicHttpPort()
-          .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`)
+          .proxy(`http://${target.info.http.host}:${target.info.http.port}`)
           .record({ destination: recordDir }),
       )
 

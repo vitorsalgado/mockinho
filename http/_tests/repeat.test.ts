@@ -6,7 +6,7 @@ import { Media } from '../index.js'
 import { httpMock } from '../index.js'
 import { get } from '../builder.js'
 import { ok, okJSON } from '../reply/index.js'
-import { AppVars } from '../vars.js'
+import { AppVars } from '../_internal/vars.js'
 
 describe('Repeat', function () {
   const $ = httpMock(opts().dynamicHttpPort().trace())

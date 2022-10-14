@@ -1,13 +1,12 @@
 import Supertest from 'supertest'
 import { equalTo } from '@mockdog/matchers'
 import { field } from '@mockdog/matchers'
-import { opts, urlPath, H, Media, HttpContext } from '../../index.js'
+import { opts, urlPath, H, Media } from '../../index.js'
 import { httpMock } from '../../index.js'
 import { SC } from '../../index.js'
 import { get, post } from '../../builder.js'
 import { badRequest, okJSON } from '../../reply/index.js'
-import { AppVars } from '../../vars.js'
-import { configureProxy } from './index.js'
+import { AppVars } from '../../_internal/vars.js'
 
 describe('Forward Proxy', function () {
   const target = httpMock(opts().dynamicHttpPort().trace())
@@ -19,9 +18,7 @@ describe('Forward Proxy', function () {
   describe('when forward proxying requests', function () {
     it('should return success response from target', async function () {
       const $ = httpMock(
-        opts()
-          .dynamicHttpPort()
-          .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`),
+        opts().dynamicHttpPort().proxy(`http://${target.info.http.host}:${target.info.http.port}`),
       )
 
       try {
@@ -53,9 +50,7 @@ describe('Forward Proxy', function () {
 
     it('should return error response from target', async function () {
       const $ = httpMock(
-        opts()
-          .dynamicHttpPort()
-          .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`),
+        opts().dynamicHttpPort().proxy(`http://${target.info.http.host}:${target.info.http.port}`),
       )
 
       try {
@@ -82,9 +77,7 @@ describe('Forward Proxy', function () {
 
     it('should send the body', async function () {
       const $ = httpMock(
-        opts()
-          .dynamicHttpPort()
-          .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`),
+        opts().dynamicHttpPort().proxy(`http://${target.info.http.host}:${target.info.http.port}`),
       )
 
       try {
@@ -118,11 +111,9 @@ describe('Forward Proxy', function () {
 
     it('should capture proxy exceptions and return a 500 and plain text', async function () {
       const $ = httpMock(
-        opts()
-          .dynamicHttpPort()
-          .proxy(`http://${target.serverInfo().http.host}:${target.serverInfo().http.port}`, {
-            proxyTimeout: 100,
-          }),
+        opts().dynamicHttpPort().proxy(`http://${target.info.http.host}:${target.info.http.port}`, {
+          proxyTimeout: 100,
+        }),
       )
 
       try {
@@ -148,19 +139,6 @@ describe('Forward Proxy', function () {
       } finally {
         await $.finalize()
       }
-    })
-  })
-
-  describe('when configuring proxy', function () {
-    it('should not accept an empty target', function () {
-      const ctx = {
-        configuration: {
-          proxyOptions: {
-            target: undefined,
-          },
-        },
-      }
-      expect(() => configureProxy(ctx as HttpContext, null as any, null as any))
     })
   })
 })

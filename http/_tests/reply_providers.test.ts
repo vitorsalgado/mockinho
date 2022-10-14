@@ -60,7 +60,7 @@ describe('Providing Replies', function () {
 
         $.mock(
           get('/test').reply(async (req, res, ctx) => {
-            const u = $.serverInfo().http.baseUrl
+            const u = $.info.http.url
             const txt = await fetch(`${u}/value`).then(res => res.text())
 
             res.status(SC.Created).contentType('text').send(txt)

@@ -36,7 +36,7 @@ describe('cli', function () {
     it('should read the configuration', async function () {
       const argv: Argv = { rootDir: __dirname }
       const mockhttp = await run(argv, '')
-      const config = mockhttp.configuration()
+      const config = mockhttp.config
       const tsconfig = await import('./mockhttprc.js')
 
       try {
@@ -69,7 +69,7 @@ describe('cli', function () {
     it('should read the specific configuration and not the default ones', async function () {
       const argv: Argv = { rootDir: __dirname, config: 'mockhttprc-custom.js' }
       const mockhttp = await run(argv, '')
-      const config = mockhttp.configuration()
+      const config = mockhttp.config
       const jsconfig = await import('./mockhttprc-custom')
 
       try {
@@ -119,14 +119,12 @@ describe('cli', function () {
 
       const argv: Argv = { rootDir: __dirname }
       const mockhttp = await run(argv, '')
-      const config = mockhttp.configuration()
+      const config = mockhttp.config
 
       try {
         mockhttp.mock(get('/test').reply(ok()))
 
-        await Supertest(`http://localhost:${mockhttp.serverInfo().http.port}`)
-          .get('/test')
-          .expect(200)
+        await Supertest(`http://localhost:${mockhttp.info.http.port}`).get('/test').expect(200)
 
         expect(config.useHttp).toBeTruthy()
         expect(config.httpPort).toEqual(0)
@@ -156,14 +154,12 @@ describe('cli', function () {
 
       const argv: Argv = { rootDir: __dirname }
       const mockhttp = await run(argv, '')
-      const config = mockhttp.configuration()
+      const config = mockhttp.config
 
       try {
         mockhttp.mock(get('/test').reply(ok()))
 
-        await Supertest(`http://localhost:${mockhttp.serverInfo().http.port}`)
-          .get('/test')
-          .expect(200)
+        await Supertest(`http://localhost:${mockhttp.info.http.port}`).get('/test').expect(200)
 
         expect(config.recordEnabled).toBeTruthy()
         expect(config.recordOptions?.destination).toEqual(
@@ -211,7 +207,7 @@ describe('cli', function () {
         plugin: ['./_fixtures/plugin-js.js', './_fixtures/plugin-ts.ts'],
       }
       const mockhttp = await run(argv, '')
-      const config = mockhttp.configuration()
+      const config = mockhttp.config
 
       try {
         mockhttp.mock(get('/test').reply(ok()))
@@ -270,7 +266,7 @@ describe('cli', function () {
         watch: true,
       }
       const mockhttp = await run(argv, '')
-      const config = mockhttp.configuration()
+      const config = mockhttp.config
 
       try {
         mockhttp.mock(get('/test').reply(ok()))
@@ -311,14 +307,12 @@ describe('cli', function () {
         mockExtension: 'test',
       }
       const mockhttp = await run(argv, '')
-      const config = mockhttp.configuration()
+      const config = mockhttp.config
 
       try {
         mockhttp.mock(get('/test').reply(ok()))
 
-        await Supertest(`http://localhost:${mockhttp.serverInfo().http.port}`)
-          .get('/test')
-          .expect(200)
+        await Supertest(`http://localhost:${mockhttp.info.http.port}`).get('/test').expect(200)
 
         expect(config.useHttp).toBeTruthy()
         expect(config.httpPort).toEqual(0)
@@ -340,7 +334,7 @@ describe('cli', function () {
         mockExtension: 'test',
       }
       const mockhttp = await run(argv, '')
-      const config = mockhttp.configuration()
+      const config = mockhttp.config
 
       try {
         mockhttp.mock(get('/test').reply(ok()))
