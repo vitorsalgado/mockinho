@@ -1,5 +1,5 @@
 import { modeIsAtLeast } from '@mockdog/core'
-import { HttpConfigurationBuilder } from '../HttpConfigurationBuilder'
+import { HttpConfigurationBuilder } from '../config_builder.js'
 
 describe('config', function () {
   it('should return the correct mode', function () {

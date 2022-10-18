@@ -176,7 +176,7 @@ export class HttpServer implements Server<HttpServerInfo, Express> {
 
       this.information.https.port = port
       this.information.https.host = this.configuration.httpsHost
-      this.information.https.url = `http://${this.configuration.httpsHost}:${port}`
+      this.information.https.url = `https://${this.configuration.httpsHost}:${port}`
 
       this.httpsServer.on('error', (err: Error & Record<string, unknown>) =>
         this.app.hooks.emit('onError', err),

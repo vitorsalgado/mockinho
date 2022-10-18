@@ -1,5 +1,5 @@
 import Supertest from 'supertest'
-import { equalTo, isUUID } from '@mockdog/matchers'
+import { isUUID } from '@mockdog/matchers'
 import { modeIsAtLeast } from '@mockdog/core'
 import { HeaderList } from '../headers.js'
 import { httpMock } from '../index.js'

@@ -1,5 +1,5 @@
 import { Mode } from '@mockdog/core'
-import { HttpConfigurationBuilder } from '../../HttpConfigurationBuilder.js'
+import { HttpConfigurationBuilder } from '../../config_builder.js'
 import { rec } from '../../../feat/rec/index.js'
 
 export function envReader(env: Record<string, unknown>) {

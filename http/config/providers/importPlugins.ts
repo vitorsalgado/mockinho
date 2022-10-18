@@ -1,7 +1,7 @@
 import Path from 'path'
 import { importModule } from '@mockdog/x'
 import { Plugin } from '@mockdog/core'
-import { HttpConfigurationBuilder } from '../HttpConfigurationBuilder.js'
+import { HttpConfigurationBuilder } from '../config_builder.js'
 
 export async function importPlugins(
   components: Array<string>,

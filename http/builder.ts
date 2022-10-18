@@ -15,6 +15,7 @@ import {
   Predicate,
   repeat,
   fromPredicate,
+  oneOf,
 } from '@mockdog/matchers'
 import { base64, JsonType, noNullElements, notBlank, notEmpty, notNull, Nullable } from '@mockdog/x'
 import { basicAuth, bearerToken, urlPath } from './feat/matchers/index.js'
@@ -90,7 +91,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
 
   scheme(...scheme: Schemes[]): this {
     this._expectations.push(
-      this.spec(makeTarget('scheme', scheme.join(',')), selector.scheme, equalTo(scheme, true), 1),
+      this.spec(makeTarget('scheme', scheme.join(',')), selector.scheme, oneOf(scheme), 1),
     )
 
     return this

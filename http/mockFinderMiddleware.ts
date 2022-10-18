@@ -19,141 +19,143 @@ export function mockFinderMiddleware(app: MockDogHttp) {
     const mocks = app.store.fetchSorted()
     const result = findMockForRequest<SrvRequest, HttpMock>(req, mocks)
 
-    if (result.hasMatch()) {
-      const matched = result.matched()
-      const response = await matched.reply.build(req, res, { config: configurations })
+    if (!result.hasMatch()) {
+      onRequestNotMatched(isVerbose, req, result)
 
-      // response was handled by the replier
-      if (response === null || response === undefined) {
-        afterMockServed(matched, result)
-        return
+      if (configurations.proxyEnabled) {
+        return next()
       }
 
-      const replier = () => {
-        for (const cookie of response.cookiesToClear) res.clearCookie(cookie.key, cookie.options)
-        for (const cookie of response.cookies)
-          res.cookie(cookie.key, cookie.value, cookie.options ?? {})
-
-        const { status, headers } = response
-
-        if (!response.trailers.isEmpty()) {
-          let header = ''
-          for (const [key] of response.trailers) {
-            header += ' '
-            header += key
-          }
-
-          headers.delete('Content-Length')
-          headers.set('Transfer-Encoding', 'chunked')
-          headers.set('Trailer', header.trim())
-        }
-
-        if (response.body === null || response.body === undefined) {
-          if (
-            status >= 200 &&
-            status !== 204 &&
-            status !== 304 &&
-            req.method !== 'HEAD' &&
-            response.trailers.isEmpty()
-          ) {
-            headers.set('content-length', '0')
-          }
-
-          writeHead(res, response)
-          res.addTrailers(response.trailers.toObject())
-          res.end(null)
-
-          afterMockServed(matched, result)
-
-          return
-        }
-
-        const requestContentType = req.header('content-type')
-        const hasContentType =
-          requestContentType !== undefined && response.headers.has('Content-Type')
-
-        if (response.body instanceof Readable) {
-          writeHead(res, response)
-
-          response.body.on('end', () => {
-            res.addTrailers(response.trailers.toObject())
-            res.end(null)
-          })
-
-          response.body.pipe(res)
-        } else {
-          switch (typeof response.body) {
-            case 'string':
-              if (!hasContentType) {
-                res.type('text')
-              }
-
-              writeHead(res, response)
-              res.write(response.body)
-
-              break
-
-            case 'boolean':
-            case 'number':
-            case 'object':
-              if (Buffer.isBuffer(response.body)) {
-                if (!hasContentType) {
-                  res.type('bin')
-                }
-
-                writeHead(res, response)
-                res.write(response.body)
-              } else {
-                if (!hasContentType) {
-                  res.type('json')
-                }
-
-                writeHead(res, response)
-                res.write(JSON.stringify(response.body))
-              }
-
-              break
-          }
-
-          res.addTrailers(response.trailers.toObject())
-          res.end(null)
-        }
-
-        afterMockServed(matched, result)
-      }
-
-      onRequestMatched(isVerbose, req, response, matched)
-
-      if (response.hasDelay()) {
-        setTimeout(replier, response.delay)
-      } else {
-        replier()
-      }
+      res
+        .set(H.ContentType, Media.PlainText)
+        .status(AppVars.NoMatchStatus)
+        .send(
+          `Request was not matched.${result
+            .closestMatch()
+            .map(() => ' See closest matches below:')
+            .orValue('')}` +
+            result
+              .closestMatch()
+              .map(x => [{ id: x.id, name: x.name, filename: x.sourceDescription }])
+              .orValue([])
+              .map(item => `\nName: ${item.name}\nId: ${item.id}\nFile: ${item.filename}`)
+              .join(''),
+        )
 
       return
     }
 
-    onRequestNotMatched(isVerbose, req, result)
+    const matched = result.matched()
+    const response = await matched.reply.build(req, res, { config: configurations })
 
-    if (configurations.proxyEnabled) {
-      return next()
+    // response was handled by the replier
+    if (response === null || response === undefined) {
+      onRequestEnded(matched, result)
+      return
     }
 
-    res
-      .set(H.ContentType, Media.PlainText)
-      .status(AppVars.NoMatchStatus)
-      .send(
-        `Request was not matched.${result
-          .closestMatch()
-          .map(() => ' See closest matches below:')
-          .orValue('')}` +
-          result
-            .closestMatch()
-            .map(x => [{ id: x.id, name: x.name, filename: x.sourceDescription }])
-            .orValue([])
-            .map(item => `\nName: ${item.name}\nId: ${item.id}\nFile: ${item.filename}`)
-            .join(''),
-      )
+    const replier = () => {
+      for (const cookie of response.cookiesToClear) res.clearCookie(cookie.key, cookie.options)
+      for (const cookie of response.cookies)
+        res.cookie(cookie.key, cookie.value, cookie.options ?? {})
+
+      const { status, headers } = response
+
+      if (!response.trailers.isEmpty()) {
+        let header = ''
+        for (const [key] of response.trailers) {
+          header += ' '
+          header += key
+        }
+
+        headers.delete('Content-Length')
+        headers.set('Transfer-Encoding', 'chunked')
+        headers.set('Trailer', header.trim())
+      }
+
+      if (response.body === null || response.body === undefined) {
+        if (
+          status >= 200 &&
+          status !== 204 &&
+          status !== 304 &&
+          req.method !== 'HEAD' &&
+          response.trailers.isEmpty()
+        ) {
+          headers.set('content-length', '0')
+        }
+
+        writeHead(res, response)
+        res.addTrailers(response.trailers.toObject())
+        res.end(null)
+
+        onRequestEnded(matched, result)
+
+        return
+      }
+
+      const requestContentType = req.header('content-type')
+      const hasContentType =
+        requestContentType !== undefined && response.headers.has('Content-Type')
+
+      if (response.body instanceof Readable) {
+        writeHead(res, response)
+
+        response.body.on('end', () => {
+          res.addTrailers(response.trailers.toObject())
+          res.end(null)
+        })
+
+        response.body.pipe(res)
+      } else {
+        switch (typeof response.body) {
+          case 'string':
+            if (!hasContentType) {
+              res.type('text')
+            }
+
+            writeHead(res, response)
+            res.write(response.body)
+
+            break
+
+          case 'boolean':
+          case 'number':
+          case 'object':
+            if (Buffer.isBuffer(response.body)) {
+              if (!hasContentType) {
+                res.type('bin')
+              }
+
+              writeHead(res, response)
+              res.write(response.body)
+            } else {
+              if (!hasContentType) {
+                res.type('json')
+              }
+
+              writeHead(res, response)
+              res.write(JSON.stringify(response.body))
+            }
+
+            break
+        }
+
+        res.addTrailers(response.trailers.toObject())
+        res.end(null)
+      }
+
+      onRequestEnded(matched, result)
+    }
+
+    onRequestMatched(isVerbose, req, response, matched)
+
+    if (response.hasDelay()) {
+      setTimeout(replier, response.delay)
+    } else {
+      replier()
+    }
+
+    return
   }
 }
 
@@ -165,7 +167,7 @@ function writeHead(res: Response, response: SrvResponse) {
   }
 }
 
-function afterMockServed(matched: HttpMock, result: FindMockResult<HttpMock>) {
+function onRequestEnded(matched: HttpMock, result: FindMockResult<HttpMock>) {
   for (const { onMockServed } of result.results()) {
     if (onMockServed !== undefined) {
       onMockServed()

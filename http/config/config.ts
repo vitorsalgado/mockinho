@@ -1,19 +1,41 @@
-import { ServerOptions as HttpsServerOptions } from 'https'
 import { ServerOptions as HttpServerOptions } from 'http'
+import { ServerOptions as HttpsServerOptions } from 'https'
 import { OptionsUrlencoded } from 'body-parser'
-import Multer from 'multer'
-import { CorsOptions } from 'cors'
 import { CookieParseOptions } from 'cookie-parser'
+import { CorsOptions } from 'cors'
 import { Options } from 'http-proxy-middleware'
-import { Configuration } from '@mockdog/core'
-import { Mode } from '@mockdog/core'
-import { Level } from '@mockdog/core'
+import Multer from 'multer'
+import { Configuration, Level, Mode } from '@mockdog/core'
 import { RequestBodyParser } from '../feat/bodyparsers/body_parser.js'
 import { RecordOptions } from '../feat/rec/index.js'
 import { FieldParser } from '../loaders/default/FieldParser.js'
-import { MiddlewareRoute } from './MiddlewareRoute.js'
-import { Argv } from './providers/index.js'
-import { InitialOptions } from './providers/index.js'
+import { MiddlewareRoute } from './mid.js'
+import { Argv, InitialOptions } from './providers/index.js'
+
+export const Defaults = {
+  fixturesDir: '_fixtures',
+  port: 0,
+  host: 'localhost',
+  mode: 'verbose' as Mode,
+  timeout: 5 * 60 * 1000,
+  rootDir: process.cwd(),
+  logLevel: 'error' as Level,
+  mocksExtension: 'mock',
+  restartCommand: 'rs',
+  watch: false,
+  record: false,
+  proxy: false,
+  recordOptions: {
+    captureRequestHeaders: ['accept', 'content-type'],
+    captureResponseHeaders: [
+      'content-type',
+      'link',
+      'content-length',
+      'cache-control',
+      'retry-after',
+    ],
+  },
+}
 
 export interface HttpConfiguration extends Configuration {
   mode: Mode

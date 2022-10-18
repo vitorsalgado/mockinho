@@ -1,6 +1,7 @@
 import { Request, Express } from 'express'
 import { BodyType, Methods } from './http.js'
 import type { MockDogHttp } from './MockDogHttp.js'
+import * as keys from './symbols.js'
 
 export interface SrvRequestInternals {
   id: string
@@ -17,6 +18,9 @@ export interface SrvRequest
   method: Methods
   files: Array<Express.Multer.File>
   locals: Record<string, any>
+
+  // TODO: change to symbols
+  [keys.kInternals]: SrvRequestInternals
 
   $internals: SrvRequestInternals
   $ctx: MockDogHttp

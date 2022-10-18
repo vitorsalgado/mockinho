@@ -1,7 +1,7 @@
 import Fs from 'fs'
 import Path from 'path'
 import { importModule } from '@mockdog/x'
-import { HttpConfigurationBuilder } from '../../HttpConfigurationBuilder.js'
+import { HttpConfigurationBuilder } from '../../config_builder.js'
 import { importPlugins } from '../importPlugins.js'
 import { InitialOptions } from './InitialOptions.js'
 

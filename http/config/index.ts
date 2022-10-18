@@ -1,7 +1,8 @@
+import { HttpConfigurationBuilder } from './config_builder.js'
+
 export * from './providers/index.js'
-export * from './Defaults.js'
-export * from './HttpConfiguration.js'
-export * from './HttpConfigurationBuilder.js'
-export * from './Middleware.js'
-export * from './MiddlewareRoute.js'
-export * from './opts.js'
+export * from './config.js'
+export * from './config_builder.js'
+export * from './mid.js'
+
+export const opts = (): HttpConfigurationBuilder => new HttpConfigurationBuilder()
