@@ -31,5 +31,9 @@
   },
   "bugs": {
     "url": "https://github.com/vitorsalgado/mockdog/issues"
+  },
+  "dependencies": {
+    "colorette": "^2.0.19",
+    "pretty-format": "^29.2.0"
   }
 }

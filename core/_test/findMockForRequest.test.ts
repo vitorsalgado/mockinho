@@ -2,10 +2,10 @@ import { equalTo } from '@mockdog/matchers'
 import { FindMockResult } from '../findMockForRequest.js'
 import { findMockForRequest } from '../findMockForRequest.js'
 import { Mock } from '../mock.js'
-import { MockInMemoryRepository } from '../mockrepository.js'
+import { MockRepository } from '../mockrepository.js'
 
 describe('findMockForRequest', function () {
-  class TestRepo extends MockInMemoryRepository<Mock> {
+  class TestRepo extends MockRepository<Mock> {
     public constructor() {
       super()
     }
@@ -43,7 +43,7 @@ describe('findMockForRequest', function () {
     const request = {}
 
     it('should match and return matched mock in the result', function () {
-      const result = findMockForRequest(request, repo.fetchSorted())
+      const result = findMockForRequest(request, repo.findEligible())
 
       expect(result.hasMatch()).toBeTruthy()
       expect(result.matched()).toBeDefined()
@@ -87,7 +87,7 @@ describe('findMockForRequest', function () {
     const request = {}
 
     it('should return result with the closest match when available', function () {
-      const result = findMockForRequest(request, repo.fetchSorted())
+      const result = findMockForRequest(request, repo.findEligible())
 
       expect(result.hasMatch()).toBeFalsy()
       expect(result.closestMatch().isPresent()).toBeTruthy()
@@ -134,7 +134,7 @@ describe('findMockForRequest', function () {
     const request = {}
 
     it('should return the result empty', function () {
-      const result = findMockForRequest(request, repo.fetchSorted())
+      const result = findMockForRequest(request, repo.findEligible())
 
       expect(result.hasMatch()).toBeFalsy()
       expect(result.closestMatch().isPresent()).toBeFalsy()

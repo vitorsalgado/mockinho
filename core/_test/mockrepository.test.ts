@@ -1,23 +1,71 @@
 import { Mock } from '../mock.js'
-import { MockInMemoryRepository } from '../mockrepository.js'
+import { MockRepository } from '../mockrepository.js'
 
 describe('MockInMemoryRepository', function () {
-  class TestRepo extends MockInMemoryRepository<Mock> {
-    public constructor() {
-      super()
-    }
-  }
+  class TestRepo extends MockRepository<Mock> {}
 
   const repo = new TestRepo()
 
   it('ensure repository workflow', function () {
-    const mock1 = new Mock('test-id-1', 'test', 1, true, 'code', 'desc')
-    const mock2 = new Mock('test-id-2', 'test', 2, true, 'code', 'desc')
-    const mock3 = new Mock('test-id-3', 'test', 3, true, 'code', 'desc')
-    const mock4 = new Mock('test-id-4', 'test', 4, true, 'file', 'desc')
-    const mock5 = new Mock('test-id-5', 'test', 5, true, 'file', 'desc')
-    const mock6 = new Mock('test-id-6', 'test', 6, true, 'code', 'desc')
-    const mock7 = new Mock('test-id-7', 'test', 7, true, 'code', 'desc', [], [], 0)
+    const mock1 = new Mock({
+      id: 'test-id-1',
+      name: 'test',
+      priority: 1,
+      enabled: true,
+      source: 'code',
+      sourceDetail: 'desc',
+    })
+    const mock2 = new Mock({
+      id: 'test-id-2',
+      name: 'test',
+      priority: 2,
+      enabled: true,
+      source: 'code',
+      sourceDetail: 'desc',
+    })
+    const mock3 = new Mock({
+      id: 'test-id-3',
+      name: 'test',
+      priority: 3,
+      enabled: true,
+      source: 'code',
+      sourceDetail: 'desc',
+    })
+    const mock4 = new Mock({
+      id: 'test-id-4',
+      name: 'test',
+      priority: 4,
+      enabled: true,
+      source: 'file',
+      sourceDetail: 'desc',
+    })
+    const mock5 = new Mock({
+      id: 'test-id-5',
+      name: 'test',
+      priority: 5,
+      enabled: true,
+      source: 'file',
+      sourceDetail: 'desc',
+    })
+    const mock6 = new Mock({
+      id: 'test-id-6',
+      name: 'test',
+      priority: 6,
+      enabled: true,
+      source: 'code',
+      sourceDetail: 'desc',
+    })
+    const mock7 = new Mock({
+      id: 'test-id-7',
+      name: 'test',
+      priority: 7,
+      enabled: true,
+      source: 'code',
+      sourceDetail: 'desc',
+      postActions: [],
+      matchers: [],
+      hits: 0,
+    })
 
     repo.save(mock3)
     repo.save(mock5)
@@ -27,7 +75,7 @@ describe('MockInMemoryRepository', function () {
     repo.save(mock4)
     repo.save(mock7)
 
-    const sorted = repo.fetchSorted()
+    const sorted = repo.findEligible()
 
     expect(sorted[0].id).toEqual('test-id-1')
     expect(sorted[1].id).toEqual('test-id-2')
@@ -37,40 +85,40 @@ describe('MockInMemoryRepository', function () {
     expect(sorted[5].id).toEqual('test-id-6')
     expect(sorted[6].id).toEqual('test-id-7')
 
-    const byId = repo.fetchById('test-id-2')
+    const byId = repo.findById('test-id-2')
 
     expect(byId.isPresent()).toBeTruthy()
     expect(byId.get().id).toEqual('test-id-2')
 
-    const byIds = repo.fetchByIds('test-id-1', 'test-id-3', 'anything', '100')
+    const byIds = repo.findByIds('test-id-1', 'test-id-3', 'anything', '100')
 
     expect(byIds).toHaveLength(2)
     expect(byIds[0].id).toEqual('test-id-1')
     expect(byIds[1].id).toEqual('test-id-3')
 
-    repo.removeById('test-id-1')
+    repo.deleteById('test-id-1')
 
-    const removed = repo.fetchById('test-id-1')
+    const removed = repo.findById('test-id-1')
 
     expect(removed.isPresent()).toBeFalsy()
 
-    repo.removeByIds('test-id-2', 'test-id-3')
+    repo.deleteById('test-id-2', 'test-id-3')
 
-    const removedList = repo.fetchByIds('test-id-2', 'test-id-3')
+    const removedList = repo.findByIds('test-id-2', 'test-id-3')
 
     expect(removedList).toHaveLength(0)
 
-    repo.removeBySource('code')
+    repo.deleteBySource('code')
 
-    const fileSource = repo.fetchSorted()
+    const fileSource = repo.findEligible()
 
     expect(fileSource).toHaveLength(2)
     expect(fileSource[0].id).toEqual('test-id-4')
     expect(fileSource[1].id).toEqual('test-id-5')
 
-    repo.removeAll()
+    repo.clear()
 
-    const leftover = repo.fetchSorted()
+    const leftover = repo.findEligible()
 
     expect(leftover).toHaveLength(0)
   })

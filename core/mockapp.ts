@@ -1,10 +1,9 @@
-import { MockSource } from './mock.js'
+import { Scope } from './scope.js'
 import { Server } from './srv.js'
 import { MockRepository } from './mockrepository.js'
-import { Mock } from './mock.js'
+import { Mock, MockBuilder } from './mock.js'
 import { PluginRegistration } from './plugin.js'
 import { Configuration } from './config.js'
-import { MockBuilder } from './mockbuilder.js'
 import { MockProvider } from './provider.js'
 import { Plugin } from './plugin.js'
 
@@ -21,6 +20,7 @@ export abstract class MockApp<
   protected readonly _mockRepository: MockRepository<MOCK>
   protected readonly _mockProviders: Array<MockProvider<MockBuilder<MOCK, DEPS>>> = []
   protected readonly _plugins: Array<PluginRegistration> = []
+  protected readonly _scopes: Array<Scope<MOCK>> = []
 
   protected constructor(config: CONFIG, store: MockRepository<MOCK>) {
     this._configuration = config
@@ -84,20 +84,20 @@ export abstract class MockApp<
     })
   }
 
-  resetMocks(source?: MockSource): void {
+  resetMocks(source?: string): void {
     if (source) {
-      this._mockRepository.removeBySource(source)
+      this._mockRepository.deleteBySource(source)
     } else {
-      this._mockRepository.removeAll()
+      this._mockRepository.clear()
     }
   }
 
   resetFileMocks(): void {
-    this._mockRepository.removeBySource('file')
+    this._mockRepository.deleteBySource('file')
   }
 
   finalize(): Promise<void> {
-    this._mockRepository.removeAll()
+    this._mockRepository.clear()
     return this.close()
   }
 
@@ -105,7 +105,7 @@ export abstract class MockApp<
     return this._mockServer.close()
   }
 
-  // region Internal
+  // region internals
 
   protected abstract applyMocksFromProviders(): Promise<void>
 

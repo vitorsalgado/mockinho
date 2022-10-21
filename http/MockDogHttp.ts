@@ -1,5 +1,4 @@
 import { Express } from 'express'
-import { notBlank } from '@mockdog/x'
 import { MockBuilder, Scope, StateRepository } from '@mockdog/core'
 import { modeIsAtLeast } from '@mockdog/core'
 import { MockApp } from '@mockdog/core'
@@ -12,7 +11,6 @@ import {
   onRequestNotMatched,
   onRequestReceived,
 } from './feat/hooks/index.js'
-import { Hooks } from './feat/hooks/index.js'
 import { HttpMock, HttpMockRepository } from './mock.js'
 import { Deps } from './builder.js'
 import { HttpServer, HttpServerInfo } from './srv.js'
@@ -50,9 +48,12 @@ export class MockDogHttp extends MockApp<
     const added = builders
       .map(b => b.build(this.deps()))
       .map(mock => this._mockRepository.save(mock))
-      .map(mock => mock.id)
 
-    return new Scope(this._mockRepository, added)
+    const scope = new Scope(this._mockRepository, added)
+
+    this._scopes.push(scope)
+
+    return scope
   }
 
   start(): Promise<HttpServerInfo> {
@@ -60,12 +61,6 @@ export class MockDogHttp extends MockApp<
       this._hooks.emit('onStart', { info })
       return info
     })
-  }
-
-  on<E extends keyof Hooks>(hook: E, listener: (args: Hooks[E]) => void): this {
-    notBlank(hook)
-    this._hooks.on(hook, listener)
-    return this
   }
 
   use(route: string | Middleware, middleware?: Middleware): void {
@@ -91,12 +86,12 @@ export class MockDogHttp extends MockApp<
     // LoggerUtil.instance().subscribe(new PinoLogger(this._configuration.logLevel))
 
     if (modeIsAtLeast(this._configuration, 'info')) {
-      this.on('onRequestStart', onRequestReceived)
-      this.on('onRequestNotMatched', onRequestNotMatched)
-      this.on('onRequestMatched', onRequestMatched)
-      this.on('onProxyRequest', onProxyRequest)
-      this.on('onProxyResponse', onProxyResponse)
-      this.on('onRecord', onRecord)
+      this.hooks.on('onRequestStart', onRequestReceived)
+      this.hooks.on('onRequestNotMatched', onRequestNotMatched)
+      this.hooks.on('onRequestMatched', onRequestMatched)
+      this.hooks.on('onProxyRequest', onProxyRequest)
+      this.hooks.on('onProxyResponse', onProxyResponse)
+      this.hooks.on('onRecord', onRecord)
     }
 
     this._mockProviders.push(defaultMockProviderFactory(this._configuration))

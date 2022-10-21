@@ -1,65 +1,48 @@
 import { Optional } from '@mockdog/x'
-import { MockSource } from './mock.js'
 import { Mock } from './mock.js'
 
-export interface MockRepository<M> {
-  save(mock: M): M
-
-  fetchSorted(): Array<M>
-
-  fetchById(id: string): Optional<M>
-
-  fetchByIds(...ids: Array<string>): Array<M>
-
-  removeById(id: string): void
-
-  removeByIds(...ids: Array<string>): void
-
-  removeBySource(source: MockSource): void
-
-  removeAll(): void
-}
-
-export abstract class MockInMemoryRepository<M extends Mock> implements MockRepository<M> {
-  protected constructor(protected readonly mocks: Map<string, M> = new Map<string, M>()) {}
+export abstract class MockRepository<M extends Mock> {
+  protected readonly _mocks: Map<string, M> = new Map<string, M>()
 
   save(mock: M): M {
-    this.mocks.set(mock.id, mock)
+    this._mocks.set(mock.id, mock)
     return mock
   }
 
-  fetchSorted(): Array<M> {
-    return [...this.mocks.values()].sort((a, b) => a.priority - b.priority)
+  findAll(): Array<M> {
+    return Array.from(this._mocks.values())
   }
 
-  fetchById(id: string): Optional<M> {
-    return Optional.ofNullable(this.mocks.get(id))
+  findEligible(): Array<M> {
+    return [...this._mocks.values()].filter(x => x.enabled).sort((a, b) => a.priority - b.priority)
   }
 
-  fetchByIds(...ids: Array<string>): Array<M> {
+  findById(id: string): Optional<M> {
+    return Optional.ofNullable(this._mocks.get(id))
+  }
+
+  findByIds(...ids: Array<string>): Array<M> {
     return ids
-      .map(id => this.fetchById(id))
+      .map(id => this.findById(id))
       .filter(x => x.isPresent())
       .map(x => x.get())
   }
 
-  removeById(id: string): void {
-    this.mocks.delete(id)
+  deleteById(...ids: Array<string>): void {
+    for (const id of ids) {
+      this._mocks.delete(id)
+    }
   }
 
-  removeByIds(...ids: Array<string>): void {
-    ids.forEach(id => this.mocks.delete(id))
-  }
-
-  removeBySource(source: MockSource): void {
-    const toRemove = Array.from(this.mocks)
+  deleteBySource(source: string): void {
+    const toRemove = Array.from(this._mocks)
       .filter(x => x[1].source === source)
       .map(x => x[0])
 
-    this.removeByIds(...toRemove)
+    this.deleteById(...toRemove)
   }
 
-  removeAll(): void {
-    this.mocks.clear()
+  clear(): void {
+    this._mocks.clear()
   }
 }

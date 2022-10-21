@@ -2,7 +2,6 @@ import http from 'node:http'
 import {
   MatcherSpecification,
   MockBuilder,
-  MockSource,
   State,
   stateMatcher,
   StateRepository,
@@ -42,11 +41,11 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
   private _reply!: Reply
 
   constructor(
-    private readonly _source: MockSource = 'code',
+    private readonly _source = 'code',
     private readonly _sourceDescription: string = '',
   ) {}
 
-  static newBuilder = (source: MockSource = 'code', sourceDescription = ''): HttpMockBuilder =>
+  static newBuilder = (source = 'code', sourceDescription = ''): HttpMockBuilder =>
     new HttpMockBuilder(source, sourceDescription)
 
   id(id: string): this {

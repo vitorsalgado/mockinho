@@ -12,7 +12,7 @@ import { AppVars } from '../_internal/vars.js'
 
 const fixture = (name: string) => Path.join(__dirname, `_fixtures/__content__${name}`)
 
-describe('MockDog HTTP', function () {
+describe('Mock App', function () {
   const $ = httpMock(opts().dynamicHttpPort().trace())
 
   beforeAll(() => $.start())

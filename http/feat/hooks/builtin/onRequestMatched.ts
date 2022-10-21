@@ -19,7 +19,7 @@ export function onRequestMatched(event: Hooks['onRequestMatched']): void {
         event.verbose,
 
         '\n' +
-          (event.mock.id || event.mock.sourceDescription || event.mock.name
+          (event.mock.id || event.mock.sourceDetail || event.mock.name
             ? `${
                 green('Mock: ') +
                 event.mock.id +
@@ -27,9 +27,7 @@ export function onRequestMatched(event: Hooks['onRequestMatched']): void {
                 event.mock.name
               }\n` +
               `${
-                event.mock.sourceDescription
-                  ? green('Mock File: ') + event.mock.sourceDescription + '\n'
-                  : ''
+                event.mock.sourceDetail ? green('Mock File: ') + event.mock.sourceDetail + '\n' : ''
               }`
             : '') +
           `${green('Took: ')}${(nowInMs() - event.start).toFixed(2).toString()} ms\n\n` +

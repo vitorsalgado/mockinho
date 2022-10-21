@@ -83,7 +83,7 @@ export function configureWatcher(config: HttpConfiguration, mockhttp: MockDogHtt
     },
   )
 
-  mockhttp.on('onClose', () => fsWatcher.close())
+  mockhttp.hooks.on('onClose', () => fsWatcher.close())
 }
 
 function extractFilename(path: string) {

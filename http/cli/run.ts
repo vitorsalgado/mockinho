@@ -57,7 +57,7 @@ export async function run(options: Argv, banner: string): Promise<MockDogHttp> {
     }
   })
 
-  mockhttp.on('onClose', () => {
+  mockhttp.hooks.on('onClose', () => {
     if (process.stdin && process.stdin.unref) process.stdin.unref()
   })
 

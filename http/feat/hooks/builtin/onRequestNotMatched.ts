@@ -27,6 +27,6 @@ export function onRequestNotMatched(event: Hooks['onRequestNotMatched']): void {
       '\n' +
       `Id: ${mock.id}\n` +
       (mock.name ? `Name: ${mock.name}\n` : '') +
-      (mock.sourceDescription ? `File: ${bold(mock.sourceDescription)}` : '' + '\n'),
+      (mock.sourceDetail ? `File: ${bold(mock.sourceDetail)}` : '' + '\n'),
   )
 }

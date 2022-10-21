@@ -53,7 +53,7 @@ export function findMockForRequest<REQUEST, MOCK extends Mock<REQUEST>>(
   const mismatches: Mismatch[] = []
 
   for (const mock of mocks) {
-    const result = mock.matches(request)
+    const result = mock.requestMatches(request)
 
     if (result.ok) {
       return FindMockResult.match(result.results, mock)

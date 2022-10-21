@@ -51,7 +51,7 @@ export interface Hooks {
     readonly mock: {
       readonly id: string
       readonly name: string
-      readonly sourceDescription: string
+      readonly sourceDetail: string
     }
   }
 

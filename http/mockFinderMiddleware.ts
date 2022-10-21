@@ -16,7 +16,7 @@ export function mockFinderMiddleware(app: MockDogHttp) {
   const isVerbose = modeIsAtLeast(configurations, 'verbose')
 
   return async function (req: SrvRequest, res: Response, next: NextFunction): Promise<void> {
-    const mocks = app.store.fetchSorted()
+    const mocks = app.store.findEligible()
     const result = findMockForRequest<SrvRequest, HttpMock>(req, mocks)
 
     if (!result.hasMatch()) {
@@ -36,7 +36,7 @@ export function mockFinderMiddleware(app: MockDogHttp) {
             .orValue('')}` +
             result
               .closestMatch()
-              .map(x => [{ id: x.id, name: x.name, filename: x.sourceDescription }])
+              .map(x => [{ id: x.id, name: x.name, filename: x.sourceDetail }])
               .orValue([])
               .map(item => `\nName: ${item.name}\nId: ${item.id}\nFile: ${item.filename}`)
               .join(''),
