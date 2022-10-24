@@ -36,6 +36,6 @@ describe('Form MultiPart', function () {
       .field('field-test-3', ['val1', 'val2'])
       .expect(200)
 
-    expect(scope.isDone()).toBeTruthy()
+    expect(scope.hasBeenCalled()).toBeTruthy()
   }, 120000)
 })

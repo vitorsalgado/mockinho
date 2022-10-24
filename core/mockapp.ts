@@ -64,7 +64,7 @@ export abstract class MockApp<
 
   async start(): Promise<SRV_INF> {
     for (const plugin of this._plugins) {
-      await plugin.plugin(this, plugin.opts)
+      await plugin.plugin(this, plugin.options)
     }
 
     return Promise.all([this.applyMocksFromProviders(), this._mockServer.start()]).then(
@@ -80,7 +80,7 @@ export abstract class MockApp<
   register<Options>(plugin: Plugin<Options, this>, opts?: Options): void {
     this._plugins.push({
       plugin: plugin as Plugin,
-      opts,
+      options: opts,
     })
   }
 

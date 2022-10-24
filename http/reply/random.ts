@@ -2,15 +2,15 @@ import { Response } from 'express'
 import { notEmpty } from '@mockdog/x'
 import { H, Media, SC } from '../http.js'
 import { SrvRequest } from '../request.js'
-import { Reply, ReplyCtx, ReplyFn, SrvResponse, wrapReply } from './reply.js'
+import { HttpReply, ReplyCtx, ReplyFn, SrvResponse, wrapReply } from './reply.js'
 import { StandardReply } from './standard.js'
 
 export const random = () => new RandomReply()
 
-export class RandomReply implements Reply {
-  private readonly _replies: Array<Reply> = []
+export class RandomReply implements HttpReply {
+  private readonly _replies: Array<HttpReply> = []
 
-  add(...replies: Array<Reply | ReplyFn>): this {
+  add(...replies: Array<HttpReply | ReplyFn>): this {
     notEmpty(replies)
 
     this._replies.push(...replies.map(x => wrapReply(x)))

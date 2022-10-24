@@ -30,6 +30,6 @@ describe('CORS', function () {
     await Supertest($.listener()).head('/test').expect(200)
     await Supertest($.listener()).options('/test').expect(200)
 
-    expect(scope.isDone()).toBeTruthy()
+    expect(scope.hasBeenCalled()).toBeTruthy()
   })
 })

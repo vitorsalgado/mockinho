@@ -1,6 +1,6 @@
 import { Mock } from '../mock.js'
 
-describe('Mock', function () {
+describe('mock', function () {
   it('should init mock and set a uuid when none is provided', function () {
     const mock = new Mock({
       id: '',

@@ -1,4 +1,5 @@
 import { CookieOptions, Response } from 'express'
+import { Reply } from '@mockdog/core'
 import { HttpConfiguration } from '../config/index.js'
 import { HeaderList } from '../headers.js'
 import { BodyType } from '../http.js'
@@ -42,11 +43,9 @@ export type ReplyFn = (
   ctx: ReplyCtx,
 ) => Promise<SrvResponse | null | void>
 
-export interface Reply {
-  build(req: SrvRequest, res: Response, ctx: ReplyCtx): Promise<SrvResponse | null | void>
-}
+export type HttpReply = Reply<SrvRequest, Response, HttpConfiguration, SrvResponse>
 
-export class ReplyWrapper implements Reply {
+export class ReplyWrapper implements HttpReply {
   constructor(private readonly _replyFn: ReplyFn) {}
 
   build(req: SrvRequest, res: Response, ctx: ReplyCtx): Promise<SrvResponse | null | void> {
@@ -54,7 +53,7 @@ export class ReplyWrapper implements Reply {
   }
 }
 
-export function wrapReply(reply: Reply | ReplyFn): Reply {
+export function wrapReply(reply: HttpReply | ReplyFn): HttpReply {
   if ('build' in reply) {
     return reply
   } else {

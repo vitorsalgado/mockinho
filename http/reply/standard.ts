@@ -8,12 +8,12 @@ import { HeaderList } from '../headers.js'
 import { BodyType, H, Media, SC } from '../http.js'
 import { SrvRequest } from '../request.js'
 import { TemplateModel, TmplRequest } from './template.js'
-import { Cookie, CookieToClear, Reply, ReplyCtx, SrvResponse } from './reply.js'
+import { Cookie, CookieToClear, HttpReply, ReplyCtx, SrvResponse } from './reply.js'
 
 const access = Util.promisify(Fs.access)
 const readFile = Util.promisify(Fs.readFile)
 
-export class StandardReply implements Reply {
+export class StandardReply implements HttpReply {
   protected _status: number = SC.OK
   protected _statusMessage?: string
   protected _body: BodyType = undefined

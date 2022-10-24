@@ -4,38 +4,28 @@ import { findMockForRequest } from '../findMockForRequest.js'
 import { Mock } from '../mock.js'
 import { MockRepository } from '../mockrepository.js'
 
-describe('findMockForRequest', function () {
-  class TestRepo extends MockRepository<Mock> {
-    public constructor() {
-      super()
-    }
-  }
+describe('find mock for request', function () {
+  class TestRepo extends MockRepository<Mock> {}
 
   describe('when theres is a match', function () {
     const repo = new TestRepo()
 
-    const mock1 = new Mock(
-      'test-id-1',
-      'test',
-      1,
-      true,
-      'code',
-      'desc',
-      [{ selector: () => 'test', matcher: equalTo('dev'), score: 1, target: '' }],
-      [],
-      0,
-    )
-    const mock2 = new Mock(
-      'test-id-2',
-      'test',
-      2,
-      true,
-      'code',
-      'desc',
-      [{ selector: () => 'test', matcher: equalTo('test'), score: 1, target: '' }],
-      [],
-      0,
-    )
+    const mock1 = new Mock({
+      id: 'test-id-1',
+      name: 'test',
+      priority: 1,
+      source: 'code',
+      sourceDetail: 'desc',
+      matchers: [{ selector: () => 'test', matcher: equalTo('dev'), score: 1, target: '' }],
+    })
+    const mock2 = new Mock({
+      id: 'test-id-2',
+      name: 'test',
+      priority: 2,
+      source: 'code',
+      sourceDetail: 'desc',
+      matchers: [{ selector: () => 'test', matcher: equalTo('test'), score: 1, target: '' }],
+    })
 
     repo.save(mock1)
     repo.save(mock2)
@@ -54,32 +44,26 @@ describe('findMockForRequest', function () {
   describe('when theres is no match', function () {
     const repo = new TestRepo()
 
-    const mock1 = new Mock(
-      'test-id-1',
-      'test',
-      1,
-      true,
-      'code',
-      'desc',
-      [{ selector: () => 'test', matcher: equalTo('dev'), score: 0, target: '' }],
-      [],
-      0,
-    )
+    const mock1 = new Mock({
+      id: 'test-id-1',
+      name: 'test',
+      priority: 1,
+      source: 'code',
+      sourceDetail: 'desc',
+      matchers: [{ selector: () => 'test', matcher: equalTo('dev'), score: 0, target: '' }],
+    })
 
-    const mock2 = new Mock(
-      'test-id-2',
-      'test',
-      2,
-      true,
-      'code',
-      'desc',
-      [
+    const mock2 = new Mock({
+      id: 'test-id-2',
+      name: 'test',
+      priority: 2,
+      source: 'code',
+      sourceDetail: 'desc',
+      matchers: [
         { selector: () => 'test', matcher: equalTo('test'), score: 2, target: '' },
         { selector: () => 'test', matcher: equalTo('no-test'), score: 0, target: '' },
       ],
-      [],
-      0,
-    )
+    })
 
     repo.save(mock1)
     repo.save(mock2)
@@ -98,25 +82,25 @@ describe('findMockForRequest', function () {
   describe('when no match and unable to determine a close match', function () {
     const repo = new TestRepo()
 
-    const mock1 = new Mock(
-      'test-id-1',
-      'test',
-      1,
-      true,
-      'code',
-      'desc',
-      [{ selector: () => 'test', matcher: equalTo('dev'), score: 0, target: '' }],
-      [],
-      0,
-    )
-    const mock2 = new Mock(
-      'test-id-2',
-      'test',
-      2,
-      true,
-      'code',
-      'desc',
-      [
+    const mock1 = new Mock({
+      id: 'test-id-1',
+      name: 'test',
+      priority: 1,
+      enabled: true,
+      source: 'code',
+      sourceDetail: 'desc',
+      matchers: [{ selector: () => 'test', matcher: equalTo('dev'), score: 0, target: '' }],
+      postActions: [],
+      hits: 0,
+    })
+    const mock2 = new Mock({
+      id: 'test-id-2',
+      name: 'test',
+      priority: 2,
+      enabled: true,
+      source: 'code',
+      sourceDetail: 'desc',
+      matchers: [
         {
           selector: () => 'test',
           matcher: equalTo('no-test'),
@@ -124,9 +108,9 @@ describe('findMockForRequest', function () {
           target: '',
         },
       ],
-      [],
-      0,
-    )
+      postActions: [],
+      hits: 0,
+    })
 
     repo.save(mock1)
     repo.save(mock2)
@@ -143,7 +127,7 @@ describe('findMockForRequest', function () {
 })
 
 describe('FindMockResult', function () {
-  const mock = new Mock('', 'test', 1, true, 'code', 'desc', [], [], 0)
+  const mock = new Mock({ id: '', name: 'test', priority: 1 })
 
   describe('when init a no matched', function () {
     const result = FindMockResult.mismatch([], mock)

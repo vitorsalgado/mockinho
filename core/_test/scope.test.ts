@@ -2,9 +2,8 @@ import { Mock } from '../mock.js'
 import { MockRepository } from '../mockrepository.js'
 import { Scope } from '../scope.js'
 
-describe('Scope', function () {
+describe('scope', function () {
   class TestMock extends Mock {}
-
   class TestMockRepo extends MockRepository<TestMock> {}
 
   const repo = new TestMockRepo()

@@ -20,10 +20,10 @@ import { base64, JsonType, noNullElements, notBlank, notEmpty, notNull, Nullable
 import { score } from './_internal/score.js'
 import { basicAuth, bearerToken, urlPath } from './feat/matchers/index.js'
 import { BodyType, H, Methods, Schemes } from './http.js'
-import { newReply } from './reply/index.js'
+import { HttpReply, newReply } from './reply/index.js'
 import { SrvRequest } from './request.js'
 import { HttpMock } from './mock.js'
-import { Reply, ReplyFn, wrapReply } from './reply/reply.js'
+import { ReplyFn, wrapReply } from './reply/reply.js'
 import { selector } from './_internal/request_value_selectors.js'
 
 export interface Deps {
@@ -31,35 +31,30 @@ export interface Deps {
 }
 
 export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
-  private _id: string = ''
-  private _name: string = ''
-  private _priority: number = 0
+  private readonly _mock
   private _scenario: string = ''
   private _scenarioNewState: string = State.STATE_STARTED
   private _scenarioRequiredState: string = ''
-  private readonly _expectations: Array<MatcherSpecification<unknown, unknown>> = []
-  private _reply!: Reply
 
-  constructor(
-    private readonly _source = 'code',
-    private readonly _sourceDescription: string = '',
-  ) {}
+  constructor(source = 'code', sourceDetail: string = '') {
+    this._mock = new HttpMock({ source, sourceDetail })
+  }
 
   static newBuilder = (source = 'code', sourceDescription = ''): HttpMockBuilder =>
     new HttpMockBuilder(source, sourceDescription)
 
   id(id: string): this {
-    this._id = id
+    this._mock.id = id
     return this
   }
 
   name(name: string): this {
-    this._name = name
+    this._mock.name = name
     return this
   }
 
   priority(priority: number): this {
-    this._priority = priority
+    this._mock.priority = priority
     return this
   }
 
@@ -69,11 +64,11 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     if (typeof matcher === 'string') {
       notBlank(matcher)
 
-      this._expectations.push(
+      this._mock.matchers.push(
         this.spec(makeTarget('url', matcher), selector.url, urlPath(matcher), score.High),
       )
     } else {
-      this._expectations.push(this.spec('url', selector.url, matcher, score.High))
+      this._mock.matchers.push(this.spec('url', selector.url, matcher, score.High))
     }
 
     return this
@@ -82,7 +77,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
   method(...method: Methods[]): this {
     notNull(method)
 
-    this._expectations.push(
+    this._mock.matchers.push(
       this.spec(
         makeTarget('method', method.join(',')),
         selector.method,
@@ -95,7 +90,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
   }
 
   scheme(...scheme: Schemes[]): this {
-    this._expectations.push(
+    this._mock.matchers.push(
       this.spec(
         makeTarget('scheme', scheme.join(',')),
         selector.scheme,
@@ -117,7 +112,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     const target = `header(${key})`
 
     if (typeof matcher === 'string') {
-      this._expectations.push(
+      this._mock.matchers.push(
         this.spec(
           target,
           selector.header(key.toLowerCase()),
@@ -126,7 +121,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
         ),
       )
     } else {
-      this._expectations.push(
+      this._mock.matchers.push(
         this.spec(target, selector.header(key), fromPredicate(matcher), score.VeryLow),
       )
     }
@@ -137,7 +132,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
   headers(matcher: Matcher<http.IncomingHttpHeaders> | Predicate<http.IncomingHttpHeaders>): this {
     notNull(matcher)
 
-    this._expectations.push(
+    this._mock.matchers.push(
       this.spec('headers', selector.headers, fromPredicate(matcher), score.Low),
     )
 
@@ -150,11 +145,11 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     const target = makeTarget('header', 'content-type')
 
     if (typeof matcher === 'string') {
-      this._expectations.push(
+      this._mock.matchers.push(
         this.spec(target, selector.header(H.ContentType), equalTo(matcher, true), score.VeryLow),
       )
     } else {
-      this._expectations.push(
+      this._mock.matchers.push(
         this.spec(target, selector.header(H.ContentType), fromPredicate(matcher), score.VeryLow),
       )
     }
@@ -168,7 +163,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
 
     const encoded = base64.encode(`${username}:${password}`)
 
-    this._expectations.push(
+    this._mock.matchers.push(
       this.spec(
         makeTarget('basic_auth', encoded),
         selector.request,
@@ -183,7 +178,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
   bearerToken(token: string): this {
     notNull(token)
 
-    this._expectations.push(
+    this._mock.matchers.push(
       this.spec(
         makeTarget('bearer_token', token),
         selector.request,
@@ -205,11 +200,11 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     const target = makeTarget('query', key)
 
     if (typeof matcher === 'string') {
-      this._expectations.push(
+      this._mock.matchers.push(
         this.spec(target, selector.query(key), equalTo(matcher), score.VeryLow),
       )
     } else {
-      this._expectations.push(
+      this._mock.matchers.push(
         this.spec(target, selector.query(key), fromPredicate(matcher), score.VeryLow),
       )
     }
@@ -224,11 +219,11 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     const target = makeTarget('query', key)
 
     if (typeof matcher === 'string') {
-      this._expectations.push(
+      this._mock.matchers.push(
         this.spec(target, selector.queries(key), equalTo(matcher), score.VeryLow),
       )
     } else {
-      this._expectations.push(
+      this._mock.matchers.push(
         this.spec(target, selector.queries(key), fromPredicate(matcher), score.VeryLow),
       )
     }
@@ -239,7 +234,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
   querystring(matcher: Matcher<URLSearchParams>): this {
     notNull(matcher)
 
-    this._expectations.push(this.spec('querystring', selector.fullQuerystring, matcher, score.Low))
+    this._mock.matchers.push(this.spec('querystring', selector.fullQuerystring, matcher, score.Low))
 
     return this
   }
@@ -249,9 +244,9 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     noNullElements(matchers)
 
     if (matchers.length === 0) {
-      this._expectations.push(this.spec('body', selector.body, matchers[0], score.Medium))
+      this._mock.matchers.push(this.spec('body', selector.body, matchers[0], score.Medium))
     } else {
-      this._expectations.push(this.spec('body', selector.body, allOf(...matchers), score.Medium))
+      this._mock.matchers.push(this.spec('body', selector.body, allOf(...matchers), score.Medium))
     }
 
     return this
@@ -268,12 +263,12 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     noNullElements(matchers)
 
     if (matchers.length === 0) {
-      this._expectations.push(
+      this._mock.matchers.push(
         this.spec('files', selector.files, fromPredicate(matchers[0]), score.Low),
       )
     }
 
-    this._expectations.push(
+    this._mock.matchers.push(
       this.spec(
         'files',
         selector.files,
@@ -293,12 +288,12 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     const target = makeTarget('file', field)
 
     if (matchers.length === 0) {
-      this._expectations.push(
+      this._mock.matchers.push(
         this.spec(target, selector.fileByFieldName(field), matchers[0], score.Low),
       )
     }
 
-    this._expectations.push(
+    this._mock.matchers.push(
       this.spec(target, selector.fileByFieldName(field), allOf(...matchers), score.Medium),
     )
 
@@ -312,11 +307,11 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     const target = makeTarget('cookie', name)
 
     if (typeof matcher === 'string') {
-      this._expectations.push(
+      this._mock.matchers.push(
         this.spec(target, selector.cookie(name), equalTo(matcher), score.VeryLow),
       )
     } else {
-      this._expectations.push(
+      this._mock.matchers.push(
         this.spec(target, selector.cookie(name), fromPredicate(matcher), score.VeryLow),
       )
     }
@@ -328,7 +323,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     name: string,
     matcher: Predicate<Nullable<JsonType>> | Matcher<Nullable<JsonType>>,
   ): this {
-    this._expectations.push(
+    this._mock.matchers.push(
       this.spec(
         makeTarget('cookieJSON', name),
         selector.jsonCookie(name),
@@ -343,7 +338,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
   repeat(times: number): this {
     notNull(times)
 
-    this._expectations.push(
+    this._mock.matchers.push(
       this.spec(makeTarget('request', times), selector.nothing, repeat(times), score.None),
     )
 
@@ -354,7 +349,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     notEmpty(matchers)
     noNullElements(matchers)
 
-    this._expectations.push(
+    this._mock.matchers.push(
       this.spec(
         'request',
         selector.request,
@@ -400,11 +395,11 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
    * @param reply - Mock response specification.
    * @param body - Response body. Will only be considered if the first parameter is a number.
    */
-  reply(reply: Reply | ReplyFn | number, body?: BodyType): this {
+  reply(reply: HttpReply | ReplyFn | number, body?: BodyType): this {
     if (typeof reply === 'number') {
-      this._reply = newReply().status(reply).body(body)
+      this._mock.reply = newReply().status(reply).body(body)
     } else {
-      this._reply = wrapReply(reply)
+      this._mock.reply = wrapReply(reply)
     }
 
     return this
@@ -414,7 +409,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
     this.validate()
 
     if (this._scenario) {
-      this._expectations.push(
+      this._mock.matchers.push(
         this.spec(
           makeTarget('state', this._scenario),
           selector.nothing,
@@ -428,15 +423,7 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
       )
     }
 
-    return new HttpMock(
-      this._id,
-      this._name,
-      this._priority,
-      this._source,
-      this._sourceDescription,
-      this._expectations,
-      this._reply,
-    )
+    return this._mock
   }
 
   private spec<T, M = T>(
@@ -454,9 +441,12 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
   }
 
   private validate(): void {
-    notEmpty(this._expectations, 'Mocks needs to have at least one Matcher.')
-    noNullElements(this._expectations, 'Matchers list must not contain null or undefined elements.')
-    notNull(this._reply, 'Response definition is required. Call .reply() to create one.')
+    notEmpty(this._mock.matchers, 'Mocks needs to have at least one Matcher.')
+    noNullElements(
+      this._mock.matchers,
+      'Matchers list must not contain null or undefined elements.',
+    )
+    notNull(this._mock.reply, 'Response definition is required. Call .reply() to create one.')
   }
 }
 

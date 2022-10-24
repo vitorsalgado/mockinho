@@ -1,12 +1,10 @@
 import { Mock } from '../mock.js'
 import { MockRepository } from '../mockrepository.js'
 
-describe('MockInMemoryRepository', function () {
-  class TestRepo extends MockRepository<Mock> {}
+describe('mock repository', function () {
+  const repo = new MockRepository()
 
-  const repo = new TestRepo()
-
-  it('ensure repository workflow', function () {
+  test('mock repository operations', function () {
     const mock1 = new Mock({
       id: 'test-id-1',
       name: 'test',

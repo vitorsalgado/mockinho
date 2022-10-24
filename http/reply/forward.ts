@@ -4,7 +4,7 @@ import { notBlank, notNull } from '@mockdog/x'
 import { HeaderList } from '../headers.js'
 import { SC } from '../http.js'
 import { SrvRequest } from '../request.js'
-import { Reply, ReplyCtx, SrvResponse } from './reply.js'
+import { HttpReply, ReplyCtx, SrvResponse } from './reply.js'
 
 const hopByHopHeaders = [
   'Connection',
@@ -19,7 +19,7 @@ const hopByHopHeaders = [
 
 export const forwardedFrom = (target: string = '') => new ForwardReply(target)
 
-export class ForwardReply implements Reply {
+export class ForwardReply implements HttpReply {
   private _stripPrefix = ''
   private _stripSuffix = ''
   private _status: number = 0

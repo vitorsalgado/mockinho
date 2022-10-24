@@ -1,7 +1,7 @@
 import { Optional } from '@mockdog/x'
 import { Mock } from './mock.js'
 
-export abstract class MockRepository<M extends Mock> {
+export class MockRepository<M extends Mock> {
   protected readonly _mocks: Map<string, M> = new Map<string, M>()
 
   save(mock: M): M {

@@ -174,7 +174,7 @@ function onRequestEnded(matched: HttpMock, result: FindMockResult<HttpMock>) {
     }
   }
 
-  matched.hit()
+  matched.inc()
 }
 
 // region Events

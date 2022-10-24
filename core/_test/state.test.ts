@@ -1,7 +1,7 @@
 import { stateMatcher, StateRepository } from '../state.js'
 import { State } from '../state.js'
 
-describe('Scenario', function () {
+describe('scenarios', function () {
   it('should create new scenario with name, id as uuid and scenario equal to started', function () {
     const name = 'the name'
     const scenario = State.newStateMachine(name)

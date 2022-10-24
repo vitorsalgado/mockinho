@@ -32,7 +32,7 @@ import { forwardedFrom } from '../../reply/forward.js'
 import { HttpMockBuilder } from '../../builder.js'
 import { newReply } from '../../reply/index.js'
 import { random } from '../../reply/random.js'
-import { Reply } from '../../reply/reply.js'
+import { HttpReply } from '../../reply/reply.js'
 import { sequence } from '../../reply/sequence.js'
 import { StandardReply } from '../../reply/index.js'
 import { FieldParser } from './FieldParser.js'
@@ -213,7 +213,7 @@ export async function buildMockFromFile(
 
 // region Utils
 
-async function buildResponse(mock: MockFileResponse, filename: string): Promise<Reply> {
+async function buildResponse(mock: MockFileResponse, filename: string): Promise<HttpReply> {
   let res
 
   if (mock.proxyFrom) {
@@ -276,7 +276,7 @@ async function buildResponse(mock: MockFileResponse, filename: string): Promise<
     res.helpers(helpers as Helper)
   }
 
-  return res as Reply
+  return res
 }
 
 function discoverMatcherByValue(

@@ -74,39 +74,6 @@ describe('Scope', function () {
     expect(() => scope.printPending()).not.toThrowError()
   })
 
-  it('should not print pending mocks when scope is done', async function () {
-    const scope = $.mock([
-      get(urlPath('/test')).reply(okJSON({ data: 'get ok' })),
-      post(urlPath('/test')).reply(okJSON({ data: 'post ok' })),
-    ])
-
-    scope.deletePending()
-
-    expect(() => scope.printPending()).not.toThrowError()
-  })
-
-  it('should abort pending mocks when deletePending() is called', async function () {
-    const scope = $.mock([
-      get(urlPath('/test')).reply(okJSON({ data: 'get ok' })),
-      post(urlPath('/test')).reply(okJSON({ data: 'post ok' })),
-    ])
-
-    await Supertest($.listener())
-      .get('/test')
-      .expect(200)
-      .expect(res => expect(res.body.data).toEqual('get ok'))
-
-    expect(scope.hasBeenCalled()).toBeFalsy()
-    expect(scope.findPending()).toHaveLength(1)
-
-    scope.deletePending()
-
-    await Supertest($.listener()).post('/test').expect(AppVars.NoMatchStatus)
-
-    expect(scope.hasBeenCalled()).toBeTruthy()
-    expect(scope.findPending()).toHaveLength(0)
-  })
-
   it('should remove all mocks when calling .clean()', async function () {
     const scope = $.mock([
       get(urlPath('/test')).reply(okJSON({ data: 'get ok' })),

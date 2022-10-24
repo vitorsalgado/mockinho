@@ -1,5 +1,4 @@
 import crypto from 'crypto'
-import { Response } from 'express'
 import { Matcher, Result } from '@mockdog/matchers'
 
 export interface PostActionArgs<R> {
@@ -30,51 +29,57 @@ export interface MatchResult {
   mismatches: Mismatch[]
 }
 
-export interface MockBuilder<MOCK extends Mock, DEPS> {
-  build(deps: DEPS): MOCK
+export interface MockBuilder<M, D> {
+  build(deps: D): M
 }
 
 export interface ReplyArgs<C> {
   config: C
 }
 
-export interface Reply<REQ, RES, C> {
-  build(req: REQ, res: RES, args: ReplyArgs<C>): Promise<RES | null | void>
+export interface Reply<SRV_REQ, SRV_RES, C, RES> {
+  build(req: SRV_REQ, res: SRV_RES, args: ReplyArgs<C>): Promise<RES | null | void>
 }
 
-export interface MockInit<R = unknown> {
+export interface MockInit<SRV_REQ, SRV_RES, C, RES> {
   id: string
   name: string
   priority: number
   enabled: boolean
   source: string
   sourceDetail: string
-  matchers: Array<MatcherSpecification<any, R>>
-  postActions: Array<PostAction<R>>
+  matchers: Array<MatcherSpecification<any, SRV_REQ>>
+  postActions: Array<PostAction<SRV_REQ>>
   hits: number
+  reply: Reply<SRV_REQ, SRV_RES, C, RES>
 }
 
-export class Mock<TRequest = unknown> {
+export class Mock<SRV_REQ = any, SRV_RES = any, C = any, RES = any> {
+  public static readonly DefSource = 'code'
+  private static readonly NoopReply = { build: () => Promise.resolve(null) }
+
   public id: string
   public name: string
   public priority: number
   public enabled: boolean
   public source
   public sourceDetail: string
-  public matchers: Array<MatcherSpecification<any, TRequest>>
-  public postActions: Array<PostAction<TRequest>>
+  public matchers: Array<MatcherSpecification<any, SRV_REQ>>
+  public postActions: Array<PostAction<SRV_REQ>>
   public hits: number
+  public reply: Reply<SRV_REQ, SRV_RES, C, RES>
 
-  constructor(init: Partial<MockInit> = {}) {
+  constructor(init: Partial<MockInit<SRV_REQ, SRV_RES, C, RES>> = {}) {
     this.id = init.id === undefined ? crypto.randomUUID() : init.id
     this.name = init.name || ''
     this.priority = init.priority === undefined ? 0 : init.priority
     this.enabled = init.enabled === undefined ? true : init.enabled
-    this.source = init.source || 'code'
+    this.source = init.source || Mock.DefSource
     this.sourceDetail = init.sourceDetail || ''
     this.matchers = init.matchers === undefined ? [] : init.matchers
     this.postActions = init.postActions === undefined ? [] : init.postActions
     this.hits = init.hits === undefined ? 0 : init.hits
+    this.reply = init.reply === undefined ? Mock.NoopReply : init.reply
   }
 
   inc() {
@@ -103,7 +108,7 @@ export class Mock<TRequest = unknown> {
     }`
   }
 
-  requestMatches(request: TRequest): MatchResult {
+  requestMatches(request: SRV_REQ): MatchResult {
     const result: MatchResult = { score: 0, ok: true, mismatches: [], results: [] }
 
     for (const m of this.matchers) {
