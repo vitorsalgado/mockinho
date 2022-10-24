@@ -110,6 +110,10 @@ export abstract class MockApp<
     return this._mockServer.close()
   }
 
+  hits() {
+    return this._scopes.reduce((acc, s) => acc + s.hits(), 0)
+  }
+
   assertCalled() {
     for (let i = 0; i < this._scopes.length; i++) {
       const scope = this._scopes[i]
@@ -143,6 +147,15 @@ export abstract class MockApp<
       } catch (e) {
         throw coreerr.wrap(e as LhamaError, `Scope ${i} doesn't have the expected hits:`)
       }
+    }
+  }
+
+  printPending() {
+    for (let i = 0; i < this._scopes.length; i++) {
+      const scope = this._scopes[i]
+
+      process.stdout.write(`Scope ${i}:\n`)
+      scope.printPending()
     }
   }
 

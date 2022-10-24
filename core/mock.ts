@@ -131,4 +131,8 @@ export class Mock<SRV_REQ = any, SRV_RES = any, C = any, RES = any> {
 
     return result
   }
+
+  toString() {
+    return `Mock{id=${this.id},name=${this.name},source-type=${this.source},source=${this.sourceDetail}`
+  }
 }
