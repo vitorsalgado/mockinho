@@ -45,16 +45,16 @@ export function mockFinderMiddleware(app: MockDogHttp) {
       return
     }
 
-    const matched = result.matched()
-    const response = await matched.reply.build(req, res, { config: configurations })
+    const mock = result.matched()
+    const response = await mock.reply.build(req, res, { config: configurations })
 
     // response was handled by the replier
     if (response === null || response === undefined) {
-      onRequestEnded(matched, result)
+      onRequestEnded(mock, result)
       return
     }
 
-    const replier = () => {
+    const replier = async () => {
       for (const cookie of response.cookiesToClear) res.clearCookie(cookie.key, cookie.options)
       for (const cookie of response.cookies)
         res.cookie(cookie.key, cookie.value, cookie.options ?? {})
@@ -88,7 +88,7 @@ export function mockFinderMiddleware(app: MockDogHttp) {
         res.addTrailers(response.trailers.toObject())
         res.end(null)
 
-        onRequestEnded(matched, result)
+        onRequestEnded(mock, result)
 
         return
       }
@@ -144,15 +144,19 @@ export function mockFinderMiddleware(app: MockDogHttp) {
         res.end(null)
       }
 
-      onRequestEnded(matched, result)
+      onRequestEnded(mock, result)
     }
 
-    onRequestMatched(isVerbose, req, response, matched)
+    onRequestMatched(isVerbose, req, response, mock)
 
     if (response.hasDelay()) {
-      setTimeout(replier, response.delay)
+      await setTimeout(async () => await replier(), response.delay)
     } else {
-      replier()
+      await replier()
+    }
+
+    if (mock.postActions.length > 0) {
+      await Promise.all(mock.postActions.map(x => x({ request: req, response, app, mock })))
     }
 
     return

@@ -2,6 +2,7 @@ import http from 'node:http'
 import {
   MatcherSpecification,
   MockBuilder,
+  PostAction,
   State,
   stateMatcher,
   StateRepository,
@@ -22,7 +23,7 @@ import { basicAuth, bearerToken, urlPath } from './feat/matchers/index.js'
 import { BodyType, H, Methods, Schemes } from './http.js'
 import { HttpReply, newReply } from './reply/index.js'
 import { SrvRequest } from './request.js'
-import { HttpMock } from './mock.js'
+import { HttpMock, PostActionContext } from './mock.js'
 import { ReplyFn, wrapReply } from './reply/reply.js'
 import { selector } from './_internal/request_value_selectors.js'
 
@@ -402,6 +403,16 @@ export class HttpMockBuilder implements MockBuilder<HttpMock, Deps> {
       this._mock.reply = wrapReply(reply)
     }
 
+    return this
+  }
+
+  postActions(...actions: Array<PostAction<PostActionContext>>): this {
+    this._mock.postActions.push(...actions)
+    return this
+  }
+
+  param<V = unknown>(key: string, value: V): this {
+    this._mock.parameters.set(key, value)
     return this
   }
 

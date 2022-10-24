@@ -289,7 +289,7 @@ export class HttpConfigurationBuilder {
     return this
   }
 
-  props<T>(key: string, value: T): this {
+  param<T>(key: string, value: T): this {
     this._props.set(key, value)
     return this
   }
@@ -389,7 +389,7 @@ export class HttpConfigurationBuilder {
       proxyOptions: this._proxyOptions,
       middlewares: this._middlewares,
       plugins: this._plugins,
-      props: this._props,
+      parameters: this._props,
       argv: this._argv,
       file: this._file,
     }

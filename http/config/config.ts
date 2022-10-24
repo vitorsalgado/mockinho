@@ -70,7 +70,7 @@ export interface HttpConfiguration extends Configuration {
   proxyEnabled: boolean
   proxyOptions: Options
   middlewares: Array<MiddlewareRoute>
-  props: Map<string, unknown>
+  parameters: Map<string, unknown>
   argv?: Argv
   file?: InitialOptions
 }

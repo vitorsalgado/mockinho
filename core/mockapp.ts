@@ -22,6 +22,7 @@ export abstract class MockApp<
   protected readonly _mockProviders: Array<MockProvider<MockBuilder<MOCK, DEPS>>> = []
   protected readonly _plugins: Array<PluginRegistration> = []
   protected readonly _scopes: Array<Scope<MOCK>> = []
+  protected readonly _parameters: Map<string, unknown> = new Map<string, unknown>()
 
   protected constructor(config: CONFIG, store: MockRepository<MOCK>) {
     this._configuration = config
@@ -55,6 +56,10 @@ export abstract class MockApp<
 
   get info(): SRV_INF {
     return this._mockServer.info
+  }
+
+  get parameters() {
+    return this._parameters
   }
 
   protected abstract setup(): void

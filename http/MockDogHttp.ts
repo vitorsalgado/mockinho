@@ -31,10 +31,13 @@ export class MockDogHttp extends MockApp<
   private readonly _hooks = new HookListener()
 
   constructor(config: HttpConfigurationBuilder | HttpConfiguration) {
-    super(
-      config instanceof HttpConfigurationBuilder ? config.build() : config,
-      new HttpMockRepository(),
-    )
+    const conf = config instanceof HttpConfigurationBuilder ? config.build() : config
+
+    super(conf, new HttpMockRepository())
+
+    for (const [k, v] of conf.parameters) {
+      this._parameters.set(k, v)
+    }
 
     this.setup()
   }

@@ -1,13 +1,7 @@
 import crypto from 'crypto'
 import { Matcher, Result } from '@mockdog/matchers'
 
-export interface PostActionArgs<R> {
-  request: R
-}
-
-export interface PostAction<R> {
-  run(args: PostActionArgs<R>): Promise<void> | void
-}
+export type PostAction<C> = (ctx: C) => Promise<void> | void
 
 export interface MatcherSpecification<VALUE, VALUE_CONTEXT> {
   target: string
@@ -41,7 +35,7 @@ export interface Reply<SRV_REQ, SRV_RES, C, RES> {
   build(req: SRV_REQ, res: SRV_RES, args: ReplyArgs<C>): Promise<RES | null | void>
 }
 
-export interface MockInit<SRV_REQ, SRV_RES, C, RES> {
+export interface MockInit<SRV_REQ, SRV_RES, C, RES, PA> {
   id: string
   name: string
   priority: number
@@ -49,12 +43,13 @@ export interface MockInit<SRV_REQ, SRV_RES, C, RES> {
   source: string
   sourceDetail: string
   matchers: Array<MatcherSpecification<any, SRV_REQ>>
-  postActions: Array<PostAction<SRV_REQ>>
+  postActions: Array<PostAction<PA>>
   hits: number
   reply: Reply<SRV_REQ, SRV_RES, C, RES>
+  parameters: Map<string, unknown>
 }
 
-export class Mock<SRV_REQ = any, SRV_RES = any, C = any, RES = any> {
+export class Mock<SRV_REQ = any, SRV_RES = any, C = any, RES = any, PA = any> {
   public static readonly DefSource = 'code'
   private static readonly NoopReply = { build: () => Promise.resolve(null) }
 
@@ -65,11 +60,12 @@ export class Mock<SRV_REQ = any, SRV_RES = any, C = any, RES = any> {
   public source
   public sourceDetail: string
   public matchers: Array<MatcherSpecification<any, SRV_REQ>>
-  public postActions: Array<PostAction<SRV_REQ>>
+  public postActions: Array<PostAction<PA>>
   public hits: number
   public reply: Reply<SRV_REQ, SRV_RES, C, RES>
+  public parameters: Map<string, unknown>
 
-  constructor(init: Partial<MockInit<SRV_REQ, SRV_RES, C, RES>> = {}) {
+  constructor(init: Partial<MockInit<SRV_REQ, SRV_RES, C, RES, PA>> = {}) {
     this.id = init.id === undefined ? crypto.randomUUID() : init.id
     this.name = init.name || ''
     this.priority = init.priority === undefined ? 0 : init.priority
@@ -80,6 +76,7 @@ export class Mock<SRV_REQ = any, SRV_RES = any, C = any, RES = any> {
     this.postActions = init.postActions === undefined ? [] : init.postActions
     this.hits = init.hits === undefined ? 0 : init.hits
     this.reply = init.reply === undefined ? Mock.NoopReply : init.reply
+    this.parameters = init.parameters === undefined ? new Map<string, unknown>() : init.parameters
   }
 
   inc() {
