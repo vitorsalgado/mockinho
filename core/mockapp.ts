@@ -1,3 +1,4 @@
+import { coreerr, LhamaError } from './error.js'
 import { Scope } from './scope.js'
 import { Server } from './srv.js'
 import { MockRepository } from './mockrepository.js'
@@ -38,6 +39,10 @@ export abstract class MockApp<
 
   get store() {
     return this._mockRepository
+  }
+
+  get scopes() {
+    return [...this._scopes]
   }
 
   get config(): CONFIG {
@@ -103,6 +108,42 @@ export abstract class MockApp<
 
   close(): Promise<void> {
     return this._mockServer.close()
+  }
+
+  assertCalled() {
+    for (let i = 0; i < this._scopes.length; i++) {
+      const scope = this._scopes[i]
+
+      try {
+        scope.assertCalled()
+      } catch (e) {
+        throw coreerr.wrap(e as LhamaError, `Scope ${i} was not called:`)
+      }
+    }
+  }
+
+  assertNotCalled() {
+    for (let i = 0; i < this._scopes.length; i++) {
+      const scope = this._scopes[i]
+
+      try {
+        scope.assertNotCalled()
+      } catch (e) {
+        throw coreerr.wrap(e as LhamaError, `Scope ${i} was called:`)
+      }
+    }
+  }
+
+  assertHits(expected: number) {
+    for (let i = 0; i < this._scopes.length; i++) {
+      const scope = this._scopes[i]
+
+      try {
+        scope.assertHits(expected)
+      } catch (e) {
+        throw coreerr.wrap(e as LhamaError, `Scope ${i} doesn't have the expected hits:`)
+      }
+    }
   }
 
   // region internals

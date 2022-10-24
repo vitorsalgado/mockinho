@@ -1,18 +1,17 @@
 import { format } from 'node:util'
 
-class LhamaError {
+export class LhamaError {
+  public readonly code: string
   public readonly name: string
   public readonly message: string
+  public readonly solution: string
 
-  constructor(
-    public readonly code: string,
-    message: string,
-    solution = '',
-    ...args: Array<unknown>
-  ) {
+  constructor(code: string, message: string, solution = '', ...args: Array<unknown>) {
     Error.captureStackTrace(this, LhamaError)
 
+    this.code = code
     this.name = 'LhamaError'
+    this.solution = solution
     this.message =
       solution === ''
         ? format(message, args)
@@ -41,4 +40,7 @@ export const coreerr = {
   ErrScopeNotPending: (message: string) => newError(code('SCOPE_NOT_PENDING'), message),
   ErrScopedMockNotFound: (id: string) =>
     newError(code('SCOPED_MOCK_NOT_FOUND'), `Scoped mock with id ${id} not found`),
+
+  wrap: (err: LhamaError, message: string) =>
+    newError(err.code, message + '\n' + err.message, err.solution),
 }
