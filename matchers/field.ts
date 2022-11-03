@@ -4,33 +4,36 @@ import { indent, matcherHint } from './internal/fmt.js'
 import { reach } from './internal/reach.js'
 import { res } from './internal/res.js'
 
+const _matcherName = 'field'
+
 export const field =
   <T>(path: string, matcher: Matcher<T>): Matcher<unknown> =>
   received => {
-    const matcherName = 'field'
-
     if (typeof received !== 'object') {
-      return res(
-        matcherName,
-        () =>
-          matcherHint(matcherName, path) +
-          '\n' +
-          `Expected value to be an object. got ${red(typeof received)}`,
-        false,
-      )
+      return fail(path, `Expected value to be an object. got ${red(typeof received)}`)
     }
 
     if (path.startsWith('$.')) {
       path = path.substring(2, path.length)
     }
 
+    if (Array.isArray(received)) {
+      if (!path.startsWith('[')) {
+        throw new TypeError('')
+      }
+    }
+
     const f = reach(path, received)
     const result = matcher(f)
 
     return res(
-      matcherName,
+      _matcherName,
       () =>
-        matcherHint(matcherName, path) + '\n' + `Field path: ${path}\n` + indent(result.message()),
+        matcherHint(_matcherName, path) + '\n' + `Field path: ${path}\n` + indent(result.message()),
       result.pass,
     )
   }
+
+function fail(path: string, hint: string) {
+  return res(_matcherName, () => matcherHint(_matcherName, path) + '\n' + hint, false)
+}

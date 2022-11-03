@@ -11,20 +11,18 @@ describe('reach', function () {
   }
 
   it('should return object key specified by path string', function () {
-    const name = 'name'
-    const age = 'age'
-    const city = 'address.city'
-    const country = 'address.country'
-    const continentName = 'address.country.continent.name'
-
-    expect(reach(name, obj)).toEqual('test')
-    expect(reach(age, obj)).toEqual(33)
-    expect(reach(city, obj)).toEqual('Santiago')
-    expect(reach(country, obj)).toEqual({
+    expect(reach('name', obj)).toEqual('test')
+    expect(reach('age', obj)).toEqual(33)
+    expect(reach('address.city', obj)).toEqual('Santiago')
+    expect(reach('address.country', obj)).toEqual({
       name: 'Chile',
       continent: { name: 'South America' },
     })
-    expect(reach(continentName, obj)).toEqual('South America')
+    expect(reach('address.country.continent.name', obj)).toEqual('South America')
+  })
+
+  it('should get array items by index', function () {
+    expect(reach('tags[1]', obj)).toEqual('travel')
   })
 
   it('should return null when a object key is not found', function () {
